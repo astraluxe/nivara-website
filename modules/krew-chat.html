@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Krew · Dashboard</title>
+<meta name="description" content="Your AI office. Live." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --paper: #F2EFE9;
+    --ink: #0E0E0C;
+    --accent: #7C5CFF;
+    --accent-ink: #F2EFE9;
+    --on: rgba(242,239,233,0.95);
+    --on-2: rgba(242,239,233,0.7);
+    --on-3: rgba(242,239,233,0.45);
+    --rule: rgba(242,239,233,0.08);
+    --rule-2: rgba(242,239,233,0.16);
+    --bg: #0A0A09;
+    --panel: #0E0E0C;
+    --panel-2: #141412;
+    --tint: rgba(242,239,233,0.04);
+    --tint-strong: rgba(242,239,233,0.06);
+    --tint-faint: rgba(242,239,233,0.02);
+    --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  }
+
+  /* Paper theme: flip the dark surfaces to warm paper, swap text/rule alphas */
+  html[data-theme="paper"] {
+    --on: #0E0E0C;
+    --on-2: rgba(14,14,12,0.7);
+    --on-3: rgba(14,14,12,0.5);
+    --rule: rgba(14,14,12,0.1);
+    --rule-2: rgba(14,14,12,0.2);
+    --bg: #F2EFE9;
+    --panel: #EAE6DD;
+    --panel-2: #DBD6C9;
+    --tint: rgba(14,14,12,0.04);
+    --tint-strong: rgba(14,14,12,0.07);
+    --tint-faint: rgba(14,14,12,0.02);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--on);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+  ul { list-style: none; }
+  input, textarea { font: inherit; background: transparent; border: none; outline: none; color: inherit; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  /* ==========================================
+     LAYOUT
+  ========================================== */
+  .app {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--bg);
+  }
+
+  /* ===== TOPBAR ===== */
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 52px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--panel);
+  }
+  .topbar-l, .topbar-r { display: flex; align-items: center; gap: 14px; }
+  .topbar-r { justify-self: end; }
+  .topbar-mark {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 600; letter-spacing: -0.02em; font-size: 15px;
+  }
+  .topbar-mark .logo {
+    width: 18px; height: 18px;
+    color: var(--on);
+  }
+  .topbar-mark .sep { color: var(--on-3); font-weight: 300; }
+  .topbar-mark .app-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .topbar-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--rule-2);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--on-2);
+    transition: all 0.15s ease;
+  }
+  .topbar-back:hover { color: var(--on); border-color: var(--on-2); }
+
+  .topbar-c {
+    display: inline-flex; align-items: center; gap: 16px;
+    padding: 6px 18px;
+    background: var(--tint);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--on-2);
+  }
+  .topbar-c .live { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
+  .topbar-c .live::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 30%, transparent);
+    animation: livedot 2s ease-in-out infinite;
+  }
+  @keyframes livedot {
+    0%, 100% { box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 30%, transparent); }
+    50% { box-shadow: 0 0 0 6px color-mix(in oklab, var(--accent) 5%, transparent); }
+  }
+  .topbar-c .sep { color: var(--on-3); }
+
+  .ucirc {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* ===== STATS STRIP ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .stat {
+    background: var(--panel);
+    padding: 12px 18px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .stat .l {
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.12em;
+    color: var(--on-3); text-transform: uppercase;
+  }
+  .stat .v {
+    font-family: var(--font-sans);
+    font-size: 18px; font-weight: 500;
+    letter-spacing: -0.02em; color: var(--on);
+  }
+  .stat .v .u { font-size: 12px; color: var(--on-3); margin-left: 3px; }
+  .stat .bar { margin-top: 4px; height: 3px; background: var(--rule-2); position: relative; }
+  .stat .bar::after { content: ""; position: absolute; inset: 0 var(--rem, 50%) 0 0; background: var(--accent); }
+  .stat.warn .bar::after { background: #FFD83C; }
+
+  /* ===== BODY: 3-col workspace ===== */
+  .body {
+    display: grid;
+    grid-template-columns: 240px 1fr 300px;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* ===== SIDEBAR ===== */
+  .side {
+    border-right: 1px solid var(--rule);
+    background: var(--panel);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .side-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+  .side-tabs button {
+    padding: 12px 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--on-3);
+    text-transform: uppercase;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+  }
+  .side-tabs button.on { color: var(--on); border-bottom-color: var(--accent); }
+
+  .side-new {
+    margin: 12px 14px 6px;
+    padding: 9px 12px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .side-new:hover { transform: translateY(-1px); }
+
+  .side-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 0 14px;
+  }
+  .side-scroll::-webkit-scrollbar { width: 5px; }
+  .side-scroll::-webkit-scrollbar-thumb { background: var(--rule-2); }
+
+  .side-section {
+    padding: 10px 14px 4px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--on-3);
+    text-transform: uppercase;
+  }
+  .conv-row {
+    padding: 9px 14px;
+    margin: 0 6px;
+    border-left: 2px solid transparent;
+    font-size: 13px;
+    color: var(--on-2);
+    cursor: pointer;
+    line-height: 1.35;
+  }
+  .conv-row:hover { background: var(--tint); color: var(--on); }
+  .conv-row.on {
+    background: rgba(124,92,255,0.08);
+    border-left-color: var(--accent);
+    color: var(--on);
+  }
+  .conv-row .ct {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--on-3);
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Agent picker (tab 2) */
+  .agent-list { display: flex; flex-direction: column; gap: 0; padding: 6px 0; }
+  .agent-row {
+    padding: 10px 14px;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    margin: 0 6px;
+  }
+  .agent-row:hover { background: var(--tint); }
+  .agent-row.on {
+    background: rgba(124,92,255,0.08);
+    border-left-color: var(--accent);
+  }
+  .agent-row .av {
+    width: 28px; height: 28px;
+    background: var(--rule-2); color: var(--on);
+    display: grid; place-items: center;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  }
+  .agent-row.on .av { background: var(--accent); color: var(--accent-ink); }
+  .agent-row .an { font-size: 13px; color: var(--on); }
+  .agent-row .ar {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.08em; color: var(--on-3);
+    text-transform: uppercase;
+  }
+
+  .side-foot {
+    border-top: 1px solid var(--rule);
+    padding: 12px 14px;
+    background: var(--tint-faint);
+  }
+  .side-foot .tok {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--on-3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex; justify-content: space-between;
+  }
+  .side-foot .tok .v { color: var(--on); }
+  .side-foot .tok-bar { height: 4px; background: var(--rule-2); position: relative; }
+  .side-foot .tok-bar::after { content: ""; position: absolute; inset: 0 36% 0 0; background: var(--accent); }
+  .side-foot .plan {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--accent);
+    background: rgba(124,92,255,0.08);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* ===== CHAT ===== */
+  .chat {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .chat-head {
+    padding: 12px 22px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--panel);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .chat-head .av {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: grid; place-items: center;
+    font-family: var(--font-mono); font-weight: 500; font-size: 13px;
+  }
+  .chat-head .meta { display: flex; flex-direction: column; gap: 1px; }
+  .chat-head .name { font-size: 14px; font-weight: 500; }
+  .chat-head .role {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.08em; color: var(--on-3);
+    text-transform: uppercase;
+  }
+  .chat-head .status {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.08em; color: var(--on-2);
+    text-transform: uppercase;
+  }
+  .chat-head .status .d {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+
+  .chat-body {
+    overflow-y: auto;
+    padding: 24px 28px 16px;
+    display: flex; flex-direction: column;
+    gap: 14px;
+  }
+  .chat-body::-webkit-scrollbar { width: 6px; }
+  .chat-body::-webkit-scrollbar-thumb { background: var(--rule-2); }
+
+  .msg { display: flex; flex-direction: column; max-width: 78%; gap: 4px; }
+  .msg.you { align-self: flex-end; }
+  .msg .who {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.1em; color: var(--on-3);
+    text-transform: uppercase;
+    padding: 0 2px;
+  }
+  .msg.you .who { text-align: right; }
+  .msg .bubble {
+    padding: 11px 15px;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  .msg.you .bubble {
+    background: var(--tint-strong);
+    border: 1px solid var(--rule);
+    color: var(--on);
+  }
+  .msg.ai .bubble {
+    background: transparent;
+    color: var(--on);
+    padding: 4px 0;
+  }
+  .msg.ai .bubble strong { color: var(--on); font-weight: 600; }
+  .msg.ai .bubble em { font-family: var(--font-serif); font-style: italic; }
+  .msg.ai .bubble code {
+    font-family: var(--font-mono);
+    background: var(--tint-strong);
+    padding: 1px 6px;
+    color: var(--accent);
+    font-size: 12px;
+  }
+  .msg.ai .bubble pre {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    padding: 12px 14px;
+    margin: 8px 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    overflow-x: auto;
+    line-height: 1.55;
+  }
+  .msg.ai .bubble pre code { background: none; padding: 0; color: var(--on); }
+  .msg.ai .bubble p { margin-bottom: 8px; }
+  .msg.ai .bubble p:last-child { margin-bottom: 0; }
+  .msg.ai .bubble ul, .msg.ai .bubble ol { margin: 6px 0 6px 20px; }
+  .msg.ai .bubble li { list-style-position: outside; padding-left: 4px; }
+  .msg.ai .bubble ul li { list-style-type: square; }
+
+  .typing {
+    display: inline-flex; gap: 4px; align-items: center;
+    padding: 6px 0;
+    color: var(--on-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+  .typing .d {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--on-2);
+    animation: blip 1.2s infinite;
+  }
+  .typing .d:nth-child(2) { animation-delay: 0.15s; }
+  .typing .d:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes blip {
+    0%, 60%, 100% { opacity: 0.3; }
+    30% { opacity: 1; }
+  }
+
+  /* Action approval card */
+  .approval {
+    margin-top: 4px;
+    border: 1px solid rgba(124,92,255,0.5);
+    background: rgba(124,92,255,0.06);
+    padding: 12px 14px;
+  }
+  .approval .ah {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .approval .ab {
+    font-size: 13px;
+    color: var(--on);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .approval .abtns {
+    display: flex; gap: 8px;
+  }
+  .approval .abtns button {
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--rule-2);
+    color: var(--on-2);
+    transition: all 0.15s ease;
+  }
+  .approval .abtns button:hover { color: var(--on); border-color: var(--on-2); }
+  .approval .abtns .primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .approval .abtns .primary:hover {
+    background: color-mix(in oklab, var(--accent) 86%, #000);
+    border-color: color-mix(in oklab, var(--accent) 86%, #000);
+  }
+
+  /* Quick prompts row */
+  .quick-row {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 0 28px 12px;
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+  .quick-row .q {
+    padding: 7px 14px;
+    border: 1px solid var(--rule-2);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--on-2);
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+  .quick-row .q:hover {
+    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+  }
+  .quick-row .q.accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+  /* Compose */
+  .compose {
+    padding: 14px 24px 18px;
+    background: var(--panel);
+    border-top: 1px solid var(--rule);
+  }
+  .compose-inner {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px 10px 16px;
+    background: var(--bg);
+    border: 1px solid var(--rule-2);
+    border-radius: 6px;
+    transition: border-color 0.15s ease;
+  }
+  .compose-inner:focus-within { border-color: var(--accent); }
+  .compose-inner input {
+    font-size: 14px;
+    color: var(--on);
+  }
+  .compose-inner input::placeholder { color: var(--on-3); }
+  .compose-inner .mic {
+    width: 32px; height: 32px;
+    background: var(--tint);
+    color: var(--on-2);
+    display: grid; place-items: center;
+    border: 1px solid var(--rule-2);
+    font-family: var(--font-mono); font-size: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .compose-inner .mic:hover { color: var(--on); border-color: var(--on-2); }
+  .compose-inner .send {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    display: grid; place-items: center;
+    border: 1px solid var(--accent);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    font-family: var(--font-mono);
+  }
+  .compose-inner .send:hover { transform: translateX(1px); }
+  .compose-inner .send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .compose-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--on-3);
+    text-transform: uppercase;
+  }
+
+  /* ===== WORKFLOW PANEL ===== */
+  .wf {
+    border-left: 1px solid var(--rule);
+    background: var(--panel);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .wf-h {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--on-3);
+    text-transform: uppercase;
+  }
+  .wf-h .live { color: var(--accent); display: inline-flex; align-items: center; gap: 6px; }
+  .wf-h .live::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    animation: livedot 2s ease-in-out infinite;
+  }
+  .wf-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 18px 18px;
+  }
+  .wf-body::-webkit-scrollbar { width: 5px; }
+  .wf-body::-webkit-scrollbar-thumb { background: var(--rule-2); }
+  .wnode {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 12px;
+    padding: 12px 0;
+    position: relative;
+  }
+  .wnode:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 14px; top: 40px; bottom: -4px;
+    width: 1px; background: var(--rule-2);
+  }
+  .wnode .ic {
+    width: 30px; height: 30px;
+    display: grid; place-items: center;
+    background: var(--tint);
+    border: 1px solid var(--rule-2);
+    color: var(--on-3);
+    font-family: var(--font-mono); font-size: 11px;
+    z-index: 1;
+  }
+  .wnode.done .ic { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .wnode.active .ic {
+    background: var(--bg); color: var(--accent); border-color: var(--accent);
+    animation: livedot 2s ease-in-out infinite;
+  }
+  .wnode .nb {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .wnode .nn { font-size: 13px; color: var(--on); font-weight: 500; }
+  .wnode .ns {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.08em; color: var(--on-3);
+    text-transform: uppercase;
+  }
+  .wnode .nt {
+    margin-left: auto;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--on-3);
+  }
+  .wnode.queued .nn { color: var(--on-3); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    .body { grid-template-columns: 200px 1fr; }
+    .wf { display: none; }
+  }
+  @media (max-width: 760px) {
+    .body { grid-template-columns: 1fr; }
+    .side { display: none; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(n+3) { display: none; }
+    .stat:nth-child(-n+2) { display: flex; }
+    .topbar { grid-template-columns: auto 1fr auto; padding: 0 12px; gap: 10px; }
+    .topbar-c { display: none; }
+    .topbar-mark .sep, .topbar-mark .app-tag { display: none; }
+    .chat-body { padding: 16px 18px; }
+    .compose { padding: 12px 16px 16px; }
+    .quick-row { padding: 0 18px 10px; padding-top: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-l">
+      <a class="topbar-mark" href="../NIVARA.html">
+        <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+        <span>hyper</span>
+        <span class="sep">/</span>
+        <span class="app-tag">krew</span>
+      </a>
+      <a class="topbar-back" href="krew.html">
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        Back
+      </a>
+    </div>
+
+    <div class="topbar-c">
+      <span class="live">live</span>
+      <span class="sep">·</span>
+      <span>Builder · ₹1,999/mo</span>
+      <span class="sep">·</span>
+      <span style="color: var(--on-3);">v1.4.2</span>
+    </div>
+
+    <div class="topbar-r">
+      <button class="topbar-back" id="themeToggle">Paper</button>
+      <span class="ucirc">D</span>
+    </div>
+  </header>
+
+  <!-- STATS STRIP -->
+  <div class="stats">
+    <div class="stat">
+      <span class="l">Tasks today</span>
+      <span class="v" id="statTasks">42</span>
+    </div>
+    <div class="stat">
+      <span class="l">Avg response</span>
+      <span class="v">1.8<span class="u">s</span></span>
+    </div>
+    <div class="stat warn">
+      <span class="l">Tokens · 6.4M</span>
+      <span class="v">4.1M <span class="u">/ 6.4M</span></span>
+      <span class="bar" style="--rem: 36%;"></span>
+    </div>
+    <div class="stat">
+      <span class="l">Spend</span>
+      <span class="v">₹1,640</span>
+    </div>
+    <div class="stat">
+      <span class="l">Agents</span>
+      <span class="v">8 <span class="u">/ 43</span></span>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <aside class="side">
+      <div class="side-tabs">
+        <button class="on" data-tab="conv">Chats</button>
+        <button data-tab="agent">Agents</button>
+      </div>
+      <a class="side-new" id="newChat">+ new chat</a>
+
+      <div class="side-scroll" id="sideScroll">
+        <!-- CONVERSATIONS -->
+        <div data-pane="conv">
+          <div class="side-section">Today</div>
+          <div class="conv-row on" data-conv="acme">
+            Client report — Acme Co
+            <span class="ct">via Boss · 2 agents</span>
+          </div>
+          <div class="conv-row" data-conv="leads">
+            Outreach to vendor list
+            <span class="ct">Cold Outreach</span>
+          </div>
+          <div class="conv-row" data-conv="press">
+            Draft press release
+            <span class="ct">Script Writer</span>
+          </div>
+
+          <div class="side-section">Yesterday</div>
+          <div class="conv-row" data-conv="auth">
+            Refactor auth flow
+            <span class="ct">Coder</span>
+          </div>
+          <div class="conv-row" data-conv="q3">
+            Q3 financial summary
+            <span class="ct">Data Analyst</span>
+          </div>
+          <div class="conv-row" data-conv="caption">
+            Captions for launch week
+            <span class="ct">Caption Writer</span>
+          </div>
+
+          <div class="side-section">Last 7 days</div>
+          <div class="conv-row" data-conv="invoice">
+            Invoice chase batch
+            <span class="ct">Invoice Tracker</span>
+          </div>
+          <div class="conv-row" data-conv="seo">
+            SEO audit for blog
+            <span class="ct">SEO Agent</span>
+          </div>
+        </div>
+
+        <!-- AGENTS -->
+        <div class="agent-list" data-pane="agent" style="display: none;">
+          <div class="side-section">Featured</div>
+          <div class="agent-row on" data-agent="boss"><div class="av">B</div><div><div class="an">Boss</div><div class="ar">orchestrator</div></div></div>
+          <div class="agent-row" data-agent="writer"><div class="av">W</div><div><div class="an">Proposal Writer</div><div class="ar">sales</div></div></div>
+          <div class="agent-row" data-agent="research"><div class="av">R</div><div><div class="an">Research Agent</div><div class="ar">intel</div></div></div>
+          <div class="agent-row" data-agent="coder"><div class="av">C</div><div><div class="an">Coder</div><div class="ar">engineering</div></div></div>
+
+          <div class="side-section">Marketing</div>
+          <div class="agent-row" data-agent="ad"><div class="av">A</div><div><div class="an">Ad Copywriter</div><div class="ar">marketing</div></div></div>
+          <div class="agent-row" data-agent="seo"><div class="av">S</div><div><div class="an">SEO Agent</div><div class="ar">marketing</div></div></div>
+          <div class="agent-row" data-agent="email"><div class="av">E</div><div><div class="an">Email Marketer</div><div class="ar">marketing</div></div></div>
+          <div class="agent-row" data-agent="content"><div class="av">C</div><div><div class="an">Content Planner</div><div class="ar">marketing</div></div></div>
+
+          <div class="side-section">Social</div>
+          <div class="agent-row" data-agent="caption"><div class="av">C</div><div><div class="an">Caption Writer</div><div class="ar">social</div></div></div>
+          <div class="agent-row" data-agent="dm"><div class="av">D</div><div><div class="an">DM Responder</div><div class="ar">social</div></div></div>
+          <div class="agent-row" data-agent="scheduler"><div class="av">S</div><div><div class="an">Social Scheduler</div><div class="ar">social</div></div></div>
+
+          <div class="side-section">Engineering</div>
+          <div class="agent-row" data-agent="review"><div class="av">R</div><div><div class="an">Code Reviewer</div><div class="ar">engineering</div></div></div>
+          <div class="agent-row" data-agent="bug"><div class="av">B</div><div><div class="an">Bug Hunter</div><div class="ar">engineering</div></div></div>
+          <div class="agent-row" data-agent="docs"><div class="av">D</div><div><div class="an">Docs Writer</div><div class="ar">engineering</div></div></div>
+          <div class="agent-row" data-agent="test"><div class="av">T</div><div><div class="an">Test Writer</div><div class="ar">engineering</div></div></div>
+
+          <div class="side-section">Operations</div>
+          <div class="agent-row" data-agent="finance"><div class="av">F</div><div><div class="an">Finance Bot</div><div class="ar">ops</div></div></div>
+          <div class="agent-row" data-agent="invoice"><div class="av">I</div><div><div class="an">Invoice Tracker</div><div class="ar">ops</div></div></div>
+          <div class="agent-row" data-agent="weekly"><div class="av">W</div><div><div class="an">Weekly Report</div><div class="ar">ops</div></div></div>
+
+          <div class="side-section">Customer</div>
+          <div class="agent-row" data-agent="support"><div class="av">S</div><div><div class="an">Support Agent</div><div class="ar">customer</div></div></div>
+          <div class="agent-row" data-agent="whatsapp"><div class="av">W</div><div><div class="an">WhatsApp Responder</div><div class="ar">customer</div></div></div>
+          <div class="agent-row" data-agent="review2"><div class="av">R</div><div><div class="an">Review Responder</div><div class="ar">customer</div></div></div>
+
+          <div class="side-section">Legal &amp; Other</div>
+          <div class="agent-row" data-agent="contract"><div class="av">C</div><div><div class="an">Contract Checker</div><div class="ar">legal</div></div></div>
+          <div class="agent-row" data-agent="trans"><div class="av">T</div><div><div class="an">Translator</div><div class="ar">language</div></div></div>
+        </div>
+      </div>
+
+      <div class="side-foot">
+        <div class="tok">
+          <span>Tokens</span>
+          <span class="v">4.1M / 6.4M</span>
+        </div>
+        <div class="tok-bar"></div>
+        <div class="plan">Builder · upgrade</div>
+      </div>
+    </aside>
+
+    <!-- CHAT -->
+    <main class="chat">
+      <header class="chat-head">
+        <div class="av" id="chatAv">B</div>
+        <div class="meta">
+          <span class="name" id="chatName">Boss</span>
+          <span class="role" id="chatRole">orchestrator · routing 2 agents</span>
+        </div>
+        <span class="status"><span class="d"></span><span id="chatStatus">2 agents working</span></span>
+      </header>
+
+      <div class="chat-body" id="chatBody">
+        <!-- seeded messages -->
+        <div class="msg you">
+          <span class="who">you · 14:32</span>
+          <div class="bubble">Write a Q3 client report for Acme Co — pull last quarter's analytics, summarise the wins, list 3 things to push in Q4. Tone professional but warm.</div>
+        </div>
+
+        <div class="msg ai">
+          <span class="who">Boss · orchestrating</span>
+          <div class="bubble">
+            <p>On it. I'll route this to two agents — <strong>Research</strong> is pulling Acme's analytics dashboard, <strong>Writer</strong> will draft once the data is in. ETA ~90s.</p>
+            <p>You'll see each step appear in the workflow panel on the right. I'll come back to you for approval before anything ships.</p>
+          </div>
+        </div>
+
+        <div class="msg ai">
+          <span class="who">Writer · drafted</span>
+          <div class="bubble">
+            <p>Draft is ready. Three sections — <em>Wins</em>, <em>Risks</em>, <em>Q4 push</em>. Consultative tone. Want me to ship it, or do you want to review the draft first?</p>
+            <div class="approval">
+              <div class="ah">↳ Action approval · Gmail</div>
+              <div class="ab">Send <strong>"Acme Q3 Report.pdf"</strong> to <code>deepak@acmeco.in</code> with a short cover note. <em>"Q3 wrap-up attached. Three Q4 plays in the last section. Talk Monday?"</em></div>
+              <div class="abtns">
+                <button class="primary">Send now</button>
+                <button>Review draft</button>
+                <button>Reject</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-row" id="quickRow">
+        <span class="q accent" data-q="write">Write a Q4 plan for Acme</span>
+        <span class="q" data-q="invoice">Chase overdue invoices</span>
+        <span class="q" data-q="caption">Caption for our launch post</span>
+        <span class="q" data-q="research">Research a competitor</span>
+        <span class="q" data-q="hindi">Reply to a Hindi support email</span>
+      </div>
+
+      <form class="compose" id="composeForm" autocomplete="off">
+        <div class="compose-inner">
+          <input id="composeInput" type="text" placeholder="Type a message or @mention an agent…" />
+          <button type="button" class="mic" title="Voice input">●</button>
+          <button type="submit" class="send" id="sendBtn" title="Send">→</button>
+        </div>
+        <div class="compose-foot">
+          <span>↩ to send · ⌘K agent menu · / commands</span>
+          <span>model · auto</span>
+        </div>
+      </form>
+    </main>
+
+    <!-- WORKFLOW PANEL -->
+    <aside class="wf">
+      <div class="wf-h">
+        <span>// Workflow · run #4218</span>
+        <span class="live">running</span>
+      </div>
+      <div class="wf-body" id="wfBody">
+        <div class="wnode done">
+          <div class="ic">✓</div>
+          <div class="nb"><span class="nn">Boss received task</span><span class="ns">routing · 0.4s</span></div>
+        </div>
+        <div class="wnode done">
+          <div class="ic">✓</div>
+          <div class="nb"><span class="nn">Research · Acme data</span><span class="ns">analytics + crm · 14s</span></div>
+        </div>
+        <div class="wnode done">
+          <div class="ic">✓</div>
+          <div class="nb"><span class="nn">Writer · draft v1</span><span class="ns">sonnet · 32s</span></div>
+        </div>
+        <div class="wnode active">
+          <div class="ic">◐</div>
+          <div class="nb"><span class="nn">Brand check · tone</span><span class="ns">running…</span></div>
+        </div>
+        <div class="wnode queued">
+          <div class="ic">○</div>
+          <div class="nb"><span class="nn">Format · PDF</span><span class="ns">queued</span></div>
+        </div>
+        <div class="wnode queued">
+          <div class="ic">○</div>
+          <div class="nb"><span class="nn">Send via Gmail</span><span class="ns">awaiting approval</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+</div>
+
+<script>
+/* ============================================
+   Krew Chat — live behaviour
+============================================ */
+
+// Theme toggle (matches the rest of the site)
+(function() {
+  const root = document.documentElement;
+  const stored = localStorage.getItem('nivara-theme');
+  if (stored === 'paper') root.setAttribute('data-theme', 'paper');
+  const btn = document.getElementById('themeToggle');
+  function update() {
+    btn.textContent = root.getAttribute('data-theme') === 'paper' ? 'Ink' : 'Paper';
+  }
+  update();
+  btn?.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme') === 'paper' ? 'paper' : 'ink';
+    const next = cur === 'paper' ? 'ink' : 'paper';
+    if (next === 'paper') root.setAttribute('data-theme', 'paper');
+    else root.removeAttribute('data-theme');
+    localStorage.setItem('nivara-theme', next);
+    update();
+  });
+})();
+
+// Sidebar tab switching
+document.querySelectorAll('.side-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.side-tabs button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const key = btn.dataset.tab;
+    document.querySelectorAll('[data-pane]').forEach(p => {
+      p.style.display = p.dataset.pane === key ? '' : 'none';
+    });
+  });
+});
+
+// Agent switching (changes chat header)
+const AGENTS = {
+  boss: { name: 'Boss', role: 'orchestrator · routing 2 agents', av: 'B', status: '2 agents working', greeting: "I'm Boss. Tell me what you want done — I'll route it to the right specialists and bring you a result." },
+  writer: { name: 'Proposal Writer', role: 'sales · drafts that win', av: 'W', status: 'ready', greeting: "Give me the prospect's name, what they need, and your pricing. I'll draft a tight proposal." },
+  research: { name: 'Research Agent', role: 'intel · verified data', av: 'R', status: 'ready', greeting: "Tell me what to research. I'll pull sources, cite them, and summarise — no hallucinating allowed." },
+  coder: { name: 'Coder', role: 'engineering · ships features', av: 'C', status: 'ready', greeting: "Drop a problem, a stack trace, or a repo path. I'll write, refactor, or debug." },
+  ad: { name: 'Ad Copywriter', role: 'marketing · Meta + Google', av: 'A', status: 'ready', greeting: "Product, audience, vibe. I'll give you 5 ad variations tuned for the platform." },
+  seo: { name: 'SEO Agent', role: 'marketing · ranks for keywords', av: 'S', status: 'ready', greeting: "Drop a URL or topic. I'll research keywords, gaps, and on-page fixes." },
+  email: { name: 'Email Marketer', role: 'marketing · campaigns', av: 'E', status: 'ready', greeting: "Tell me about the campaign — audience, goal, deadline. I'll plan the sequence and write it." },
+  content: { name: 'Content Planner', role: 'marketing · calendar', av: 'C', status: 'ready', greeting: "Tell me your niche and platforms. I'll map out a content calendar." },
+  caption: { name: 'Caption Writer', role: 'social · sharp captions', av: 'C', status: 'ready', greeting: "Paste the post or describe it. I'll give you 3 caption variants per platform." },
+  dm: { name: 'DM Responder', role: 'social · replies in your voice', av: 'D', status: 'ready', greeting: "Paste a DM. I'll reply in your tone — friendly, professional, whatever you set." },
+  scheduler: { name: 'Social Scheduler', role: 'social · posts at peak', av: 'S', status: 'ready', greeting: "Give me the post + platforms. I'll suggest the best time slots based on your audience." },
+  review: { name: 'Code Reviewer', role: 'engineering · senior PR eyes', av: 'R', status: 'ready', greeting: "Paste code or share a PR. I'll review like a senior engineer — bugs first, then style." },
+  bug: { name: 'Bug Hunter', role: 'engineering · edge cases', av: 'B', status: 'ready', greeting: "Paste the bug report or stack trace. I'll find the root cause." },
+  docs: { name: 'Docs Writer', role: 'engineering · READMEs &amp; APIs', av: 'D', status: 'ready', greeting: "Paste a function or point me at a repo. I'll write docs developers will actually read." },
+  test: { name: 'Test Writer', role: 'engineering · unit + integration', av: 'T', status: 'ready', greeting: "Paste a function. I'll write tests with realistic fixtures and 3+ edge cases." },
+  finance: { name: 'Finance Bot', role: 'ops · books &amp; bills', av: 'F', status: 'ready', greeting: "Drop a CSV, a screenshot of an invoice, or just tell me what you need logged." },
+  invoice: { name: 'Invoice Tracker', role: 'ops · chases overdue', av: 'I', status: 'ready', greeting: "Tell me which invoices are out. I'll draft a polite-but-firm chase email." },
+  weekly: { name: 'Weekly Report', role: 'ops · auto-digests', av: 'W', status: 'ready', greeting: "I'll generate your team's weekly digest. Want me to pull from Linear, GitHub and Slack?" },
+  support: { name: 'Support Agent', role: 'customer · real-time chat', av: 'S', status: 'ready', greeting: "Paste a ticket or support question. I'll draft a reply in your brand voice." },
+  whatsapp: { name: 'WhatsApp Responder', role: 'customer · business inbox', av: 'W', status: 'ready', greeting: "Paste an incoming WhatsApp message. I'll reply — Hindi, English, or transliterated." },
+  review2: { name: 'Review Responder', role: 'customer · Google &amp; Play', av: 'R', status: 'ready', greeting: "Paste a review (or screenshot). I'll write a reply that preserves brand and addresses the issue." },
+  contract: { name: 'Contract Checker', role: 'legal · spots traps', av: 'C', status: 'ready', greeting: "Paste a contract clause or upload a PDF. I'll flag what's risky in plain English." },
+  trans: { name: 'Translator', role: 'language · 10 Indian languages', av: 'T', status: 'ready', greeting: "Paste text in any language. I'll translate fluently — not literally." },
+};
+let currentAgent = 'boss';
+
+document.querySelectorAll('.agent-row').forEach(row => {
+  row.addEventListener('click', () => {
+    document.querySelectorAll('.agent-row').forEach(r => r.classList.remove('on'));
+    row.classList.add('on');
+    const k = row.dataset.agent;
+    currentAgent = k;
+    const a = AGENTS[k];
+    if (!a) return;
+    document.getElementById('chatAv').textContent = a.av;
+    document.getElementById('chatName').textContent = a.name;
+    document.getElementById('chatRole').innerHTML = a.role;
+    document.getElementById('chatStatus').textContent = a.status;
+    // Reset chat to greeting
+    const body = document.getElementById('chatBody');
+    body.innerHTML = `
+      <div class="msg ai">
+        <span class="who">${a.name} · ready</span>
+        <div class="bubble"><p>${a.greeting}</p></div>
+      </div>
+    `;
+  });
+});
+
+// Conv row switching
+document.querySelectorAll('.conv-row').forEach(row => {
+  row.addEventListener('click', () => {
+    document.querySelectorAll('.conv-row').forEach(r => r.classList.remove('on'));
+    row.classList.add('on');
+  });
+});
+
+// New chat
+document.getElementById('newChat').addEventListener('click', () => {
+  const body = document.getElementById('chatBody');
+  body.innerHTML = `
+    <div class="msg ai">
+      <span class="who">${AGENTS[currentAgent].name} · ready</span>
+      <div class="bubble"><p>${AGENTS[currentAgent].greeting}</p></div>
+    </div>
+  `;
+  document.querySelectorAll('.conv-row').forEach(r => r.classList.remove('on'));
+});
+
+// Quick prompts
+const QUICKS = {
+  write: "Write a Q4 plan for Acme — 3 priority moves, each with a one-line rationale, in our consultative tone.",
+  invoice: "Draft a polite-but-firm follow-up email for an invoice that's 14 days overdue from a long-term client.",
+  caption: "Write 3 Instagram caption variants for our launch post — feature is a new no-code workflow builder. Audience: Indian freelancers and small agencies.",
+  research: "Research Cred (cred.club) — who they target, their pricing model, recent product changes in the last 3 months. Cite sources.",
+  hindi: "Reply in Hindi to: 'Mera order abhi tak nahi aaya, kya status hai?' — keep it warm, give a tracking placeholder, offer expedite.",
+};
+document.querySelectorAll('.quick-row .q').forEach(q => {
+  q.addEventListener('click', () => {
+    const text = QUICKS[q.dataset.q] || q.textContent;
+    document.getElementById('composeInput').value = text;
+    document.getElementById('composeInput').focus();
+  });
+});
+
+// Chat send (calls window.claude.complete)
+const form = document.getElementById('composeForm');
+const input = document.getElementById('composeInput');
+const sendBtn = document.getElementById('sendBtn');
+const body = document.getElementById('chatBody');
+
+function addMsg(role, content, who = null) {
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const time = new Date().toTimeString().slice(0, 5);
+  const whoText = who || (role === 'you' ? `you · ${time}` : `${AGENTS[currentAgent].name} · ${time}`);
+  div.innerHTML = `<span class="who">${whoText}</span><div class="bubble">${content}</div>`;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  return div;
+}
+
+function mdLite(text) {
+  // very small markdown subset → HTML
+  text = text.replace(/```([\s\S]*?)```/g, (m, code) => `<pre><code>${code.replace(/</g, '&lt;')}</code></pre>`);
+  text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+  text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/_([^_]+)_/g, '<em>$1</em>');
+  // basic paragraph splitting
+  const parts = text.split(/\n\s*\n/);
+  return parts.map(p => {
+    // bullet list detection
+    if (/^\s*[-*]\s/m.test(p)) {
+      const items = p.split(/\n/).filter(l => l.trim()).map(l => l.replace(/^\s*[-*]\s+/, ''));
+      return '<ul>' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+    }
+    if (/^\s*\d+\.\s/m.test(p)) {
+      const items = p.split(/\n/).filter(l => l.trim()).map(l => l.replace(/^\s*\d+\.\s+/, ''));
+      return '<ol>' + items.map(i => `<li>${i}</li>`).join('') + '</ol>';
+    }
+    return `<p>${p.replace(/\n/g, '<br/>')}</p>`;
+  }).join('');
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMsg('you', text.replace(/</g, '&lt;'));
+  input.value = '';
+  sendBtn.disabled = true;
+
+  // typing indicator
+  const typing = document.createElement('div');
+  typing.className = 'msg ai';
+  typing.innerHTML = `<span class="who">${AGENTS[currentAgent].name} · thinking</span><div class="bubble"><div class="typing"><span class="d"></span><span class="d"></span><span class="d"></span> typing</div></div>`;
+  body.appendChild(typing);
+  body.scrollTop = body.scrollHeight;
+
+  // Add workflow node
+  const wf = document.getElementById('wfBody');
+  const node = document.createElement('div');
+  node.className = 'wnode active';
+  node.innerHTML = `<div class="ic">◐</div><div class="nb"><span class="nn">${AGENTS[currentAgent].name}</span><span class="ns">processing…</span></div>`;
+  wf.appendChild(node);
+  wf.scrollTop = wf.scrollHeight;
+
+  try {
+    const a = AGENTS[currentAgent];
+    const sys = `You are ${a.name}, a specialist AI agent inside Krew (Nivara Technologies' AI office product). Your role: ${a.role.replace(/&amp;/g, '&')}. Keep responses concise (under 200 words unless asked). Use short paragraphs, bullets when useful. Don't over-apologise or hedge. You are part of nivara.tech — a Bengaluru-based AI platform for Indian developers, creators and small businesses. Pricing is in ₹ rupees. When the user asks for something irreversible (sending an email, posting publicly, paying), ask for confirmation rather than acting.`;
+    const reply = await window.claude.complete({
+      messages: [
+        { role: 'user', content: `${sys}\n\nUser message: ${text}` },
+      ],
+    });
+
+    typing.remove();
+    const aiDiv = addMsg('ai', mdLite(reply));
+
+    // mark workflow node done
+    node.className = 'wnode done';
+    node.querySelector('.ic').textContent = '✓';
+    node.querySelector('.ns').textContent = `${a.av.toLowerCase()} · ${Math.floor(Math.random() * 20 + 8)}s`;
+
+    // bump task count
+    const t = document.getElementById('statTasks');
+    t.textContent = (parseInt(t.textContent, 10) + 1).toString();
+  } catch (err) {
+    typing.remove();
+    addMsg('ai', `<p style="color: #FF6B6B;">${err.message || 'Something went wrong. Try again.'}</p>`);
+    node.className = 'wnode';
+    node.querySelector('.ic').textContent = '!';
+    node.querySelector('.ns').textContent = 'error';
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+});
+
+input.focus();
+</script>
+</body>
+</html>

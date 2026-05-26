@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mesh — RAM Pooling · Nivara</title>
+<meta name="description" content="Pool RAM across devices. Run AI models no single machine can. Mesh 3 always free — 3 devices forever. Scale to 30+ on demand." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../module-pages.css" />
+<link rel="stylesheet" href="../backgrounds.css" />
+
+<style>
+/* ===== Mesh hero stage ===== */
+.mesh-stage-body {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+}
+.mesh-graph-area {
+  padding: 36px 28px;
+  border-right: 1px solid rgba(242,239,233,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mesh-graph-svg { width: 100%; max-width: 460px; height: auto; }
+.mesh-info-area {
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.mi-row { display: flex; flex-direction: column; gap: 4px; }
+.mi-label {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(242,239,233,0.35);
+}
+.mi-val { font-family: var(--font-mono); font-size: 12px; color: rgba(242,239,233,0.88); }
+.mi-bar {
+  height: 3px; background: rgba(242,239,233,0.1);
+  margin-top: 6px; position: relative; overflow: hidden;
+}
+.mi-bar-fill {
+  position: absolute; inset: 0 0 0 0;
+  background: var(--accent);
+  animation: bar-load 2.8s ease-in-out infinite;
+}
+@keyframes bar-load { 0%{right:60%} 60%{right:5%} 100%{right:5%} }
+.mi-layers { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; }
+.mi-layer {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 9px;
+  color: rgba(242,239,233,0.35);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(242,239,233,0.04);
+}
+.mi-layer-node { color: var(--accent); }
+
+/* ===== RAM vis (section 1) ===== */
+.ram-vis {
+  display: flex; align-items: stretch; gap: 0;
+  padding: 0;
+}
+.ram-before {
+  flex: 1;
+  display: flex; flex-direction: column;
+  border-right: 1px solid rgba(14,14,12,0.1);
+}
+.ram-before-head {
+  padding: 14px 20px 10px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(14,14,12,0.4);
+  border-bottom: 1px solid rgba(14,14,12,0.08);
+}
+.ram-device {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(14,14,12,0.06);
+}
+.ram-device:last-child { border-bottom: none; }
+.ram-device-ico {
+  width: 34px; height: 34px;
+  background: #0E0E0C; color: #F2EFE9;
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.ram-device-name { font-size: 13px; font-weight: 500; }
+.ram-device-mem { font-family: var(--font-mono); font-size: 10px; color: var(--muted); margin-top: 2px; }
+.ram-device-cap {
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  color: var(--muted);
+}
+.ram-error {
+  padding: 14px 20px;
+  font-family: var(--font-mono); font-size: 10px;
+  color: #DC2626; letter-spacing: 0.04em;
+  border-top: 1px solid rgba(220,38,38,0.2);
+  background: rgba(220,38,38,0.04);
+}
+.ram-after {
+  width: 200px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+}
+.ram-after-head {
+  padding: 14px 20px 10px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(14,14,12,0.4);
+  border-bottom: 1px solid rgba(14,14,12,0.08);
+}
+.ram-pool-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 28px 20px; gap: 8px;
+  background: color-mix(in oklab, var(--accent) 8%, var(--paper));
+  border-left: 3px solid var(--accent);
+}
+.ram-pool-num {
+  font-size: 56px; font-weight: 500; line-height: 1;
+  letter-spacing: -0.05em;
+}
+.ram-pool-unit {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--muted); text-align: center;
+}
+.ram-pool-tag {
+  margin-top: 10px; padding: 4px 12px;
+  background: var(--accent); color: var(--accent-ink);
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+.ram-pool-ok {
+  font-family: var(--font-mono); font-size: 10px;
+  color: #16A34A; margin-top: 4px; text-align: center;
+}
+
+/* ===== Tier comparison ===== */
+.tier-sec {
+  padding: clamp(60px, 8vw, 100px) 0;
+  border-top: 1px solid var(--rule);
+}
+.tier-sec-head { margin-bottom: 48px; }
+.tier-sec-head .eyebrow {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+.tier-sec-head h2 {
+  font-size: clamp(36px, 4.6vw, 64px);
+  line-height: 0.95; letter-spacing: -0.04em; font-weight: 500;
+}
+.tier-sec-head h2 .it {
+  font-family: var(--font-serif); font-style: italic; font-weight: 400;
+}
+.tier-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr 1fr;
+  border: 1px solid var(--rule);
+  background: var(--rule);
+  gap: 1px;
+}
+.tier-col-label {
+  background: var(--paper-2);
+  padding: 28px 24px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.tier-col-free {
+  background: var(--paper);
+  padding: 28px 24px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tier-col-paid {
+  background: #0E0E0C;
+  padding: 28px 24px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tier-h { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.tier-h.dark { color: rgba(242,239,233,0.4); }
+.tier-price { font-size: 36px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; margin: 4px 0; }
+.tier-price.dark { color: #F2EFE9; }
+.tier-sub { font-size: 12px; color: var(--muted); }
+.tier-sub.dark { color: rgba(242,239,233,0.5); }
+.tier-row {
+  display: contents;
+}
+.tier-row-label {
+  background: var(--paper-2);
+  padding: 16px 24px;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted-2);
+  display: flex; align-items: center;
+}
+.tier-cell-free {
+  background: var(--paper);
+  padding: 16px 24px;
+  font-size: 13px; color: var(--ink-2);
+  display: flex; align-items: center; gap: 10px;
+}
+.tier-cell-paid {
+  background: #0E0E0C;
+  padding: 16px 24px;
+  font-size: 13px; color: rgba(242,239,233,0.75);
+  display: flex; align-items: center; gap: 10px;
+}
+.chk-yes { color: #22C55E; font-size: 15px; flex-shrink: 0; }
+.chk-no  { color: rgba(14,14,12,0.2); font-size: 15px; flex-shrink: 0; }
+.chk-no-dark { color: rgba(242,239,233,0.15); font-size: 15px; flex-shrink: 0; }
+.chk-acc { color: var(--accent); font-size: 15px; flex-shrink: 0; }
+
+/* ===== Inter-mesh vis ===== */
+.intermesh-vis { padding: 32px; display: flex; align-items: center; justify-content: center; }
+
+/* ===== How it works ===== */
+.how-sec { padding: clamp(60px,8vw,100px) 0; border-top: 1px solid var(--rule); }
+.how-eyebrow {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 32px;
+}
+.how-num-circle {
+  width: 32px; height: 32px;
+  border: 1px solid var(--rule-strong); border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink);
+}
+.how-eyebrow-label {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.how-h2 {
+  font-size: clamp(36px,4.6vw,64px); line-height: 0.95;
+  letter-spacing: -0.04em; font-weight: 500; margin-bottom: 48px;
+}
+.how-h2 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+.how-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+}
+.how-card {
+  background: var(--paper);
+  padding: 32px 26px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.how-step {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+.how-icon {
+  width: 40px; height: 40px;
+  background: var(--ink); color: var(--paper);
+  display: grid; place-items: center;
+}
+.how-icon.acc { background: var(--accent); color: var(--accent-ink); }
+.how-card h4 { font-size: 17px; font-weight: 500; letter-spacing: -0.01em; }
+.how-card p { font-size: 13px; color: var(--muted); line-height: 1.55; margin-top: auto; }
+.how-card code {
+  font-family: var(--font-mono); font-size: 11px;
+  background: var(--paper-2); padding: 2px 6px;
+}
+
+/* ===== Mesh 3 SVG vis ===== */
+.m3-vis { padding: 32px; display: flex; align-items: center; justify-content: center; }
+
+/* ===== Pricing strip ===== */
+.pricing-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: rgba(242,239,233,0.08);
+}
+.ps-cell {
+  background: #0E0E0C; padding: 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.ps-cell.hi { border-bottom: 2px solid var(--accent); }
+.ps-label {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(242,239,233,0.35);
+}
+.ps-cell.hi .ps-label { color: rgba(124,92,255,0.8); }
+.ps-price { font-size: 20px; font-weight: 500; color: #F2EFE9; }
+.ps-dev { font-family: var(--font-mono); font-size: 9px; color: rgba(242,239,233,0.3); }
+
+/* ===== Responsive ===== */
+@media (max-width: 960px) {
+  .mesh-stage-body { grid-template-columns: 1fr; }
+  .mesh-info-area { border-top: 1px solid rgba(242,239,233,0.08); }
+  .tier-grid { grid-template-columns: 1fr 1fr; }
+  .tier-col-label { display: none; }
+  .tier-row-label { display: none; }
+  .tier-cell-free::before { content: attr(data-label); display: block; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 4px; width: 100%; }
+  .how-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .tier-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .ram-vis { flex-direction: column; }
+  .ram-after { width: 100%; }
+  .pricing-strip { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="../NIVARA.html" class="nav-mark" aria-label="Nivara home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>Nivara<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../NIVARA.html#platform">Platform</a></li>
+      <li><a href="../NIVARA.html#modules">Modules</a></li>
+      <li><a href="../NIVARA.html#pricing">Pricing</a></li>
+      <li><a href="../download.html">Download</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <span class="mono nav-meta">07 · Mesh</span>
+      <a href="../download.html" class="btn">
+        Download
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- COMING SOON BANNER -->
+<div class="cs-banner">
+  <div class="wrap">
+    <div class="cs-banner-row">
+      <span class="cs-banner-tag">Coming soon</span>
+      <p class="cs-banner-text">Mesh ships in Phase 7. <strong>Mesh 3 (free tier) launches on day one</strong> — 3 devices, zero cost, forever.</p>
+      <a href="../download.html" class="cs-banner-cta">
+        Download →
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- BREADCRUMB -->
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="../NIVARA.html">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        Modules
+      </a>
+      <span class="sep">/</span>
+      <span class="here">07 · Mesh</span>
+    </div>
+  </div>
+</section>
+
+<!-- HERO -->
+<section class="mhero" data-screen-label="01 Hero">
+  <div class="pgbg pgbg-mesh" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000" fill="none">
+      <line x1="180" y1="280" x2="500" y2="140" stroke="currentColor" stroke-width="1.2"/>
+      <line x1="500" y1="140" x2="820" y2="280" stroke="currentColor" stroke-width="1.2"/>
+      <line x1="180" y1="280" x2="320" y2="580" stroke="currentColor" stroke-width="1"/>
+      <line x1="820" y1="280" x2="680" y2="580" stroke="currentColor" stroke-width="1"/>
+      <line x1="320" y1="580" x2="680" y2="580" stroke="currentColor" stroke-width="1"/>
+      <line x1="180" y1="280" x2="820" y2="280" stroke="currentColor" stroke-width="0.7"/>
+      <line x1="320" y1="580" x2="500" y2="140" stroke="currentColor" stroke-width="0.6"/>
+      <line x1="680" y1="580" x2="500" y2="140" stroke="currentColor" stroke-width="0.6"/>
+      <line x1="80"  y1="700" x2="320" y2="580" stroke="currentColor" stroke-width="0.8"/>
+      <line x1="920" y1="700" x2="680" y2="580" stroke="currentColor" stroke-width="0.8"/>
+      <line x1="500" y1="820" x2="320" y2="580" stroke="currentColor" stroke-width="0.8"/>
+      <line x1="500" y1="820" x2="680" y2="580" stroke="currentColor" stroke-width="0.8"/>
+      <circle class="nodepulse" cx="180" cy="280" r="20" fill="var(--accent)" style="animation-delay:0s"/>
+      <circle class="nodepulse" cx="500" cy="140" r="20" fill="var(--accent)" style="animation-delay:0.9s"/>
+      <circle class="nodepulse" cx="820" cy="280" r="20" fill="var(--accent)" style="animation-delay:1.8s"/>
+      <circle cx="180" cy="280" r="9" fill="currentColor"/>
+      <circle cx="500" cy="140" r="9" fill="currentColor"/>
+      <circle cx="820" cy="280" r="9" fill="currentColor"/>
+      <circle cx="320" cy="580" r="7" fill="currentColor"/>
+      <circle cx="680" cy="580" r="7" fill="currentColor"/>
+      <circle cx="80"  cy="700" r="5" fill="currentColor"/>
+      <circle cx="920" cy="700" r="5" fill="currentColor"/>
+      <circle cx="500" cy="820" r="5" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="mhero-top">
+      <div>
+        <div class="mhero-tag up"><span class="ind"></span>Coming soon · Phase 7</div>
+        <h1>Pool RAM.<br/>Run models<br/><span class="it">no single device can.</span></h1>
+      </div>
+    </div>
+
+    <div class="mhero-foot">
+      <p>
+        Three laptops with 8 GB each become a 24 GB supernode. <em>Mesh 3</em> is always free — 3 devices, no expiry, zero cost. Need more? Pick your size, pick your duration, pay only for what you need.
+      </p>
+      <div class="mhero-meta">
+        <div class="row"><span class="l">Status</span><span>Coming soon · Phase 7</span></div>
+        <div class="row"><span class="l">Free</span><span>Mesh 3 · 3 devices · ₹0 forever</span></div>
+        <div class="row"><span class="l">Paid</span><span>From ₹15 · 5 devices · 1 hr</span></div>
+        <div class="row"><span class="l">Tech</span><span>P2P · exo-based · local WiFi</span></div>
+      </div>
+      <div class="mhero-cta">
+        <a href="../download.html" class="btn">
+          Download →
+          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+        <span class="note">Mesh 3 ships on day one</span>
+      </div>
+    </div>
+
+    <!-- STAGE: live mesh session mockup -->
+    <div class="mstage">
+      <div class="mstage-head">
+        <span>// Mesh session · live preview</span>
+        <span class="right">3 nodes · 24 GB pool · model active</span>
+      </div>
+      <div class="frame-dark">
+        <div class="frame-top">
+          <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
+          <span class="ftitle">NIVARA MESH · ROOM 472819</span>
+        </div>
+        <div class="mesh-stage-body">
+          <div class="mesh-graph-area">
+            <svg class="mesh-graph-svg" viewBox="0 0 460 290" fill="none">
+              <!-- Connection lines with animated data particles -->
+              <line x1="90"  y1="210" x2="230" y2="250" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <line x1="370" y1="210" x2="230" y2="250" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <line x1="230" y1="60"  x2="230" y2="250" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <line x1="90"  y1="210" x2="370" y2="210" stroke="rgba(242,239,233,0.1)" stroke-width="1"/>
+              <line x1="90"  y1="210" x2="230" y2="60"  stroke="rgba(242,239,233,0.08)" stroke-width="1"/>
+              <line x1="370" y1="210" x2="230" y2="60"  stroke="rgba(242,239,233,0.08)" stroke-width="1"/>
+
+              <!-- Animated data packets -->
+              <circle r="3.5" fill="var(--accent)" opacity="0.85">
+                <animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#pA"/></animateMotion>
+              </circle>
+              <circle r="3.5" fill="var(--accent)" opacity="0.85">
+                <animateMotion dur="1.8s" repeatCount="indefinite" begin="0.6s"><mpath href="#pB"/></animateMotion>
+              </circle>
+              <circle r="3.5" fill="var(--accent)" opacity="0.85">
+                <animateMotion dur="2s" repeatCount="indefinite" begin="1.2s"><mpath href="#pC"/></animateMotion>
+              </circle>
+              <defs>
+                <path id="pA" d="M90,210 L230,250"/>
+                <path id="pB" d="M370,210 L230,250"/>
+                <path id="pC" d="M230,60 L230,250"/>
+              </defs>
+
+              <!-- Node A -->
+              <circle cx="90" cy="210" r="38" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/>
+              <text x="90" y="203" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="500" fill="rgba(242,239,233,0.92)">8 GB</text>
+              <text x="90" y="220" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(242,239,233,0.38)">Device A</text>
+
+              <!-- Node B (top) -->
+              <circle cx="230" cy="60" r="38" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/>
+              <text x="230" y="53" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="500" fill="rgba(242,239,233,0.92)">8 GB</text>
+              <text x="230" y="70" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(242,239,233,0.38)">Device B</text>
+
+              <!-- Node C -->
+              <circle cx="370" cy="210" r="38" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/>
+              <text x="370" y="203" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="500" fill="rgba(242,239,233,0.92)">8 GB</text>
+              <text x="370" y="220" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(242,239,233,0.38)">Device C</text>
+
+              <!-- Pool node (center) -->
+              <circle cx="230" cy="250" r="0" fill="rgba(124,92,255,0.12)" stroke="rgba(124,92,255,0.75)" stroke-width="2">
+                <animate attributeName="r" values="0;44" dur="0.5s" fill="freeze" begin="0.4s"/>
+              </circle>
+              <text x="230" y="244" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="16" font-weight="500" fill="rgba(124,92,255,1)" opacity="0">
+                24 GB
+                <animate attributeName="opacity" values="0;1" dur="0.3s" fill="freeze" begin="0.8s"/>
+              </text>
+              <text x="230" y="262" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(242,239,233,0.38)" opacity="0">
+                unified pool
+                <animate attributeName="opacity" values="0;1" dur="0.3s" fill="freeze" begin="0.9s"/>
+              </text>
+            </svg>
+          </div>
+
+          <div class="mesh-info-area">
+            <div class="mi-row">
+              <span class="mi-label">Room</span>
+              <span class="mi-val">NIVARA-472819</span>
+            </div>
+            <div class="mi-row">
+              <span class="mi-label">Pool</span>
+              <span class="mi-val">24 GB · 3 nodes</span>
+            </div>
+            <div class="mi-row">
+              <span class="mi-label">Model</span>
+              <span class="mi-val">Llama 3.3 70B</span>
+              <div class="mi-bar"><div class="mi-bar-fill"></div></div>
+              <span style="font-family:var(--font-mono);font-size:9px;color:rgba(242,239,233,0.28);margin-top:3px;">Loading layers... 82%</span>
+            </div>
+            <div class="mi-row" style="margin-top:auto;">
+              <span class="mi-label">Layer routing</span>
+              <div class="mi-layers">
+                <div class="mi-layer"><span>Layer 28–31</span><span class="mi-layer-node">→ A</span></div>
+                <div class="mi-layer"><span>Layer 32–35</span><span class="mi-layer-node">→ B</span></div>
+                <div class="mi-layer"><span>Layer 36–40</span><span class="mi-layer-node">→ C</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1: WHAT IS MESH -->
+<section class="fsec">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow">
+          <span class="num">01</span>
+          <span class="label">What is Mesh?</span>
+        </div>
+        <h2>Small devices,<br/><span class="it">enormous models.</span></h2>
+        <p>Most AI models that actually do useful work — Llama 3.3 70B, Qwen 72B, Mistral Large — need 40–80 GB of RAM. No single laptop has that. Mesh solves this.</p>
+        <p>Multiple machines on the same WiFi pool their RAM together. Each device holds a portion of the model. Inference runs distributed across all of them. From outside, it behaves like one very powerful machine.</p>
+        <ul>
+          <li>Model layers split automatically — no manual setup</li>
+          <li>Built on <strong>exo</strong> (Apache 2.0, open source)</li>
+          <li>Pure P2P — no cloud, no central server, runs on your hardware</li>
+          <li>Works on MacBook, Windows laptop, Linux desktop — mixed hardware</li>
+        </ul>
+      </div>
+      <div>
+        <div class="frame">
+          <div class="frame-top">
+            <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
+            <span class="ftitle">RAM · BEFORE AND AFTER MESH</span>
+          </div>
+          <div class="ram-vis">
+            <div class="ram-before">
+              <div class="ram-before-head">Without mesh</div>
+              <div class="ram-device">
+                <div class="ram-device-ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 12v2M11 12v2M3 14h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <div class="ram-device-name">Laptop A</div>
+                  <div class="ram-device-mem">8 GB available</div>
+                </div>
+                <span class="ram-device-cap">8 GB</span>
+              </div>
+              <div class="ram-device">
+                <div class="ram-device-ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 12v2M11 12v2M3 14h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <div class="ram-device-name">Laptop B</div>
+                  <div class="ram-device-mem">8 GB available</div>
+                </div>
+                <span class="ram-device-cap">8 GB</span>
+              </div>
+              <div class="ram-device">
+                <div class="ram-device-ico">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M5 12v2M11 12v2M3 14h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <div class="ram-device-name">Laptop C</div>
+                  <div class="ram-device-mem">8 GB available</div>
+                </div>
+                <span class="ram-device-cap">8 GB</span>
+              </div>
+              <div class="ram-error">✗ Llama 3.3 70B needs ~40 GB — won't run</div>
+            </div>
+            <div class="ram-after">
+              <div class="ram-after-head">With Mesh 3</div>
+              <div class="ram-pool-body">
+                <div class="ram-pool-num">24</div>
+                <div class="ram-pool-unit">GB unified RAM pool</div>
+                <div class="ram-pool-tag">Mesh 3 · free</div>
+                <div class="ram-pool-ok">✓ Llama 3.3 70B fits</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: MESH 3 FREE -->
+<section class="fsec reverse">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow">
+          <span class="num">02</span>
+          <span class="label">Mesh 3 · free tier</span>
+        </div>
+        <h2>Three devices.<br/><span class="it">Always free.</span></h2>
+        <p>Mesh 3 is included on every Nivara plan — including Explore (₹0 forever). Connect up to 3 machines on the same WiFi and pool their RAM. No credit card. No time limit.</p>
+        <ul>
+          <li class="acc">Included on every plan including Explore</li>
+          <li class="acc">Up to 3 devices on one mesh session</li>
+          <li class="acc">Pool up to ~24 GB RAM</li>
+          <li>No expiry — run indefinitely</li>
+          <li>Fully P2P — runs entirely on your own hardware</li>
+          <li>Mixed hardware: Mac, Windows, Linux all work together</li>
+        </ul>
+        <p style="margin-top:24px;padding:16px;background:color-mix(in oklab,var(--ink) 4%,transparent);border-left:3px solid var(--rule-strong);font-size:13px;color:var(--muted);line-height:1.6;">
+          <strong style="color:var(--ink);">Limitation:</strong> Mesh 3 sessions are isolated. Two separate meshes cannot connect to each other. That requires a paid plan with a central node.
+        </p>
+      </div>
+      <div>
+        <div class="frame-dark">
+          <div class="frame-top">
+            <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
+            <span class="ftitle">MESH 3 · FREE · 3 DEVICES MAX</span>
+          </div>
+          <div class="m3-vis">
+            <svg viewBox="0 0 340 280" fill="none" style="width:100%;max-width:340px;">
+              <!-- connections (green = free) -->
+              <line x1="170" y1="36"  x2="56"  y2="218" stroke="rgba(34,197,94,0.45)" stroke-width="2" stroke-dasharray="6 4"/>
+              <line x1="170" y1="36"  x2="284" y2="218" stroke="rgba(34,197,94,0.45)" stroke-width="2" stroke-dasharray="6 4"/>
+              <line x1="56"  y1="218" x2="284" y2="218" stroke="rgba(34,197,94,0.35)" stroke-width="2" stroke-dasharray="6 4"/>
+              <!-- pulse rings (free = green) -->
+              <circle cx="170" cy="36"  r="42" fill="none" stroke="rgba(34,197,94,0.15)" stroke-width="1">
+                <animate attributeName="r" values="42;60" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.4;0" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <!-- nodes -->
+              <circle cx="170" cy="36"  r="38" fill="rgba(14,14,12,0.9)" stroke="rgba(34,197,94,0.75)" stroke-width="2"/>
+              <text x="170" y="29"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="500" fill="rgba(242,239,233,0.95)">8 GB</text>
+              <text x="170" y="47"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(34,197,94,0.8)">Device A</text>
+              <circle cx="56"  cy="218" r="38" fill="rgba(14,14,12,0.9)" stroke="rgba(34,197,94,0.75)" stroke-width="2"/>
+              <text x="56"  y="211" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="500" fill="rgba(242,239,233,0.95)">8 GB</text>
+              <text x="56"  y="229" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(34,197,94,0.8)">Device B</text>
+              <circle cx="284" cy="218" r="38" fill="rgba(14,14,12,0.9)" stroke="rgba(34,197,94,0.75)" stroke-width="2"/>
+              <text x="284" y="211" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="500" fill="rgba(242,239,233,0.95)">8 GB</text>
+              <text x="284" y="229" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(34,197,94,0.8)">Device C</text>
+              <!-- center label -->
+              <text x="170" y="134" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9"  fill="rgba(34,197,94,0.5)" letter-spacing="0.14em">MESH 3</text>
+              <text x="170" y="156" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="22" font-weight="500" fill="rgba(34,197,94,0.92)">₹0</text>
+              <text x="170" y="174" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(34,197,94,0.45)">forever</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: EXTEND MESH PAID -->
+<section class="fsec">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow">
+          <span class="num">03</span>
+          <span class="label">Extend Mesh · paid</span>
+        </div>
+        <h2>Need more<br/><span class="it">than three?</span></h2>
+        <p>Scale to 5, 10, 20 devices — as many as your session needs. Hourly sessions start at just 5 devices. Day, week, and monthly passes start at 10. Pay once, use for the full duration.</p>
+        <ul>
+          <li class="acc">Hourly: 5 devices · ₹15/hr · ₹3.00/device/hr</li>
+          <li class="acc">Daily: 10 devices · ₹59/day · ₹0.25/device/hr</li>
+          <li class="acc">Weekly: 10 devices · ₹179/week</li>
+          <li class="acc">Monthly: 10 devices · ₹399/month · 45× cheaper/hr vs hourly</li>
+          <li>Extra devices: ₹2/hr · ₹6/day · ₹18/week · ₹40/month</li>
+          <li>Paid users become central nodes — control who joins</li>
+        </ul>
+      </div>
+      <div>
+        <div class="frame-dark">
+          <div class="frame-top">
+            <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
+            <span class="ftitle">EXTEND MESH · 10 DEVICES · CENTRAL NODE</span>
+          </div>
+          <div style="padding:28px;">
+            <!-- 10-node hub-and-spoke diagram -->
+            <svg viewBox="0 0 400 220" fill="none" style="width:100%;margin-bottom:20px;">
+              <!-- Spokes from center -->
+              <line x1="200" y1="110" x2="200" y2="36"  stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <line x1="200" y1="110" x2="298" y2="62"  stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <line x1="200" y1="110" x2="362" y2="140" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <line x1="200" y1="110" x2="298" y2="180" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <line x1="200" y1="110" x2="200" y2="192" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <line x1="200" y1="110" x2="102" y2="180" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <line x1="200" y1="110" x2="38"  y2="140" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <line x1="200" y1="110" x2="102" y2="62"  stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <!-- Member nodes (8 outer) -->
+              <circle cx="200" cy="28"  r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="200" y="32" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">8 GB</text>
+              <circle cx="306" cy="56"  r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="306" y="60" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">16 GB</text>
+              <circle cx="370" cy="140" r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="370" y="144" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">8 GB</text>
+              <circle cx="306" cy="186" r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="306" y="190" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">8 GB</text>
+              <circle cx="200" cy="200" r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="200" y="204" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">8 GB</text>
+              <circle cx="94"  cy="186" r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="94"  y="190" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">8 GB</text>
+              <circle cx="30"  cy="140" r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="30"  y="144" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">8 GB</text>
+              <circle cx="94"  cy="56"  r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.45)" stroke-width="1.5"/>
+              <text x="94"  y="60"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.7)">8 GB</text>
+              <!-- Central node (you) -->
+              <circle cx="200" cy="110" r="32" fill="rgba(124,92,255,0.18)" stroke="rgba(124,92,255,0.9)" stroke-width="2"/>
+              <text x="200" y="105" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(124,92,255,1)" font-weight="500">Central</text>
+              <text x="200" y="120" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9"  fill="rgba(242,239,233,0.45)">node · you</text>
+            </svg>
+            <!-- Duration pricing strip -->
+            <div class="pricing-strip">
+              <div class="ps-cell">
+                <div class="ps-label">1 hour</div>
+                <div class="ps-price">₹25</div>
+                <div class="ps-dev">10 devices</div>
+              </div>
+              <div class="ps-cell hi">
+                <div class="ps-label">1 day</div>
+                <div class="ps-price">₹59</div>
+                <div class="ps-dev">10 devices</div>
+              </div>
+              <div class="ps-cell">
+                <div class="ps-label">1 week</div>
+                <div class="ps-price">₹179</div>
+                <div class="ps-dev">10 devices</div>
+              </div>
+              <div class="ps-cell">
+                <div class="ps-label">1 month</div>
+                <div class="ps-price">₹399</div>
+                <div class="ps-dev">10 devices</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIER COMPARISON TABLE -->
+<section class="tier-sec">
+  <div class="wrap">
+    <div class="tier-sec-head">
+      <div class="eyebrow">// 04 — Free vs Paid · full comparison</div>
+      <h2>Two tiers,<br/><span class="it">one platform.</span></h2>
+    </div>
+    <div class="tier-grid">
+      <!-- Header row -->
+      <div class="tier-col-label">
+        <div class="tier-h">Feature</div>
+      </div>
+      <div class="tier-col-free">
+        <div class="tier-h">Mesh 3 · Free</div>
+        <div class="tier-price">₹0</div>
+        <div class="tier-sub">Forever · every plan</div>
+      </div>
+      <div class="tier-col-paid">
+        <div class="tier-h dark">Extend Mesh · Paid</div>
+        <div class="tier-price dark">₹15<span style="font-size:16px;color:rgba(242,239,233,0.4);">/hr</span></div>
+        <div class="tier-sub dark">5–30+ devices · any duration</div>
+      </div>
+
+      <!-- Max devices -->
+      <div class="tier-row-label" data-label="Devices">Max devices</div>
+      <div class="tier-cell-free" data-label="Mesh 3"><span class="chk-yes">●</span>Up to <strong>3 devices</strong></div>
+      <div class="tier-cell-paid" data-label="Extend"><span class="chk-acc">●</span><strong>5–30+</strong> devices — you choose</div>
+
+      <!-- RAM pool -->
+      <div class="tier-row-label" data-label="RAM">RAM pool</div>
+      <div class="tier-cell-free" data-label="Mesh 3"><span class="chk-yes">●</span>Up to ~24 GB (3 × 8 GB)</div>
+      <div class="tier-cell-paid" data-label="Extend"><span class="chk-acc">●</span>40–240+ GB — run any model</div>
+
+      <!-- Pricing -->
+      <div class="tier-row-label" data-label="Cost">Pricing</div>
+      <div class="tier-cell-free" data-label="Mesh 3"><span class="chk-yes">●</span>Free — no credit card ever</div>
+      <div class="tier-cell-paid" data-label="Extend"><span class="chk-acc">●</span>Pay per session · hourly → monthly</div>
+
+      <!-- Duration -->
+      <div class="tier-row-label" data-label="Duration">Duration</div>
+      <div class="tier-cell-free" data-label="Mesh 3"><span class="chk-yes">●</span>Unlimited — no expiry</div>
+      <div class="tier-cell-paid" data-label="Extend"><span class="chk-acc">●</span>1 hr · 1 day · 1 week · 1 month</div>
+
+      <!-- Inter-mesh -->
+      <div class="tier-row-label" data-label="Inter-mesh">Inter-mesh</div>
+      <div class="tier-cell-free" data-label="Mesh 3"><span class="chk-no">○</span>Not available — isolated only</div>
+      <div class="tier-cell-paid" data-label="Extend"><span class="chk-acc">●</span>Connect meshes via central nodes</div>
+
+      <!-- Plan required -->
+      <div class="tier-row-label" data-label="Plan">Plan required</div>
+      <div class="tier-cell-free" data-label="Mesh 3"><span class="chk-yes">●</span>Any plan — including Explore (₹0)</div>
+      <div class="tier-cell-paid" data-label="Extend"><span class="chk-acc">●</span>Paid Nivara plan required</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: INTER-MESH CONNECTIONS -->
+<section class="fsec reverse">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow">
+          <span class="num">05</span>
+          <span class="label">Inter-mesh · paid only</span>
+        </div>
+        <h2>Two meshes,<br/><span class="it">one supernode.</span></h2>
+        <p>Paid users become "central nodes" — they own a mesh session and control who joins. Two central nodes can connect their separate meshes, creating one massive unified pool.</p>
+        <ul>
+          <li class="acc">Only paid central nodes can initiate connections</li>
+          <li class="acc">Central node A sends a request to central node B</li>
+          <li>B's user sees an accept/reject prompt</li>
+          <li>Combined pool = A's capacity + B's capacity</li>
+        </ul>
+        <div style="margin-top:24px;display:flex;flex-direction:column;gap:12px;">
+          <div style="padding:16px 20px;background:color-mix(in oklab,#22C55E 8%,transparent);border-left:3px solid #22C55E;">
+            <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#16A34A;margin-bottom:6px;">Graceful migration</div>
+            <div style="font-size:13px;color:var(--ink-2);line-height:1.6;">Node A (10 devices) joins Node B (20-device plan, 10 used). If A disconnects: B has 10 free slots → A's devices migrate automatically. Nobody drops.</div>
+          </div>
+          <div style="padding:16px 20px;background:color-mix(in oklab,#EF4444 6%,transparent);border-left:3px solid rgba(239,68,68,0.5);">
+            <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#DC2626;margin-bottom:6px;">Hard disconnect</div>
+            <div style="font-size:13px;color:var(--ink-2);line-height:1.6;">Node A (10 devices) joins Node B (10-device plan, fully used). If A disconnects: B has no free slots → A's 10 devices leave the mesh.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="frame-dark">
+          <div class="frame-top">
+            <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
+            <span class="ftitle">INTER-MESH · CENTRAL NODE LINK</span>
+          </div>
+          <div class="intermesh-vis">
+            <svg viewBox="0 0 460 260" fill="none" style="width:100%;max-width:460px;">
+              <!-- Mesh A label -->
+              <text x="92" y="16" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(242,239,233,0.3)" letter-spacing="0.14em">MESH A</text>
+              <!-- Central A -->
+              <circle cx="92" cy="130" r="32" fill="rgba(124,92,255,0.18)" stroke="rgba(124,92,255,0.8)" stroke-width="2"/>
+              <text x="92" y="125" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(124,92,255,0.95)" font-weight="500">Central</text>
+              <text x="92" y="141" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9"  fill="rgba(242,239,233,0.45)">Node A</text>
+              <!-- A members -->
+              <line x1="62"  y1="110" x2="28"  y2="72"  stroke="rgba(124,92,255,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <circle cx="20"  cy="62"  r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <text x="20"  y="66" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.65)">8 GB</text>
+              <line x1="60"  y1="152" x2="24"  y2="188" stroke="rgba(124,92,255,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <circle cx="16"  cy="196" r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <text x="16"  y="200" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.65)">8 GB</text>
+              <line x1="92"  y1="98"  x2="92"  y2="56"  stroke="rgba(124,92,255,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <circle cx="92"  cy="44"  r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <text x="92"  y="48" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.65)">16 GB</text>
+
+              <!-- Mesh B label -->
+              <text x="368" y="16" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(242,239,233,0.3)" letter-spacing="0.14em">MESH B</text>
+              <!-- Central B -->
+              <circle cx="368" cy="130" r="32" fill="rgba(124,92,255,0.18)" stroke="rgba(124,92,255,0.8)" stroke-width="2"/>
+              <text x="368" y="125" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(124,92,255,0.95)" font-weight="500">Central</text>
+              <text x="368" y="141" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9"  fill="rgba(242,239,233,0.45)">Node B</text>
+              <!-- B members -->
+              <line x1="396" y1="110" x2="430" y2="72"  stroke="rgba(124,92,255,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <circle cx="440" cy="62"  r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <text x="440" y="66" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.65)">8 GB</text>
+              <line x1="398" y1="152" x2="434" y2="188" stroke="rgba(124,92,255,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <circle cx="444" cy="196" r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <text x="444" y="200" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.65)">8 GB</text>
+              <line x1="368" y1="98"  x2="368" y2="56"  stroke="rgba(124,92,255,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <circle cx="368" cy="44"  r="16" fill="rgba(14,14,12,0.9)" stroke="rgba(124,92,255,0.4)" stroke-width="1.5"/>
+              <text x="368" y="48" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.65)">8 GB</text>
+
+              <!-- Inter-mesh connection -->
+              <line x1="124" y1="130" x2="336" y2="130" stroke="rgba(242,239,233,0.5)" stroke-width="1.5" stroke-dasharray="8 5"/>
+              <!-- Animated packet across the inter-mesh link -->
+              <circle r="4" fill="rgba(242,239,233,0.7)">
+                <animateMotion dur="2.2s" repeatCount="indefinite">
+                  <mpath><path d="M124,130 L336,130" fill="none"/></mpath>
+                </animateMotion>
+              </circle>
+              <circle cx="230" cy="130" r="18" fill="rgba(14,14,12,0.95)" stroke="rgba(242,239,233,0.25)" stroke-width="1.5"/>
+              <text x="230" y="126" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.45)">paid</text>
+              <text x="230" y="138" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(242,239,233,0.45)">link</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-sec">
+  <div class="wrap">
+    <div class="how-eyebrow">
+      <span class="how-num-circle">06</span>
+      <span class="how-eyebrow-label">How Mesh works</span>
+    </div>
+    <h2 class="how-h2">Four steps to<br/><span class="it">a supernode.</span></h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-step">Step 01</div>
+        <div class="how-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M7 14v2M13 14v2M4 18h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <h4>Open Models</h4>
+        <p>Open Nivara desktop app. Go to the <strong>Models</strong> module. Choose the model you want to run — Llama 70B, Qwen 72B, anything that needs more RAM than you have.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">Step 02</div>
+        <div class="how-icon acc">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10h8M10 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h4>Run with Mesh</h4>
+        <p>Click <strong>"Run with Mesh"</strong> instead of Run. Nivara starts a node on your machine and generates a room code: <code>NIVARA-472819</code></p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">Step 03</div>
+        <div class="how-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7 10h6M13 10l-3-3M13 10l-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h4>Share the code</h4>
+        <p>Send the 6-digit room code to friends. They open Nivara on their machine, click <strong>Join Mesh</strong>, enter the code — they're in.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">Step 04</div>
+        <div class="how-icon acc">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M9 10l2-2M9 10l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <h4>Model distributes</h4>
+        <p>Layers of the model split across all devices automatically. Each machine holds only its share in RAM. Inference runs distributed, locally — no cloud, no API, no cost.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALLOUT -->
+<section class="callout">
+  <div class="wrap">
+    <h3>Your devices,<br/><span class="it">one supernode.</span></h3>
+    <p>Mesh 3 is free on every plan. No server, no cost, no expiry. Be the first to know when Extend Mesh launches.</p>
+    <div class="btn-row">
+      <a href="../download.html" class="btn">
+        Join the waitlist
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+      <a href="../NIVARA.html#mesh" class="btn alt">
+        Back to Mesh plans
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="../NIVARA.html">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>Nivara</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="krew.html">Krew · agents</a></li>
+          <li><a href="automation.html">Studio · automation</a></li>
+          <li><a href="coder.html">Coder · dev tools</a></li>
+          <li><a href="models.html">Models · open hub</a></li>
+          <li><a href="vault.html">Vault · VPN</a></li>
+          <li><a href="guard.html">Guard · security</a></li>
+          <li><a href="mesh.html">Mesh · RAM pooling</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Links</h3>
+        <ul>
+          <li><a href="../NIVARA.html#pricing">Pricing</a></li>
+          <li><a href="../download.html">Download</a></li>
+          <li><a href="../NIVARA.html#modules">All modules</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="mono">© 2025 Nivara Technologies · Blr, India.</span>
+      <span class="mono">Mesh · P2P · your hardware, your control</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var toggle = document.getElementById('themeToggle');
+  var html = document.documentElement;
+  var saved = localStorage.getItem('nivara-theme') || 'paper';
+  html.setAttribute('data-theme', saved === 'ink' ? 'ink' : '');
+  toggle.addEventListener('click', function () {
+    var next = html.getAttribute('data-theme') === 'ink' ? '' : 'ink';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('nivara-theme', next === 'ink' ? 'ink' : 'paper');
+  });
+  // Reveal on scroll
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(function (el) { obs.observe(el); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nivara — Icon kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F2EFE9;
+    --paper-2: #EAE6DD;
+    --ink: #0E0E0C;
+    --ink-2: #1C1C1A;
+    --muted: rgba(14,14,12,0.58);
+    --muted-2: rgba(14,14,12,0.4);
+    --rule: rgba(14,14,12,0.12);
+    --rule-strong: rgba(14,14,12,0.22);
+    --accent: #7C5CFF;
+    --accent-ink: #F2EFE9;
+    --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    padding: 56px 48px 96px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* ============== HEADER ============== */
+  header {
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 32px; align-items: end;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 56px;
+  }
+  header .markwrap {
+    width: 92px; height: 84px;
+    display: grid; place-items: center;
+  }
+  header .markwrap svg { width: 100%; height: 100%; color: var(--ink); }
+  header h1 {
+    font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: -0.04em;
+    font-weight: 500; line-height: 0.95;
+  }
+  header h1 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  header .eyebrow {
+    font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+  header .lede {
+    max-width: 56ch;
+    color: var(--muted); margin-top: 14px;
+    font-size: 15px; line-height: 1.55;
+  }
+  header .quick {
+    display: flex; flex-direction: column; gap: 10px;
+    text-align: right;
+  }
+  header .quick a, header .quick button {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 18px;
+    background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink);
+    font-family: var(--font-sans); font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+  }
+  header .quick a:hover, header .quick button:hover {
+    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  header .quick button.alt {
+    background: transparent; color: var(--ink); border-color: var(--rule-strong);
+  }
+
+  /* ============== SECTIONS ============== */
+  section { margin-bottom: 72px; }
+  section .sechead {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 16px;
+  }
+  section h2 {
+    font-size: 32px; letter-spacing: -0.025em;
+    font-weight: 500;
+  }
+  section h2 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  section .num {
+    font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.16em; color: var(--muted-2);
+    text-transform: uppercase;
+  }
+  section .secdesc {
+    color: var(--muted); font-size: 14px;
+    line-height: 1.55; max-width: 70ch;
+    margin-top: -16px; margin-bottom: 28px;
+  }
+
+  /* ============== SIZE GRID ============== */
+  .sizes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .tile {
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .tile.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tile.acc { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .tile .preview {
+    aspect-ratio: 1;
+    display: grid; place-items: center;
+    border-bottom: 1px solid var(--rule);
+    background: repeating-conic-gradient(
+      rgba(14,14,12,0.04) 0% 25%,
+      transparent 0% 50%
+    ) 0 0 / 16px 16px;
+  }
+  .tile.dark .preview {
+    border-bottom-color: rgba(242,239,233,0.12);
+    background: repeating-conic-gradient(
+      rgba(242,239,233,0.04) 0% 25%,
+      transparent 0% 50%
+    ) 0 0 / 16px 16px;
+  }
+  .tile.acc .preview {
+    border-bottom-color: rgba(242,239,233,0.2);
+    background: none;
+  }
+  .tile .preview .iconbox {
+    background: inherit;
+    width: 80%; height: 80%;
+    display: grid; place-items: center;
+  }
+  .tile .preview .iconbox.solid { background: var(--paper); }
+  .tile.dark .preview .iconbox.solid { background: var(--ink); }
+  .tile.acc  .preview .iconbox.solid { background: var(--accent); }
+  .tile .preview svg { color: currentColor; }
+  .tile .info {
+    padding: 12px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tile.dark .info { color: rgba(242,239,233,0.55); }
+  .tile.acc .info { color: rgba(242,239,233,0.7); }
+  .tile .info .px { font-weight: 500; color: var(--ink); }
+  .tile.dark .info .px { color: var(--paper); }
+  .tile.acc .info .px { color: var(--accent-ink); }
+  .tile .info .dl {
+    background: transparent; border: none; cursor: pointer;
+    font-family: inherit; font-size: inherit;
+    letter-spacing: inherit; text-transform: inherit;
+    color: var(--accent); padding: 2px 0;
+  }
+  .tile.dark .info .dl, .tile.acc .info .dl { color: var(--paper); }
+  .tile .info .dl:hover { text-decoration: underline; }
+  .tile .info .dl.ok { color: var(--accent); }
+
+  /* ============== SHOWCASE ============== */
+  .showcase {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 880px) { .showcase { grid-template-columns: 1fr; } }
+  .show {
+    aspect-ratio: 1;
+    display: grid; place-items: center;
+    border: 1px solid var(--rule-strong);
+    position: relative;
+  }
+  .show.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .show.acc  { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .show.paper { background: var(--paper); color: var(--ink); }
+  .show svg { width: 42%; color: currentColor; }
+  .show .label {
+    position: absolute; top: 16px; left: 18px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: currentColor; opacity: 0.55;
+  }
+  .show .dl {
+    position: absolute; bottom: 16px; right: 18px;
+    background: transparent; border: none; cursor: pointer;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: currentColor; opacity: 0.75;
+  }
+  .show .dl:hover { opacity: 1; text-decoration: underline; }
+  .show .dl.ok { opacity: 1; color: currentColor; }
+
+  /* ============== SVG SOURCE ============== */
+  .svg-src {
+    background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 28px;
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 32px; align-items: stretch;
+  }
+  @media (max-width: 880px) { .svg-src { grid-template-columns: 1fr; } }
+  .svg-src .demo {
+    width: 100%; min-height: 200px;
+    background: rgba(242,239,233,0.04);
+    border: 1px solid rgba(242,239,233,0.12);
+    display: grid; place-items: center;
+  }
+  .svg-src .demo svg { width: 56%; color: var(--paper); }
+  .svg-src .code-wrap { position: relative; }
+  .svg-src pre {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(242,239,233,0.1);
+    padding: 22px 24px;
+    overflow-x: auto;
+    font-family: var(--font-mono); font-size: 12px;
+    line-height: 1.6;
+    color: rgba(242,239,233,0.9);
+    white-space: pre;
+  }
+  .svg-src .copy {
+    position: absolute; top: 10px; right: 10px;
+    background: transparent; border: 1px solid rgba(242,239,233,0.25);
+    color: rgba(242,239,233,0.65);
+    padding: 6px 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    cursor: pointer;
+  }
+  .svg-src .copy:hover { color: var(--paper); border-color: var(--paper); }
+  .svg-src .copy.ok { color: var(--accent); border-color: var(--accent); }
+
+  /* ============== HOW-TO ============== */
+  .howto {
+    background: #F7F4ED;
+    border: 1px solid var(--rule-strong);
+    padding: 32px;
+  }
+  .howto h3 { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .howto h3 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  .howto p { color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 70ch; }
+  .howto ol {
+    list-style: none; counter-reset: step;
+    margin-top: 20px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .howto ol li {
+    display: grid; grid-template-columns: 32px 1fr;
+    gap: 14px; align-items: start;
+    font-size: 14px; line-height: 1.55;
+    color: var(--ink);
+  }
+  .howto ol li::before {
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.12em; color: var(--accent);
+    padding-top: 2px;
+  }
+  .howto ol li code, .howto p code {
+    background: rgba(14,14,12,0.06);
+    padding: 2px 7px;
+    font-family: var(--font-mono); font-size: 12.5px;
+    color: var(--ink);
+  }
+  .howto .cmd {
+    margin-top: 20px;
+    padding: 16px 18px;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--font-mono); font-size: 12px;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .howto .cmd .pfx { color: var(--accent); margin-right: 8px; }
+  .howto .cmd .com { color: rgba(242,239,233,0.5); }
+
+  /* ============== BULK ============== */
+  .bulk-row {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-top: 20px;
+  }
+  .bulk-row button {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 18px;
+    background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink);
+    font-family: var(--font-sans); font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px; cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .bulk-row button:hover {
+    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .bulk-row button.alt {
+    background: transparent; color: var(--ink); border-color: var(--rule-strong);
+  }
+  .bulk-row button.alt:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* status pill */
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 11px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-2);
+  }
+  .pill::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+</style>
+</head>
+<body>
+
+<!-- Hidden SVG sprite — the canonical mark in its base 26×24 viewBox. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="nv-mark" viewBox="0 0 26 24">
+    <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+    <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+
+  <header>
+    <div class="markwrap">
+      <svg><use href="#nv-mark"/></svg>
+    </div>
+    <div>
+      <div class="eyebrow">// Nivara · brand assets</div>
+      <h1>Icon kit. <span class="it">.exe / .ico / .png ready.</span></h1>
+      <p class="lede">
+        The Nivara double-arrow mark — every size you need to drop into a Windows executable, an installer, a taskbar shortcut, or an app store listing. Click any size to download as PNG. Copy the raw SVG below for vector use. The "Bundle all" button packages every PNG size into a single ZIP that <code style="font-family: var(--font-mono); font-size: 12.5px; background: rgba(14,14,12,0.06); padding: 1px 6px;">ImageMagick</code> can convert to <code style="font-family: var(--font-mono); font-size: 12.5px; background: rgba(14,14,12,0.06); padding: 1px 6px;">.ico</code> in one command.
+      </p>
+    </div>
+    <div class="quick">
+      <button id="bundleAll">
+        Bundle all sizes (.zip)
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v8M2 6l4 4 4-4" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <button class="alt" id="copyAllSvg">Copy SVG source</button>
+      <span class="pill" id="statusPill" style="align-self: flex-end;">ready · 13 sizes</span>
+    </div>
+  </header>
+
+  <!-- =========== 01 · ICO SIZES (paper variant) =========== -->
+  <section>
+    <div class="sechead">
+      <h2>Windows ICO sizes <span class="it">/ paper</span></h2>
+      <span class="num">01 · ink-on-paper</span>
+    </div>
+    <p class="secdesc">Every size Windows actually uses — taskbar, file explorer, alt-tab, jump list, start menu, app-store thumbnail. Click any tile to download that exact PNG.</p>
+    <div class="sizes" id="grid-paper"></div>
+  </section>
+
+  <!-- =========== 02 · ICO SIZES (ink variant) =========== -->
+  <section>
+    <div class="sechead">
+      <h2>Windows ICO sizes <span class="it">/ ink</span></h2>
+      <span class="num">02 · paper-on-ink</span>
+    </div>
+    <p class="secdesc">Dark-mode variant. Use for installers with a dark splash, dark store listings, or when overlaying on a colored background.</p>
+    <div class="sizes" id="grid-ink"></div>
+  </section>
+
+  <!-- =========== 03 · ACCENT (purple bg) =========== -->
+  <section>
+    <div class="sechead">
+      <h2>Accent variant <span class="it">/ purple</span></h2>
+      <span class="num">03 · paper-on-accent</span>
+    </div>
+    <p class="secdesc">When the icon needs to <em>be</em> the brand — for the .exe itself, app stores, marketing tiles. Solid <code style="font-family: var(--font-mono); font-size: 12.5px; background: rgba(14,14,12,0.06); padding: 1px 6px;">#7C5CFF</code> background, paper-cream chevron on top.</p>
+    <div class="sizes" id="grid-acc"></div>
+  </section>
+
+  <!-- =========== 04 · BIG SHOWCASE =========== -->
+  <section>
+    <div class="sechead">
+      <h2>Hero variants <span class="it">/ 512 px</span></h2>
+      <span class="num">04 · master files</span>
+    </div>
+    <p class="secdesc">The "master" assets your developer/designer drops into the codebase. Each one is 512×512 PNG with the mark centered, 20% padding, ready for `electron-builder`, `Tauri`, or direct `.ico` conversion.</p>
+    <div class="showcase">
+      <div class="show paper">
+        <span class="label">// paper · default</span>
+        <svg><use href="#nv-mark"/></svg>
+        <button class="dl" data-master="paper">Download 512 ↓</button>
+      </div>
+      <div class="show dark">
+        <span class="label">// ink · dark mode</span>
+        <svg><use href="#nv-mark"/></svg>
+        <button class="dl" data-master="ink">Download 512 ↓</button>
+      </div>
+      <div class="show acc">
+        <span class="label">// accent · brand</span>
+        <svg><use href="#nv-mark"/></svg>
+        <button class="dl" data-master="acc">Download 512 ↓</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== 05 · SVG SOURCE =========== -->
+  <section>
+    <div class="sechead">
+      <h2>SVG source <span class="it">/ canonical mark</span></h2>
+      <span class="num">05 · the path data</span>
+    </div>
+    <p class="secdesc">The mark itself — two parallelogram-arrow paths inside a 26×24 viewBox. Vector-perfect at any size. Drop this into a React component, an electron splash, a docs README. Uses `currentColor` so it picks up parent text color.</p>
+
+    <div class="svg-src">
+      <div class="demo">
+        <svg><use href="#nv-mark"/></svg>
+      </div>
+      <div class="code-wrap">
+        <button class="copy" id="copySvg">Copy</button>
+        <pre id="svgPretty"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========== 06 · HOW TO BUILD .ICO =========== -->
+  <section>
+    <div class="sechead">
+      <h2>How to build the .ico <span class="it">/ for Claude Code</span></h2>
+      <span class="num">06 · pipeline</span>
+    </div>
+
+    <div class="howto">
+      <h3>From SVG → <span class="it">Nivara.ico</span> in three commands.</h3>
+      <p>Windows .exe icons are multi-resolution `.ico` files containing 16, 24, 32, 48, 64, 128, 256 px frames packed together. Easiest path:</p>
+
+      <ol>
+        <li>Click <strong>Bundle all sizes</strong> above. You get <code>nivara-icons.zip</code> with all the PNG sizes.</li>
+        <li>Unzip it. Open a terminal in that folder.</li>
+        <li>Run ImageMagick (free, cross-platform — <code>brew install imagemagick</code> on macOS / <code>winget install ImageMagick</code> on Windows):</li>
+      </ol>
+
+      <div class="cmd"><span class="pfx">$</span>magick nivara-16-paper.png nivara-24-paper.png nivara-32-paper.png ^
+        nivara-48-paper.png nivara-64-paper.png nivara-128-paper.png nivara-256-paper.png Nivara.ico
+        <br/><span class="com"># produces a single multi-res Nivara.ico ready for electron-builder / Tauri / Inno Setup</span></div>
+
+      <p style="margin-top: 20px;">For an <strong>Electron</strong> build, point `build.win.icon` in `package.json` at the produced `Nivara.ico`. For <strong>Tauri</strong>, drop it into `src-tauri/icons/icon.ico` and call <code>tauri icon</code> to generate every other platform's variant in one shot. For a quick <strong>Inno Setup</strong> installer, set <code>SetupIconFile=Nivara.ico</code> in your .iss script.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ============= SVG MARKUP (single source of truth) =============
+  // 26×24 base; paths use currentColor so we can recolor by wrapping.
+  const MARK_VIEWBOX = "0 0 26 24";
+  const MARK_PATHS = `<path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+<path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>`;
+  const SVG_FULL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${MARK_VIEWBOX}" fill="none" aria-label="Nivara">
+${MARK_PATHS}
+</svg>`;
+
+  // ============= SIZE SET =============
+  // Windows .ico spec: 16, 20, 24, 32, 40, 48, 64, 96, 128, 256.
+  // Plus 512 for master / app stores. We also expose 1024 in the JS but keep the visual grid focused.
+  const SIZES = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256, 512];
+
+  // ============= COLOR VARIANTS =============
+  // Each variant defines background + mark color. Padding is fixed at 20% on each side.
+  const VARIANTS = {
+    paper: { bg: '#F2EFE9', fg: '#0E0E0C', label: 'Paper' },
+    ink:   { bg: '#0E0E0C', fg: '#F2EFE9', label: 'Ink' },
+    acc:   { bg: '#7C5CFF', fg: '#F2EFE9', label: 'Accent' },
+  };
+
+  // ============= RENDER A SINGLE TILE =============
+  function renderTile(grid, size, variantKey) {
+    const v = VARIANTS[variantKey];
+    const tile = document.createElement('div');
+    tile.className = 'tile' + (variantKey === 'ink' ? ' dark' : '') + (variantKey === 'acc' ? ' acc' : '');
+    // For small sizes (<24), zoom up in the preview so they're visible.
+    const previewScale = Math.max(48, Math.min(160, size * 1.6));
+    tile.innerHTML = `
+      <div class="preview">
+        <div class="iconbox solid" style="width: ${previewScale + 24}px; height: ${previewScale + 24}px; padding: 12px;">
+          <svg viewBox="${MARK_VIEWBOX}" style="width: ${previewScale}px; height: auto; color: ${v.fg};">
+            ${MARK_PATHS}
+          </svg>
+        </div>
+      </div>
+      <div class="info">
+        <span class="px">${size}×${size}</span>
+        <button class="dl" data-size="${size}" data-variant="${variantKey}">Download ↓</button>
+      </div>
+    `;
+    grid.appendChild(tile);
+  }
+
+  function buildGrid(id, variantKey) {
+    const grid = document.getElementById(id);
+    SIZES.forEach(s => renderTile(grid, s, variantKey));
+  }
+  buildGrid('grid-paper', 'paper');
+  buildGrid('grid-ink', 'ink');
+  buildGrid('grid-acc', 'acc');
+
+  // ============= RASTERIZE SVG → PNG =============
+  // Approach: build an offscreen canvas at the target size, fill bg, draw the SVG.
+  async function makePng(size, variantKey) {
+    const v = VARIANTS[variantKey];
+    const pad = size * 0.20; // 20% padding on each side (matches store guidelines)
+    const inner = size - pad * 2;
+
+    // Build an inline SVG matching the artwork
+    const innerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${inner}" height="${inner * 24/26}" viewBox="${MARK_VIEWBOX}">
+${MARK_PATHS.replace(/currentColor/g, v.fg)}
+</svg>`;
+    const svgBlob = new Blob([innerSvg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    await new Promise((resolve, reject) => {
+      img.onload = resolve; img.onerror = reject;
+      img.src = url;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = v.bg;
+    ctx.fillRect(0, 0, size, size);
+
+    // Draw the mark centered, respecting 26×24 aspect ratio.
+    // Available inner box is `inner` square; mark aspect is 26/24 → wider than tall.
+    const aspect = 26 / 24;
+    let drawW, drawH;
+    if (aspect >= 1) { drawW = inner; drawH = inner / aspect; }
+    else { drawH = inner; drawW = inner * aspect; }
+    const dx = (size - drawW) / 2;
+    const dy = (size - drawH) / 2;
+    ctx.drawImage(img, dx, dy, drawW, drawH);
+
+    URL.revokeObjectURL(url);
+    return await new Promise(r => canvas.toBlob(r, 'image/png'));
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+  }
+
+  // ============= EVENT WIRING =============
+  document.addEventListener('click', async e => {
+    // per-tile download
+    const tileBtn = e.target.closest('.tile .dl');
+    if (tileBtn) {
+      const size = parseInt(tileBtn.dataset.size, 10);
+      const variant = tileBtn.dataset.variant;
+      tileBtn.textContent = '...';
+      const blob = await makePng(size, variant);
+      downloadBlob(blob, `nivara-${size}-${variant}.png`);
+      tileBtn.classList.add('ok');
+      tileBtn.textContent = '✓ Saved';
+      setTimeout(() => { tileBtn.textContent = 'Download ↓'; tileBtn.classList.remove('ok'); }, 1400);
+      return;
+    }
+    // master 512 from showcase
+    const masterBtn = e.target.closest('.show .dl[data-master]');
+    if (masterBtn) {
+      const variant = masterBtn.dataset.master;
+      const old = masterBtn.textContent;
+      masterBtn.textContent = '...';
+      const blob = await makePng(512, variant);
+      downloadBlob(blob, `nivara-512-${variant}.png`);
+      masterBtn.classList.add('ok');
+      masterBtn.textContent = '✓ Saved';
+      setTimeout(() => { masterBtn.textContent = old; masterBtn.classList.remove('ok'); }, 1400);
+      return;
+    }
+  });
+
+  // ============= BUNDLE ALL (ZIP — minimal STORE-only zip writer) =============
+  // Implements the ZIP "stored" format (no compression) so we don't need a zip lib.
+  // Good enough: PNGs are already compressed, .ico needs uncompressed PNGs anyway.
+  async function bundleAll() {
+    const pill = document.getElementById('statusPill');
+    pill.textContent = 'building zip…';
+    const files = [];
+    for (const variant of Object.keys(VARIANTS)) {
+      for (const size of SIZES) {
+        const blob = await makePng(size, variant);
+        const buf = new Uint8Array(await blob.arrayBuffer());
+        files.push({ name: `nivara-${size}-${variant}.png`, data: buf });
+      }
+    }
+    // Also include the raw SVG masters
+    for (const variant of Object.keys(VARIANTS)) {
+      const v = VARIANTS[variant];
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${MARK_VIEWBOX}" style="background: ${v.bg};">
+${MARK_PATHS.replace(/currentColor/g, v.fg)}
+</svg>`;
+      files.push({ name: `nivara-${variant}.svg`, data: new TextEncoder().encode(svg) });
+    }
+    // README
+    const readme = `Nivara icon kit
+================
+
+Files:
+  nivara-{size}-{variant}.png   — PNG raster, ${SIZES.length} sizes × 3 variants
+  nivara-{variant}.svg          — Vector source per variant
+
+Variants:
+  paper  — ink chevron on cream (#F2EFE9) background — default
+  ink    — paper chevron on charcoal (#0E0E0C) background — dark mode
+  acc    — paper chevron on accent purple (#7C5CFF) — for the .exe / app stores
+
+To build Windows .ico:
+  magick nivara-16-paper.png nivara-24-paper.png nivara-32-paper.png \\
+         nivara-48-paper.png nivara-64-paper.png nivara-128-paper.png \\
+         nivara-256-paper.png Nivara.ico
+
+For electron-builder, set package.json:
+  "build": { "win": { "icon": "Nivara.ico" } }
+
+For Tauri, drop the master into src-tauri/icons/ and run \`tauri icon\`.
+`;
+    files.push({ name: 'README.txt', data: new TextEncoder().encode(readme) });
+
+    const zipBlob = makeZip(files);
+    downloadBlob(zipBlob, 'nivara-icons.zip');
+    pill.textContent = '✓ zip ready';
+    setTimeout(() => { pill.textContent = 'ready · ' + SIZES.length + ' sizes'; }, 2500);
+  }
+
+  document.getElementById('bundleAll').addEventListener('click', bundleAll);
+
+  // ============= MINIMAL STORE-ONLY ZIP WRITER =============
+  // Builds a valid PKZIP archive with no compression. Plenty for this use case.
+  function makeZip(files) {
+    const encoder = new TextEncoder();
+    const parts = [];
+    const centralEntries = [];
+    let offset = 0;
+
+    // CRC-32 table
+    const crcTable = (() => {
+      const t = new Uint32Array(256);
+      for (let n = 0; n < 256; n++) {
+        let c = n;
+        for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+        t[n] = c;
+      }
+      return t;
+    })();
+    function crc32(buf) {
+      let c = 0xFFFFFFFF;
+      for (let i = 0; i < buf.length; i++) c = crcTable[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
+      return (c ^ 0xFFFFFFFF) >>> 0;
+    }
+
+    for (const f of files) {
+      const nameBytes = encoder.encode(f.name);
+      const crc = crc32(f.data);
+      const size = f.data.length;
+
+      // Local file header (30 bytes + name)
+      const local = new Uint8Array(30 + nameBytes.length);
+      const dv = new DataView(local.buffer);
+      dv.setUint32(0, 0x04034b50, true);     // signature
+      dv.setUint16(4, 20, true);             // version
+      dv.setUint16(6, 0, true);              // flags
+      dv.setUint16(8, 0, true);              // method (0 = store)
+      dv.setUint16(10, 0, true);             // mod time
+      dv.setUint16(12, 0, true);             // mod date
+      dv.setUint32(14, crc, true);
+      dv.setUint32(18, size, true);          // compressed size
+      dv.setUint32(22, size, true);          // uncompressed size
+      dv.setUint16(26, nameBytes.length, true);
+      dv.setUint16(28, 0, true);             // extra len
+      local.set(nameBytes, 30);
+
+      parts.push(local);
+      parts.push(f.data);
+
+      // Central directory entry
+      const central = new Uint8Array(46 + nameBytes.length);
+      const cdv = new DataView(central.buffer);
+      cdv.setUint32(0, 0x02014b50, true);
+      cdv.setUint16(4, 20, true);            // version made by
+      cdv.setUint16(6, 20, true);            // version needed
+      cdv.setUint16(8, 0, true);
+      cdv.setUint16(10, 0, true);            // method
+      cdv.setUint16(12, 0, true);
+      cdv.setUint16(14, 0, true);
+      cdv.setUint32(16, crc, true);
+      cdv.setUint32(20, size, true);
+      cdv.setUint32(24, size, true);
+      cdv.setUint16(28, nameBytes.length, true);
+      cdv.setUint16(30, 0, true);
+      cdv.setUint16(32, 0, true);
+      cdv.setUint16(34, 0, true);
+      cdv.setUint16(36, 0, true);
+      cdv.setUint32(38, 0, true);
+      cdv.setUint32(42, offset, true);
+      central.set(nameBytes, 46);
+      centralEntries.push(central);
+
+      offset += local.length + size;
+    }
+
+    // Concatenate central directory
+    const cdStart = offset;
+    let cdLen = 0;
+    for (const c of centralEntries) { parts.push(c); cdLen += c.length; }
+
+    // EOCD record (22 bytes)
+    const eocd = new Uint8Array(22);
+    const edv = new DataView(eocd.buffer);
+    edv.setUint32(0, 0x06054b50, true);
+    edv.setUint16(4, 0, true);
+    edv.setUint16(6, 0, true);
+    edv.setUint16(8, centralEntries.length, true);
+    edv.setUint16(10, centralEntries.length, true);
+    edv.setUint32(12, cdLen, true);
+    edv.setUint32(16, cdStart, true);
+    edv.setUint16(20, 0, true);
+    parts.push(eocd);
+
+    return new Blob(parts, { type: 'application/zip' });
+  }
+
+  // ============= SVG SOURCE COPY =============
+  const svgPretty = document.getElementById('svgPretty');
+  svgPretty.textContent = SVG_FULL;
+  document.getElementById('copySvg').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    try {
+      await navigator.clipboard.writeText(SVG_FULL);
+      btn.classList.add('ok');
+      const old = btn.textContent;
+      btn.textContent = '✓ Copied';
+      setTimeout(() => { btn.classList.remove('ok'); btn.textContent = old; }, 1400);
+    } catch (_) {}
+  });
+  document.getElementById('copyAllSvg').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    try {
+      await navigator.clipboard.writeText(SVG_FULL);
+      const old = btn.textContent;
+      btn.textContent = '✓ SVG copied';
+      setTimeout(() => { btn.textContent = old; }, 1400);
+    } catch (_) {}
+  });
+</script>
+
+</body>
+</html>

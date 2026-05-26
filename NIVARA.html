@@ -1,0 +1,1317 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nivara — India's AI operating system</title>
+<meta name="description" content="Six tools. One login. The AI operating system built for Indian developers, creators and small businesses." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+</head>
+<body>
+
+<!-- ============================================
+     NAV
+============================================ -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="nav-mark" aria-label="Nivara home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>Nivara<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#platform">Platform</a></li>
+      <li><a href="#modules">Modules</a></li>
+      <li><a href="#audience">Who it's for</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="download.html">Download</a></li>
+      <li><a href="affiliates.html">Affiliates</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-tour-btn" data-action="tour" title="Take a tour">
+        <span class="pulse"></span>
+        Show me around
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme" data-tour="theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="download.html" class="btn">
+        Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================
+     HERO
+============================================ -->
+<section class="hero" id="top" data-screen-label="01 Hero">
+  <div class="pgbg pgbg-globe" aria-hidden="true">
+    <canvas id="globe-cv"></canvas>
+  </div>
+  <div class="wrap">
+    <div class="hero-meta mono">
+      <div class="hero-meta-left">
+        <span><span class="label">Index</span>00 / 06</span>
+        <span><span class="label">Status</span>v0.3 · Available now</span>
+        <span><span class="label">Origin</span>Bengaluru, IN</span>
+      </div>
+      <div class="hero-meta-right">
+        <span><span class="label">Series</span>2026 · Q1</span>
+        <span><span class="label">Build</span>0.2.14</span>
+      </div>
+    </div>
+
+    <h1 class="hero-h">
+      <span class="line">India's</span>
+      <span class="line stack">
+        <span class="accent-mark" aria-hidden="true"></span>
+        AI operating
+      </span>
+      <span class="line"><span class="it">system.</span></span>
+    </h1>
+
+    <div class="hero-foot">
+      <p>
+        Six products. One login. Everything connected.
+        <em>Nivara</em> is the unified AI platform built for Indian developers, creators and small businesses — at a price that makes sense here.
+      </p>
+      <div class="hero-keys">
+        <div class="row"><span>Agents, automation, code, models, VPN &amp; security</span></div>
+        <div class="row"><span>UPI &amp; Razorpay billing · Hindi + 9 languages</span></div>
+        <div class="row"><span>Free forever tier · ₹0 to start</span></div>
+      </div>
+      <div class="hero-cta">
+        <a href="download.html" class="btn">
+          Download for Windows — Free
+          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+            <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          </svg>
+        </a>
+        <span class="note">~10 MB · Windows 10+ · No credit card</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- status strip -->
+<div class="strip" aria-hidden="true">
+  <div class="strip-inner">
+    <span class="strip-item"><span class="sq acc"></span>Krew · agents</span>
+    <span class="strip-item"><span class="sq"></span>Studio · automation</span>
+    <span class="strip-item"><span class="sq"></span>Coder · dev tools</span>
+    <span class="strip-item"><span class="sq"></span>Models · open hub</span>
+    <span class="strip-item"><span class="sq"></span>Vault · VPN</span>
+    <span class="strip-item"><span class="sq"></span>Guard · security</span>
+    <span class="strip-item"><span class="sq acc"></span>Krew · agents</span>
+    <span class="strip-item"><span class="sq"></span>Studio · automation</span>
+    <span class="strip-item"><span class="sq"></span>Coder · dev tools</span>
+    <span class="strip-item"><span class="sq"></span>Models · open hub</span>
+    <span class="strip-item"><span class="sq"></span>Vault · VPN</span>
+    <span class="strip-item"><span class="sq"></span>Guard · security</span>
+    <span class="strip-item"><span class="sq acc"></span>Krew · agents</span>
+    <span class="strip-item"><span class="sq"></span>Studio · automation</span>
+    <span class="strip-item"><span class="sq"></span>Coder · dev tools</span>
+    <span class="strip-item"><span class="sq"></span>Models · open hub</span>
+    <span class="strip-item"><span class="sq"></span>Vault · VPN</span>
+    <span class="strip-item"><span class="sq"></span>Guard · security</span>
+    <span class="strip-item"><span class="sq acc"></span>Krew · agents</span>
+    <span class="strip-item"><span class="sq"></span>Studio · automation</span>
+    <span class="strip-item"><span class="sq"></span>Coder · dev tools</span>
+    <span class="strip-item"><span class="sq"></span>Models · open hub</span>
+    <span class="strip-item"><span class="sq"></span>Vault · VPN</span>
+    <span class="strip-item"><span class="sq"></span>Guard · security</span>
+    <span class="strip-item"><span class="sq acc"></span>Krew · agents</span>
+    <span class="strip-item"><span class="sq"></span>Studio · automation</span>
+    <span class="strip-item"><span class="sq"></span>Coder · dev tools</span>
+    <span class="strip-item"><span class="sq"></span>Models · open hub</span>
+    <span class="strip-item"><span class="sq"></span>Vault · VPN</span>
+    <span class="strip-item"><span class="sq"></span>Guard · security</span>
+    <span class="strip-item"><span class="sq acc"></span>Krew · agents</span>
+    <span class="strip-item"><span class="sq"></span>Studio · automation</span>
+    <span class="strip-item"><span class="sq"></span>Coder · dev tools</span>
+    <span class="strip-item"><span class="sq"></span>Models · open hub</span>
+    <span class="strip-item"><span class="sq"></span>Vault · VPN</span>
+    <span class="strip-item"><span class="sq"></span>Guard · security</span>
+  </div>
+</div>
+
+<!-- ============================================
+     PROBLEM
+============================================ -->
+<section class="problem" id="platform" data-screen-label="02 Problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="mono index">// 01 — The problem</div>
+      <h2>Most AI tools<br/>aren't built <span class="it">for India.</span></h2>
+    </div>
+
+    <div class="problem-grid">
+      <div class="col-label mono reveal">Today</div>
+      <div class="problem-card reveal">
+        <h3><span class="num mono">01</span>Too many tools, too many bills</h3>
+        <p>A small Indian agency pays separately for an agent tool, an automation platform, a coding assistant, a VPN and a model playground. Five subscriptions. Five logins. Five sets of data that never talk to each other.</p>
+      </div>
+      <div class="problem-card reveal">
+        <h3><span class="num mono">02</span>Adoption is fragmented</h3>
+        <p>Millions of Indian developers, students, freelancers and small businesses want to work with AI — but the existing ecosystem is scattered, expensive and built for Western markets. There is no single platform that feels like it was made for them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     MODULES
+============================================ -->
+<section class="modules" id="modules" data-screen-label="03 Modules" data-tour="modules">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="mono index">// 02 — The platform</div>
+      <h2>Six products.<br/><span class="it">One ecosystem.</span></h2>
+    </div>
+
+    <div class="modules-grid">
+
+      <!-- KREW -->
+      <a class="mcard reveal mclink" href="modules/krew.html" data-tour="krew-card">
+        <div class="mtop">
+          <span class="midx">01 / Krew</span>
+          <span class="mstatus"><span class="ind"></span>Live · Desktop</span>
+        </div>
+        <div class="micon" aria-hidden="true">
+          <!-- filled agents stack -->
+          <svg viewBox="0 0 28 28" fill="none">
+            <circle cx="9" cy="9" r="4" fill="currentColor"/>
+            <circle cx="19" cy="9" r="4" fill="currentColor"/>
+            <path d="M3 24c0-3.3 2.7-6 6-6s6 2.7 6 6v1H3v-1Z" fill="currentColor"/>
+            <path d="M13 24c0-3.3 2.7-6 6-6s6 2.7 6 6v1H13v-1Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3 class="mname">Krew <span class="role">/ agents</span></h3>
+        <p class="mdesc">Deploy AI agents that work for you around the clock. Client reporting, content, lead research, email handling, ops. Runs locally on your machine — your conversations never leave your device.</p>
+        <div class="mtag"><span style="color: var(--accent);">● Live · Desktop app</span><span class="go">Download &nbsp;→</span></div>
+      </a>
+
+      <!-- STUDIO -->
+      <a class="mcard reveal mclink cs" href="modules/automation.html">
+        <span class="mcs-badge">Coming soon</span>
+        <div class="mtop">
+          <span class="midx">02 / Studio</span>
+          <span class="mstatus"><span class="ind"></span>Beta · Q2</span>
+        </div>
+        <div class="micon" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none">
+            <circle cx="4" cy="6" r="3" fill="currentColor"/>
+            <circle cx="4" cy="22" r="3" fill="currentColor"/>
+            <circle cx="24" cy="14" r="3" fill="currentColor"/>
+            <path d="M7 6H14a4 4 0 0 1 4 4v0M7 22H14a4 4 0 0 0 4-4v0M18 10v8" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <h3 class="mname">Studio <span class="role">/ automation</span></h3>
+        <p class="mdesc">A no-code drag-and-drop workflow builder. Connect Krew agents to triggers, schedules and external tools. The stickiness layer of the platform — once you build here, you don't leave.</p>
+        <div class="mtag"><span>Stickiness layer</span><span class="go">Preview &nbsp;→</span></div>
+      </a>
+
+      <!-- CODER -->
+      <a class="mcard reveal mclink cs" href="modules/coder.html">
+        <span class="mcs-badge">Coming soon</span>
+        <div class="mtop">
+          <span class="midx">03 / Coder</span>
+          <span class="mstatus upcoming"><span class="ind"></span>Q3</span>
+        </div>
+        <div class="micon" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none">
+            <path d="M8 4H2v6m0 8v6h6M20 4h6v6m0 8v6h-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" fill="none"/>
+            <rect x="10" y="12" width="8" height="4" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3 class="mname">Coder <span class="role">/ dev tools</span></h3>
+        <p class="mdesc">An AI coding environment. Write code with AI assistance, run open-source models locally, and merge RAM across a friend group to run models no single laptop could handle alone.</p>
+        <div class="mtag"><span>Developer play</span><span class="go">Preview &nbsp;→</span></div>
+      </a>
+
+      <!-- MODELS -->
+      <a class="mcard feature reveal span6 mclink cs" href="modules/models.html">
+        <span class="mcs-badge">Coming soon</span>
+        <div class="mtop">
+          <span class="midx">04 / Models</span>
+          <span class="mstatus"><span class="ind"></span>Free forever</span>
+        </div>
+        <div class="micon" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none">
+            <path d="M14 2 26 8 14 14 2 8 14 2Z" fill="currentColor"/>
+            <path d="M2 14l12 6 12-6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+            <path d="M2 20l12 6 12-6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+          </svg>
+        </div>
+        <h3 class="mname" style="font-size: 36px;">Models <span class="role">/ open hub</span></h3>
+        <p class="mdesc" style="max-width: 50ch;">Browse, download and run open-source AI models for free. Llama, Mistral, Phi, Gemma — all in one place. Nivara's developer acquisition engine. Free access brings thousands of builders in, who convert to paid plans.</p>
+        <div class="mtag"><span>↳ Acquisition engine</span><span class="go">Preview &nbsp;→</span></div>
+      </a>
+
+      <!-- VAULT -->
+      <a class="mcard reveal span6 mclink cs" href="modules/vault.html">
+        <span class="mcs-badge">Coming soon</span>
+        <div class="mtop">
+          <span class="midx">05 / Vault</span>
+          <span class="mstatus"><span class="ind"></span>Always free</span>
+        </div>
+        <div class="micon" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none">
+            <path d="M14 2 4 6v8c0 6.5 4.3 11.5 10 12 5.7-.5 10-5.5 10-12V6L14 2Z" fill="currentColor"/>
+            <path d="M10 14l3 3 5-5" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <h3 class="mname" style="font-size: 36px;">Vault <span class="role">/ VPN</span></h3>
+        <p class="mdesc" style="max-width: 50ch;">A free, always-on VPN included with every Nivara account. Not just a feature — a daily presence strategy. Even when you aren't using AI tools, Vault keeps Nivara on your device, every single day.</p>
+        <div class="mtag"><span>Daily presence layer</span><span class="go">Preview &nbsp;→</span></div>
+      </a>
+
+      <!-- GUARD -->
+      <a class="mcard reveal span12 mclink cs" href="modules/guard.html">
+        <span class="mcs-badge">Coming soon</span>
+        <div class="mtop">
+          <span class="midx">06 / Guard</span>
+          <span class="mstatus upcoming"><span class="ind"></span>Pro tier · 2026 H2</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: center; padding: 8px 0;">
+          <div>
+            <div class="micon" aria-hidden="true" style="width: 72px; height: 72px;">
+              <svg viewBox="0 0 28 28" fill="none" style="width: 36px; height: 36px;">
+                <path d="M14 2 3 6v10c0 5 4.5 9.5 11 10 6.5-.5 11-5 11-10V6L14 2Z" fill="currentColor"/>
+                <rect x="11" y="11" width="6" height="8" fill="var(--ink)"/>
+                <circle cx="14" cy="14" r="1.2" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="mname" style="font-size: 40px; margin-top: 16px;">Guard <span class="role">/ security</span></h3>
+            <div class="mtag" style="margin-top: 20px; border-top: none; padding-top: 0;"><span>↳ Highest price tolerance</span><span class="go">Preview &nbsp;→</span></div>
+          </div>
+          <p class="mdesc" style="max-width: 56ch; padding-bottom: 0; font-size: 16px; line-height: 1.6;">Enterprise-grade cybersecurity for small businesses and startups. Threat detection, breach alerts, contract scanning and 24/7 monitoring — without needing a dedicated IT team. The highest price-tolerance product on the platform. Ships last, after trust is built.</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     DEEP DIVE — KREW
+============================================ -->
+<section class="deepdive" data-screen-label="04 Deep dives">
+  <div class="wrap">
+
+    <!-- KREW -->
+    <div class="dd">
+      <div class="dd-text">
+        <div class="eyebrow mono"><span class="num">01</span><span>Krew — agents</span></div>
+        <h3>Your office,<br/><span class="it">staffed by AI.</span></h3>
+        <p>Krew is a personalised AI office: writers, researchers, coders and support agents — each at their own desk, working around the clock. Live now, growing fast.</p>
+        <ul>
+          <li class="acc">Pre-built agent templates for agencies, creators &amp; devs</li>
+          <li>Claude, GPT &amp; open-source model routing</li>
+          <li>Sarvam AI for 10 Indian languages</li>
+          <li>Train agents on your docs, brand and tone</li>
+        </ul>
+      </div>
+
+      <div class="dd-visual vis-krew">
+        <div class="floor"></div>
+        <div class="agents">
+          <div class="vis-agent live"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+          <div class="vis-agent live"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+          <div class="vis-agent idle"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+          <div class="vis-agent live"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+          <div class="vis-agent live"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+          <div class="vis-agent idle"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+          <div class="vis-agent live"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+          <div class="vis-agent live"><div class="head"></div><div class="body"></div><div class="desk"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDIO -->
+    <div class="dd reverse">
+      <div class="dd-text">
+        <div class="eyebrow mono"><span class="num">02</span><span>Studio — automation</span></div>
+        <h3>Workflows that<br/><span class="it">won't let go.</span></h3>
+        <p>Drag, drop, connect. Once your agents, triggers and schedules live inside Studio, moving anywhere else means rebuilding everything. That's the point.</p>
+        <ul>
+          <li>10 core integrations at launch — Gmail, Sheets, Notion, Slack, WhatsApp</li>
+          <li class="acc">Visual workflow canvas with branching logic</li>
+          <li>Schedule, webhook &amp; agent-triggered runs</li>
+          <li>Self-healing runs with retry &amp; alert nodes</li>
+        </ul>
+      </div>
+
+      <div class="dd-visual vis-studio">
+        <svg viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- grid -->
+          <defs>
+            <pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(14,14,12,0.06)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="400" height="320" fill="url(#g)"/>
+
+          <!-- connector lines -->
+          <path d="M88 64 L168 64" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+          <path d="M88 64 Q128 64 128 160 L168 160" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+          <path d="M88 64 Q128 64 128 256 L168 256" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+          <path d="M248 64 L312 160" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+          <path d="M248 160 L312 160" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+          <path d="M248 256 L312 160" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+
+          <!-- nodes -->
+          <g>
+            <rect x="20" y="44" width="68" height="40" fill="#0E0E0C"/>
+            <text x="54" y="68" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">TRIGGER</text>
+          </g>
+          <g>
+            <rect x="168" y="44" width="80" height="40" fill="#F2EFE9" stroke="#0E0E0C" stroke-width="2"/>
+            <text x="208" y="68" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="10" letter-spacing="1">AGENT · 1</text>
+          </g>
+          <g>
+            <rect x="168" y="140" width="80" height="40" fill="#7C5CFF" stroke="#0E0E0C" stroke-width="2"/>
+            <text x="208" y="164" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">AGENT · 2</text>
+          </g>
+          <g>
+            <rect x="168" y="236" width="80" height="40" fill="#F2EFE9" stroke="#0E0E0C" stroke-width="2"/>
+            <text x="208" y="260" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="10" letter-spacing="1">AGENT · 3</text>
+          </g>
+          <g>
+            <rect x="312" y="140" width="68" height="40" fill="#0E0E0C"/>
+            <text x="346" y="164" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">OUTPUT</text>
+          </g>
+
+          <!-- pulse dot -->
+          <circle cx="208" cy="160" r="4" fill="#0E0E0C">
+            <animate attributeName="cx" values="208;346;208" dur="3s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+    </div>
+
+    <!-- CODER -->
+    <div class="dd">
+      <div class="dd-text">
+        <div class="eyebrow mono"><span class="num">03</span><span>Coder — dev tools</span></div>
+        <h3>Code with AI.<br/><span class="it">Run models together.</span></h3>
+        <p>An AI coding environment that ships with the original Nivara trick: merge RAM across a friend group to run models no single laptop could load. Cheaper, faster, more fun than the cloud.</p>
+        <ul>
+          <li>Inline AI completion &amp; chat (free open models)</li>
+          <li>Local inference with one-click setup</li>
+          <li class="acc">Friend-mesh RAM pooling — run 70B locally</li>
+          <li>Repo-aware refactors &amp; review</li>
+        </ul>
+      </div>
+
+      <div class="dd-visual vis-coder">
+        <div class="term-top">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="label">Nivara coder · ~/project</span>
+        </div>
+        <div class="ln pr">Nivara start --mesh<span class="cursor"></span></div>
+        <div class="ln out dim">discovering peers on local network…</div>
+        <div class="ln out">3 peers found · <span class="acc">+42 GB RAM</span> available</div>
+        <div class="ln out dim">loading llama-3.1-70b across mesh…</div>
+        <div class="ln out"><span class="acc">✓</span> ready · tokens/s: 38</div>
+        <div class="ln pr">explain src/queue.ts</div>
+        <div class="ln out dim">analysing 412 lines · 3 files of context</div>
+      </div>
+    </div>
+
+    <!-- MODELS -->
+    <div class="dd reverse">
+      <div class="dd-text">
+        <div class="eyebrow mono"><span class="num">04</span><span>Models — open hub</span></div>
+        <h3>Every open model,<br/><span class="it">one click away.</span></h3>
+        <p>Llama, Mistral, Phi, Gemma — browse and download for free. A simpler UX than Hugging Face, with one-click setup and India-first mirrors for fast downloads.</p>
+        <ul>
+          <li>Curated catalogue with India-tuned benchmarks</li>
+          <li>One-click local install · works with Coder</li>
+          <li class="acc">Mumbai &amp; Chennai mirror — 10× faster downloads</li>
+          <li>Free forever · no signup needed to browse</li>
+        </ul>
+      </div>
+
+      <div class="dd-visual vis-models">
+        <div class="mrow feat">
+          <div class="badge">M</div>
+          <div>
+            <div class="name">Mistral-Small-24B</div>
+            <div class="size">14.2 GB · Apache 2.0</div>
+          </div>
+          <div class="size">★ 4.8</div>
+          <div class="dl">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M4 1v6M1 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="mrow">
+          <div class="badge">L</div>
+          <div>
+            <div class="name">Llama-3.1-8B-Instruct</div>
+            <div class="size">4.7 GB · Meta License</div>
+          </div>
+          <div class="size">★ 4.9</div>
+          <div class="dl">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M4 1v6M1 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="mrow">
+          <div class="badge">P</div>
+          <div>
+            <div class="name">Phi-4-mini</div>
+            <div class="size">2.4 GB · MIT</div>
+          </div>
+          <div class="size">★ 4.6</div>
+          <div class="dl">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M4 1v6M1 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="mrow">
+          <div class="badge">G</div>
+          <div>
+            <div class="name">Gemma-2-9B</div>
+            <div class="size">5.2 GB · Gemma License</div>
+          </div>
+          <div class="size">★ 4.7</div>
+          <div class="dl">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M4 1v6M1 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VAULT + GUARD pair -->
+    <div class="dd">
+      <div class="dd-text">
+        <div class="eyebrow mono"><span class="num">05</span><span>Vault — VPN</span></div>
+        <h3>The VPN that's<br/><span class="it">always on.</span></h3>
+        <p>WireGuard-based VPN included with every account, free. Even when you're not actively using AI, Vault runs in the background — keeping Nivara on your device every day, and your data encrypted in transit.</p>
+        <ul>
+          <li>Verified no-log policy</li>
+          <li>Mumbai, Bengaluru, Singapore &amp; Frankfurt regions</li>
+          <li class="acc">Encrypts every Krew &amp; Coder API call automatically</li>
+          <li>Free forever on every plan, including Explore</li>
+        </ul>
+      </div>
+
+      <div class="dd-visual vis-vault">
+        <svg viewBox="0 0 320 320" fill="none">
+          <circle cx="160" cy="160" r="140" stroke="rgba(242,239,233,0.15)" stroke-width="1"/>
+          <circle cx="160" cy="160" r="100" stroke="rgba(242,239,233,0.2)" stroke-width="1"/>
+          <circle cx="160" cy="160" r="60" stroke="rgba(242,239,233,0.3)" stroke-width="1"/>
+          <ellipse cx="160" cy="160" rx="140" ry="50" stroke="rgba(242,239,233,0.15)" stroke-width="1"/>
+          <ellipse cx="160" cy="160" rx="140" ry="100" stroke="rgba(242,239,233,0.1)" stroke-width="1"/>
+
+          <!-- nodes -->
+          <g fill="#F2EFE9">
+            <circle cx="160" cy="20" r="3"/>
+            <circle cx="285" cy="120" r="3"/>
+            <circle cx="240" cy="245" r="3"/>
+            <circle cx="80" cy="265" r="3"/>
+            <circle cx="40" cy="140" r="3"/>
+          </g>
+
+          <!-- BLR node — highlighted -->
+          <g>
+            <circle cx="160" cy="160" r="14" fill="#7C5CFF"/>
+            <circle cx="160" cy="160" r="22" stroke="#7C5CFF" stroke-width="1" opacity="0.5">
+              <animate attributeName="r" values="14;30;14" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <text x="160" y="195" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">BLR · ROUTE</text>
+          </g>
+
+          <!-- lines -->
+          <g stroke="rgba(242,239,233,0.2)" stroke-width="1">
+            <path d="M160 160 L160 20"/>
+            <path d="M160 160 L285 120"/>
+            <path d="M160 160 L240 245"/>
+            <path d="M160 160 L80 265"/>
+            <path d="M160 160 L40 140"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="dd reverse">
+      <div class="dd-text">
+        <div class="eyebrow mono"><span class="num">06</span><span>Guard — security</span></div>
+        <h3>Cybersecurity<br/><span class="it">without an IT team.</span></h3>
+        <p>Agentic monitoring that watches your stack, scans contracts and clauses, and responds to threats in real time. Built for the kind of SMB that can't afford a Big-4 SOC, but can't afford a breach either.</p>
+        <ul>
+          <li>Always-on monitoring across cloud accounts</li>
+          <li>Contract &amp; clause scanning · GDPR &amp; DPDP-aware</li>
+          <li class="acc">Auto-response to common threats</li>
+          <li>SOC2-ready audit trail · ships H2 2026</li>
+        </ul>
+      </div>
+
+      <div class="dd-visual vis-guard">
+        <svg viewBox="0 0 320 256" fill="none">
+          <!-- grid background -->
+          <defs>
+            <pattern id="gg" width="16" height="16" patternUnits="userSpaceOnUse">
+              <path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(14,14,12,0.06)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="320" height="256" fill="url(#gg)"/>
+
+          <!-- shield hexagon, filled -->
+          <path d="M160 28 L240 64 L240 156 C240 200 160 232 160 232 C160 232 80 200 80 156 L80 64 Z" fill="#0E0E0C"/>
+          <path d="M160 28 L240 64 L240 156 C240 200 160 232 160 232 C160 232 80 200 80 156 L80 64 Z" fill="none" stroke="#7C5CFF" stroke-width="2"/>
+
+          <!-- inner lock -->
+          <rect x="138" y="120" width="44" height="44" fill="#7C5CFF"/>
+          <path d="M146 120 V108 a14 14 0 0 1 28 0 V120" stroke="#7C5CFF" stroke-width="3" fill="none"/>
+          <circle cx="160" cy="142" r="3" fill="#0E0E0C"/>
+
+          <!-- corner markers -->
+          <g stroke="#0E0E0C" stroke-width="2">
+            <path d="M16 16 H32 M16 16 V32"/>
+            <path d="M304 16 H288 M304 16 V32"/>
+            <path d="M16 240 H32 M16 240 V224"/>
+            <path d="M304 240 H288 M304 240 V224"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================
+     LOCK-IN
+============================================ -->
+<section class="lockin" data-screen-label="05 Lock-in">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="mono index">// 03 — Why users don't leave</div>
+      <h2>Every module creates<br/>switching cost. <span class="it">Together,<br/>they create gravity.</span></h2>
+    </div>
+
+    <div class="lockin-grid">
+      <div class="lockin-card reveal">
+        <span class="num">01</span>
+        <p>Their agents live in Krew. Every agent they've built, configured and trained on their data is inside Nivara. Rebuilding elsewhere takes weeks.</p>
+        <h4>Agent memory</h4>
+      </div>
+      <div class="lockin-card reveal">
+        <span class="num">02</span>
+        <p>Their workflows live in Studio. Every automation, trigger and connection is tied to the platform. Moving means rebuilding everything.</p>
+        <h4>Workflow graph</h4>
+      </div>
+      <div class="lockin-card reveal">
+        <span class="num">03</span>
+        <p>Vault runs every day. Even when they aren't using AI, the VPN keeps Nivara present on their device — the lowest churn feature on the platform.</p>
+        <h4>Daily presence</h4>
+      </div>
+      <div class="lockin-card reveal">
+        <span class="num">04</span>
+        <p>Coder is their dev environment. Project configs, model setups and mesh connections are all here. Switching breaks the whole workflow.</p>
+        <h4>Dev surface</h4>
+      </div>
+      <div class="lockin-card reveal">
+        <span class="num">05</span>
+        <p>Their models are in the Hub. Saved versions, fine-tunes and community picks all live inside Nivara. They've already invested time here.</p>
+        <h4>Model library</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     AUDIENCE
+============================================ -->
+<section class="audience" id="audience" data-screen-label="06 Audience">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="mono index">// 04 — Who it's for</div>
+      <h2>Built for the<br/>people who actually <span class="it">build.</span></h2>
+    </div>
+
+    <div class="aud-grid">
+      <div class="aud-card reveal">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="2" width="8" height="8" fill="currentColor"/>
+            <rect x="12" y="2" width="8" height="8" fill="currentColor" opacity="0.6"/>
+            <rect x="2" y="12" width="8" height="8" fill="currentColor" opacity="0.6"/>
+            <rect x="12" y="12" width="8" height="8" fill="currentColor"/>
+          </svg>
+        </div>
+        <h4>Marketing agencies</h4>
+        <p>Automate client deliverables, reports and content pipelines. Krew + Studio replaces three hires.</p>
+      </div>
+
+      <div class="aud-card reveal">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 22 22" fill="none">
+            <path d="M8 4 3 11l5 7M14 4l5 7-5 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" fill="none"/>
+          </svg>
+        </div>
+        <h4>Developers</h4>
+        <p>Run AI models locally, code faster, and merge compute with friends — without paying for cloud GPUs.</p>
+      </div>
+
+      <div class="aud-card reveal">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="9" fill="currentColor"/>
+            <path d="M8 9l3 3 3-3" stroke="var(--paper)" stroke-width="2" fill="none"/>
+            <circle cx="11" cy="14" r="1.5" fill="var(--paper)"/>
+          </svg>
+        </div>
+        <h4>Creators</h4>
+        <p>Generate, schedule and manage content at scale. From script to caption to thumbnail, with one agent stack.</p>
+      </div>
+
+      <div class="aud-card reveal">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="6" width="18" height="14" fill="currentColor"/>
+            <path d="M7 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <h4>Small businesses</h4>
+        <p>Run smarter ops without hiring more people. AI handles email, support, scheduling and reporting on autopilot.</p>
+      </div>
+
+      <div class="aud-card reveal">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 22 22" fill="none">
+            <path d="M11 2 1 7l10 5 10-5-10-5Z" fill="currentColor"/>
+            <path d="M3 11v4l8 4 8-4v-4" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <h4>Students</h4>
+        <p>Access powerful AI tools and open models with the Explore tier — free, no credit card, full Vault VPN included.</p>
+      </div>
+
+      <div class="aud-card reveal">
+        <div class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="7" r="4" fill="currentColor"/>
+            <path d="M3 20a8 8 0 0 1 16 0v1H3v-1Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <h4>Freelancers</h4>
+        <p>Do more work in less time and charge more for it. Krew agents are quietly hired teammates that never burn out.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PRICING
+============================================ -->
+<section class="pricing" id="pricing" data-screen-label="07 Pricing" data-tour="pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="mono index">// 05 — Pricing</div>
+      <div>
+        <h2>Built for Indian <span class="it">budgets.</span></h2>
+        <p>Razorpay &amp; UPI billing. Cancel anytime. Vault VPN included on every plan, including the free tier.</p>
+      </div>
+    </div>
+
+    <div class="price-grid">
+
+      <div class="pcard reveal">
+        <div class="ptop">
+          <span class="ptier">01 / Free</span>
+        </div>
+        <div class="pname">Explore</div>
+        <div class="pamount"><span class="cur">₹</span>0<span class="per">/ forever</span></div>
+        <ul>
+          <li>3 Krew agents</li>
+          <li>100K lifetime tokens</li>
+          <li>Claude Haiku model</li>
+          <li>Sarvam · 10 languages</li>
+          <li>Vault VPN · always on</li>
+          <li>Models hub · full access</li>
+        </ul>
+        <div class="pcta"><a href="download.html" class="btn" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;">Download free</a></div>
+      </div>
+
+      <div class="pcard reveal">
+        <div class="ptop">
+          <span class="ptier">02 / Starter</span>
+        </div>
+        <div class="pname">Solo</div>
+        <div class="pamount"><span class="cur">₹</span>799<span class="per">/ month</span></div>
+        <ul>
+          <li>8 Krew agents</li>
+          <li>7.5M tokens / month</li>
+          <li>2 GB agent storage</li>
+          <li>Coder · open models</li>
+          <li>Vault VPN · all regions</li>
+          <li>Email support</li>
+        </ul>
+        <div class="pcta"><button>Get Solo</button></div>
+      </div>
+
+      <div class="pcard feat reveal">
+        <div class="ptop">
+          <span class="ptier">03 / Most chosen</span>
+          <span class="ppop">Best value</span>
+        </div>
+        <div class="pname">Builder</div>
+        <div class="pamount"><span class="cur">₹</span>1,999<span class="per">/ month</span></div>
+        <ul>
+          <li>10 Krew agents</li>
+          <li>6.4M tokens + automation</li>
+          <li>5 GB storage</li>
+          <li>Studio automation included</li>
+          <li>Coder + Models access</li>
+          <li>Priority support</li>
+        </ul>
+        <div class="pcta"><button>Get Builder</button></div>
+      </div>
+
+      <div class="pcard reveal">
+        <div class="ptop">
+          <span class="ptier">04 / Power</span>
+        </div>
+        <div class="pname">Pro</div>
+        <div class="pamount"><span class="cur">₹</span>4,999<span class="per">/ month</span></div>
+        <ul>
+          <li>15 agents + Guard AI</li>
+          <li>10.2M tokens / month</li>
+          <li>15 GB storage</li>
+          <li>Guard · security suite</li>
+          <li>SLA · 99.9% uptime</li>
+          <li>Dedicated success manager</li>
+        </ul>
+        <div class="pcta"><button>Get Pro</button></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     MESH PLANS
+============================================ -->
+<section class="mesh-plans" id="mesh" data-screen-label="07 Mesh">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="mono index">// 05.5 — Mesh · RAM pooling</div>
+      <div>
+        <h2>Pool RAM. Run models<br/><span class="it">no single device can.</span></h2>
+        <p>Three laptops with 8 GB each become a 24 GB supernode. 3 devices is always free — need more? Pick your size and pay only for the extra devices, only when you need them. Nivara's cost: zero. It all runs on your hardware.</p>
+        <a href="modules/mesh.html" class="mesh-detail-btn">
+          Explore Mesh in detail
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="mesh-plan-grid">
+
+      <!-- FREE card -->
+      <div class="mesh-pcard reveal">
+        <div class="mesh-pcard-top">
+          <span class="mesh-ptier mono">Mesh 3</span>
+          <span class="mesh-free-tag">Always free</span>
+        </div>
+        <div class="mesh-device-num">3</div>
+        <p class="mesh-pcard-sub">Up to 3 machines in one RAM pool</p>
+        <ul class="mesh-free-list">
+          <li>Included on every plan, including Explore</li>
+          <li>Peer-to-peer — runs entirely on your devices</li>
+          <li>No server, no bandwidth cost</li>
+          <li>Pool RAM to run models too large for one machine</li>
+          <li>Inter-mesh connections require a paid plan</li>
+        </ul>
+        <button class="mesh-cta-btn">Start meshing — it's free</button>
+      </div>
+
+      <!-- CUSTOM / PAID card -->
+      <div class="mesh-pcard mesh-pcard-feat reveal">
+        <div class="mesh-pcard-top">
+          <span class="mesh-ptier mono">Extend Mesh</span>
+          <span class="mesh-ppop">You choose the size</span>
+        </div>
+
+        <div class="mesh-calc">
+          <p class="mesh-calc-label mono">Devices in your mesh</p>
+          <div class="mesh-stepper">
+            <button class="mesh-step-btn" id="meshMinus" aria-label="Remove device">−</button>
+            <span class="mesh-step-val" id="meshCount">5</span>
+            <button class="mesh-step-btn" id="meshPlus" aria-label="Add device">+</button>
+          </div>
+          <p class="mesh-calc-note" id="meshExtra">Base · 5 devices included</p>
+        </div>
+
+        <div class="mesh-dur-tabs" role="group" aria-label="Duration">
+          <button class="mesh-tab active" data-dur="hour">1 hr</button>
+          <button class="mesh-tab" data-dur="day">1 day</button>
+          <button class="mesh-tab" data-dur="week">1 week</button>
+          <button class="mesh-tab" data-dur="month">1 month</button>
+        </div>
+
+        <!-- Hours picker — visible only on hourly tab -->
+        <div class="mesh-hr-picker" id="meshHrPicker">
+          <div class="mesh-hr-header">
+            <p class="mesh-calc-label mono">How many hours?</p>
+            <span class="mesh-hr-val" id="meshHrCount">1 hr</span>
+          </div>
+          <input type="range" class="mesh-hr-slider" id="meshHrSlider" min="1" max="24" value="1" step="1">
+          <div class="mesh-hr-ticks" aria-hidden="true">
+            <span>1</span><span>6</span><span>12</span><span>18</span><span>24</span>
+          </div>
+        </div>
+
+        <div class="mesh-calc-result">
+          <div class="mesh-result-price" id="meshTotal">₹15</div>
+          <div class="mesh-result-detail" id="meshDetail">5 devices · 1 hour</div>
+          <div class="mesh-result-perhr" id="meshPerhr">₹3.00 / device / hr</div>
+          <div class="mesh-result-tip" id="meshTip">Planning to run all day? Day pass (₹59) = just 4 hourly sessions</div>
+        </div>
+
+        <a href="download.html" class="mesh-cta-btn mesh-cta-feat" id="meshJoin" style="display:block; text-align:center; text-decoration:none;">Download to unlock Mesh</a>
+      </div>
+
+    </div>
+    <p class="mesh-footnote mono reveal">All compute runs on your own hardware · Razorpay &amp; UPI for paid tiers</p>
+  </div>
+</section>
+
+<!-- Mesh ticker -->
+<div class="mesh-ticker" aria-hidden="true">
+  <div class="mesh-ticker-inner">
+    <span class="mtick-item"><span class="mtick-label">Mesh 3</span><span class="mtick-detail">always free · included on every plan</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · 7.5M tokens · 8 agents</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Extend your mesh</span><span class="mtick-detail">hourly from 5 devices · day+ from 10 devices</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹1,999/month · automation included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · your hardware, your control</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Monthly mesh</span><span class="mtick-detail">45× cheaper per device-hour than hourly</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Explore forever</span><span class="mtick-detail">₹0 · 100K tokens · Mesh 3 included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Pro plan</span><span class="mtick-detail">₹4,999/month · Guard AI + SLA</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">10-device mesh</span><span class="mtick-detail">₹399/month · 10 devices · pool 80 GB RAM together</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · zero egress cost</span><span class="mtick-sep"></span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="mtick-item"><span class="mtick-label">Mesh 3</span><span class="mtick-detail">always free · included on every plan</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · 7.5M tokens · 8 agents</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Extend your mesh</span><span class="mtick-detail">hourly from 5 devices · day+ from 10 devices</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹1,999/month · automation included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · your hardware, your control</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Monthly mesh</span><span class="mtick-detail">45× cheaper per device-hour than hourly</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Explore forever</span><span class="mtick-detail">₹0 · 100K tokens · Mesh 3 included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Pro plan</span><span class="mtick-detail">₹4,999/month · Guard AI + SLA</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">10-device mesh</span><span class="mtick-detail">₹399/month · 10 devices · pool 80 GB RAM together</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · zero egress cost</span><span class="mtick-sep"></span></span>
+  </div>
+</div>
+
+<script>
+(function () {
+  var BASE     = { hour: 15, day: 59, week: 179, month: 399 };
+  var EXTRA    = { hour: 2,  day: 6,  week: 18,  month: 40  };
+  var HRS      = { hour: 1,  day: 24, week: 168,  month: 720 };
+  var BASE_DEV = { hour: 5, day: 10, week: 10, month: 10 };
+
+  var devices = 5, dur = 'hour', hours = 1;
+
+  function fmt(n) { return n.toLocaleString('en-IN'); }
+
+  function update() {
+    var bd       = BASE_DEV[dur];
+    var extra    = Math.max(0, devices - bd);
+    var unitCost = BASE[dur] + extra * EXTRA[dur];   // cost for 1 unit (1 hr / 1 day / etc.)
+    var total    = (dur === 'hour') ? unitCost * hours : unitCost;
+    var totalHrs = (dur === 'hour') ? hours : HRS[dur];
+    var durLabel = (dur === 'hour')
+      ? hours + ' hr' + (hours > 1 ? 's' : '')
+      : { day: '1 day', week: '1 week', month: '1 month' }[dur];
+
+    // Dynamic tip
+    var tip;
+    if (dur === 'hour') {
+      var dayDevices = Math.max(10, devices);
+      var dayTotal   = BASE.day + Math.max(0, dayDevices - 10) * EXTRA.day;
+      var hrBreak    = Math.ceil(dayTotal / unitCost);
+      if (hours >= hrBreak) {
+        tip = 'Day pass (₹' + dayTotal + ') covers all day · save ₹' + (total - dayTotal) + ' by switching';
+      } else {
+        tip = 'Day pass (₹' + dayTotal + ') = only ' + hrBreak + ' hourly sessions — better for full-day use';
+      }
+    } else if (dur === 'day') {
+      tip = 'Need it 4+ days? Week pass (₹179) beats ₹236 in daily passes';
+    } else if (dur === 'week') {
+      tip = 'Running 3+ weeks? Monthly at ₹399 — saves ₹138 vs 3 weekly passes';
+    } else {
+      tip = 'Best value — 45× cheaper per device-hr than hourly';
+    }
+
+    // Hours picker visibility + slider fill
+    var picker = document.getElementById('meshHrPicker');
+    picker.style.display = (dur === 'hour') ? 'block' : 'none';
+    var slider = document.getElementById('meshHrSlider');
+    slider.value = hours;
+    slider.style.setProperty('--fill', ((hours - 1) / 23 * 100) + '%');
+    document.getElementById('meshHrCount').textContent = hours + ' hr' + (hours > 1 ? 's' : '');
+
+    document.getElementById('meshMinus').disabled = (devices <= bd);
+    document.getElementById('meshCount').textContent   = devices;
+    document.getElementById('meshExtra').textContent   = extra === 0
+      ? 'Base · ' + bd + ' devices included'
+      : extra + ' extra device' + (extra > 1 ? 's' : '') + ' beyond ' + bd;
+    document.getElementById('meshTotal').textContent   = '₹' + fmt(total);
+    document.getElementById('meshDetail').textContent  =
+      devices + ' devices · ' + durLabel + (extra > 0 ? ' · ₹' + EXTRA[dur] + '/extra' : '');
+    document.getElementById('meshPerhr').textContent   = '₹' + (total / devices / totalHrs).toFixed(2) + ' / device / hr';
+    document.getElementById('meshTip').textContent     = tip;
+  }
+
+  // Device stepper
+  document.getElementById('meshMinus').addEventListener('click', function () {
+    if (devices > BASE_DEV[dur]) { devices--; update(); }
+  });
+  document.getElementById('meshPlus').addEventListener('click', function () {
+    if (devices < 30) { devices++; update(); }
+  });
+
+  // Hours slider
+  document.getElementById('meshHrSlider').addEventListener('input', function () {
+    hours = parseInt(this.value, 10);
+    update();
+  });
+
+  // Duration tabs
+  document.querySelectorAll('.mesh-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.mesh-tab').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var newDur = btn.dataset.dur;
+      if (devices < BASE_DEV[newDur]) { devices = BASE_DEV[newDur]; }
+      if (newDur !== 'hour') { hours = 1; }
+      dur = newDur;
+      update();
+    });
+  });
+
+  update();
+})();
+</script>
+
+<!-- ============================================
+     DOWNLOAD CTA
+============================================ -->
+<section class="waitlist" id="download-cta" data-screen-label="08 Download">
+  <div class="wrap">
+    <div class="waitlist-eyebrow mono reveal">// 06 — Get the app</div>
+
+    <h2 class="reveal">
+      Everything runs
+      <span class="it">on your machine.</span>
+    </h2>
+
+    <p class="lede reveal">
+      One installer. Six AI modules. Your conversations, your files, your models — all local. Nothing leaves your device.
+    </p>
+
+    <div class="reveal" style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 40px;">
+      <a href="download.html" class="btn" style="font-size: 16px; padding: 14px 32px; gap: 12px;">
+        Download Nivara — Free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted-2); letter-spacing: 0.04em;">
+        Windows 10+ · ~10 MB · No credit card needed
+      </span>
+    </div>
+
+    <div class="waitlist-stats reveal" style="margin-top: 56px;">
+      <div class="s"><span class="v">~10 MB</span><span class="l">Installer size</span></div>
+      <div class="s"><span class="v">06</span><span class="l">Modules included</span></div>
+      <div class="s"><span class="v">₹0</span><span class="l">To start, forever</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+============================================ -->
+<footer data-screen-label="09 Footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="#top">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>Nivara</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="modules/krew.html">Krew · agents</a></li>
+          <li><a href="modules/automation.html">Studio · automation</a></li>
+          <li><a href="modules/coder.html">Coder · dev tools</a></li>
+          <li><a href="modules/models.html">Models · open hub</a></li>
+          <li><a href="modules/vault.html">Vault · VPN</a></li>
+          <li><a href="modules/guard.html">Guard · security</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#platform">About</a></li>
+          <li><a href="#audience">Who it's for</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="download.html">Download app</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="download.html">Download — free</a></li>
+          <li><a href="#">X / @nivaratech_in</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="mailto:hello@nivara.tech">hello@nivara.tech</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 Nivara Technologies · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================
+     SCRIPTS
+============================================ -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ---- Theme toggle (Paper / Ink) — persisted to localStorage
+  (function() {
+    const root = document.documentElement;
+    const stored = localStorage.getItem('nivara-theme');
+    if (stored === 'ink' || stored === 'paper') root.setAttribute('data-theme', stored);
+    const btn = document.getElementById('themeToggle');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const cur = root.getAttribute('data-theme') === 'ink' ? 'ink' : 'paper';
+        const next = cur === 'ink' ? 'paper' : 'ink';
+        if (next === 'paper') root.removeAttribute('data-theme');
+        else root.setAttribute('data-theme', next);
+        localStorage.setItem('nivara-theme', next);
+      });
+    }
+  })();
+
+  // ---- Reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---- Smooth scroll for anchors (fallback for older browsers)
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id && id.length > 1) {
+        const el = document.querySelector(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+
+  // ---- Animate live agent heads at the Krew visual (random blink)
+  document.querySelectorAll('.vis-agent.live .head').forEach((h, i) => {
+    setInterval(() => {
+      h.style.transform = 'scaleY(0.2)';
+      setTimeout(() => h.style.transform = '', 90);
+    }, 2400 + i * 470);
+  });
+</script>
+
+<!-- ============================================
+     TWEAKS
+============================================ -->
+<script type="application/json" id="nivara-tweaks-defaults">
+{
+  "accent": "#7C5CFF",
+  "theme": "paper",
+  "wordmark": "Nivara"
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+(function () {
+  const canvas = document.getElementById('globe-cv');
+  if (!canvas || !window.d3 || !window.topojson) return;
+
+  const ctx = canvas.getContext('2d');
+  const BLR    = [77.6, 12.97];
+  const CITIES = [
+    [77.21, 28.61], // Delhi
+    [72.88, 19.07], // Mumbai
+    [88.36, 22.57], // Kolkata
+    [78.48, 17.38], // Hyderabad
+    [80.27, 13.08], // Chennai
+  ];
+  const ROUTES = [
+    [BLR, [-0.12,  51.50]],   // London
+    [BLR, [139.69, 35.68]],   // Tokyo
+    [BLR, [-74.01, 40.71]],   // New York
+    [BLR, [151.21,-33.87]],   // Sydney
+  ];
+
+  let w, h, proj, pathFn, world, lon = -78;
+
+  function clr() {
+    const ink = document.documentElement.getAttribute('data-theme') === 'ink';
+    return {
+      sphere:  ink ? 'rgba(124,92,255,.022)' : 'rgba(124,92,255,.014)',
+      grat:    ink ? 'rgba(242,239,233,.08)' : 'rgba(14,14,12,.06)',
+      land:    ink ? 'rgba(242,239,233,.06)' : 'rgba(14,14,12,.05)',
+      border:  ink ? 'rgba(242,239,233,.22)' : 'rgba(14,14,12,.16)',
+      outline: ink ? 'rgba(242,239,233,.30)' : 'rgba(14,14,12,.22)',
+      city:    ink ? 'rgba(242,239,233,.55)' : 'rgba(14,14,12,.45)',
+    };
+  }
+
+  function resize() {
+    const par = canvas.parentElement;
+    w = par.offsetWidth;
+    h = par.offsetHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    proj = d3.geoOrthographic()
+      .scale(Math.min(w * 0.38, h * 0.72))
+      .translate([w * 0.5, h * 0.52])
+      .clipAngle(90)
+      .precision(0.3);
+    pathFn = d3.geoPath(proj, ctx);
+  }
+
+  function onFront(ll) {
+    return d3.geoDistance(ll, [-lon, 15]) < Math.PI / 2 + 0.01;
+  }
+
+  function draw() {
+    lon += 0.022;
+    proj.rotate([lon, -15]);
+    ctx.clearRect(0, 0, w, h);
+    const c = clr();
+
+    // Sphere tint
+    ctx.beginPath(); pathFn({ type: 'Sphere' });
+    ctx.fillStyle = c.sphere; ctx.fill();
+
+    if (world) {
+      // Graticule grid
+      ctx.beginPath(); pathFn(d3.geoGraticule()());
+      ctx.strokeStyle = c.grat; ctx.lineWidth = 0.4; ctx.stroke();
+
+      // Land masses
+      ctx.beginPath();
+      pathFn(topojson.feature(world, world.objects.land));
+      ctx.fillStyle = c.land; ctx.fill();
+
+      // Country borders
+      ctx.beginPath();
+      pathFn(topojson.mesh(world, world.objects.countries, (a, b) => a !== b));
+      ctx.strokeStyle = c.border; ctx.lineWidth = 0.55; ctx.stroke();
+
+      // Routes from BLR (great-circle arcs)
+      if (onFront(BLR)) {
+        ROUTES.forEach(([from, to]) => {
+          ctx.beginPath();
+          pathFn({ type: 'LineString', coordinates: [from, to] });
+          ctx.strokeStyle = 'rgba(124,92,255,.28)';
+          ctx.lineWidth = 0.9; ctx.stroke();
+        });
+      }
+    }
+
+    // Globe outline ring
+    ctx.beginPath(); pathFn({ type: 'Sphere' });
+    ctx.strokeStyle = c.outline; ctx.lineWidth = 1; ctx.stroke();
+
+    // Indian city dots
+    CITIES.forEach(ll => {
+      if (!onFront(ll)) return;
+      const p = proj(ll);
+      if (!p) return;
+      ctx.beginPath(); ctx.arc(p[0], p[1], 2, 0, 2 * Math.PI);
+      ctx.fillStyle = c.city; ctx.fill();
+    });
+
+    // BLR — pulsing accent rings
+    if (onFront(BLR)) {
+      const p = proj(BLR);
+      if (p) {
+        const t = (Date.now() % 2400) / 2400;
+        [0, 0.33, 0.66].forEach(off => {
+          const ph = (t + off) % 1;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 5 + ph * 22, 0, 2 * Math.PI);
+          ctx.strokeStyle = `rgba(124,92,255,${(1 - ph) * 0.7})`;
+          ctx.lineWidth = 1.5; ctx.stroke();
+        });
+        ctx.beginPath(); ctx.arc(p[0], p[1], 4.5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(124,92,255,.92)'; ctx.fill();
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  new ResizeObserver(resize).observe(canvas.parentElement);
+
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+    .then(r => r.json())
+    .then(data => { world = data; draw(); })
+    .catch(() => draw());
+})();
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+<script src="tour.js"></script>
+</body>
+</html>
+

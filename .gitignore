@@ -1,0 +1,16 @@
+node_modules/
+.DS_Store
+Thumbs.db
+.env
+.env.local
+.env*.local
+.claude/
+nivara-desktop/
+video/
+NOT-FINAL.MD
+MAIN-PLAN.MD
+PRODUCT.MD
+PRODUCT-DETAILS.MD
+extra_for_later.md
+tweaks-app.jsx
+tweaks-panel.jsx

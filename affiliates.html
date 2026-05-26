@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Affiliate program — Nivara</title>
+<meta name="description" content="Earn 10–20% recurring commission as India's developers, creators and businesses build with Nivara. Apply free. Paid monthly via UPI." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="module-pages.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+
+<style>
+  /* ============================================
+     AFFILIATE PAGE
+     ============================================ */
+
+  /* ---------- TIER PILLS in hero ---------- */
+  .tier-pills {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 32px 0 0;
+  }
+  .tier-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 14px;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .tier-pill::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--ink);
+  }
+  .tier-pill.t-builder::before { background: var(--accent); }
+  .tier-pill.t-partner::before { background: var(--accent); transform: rotate(45deg); }
+  .tier-pill.t-elite {
+    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+  }
+  .tier-pill.t-elite::before { background: var(--accent-ink); }
+
+  /* ---------- HERO STAT GRID ---------- */
+  .aff-stats {
+    margin-top: clamp(60px, 7vw, 96px);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule-strong);
+    border: 1px solid var(--rule-strong);
+  }
+  @media (max-width: 880px) { .aff-stats { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px) { .aff-stats { grid-template-columns: 1fr; } }
+  .aff-stat {
+    background: var(--paper);
+    padding: 28px 32px 26px;
+    display: flex; flex-direction: column; gap: 8px;
+    min-height: 156px;
+  }
+  .aff-stat .lbl {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted-2);
+  }
+  .aff-stat .val {
+    font-size: clamp(44px, 5.4vw, 72px);
+    font-weight: 500; letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: var(--ink);
+  }
+  .aff-stat .val .u {
+    font-size: clamp(16px, 1.4vw, 22px);
+    opacity: 0.6; margin-left: 4px;
+    font-weight: 400;
+  }
+  .aff-stat .val .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  .aff-stat .sub {
+    margin-top: auto;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .aff-stat.acc {
+    background: var(--ink); color: var(--paper);
+  }
+  .aff-stat.acc .lbl { color: rgba(242,239,233,0.5); }
+  .aff-stat.acc .val { color: var(--paper); }
+  .aff-stat.acc .val .it { color: var(--accent); }
+  .aff-stat.acc .sub { color: rgba(242,239,233,0.55); }
+
+  /* ---------- PROCESS (3 steps) ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule-strong);
+    position: relative;
+  }
+  @media (max-width: 880px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    padding: 40px 36px 36px;
+    border-right: 1px solid var(--rule);
+    display: flex; flex-direction: column;
+    gap: 16px;
+    background: var(--paper);
+    position: relative;
+    min-height: 360px;
+  }
+  .step:last-child { border-right: none; }
+  @media (max-width: 880px) {
+    .step { border-right: none; border-bottom: 1px solid var(--rule); }
+    .step:last-child { border-bottom: none; }
+  }
+  .step .num {
+    display: inline-block;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .step .icon-wrap {
+    width: 64px; height: 64px;
+    background: var(--paper-2);
+    display: grid; place-items: center;
+    margin-bottom: 4px;
+  }
+  .step .icon-wrap svg { width: 30px; height: 30px; color: var(--ink); }
+  .step h3 {
+    font-size: 26px; font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+  .step h3 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--accent); }
+  .step p {
+    font-size: 14px; line-height: 1.55;
+    color: var(--muted);
+  }
+  .step p code {
+    background: rgba(14,14,12,0.06);
+    padding: 1px 6px;
+    font-family: var(--font-mono); font-size: 12.5px;
+    color: var(--ink);
+  }
+  .step .arrow {
+    position: absolute;
+    top: 50%;
+    right: -16px;
+    transform: translateY(-50%);
+    width: 32px; height: 32px;
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    z-index: 2;
+    color: var(--accent);
+  }
+  @media (max-width: 880px) { .step .arrow { display: none; } }
+
+  /* ---------- COMMISSION TIERS ---------- */
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 1100px) { .tiers-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .tiers-grid { grid-template-columns: 1fr; } }
+  .tcard {
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    padding: 28px 26px 26px;
+    display: flex; flex-direction: column; gap: 18px;
+    position: relative;
+    min-height: 480px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .tcard:hover { transform: translateY(-2px); border-color: var(--ink); }
+  .tcard.feat {
+    background: var(--ink); color: var(--paper);
+    border-color: var(--ink);
+  }
+  .tcard.feat:hover { border-color: var(--accent); }
+  .tcard .tridge {
+    position: absolute;
+    top: -1px; left: 24px;
+    background: var(--ink); color: var(--paper);
+    padding: 5px 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .tcard.feat .tridge {
+    background: var(--accent); color: var(--accent-ink);
+  }
+  .tcard.feat .tridge-elite {
+    background: var(--accent);
+  }
+  .tcard .thead { display: flex; justify-content: space-between; align-items: baseline; margin-top: 6px; }
+  .tcard .tname {
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+  .tcard .ticon {
+    width: 22px; height: 22px;
+    color: var(--ink);
+  }
+  .tcard.feat .ticon { color: var(--accent); }
+  .tcard .trate {
+    font-size: 64px; font-weight: 500;
+    letter-spacing: -0.05em; line-height: 0.92;
+    color: var(--ink);
+  }
+  .tcard.feat .trate { color: var(--accent); }
+  .tcard .trate .pct {
+    font-family: var(--font-mono); font-size: 22px;
+    color: var(--accent); margin-right: 4px;
+    vertical-align: super; opacity: 0.7;
+  }
+  .tcard.feat .trate .pct { color: var(--paper); opacity: 0.6; }
+  .tcard .trate .per {
+    display: block;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 6px;
+  }
+  .tcard.feat .trate .per { color: rgba(242,239,233,0.55); }
+  .tcard .trange {
+    font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .tcard.feat .trange { color: rgba(242,239,233,0.85); border-color: rgba(242,239,233,0.12); }
+  .tcard .trange b { color: var(--accent); font-weight: 500; }
+  .tcard ul {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 10px;
+    flex: 1;
+  }
+  .tcard ul li {
+    font-size: 13px; line-height: 1.5;
+    color: var(--ink-2);
+    display: grid; grid-template-columns: 14px 1fr;
+    gap: 10px; align-items: start;
+  }
+  .tcard.feat ul li { color: rgba(242,239,233,0.78); }
+  .tcard ul li::before {
+    content: "";
+    width: 9px; height: 9px;
+    background: var(--ink);
+    margin-top: 6px;
+  }
+  .tcard.feat ul li::before { background: var(--accent); }
+  .tcard ul li.h { color: var(--ink); font-weight: 500; }
+  .tcard.feat ul li.h { color: var(--paper); }
+
+  /* ---------- TIER PROGRESS BAR ---------- */
+  .tier-progress {
+    margin-top: 28px;
+    padding: 20px 26px;
+    background: #F7F4ED;
+    border: 1px solid var(--rule-strong);
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 24px; align-items: center;
+  }
+  .tier-progress .pl {
+    font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tier-progress .pl b { color: var(--ink); font-weight: 500; }
+  .tier-progress .ptrack {
+    height: 8px;
+    background: var(--rule);
+    position: relative;
+  }
+  .tier-progress .ptrack .pmarker {
+    position: absolute; top: -4px;
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border: 3px solid var(--paper);
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+  .tier-progress .ptrack .pthresh {
+    position: absolute; top: -2px; bottom: -2px;
+    width: 1px;
+    background: var(--rule-strong);
+  }
+  .tier-progress .ptrack .pthresh.t-builder { left: 10%; }
+  .tier-progress .ptrack .pthresh.t-partner { left: 30%; }
+  .tier-progress .ptrack .pthresh.t-elite { left: 99%; }
+  .tier-progress .pscale {
+    grid-column: 2;
+    position: relative;
+    height: 1.4em;
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted-2);
+    margin-top: 8px;
+  }
+  .tier-progress .pscale span { position: absolute; white-space: nowrap; }
+  .tier-progress .pnote {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    text-align: right;
+  }
+  .tier-progress .pnote b { color: var(--accent); }
+
+  .tier-fineprint {
+    margin-top: 24px;
+    padding: 18px 24px;
+    background: var(--paper-2);
+    border: 1px dashed var(--rule-strong);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .tier-fineprint b { color: var(--ink); font-weight: 500; }
+  .tier-fineprint .num {
+    font-family: var(--font-mono);
+    color: var(--accent);
+  }
+
+  /* ---------- ESTIMATOR ---------- */
+  .estim {
+    background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 0;
+    min-height: 540px;
+  }
+  @media (max-width: 880px) { .estim { grid-template-columns: 1fr; } }
+  .estim .e-left {
+    padding: 48px 44px;
+    border-right: 1px solid rgba(242,239,233,0.12);
+  }
+  @media (max-width: 880px) {
+    .estim .e-left { border-right: none; border-bottom: 1px solid rgba(242,239,233,0.12); }
+  }
+  .estim .e-right {
+    padding: 48px 44px;
+    background: #161614;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+  }
+  .estim h3 {
+    font-size: 26px; font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .estim h3 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--accent); }
+  .estim .e-sub {
+    font-size: 14px;
+    color: rgba(242,239,233,0.55);
+    margin-bottom: 32px;
+    max-width: 40ch;
+  }
+  .estim .ctrl {
+    display: flex; flex-direction: column; gap: 8px;
+    margin-bottom: 24px;
+  }
+  .estim .ctrl .clbl {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(242,239,233,0.55);
+  }
+  .estim .ctrl .cval {
+    font-family: var(--font-sans);
+    font-size: 24px;
+    color: var(--paper);
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    text-transform: none;
+  }
+  .estim .ctrl .cval .u {
+    font-size: 13px; opacity: 0.55;
+    margin-left: 4px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .estim input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 6px;
+    background: rgba(242,239,233,0.1);
+    outline: none; cursor: pointer;
+    margin: 4px 0;
+  }
+  .estim input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .estim input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--paper);
+  }
+  .estim .ticks {
+    position: relative;
+    height: 1.3em;
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.12em; color: rgba(242,239,233,0.4);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .estim .ticks span { position: absolute; white-space: nowrap; }
+
+  /* plan preset buttons */
+  .plan-presets {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .plan-presets button {
+    padding: 6px 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(242,239,233,0.65);
+    background: transparent;
+    border: 1px solid rgba(242,239,233,0.18);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .plan-presets button:hover { color: var(--paper); border-color: var(--paper); }
+  .plan-presets button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  /* Right panel — earnings result */
+  .e-tag {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .e-monthly {
+    font-size: clamp(64px, 8vw, 110px);
+    font-weight: 500; letter-spacing: -0.06em;
+    line-height: 0.9;
+    color: var(--paper);
+    margin-bottom: 8px;
+  }
+  .e-monthly .cur { font-size: clamp(28px, 3vw, 42px); color: rgba(242,239,233,0.55); vertical-align: super; margin-right: 4px; }
+  .e-monthly .per { font-family: var(--font-mono); font-size: 14px; opacity: 0.5; letter-spacing: 0.12em; margin-left: 10px; text-transform: uppercase; }
+  .e-tier {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(242,239,233,0.65);
+    padding: 8px 14px;
+    border: 1px solid rgba(242,239,233,0.18);
+    background: rgba(242,239,233,0.04);
+    align-self: flex-start;
+    margin-bottom: 32px;
+  }
+  .e-tier .acc { color: var(--accent); font-weight: 500; }
+  .e-tier .dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+
+  .e-breakdown {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(242,239,233,0.1);
+    border: 1px solid rgba(242,239,233,0.1);
+  }
+  .e-breakdown .eb {
+    background: #161614;
+    padding: 16px 18px;
+  }
+  .e-breakdown .eb .ll {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(242,239,233,0.5);
+  }
+  .e-breakdown .eb .vv {
+    font-size: 26px; font-weight: 500; letter-spacing: -0.02em;
+    margin-top: 4px;
+    color: var(--paper);
+  }
+  .e-breakdown .eb .vv .cur { font-size: 14px; opacity: 0.55; margin-right: 2px; }
+  .e-breakdown .eb.acc .vv { color: var(--accent); }
+
+  .e-annual {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: rgba(124,92,255,0.1);
+    border: 1px solid rgba(124,92,255,0.3);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .e-annual .ll {
+    font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .e-annual .vv {
+    font-size: 32px; font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--paper);
+  }
+  .e-annual .vv .cur { font-size: 16px; opacity: 0.55; margin-right: 2px; }
+
+  /* ---------- APPLICATION FORM ---------- */
+  .form-wrap {
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0;
+  }
+  @media (max-width: 1000px) { .form-wrap { grid-template-columns: 1fr; } }
+  .form-side {
+    background: #F7F4ED;
+    padding: 40px 36px;
+    border-right: 1px solid var(--rule);
+    display: flex; flex-direction: column;
+    gap: 20px;
+  }
+  @media (max-width: 1000px) { .form-side { border-right: none; border-bottom: 1px solid var(--rule); } }
+  .form-side .ftag {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .form-side h3 {
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+  .form-side h3 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+  .form-side p {
+    font-size: 14px; line-height: 1.55;
+    color: var(--muted);
+  }
+  .form-side .checklist {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .form-side .checklist li {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    display: grid; grid-template-columns: 18px 1fr;
+    gap: 10px; align-items: center;
+  }
+  .form-side .checklist li::before {
+    content: "✓";
+    color: var(--accent);
+    font-family: var(--font-mono); font-size: 12px;
+    font-weight: 500;
+  }
+
+  .form-main {
+    padding: 40px 36px 36px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .form-row {
+    display: flex; flex-direction: column;
+    gap: 6px;
+  }
+  .form-row.full { grid-column: 1 / -1; }
+  .form-row label {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-row label .req { color: var(--accent); }
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    padding: 12px 14px;
+    font-family: var(--font-sans); font-size: 14px;
+    color: var(--ink);
+    width: 100%;
+    transition: border-color 0.2s ease;
+  }
+  .form-row textarea { min-height: 110px; resize: vertical; font-family: var(--font-sans); line-height: 1.5; }
+  .form-row input::placeholder,
+  .form-row textarea::placeholder { color: var(--muted-2); }
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus {
+    outline: none; border-color: var(--accent);
+  }
+  .form-row .hint {
+    font-size: 11px; color: var(--muted-2);
+    margin-top: 2px;
+  }
+  .form-foot {
+    margin-top: 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+  .form-foot .terms {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.06em; color: var(--muted);
+    max-width: 50ch; line-height: 1.5;
+  }
+  .form-foot .terms a { color: var(--accent); border-bottom: 1px solid currentColor; }
+  .form-foot button {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 26px;
+    background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--font-sans); font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .form-foot button:hover {
+    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .form-foot button.ok { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  /* ---------- FAQ ---------- */
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 24px;
+    border-top: 1px solid var(--rule-strong);
+  }
+  @media (max-width: 880px) { .faq-grid { grid-template-columns: 1fr; } }
+  .faq-item {
+    border-bottom: 1px solid var(--rule);
+    padding: 0;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 22px 0;
+    display: grid; grid-template-columns: 1fr 32px;
+    gap: 16px; align-items: center;
+    font-size: 17px; font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    transition: color 0.15s ease;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary:hover { color: var(--accent); }
+  .faq-item summary .ico {
+    width: 32px; height: 32px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: var(--ink);
+    transition: transform 0.25s cubic-bezier(.4,.2,.2,1), background 0.2s ease;
+    position: relative;
+  }
+  .faq-item summary .ico::before,
+  .faq-item summary .ico::after {
+    content: ""; position: absolute;
+    background: currentColor;
+  }
+  .faq-item summary .ico::before { width: 12px; height: 2px; }
+  .faq-item summary .ico::after { width: 2px; height: 12px; transition: transform 0.25s; }
+  .faq-item[open] summary .ico {
+    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+  }
+  .faq-item[open] summary .ico::after { transform: scaleY(0); }
+  .faq-item .answer {
+    padding: 0 0 24px;
+    font-size: 14.5px; line-height: 1.65;
+    color: var(--muted);
+    max-width: 60ch;
+  }
+  .faq-item .answer code {
+    font-family: var(--font-mono); font-size: 12.5px;
+    background: rgba(14,14,12,0.06);
+    padding: 1px 6px;
+    color: var(--ink);
+  }
+  .faq-item .answer strong { color: var(--ink); font-weight: 500; }
+
+  /* ---------- HERO TWEAKS just for affiliate ---------- */
+  .aff-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 7px 14px;
+    background: rgba(124,92,255,0.1);
+    border: 1px solid rgba(124,92,255,0.3);
+    color: var(--accent);
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .aff-eyebrow::before {
+    content: ""; width: 7px; height: 7px;
+    background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 30%, transparent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 30%, transparent); }
+    50%     { box-shadow: 0 0 0 7px color-mix(in oklab, var(--accent) 10%, transparent); }
+  }
+
+  /* ============================================
+     CHEVRON STACK background — bg.aff
+     ============================================ */
+  .pgbg-aff { opacity: 0.10; }
+  [data-theme="ink"] .pgbg-aff { opacity: 0.22; }
+
+  /* --- ink-mode fixes for intentionally-dark elements --- */
+  [data-theme="ink"] .aff-stat.acc {
+    background: var(--paper-3);
+  }
+  [data-theme="ink"] .aff-stat.acc .val { color: var(--ink); }
+
+  [data-theme="ink"] .tcard.feat {
+    background: var(--paper-2);
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  [data-theme="ink"] .tcard .tridge {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+  }
+  [data-theme="ink"] .tcard.feat .trate { color: var(--accent); }
+  [data-theme="ink"] .tcard.feat .trate .pct { color: var(--ink); opacity: 0.5; }
+  [data-theme="ink"] .tcard.feat .trate .per { color: var(--muted); }
+  [data-theme="ink"] .tcard.feat .trange { color: var(--ink-2); border-color: var(--rule-strong); }
+  [data-theme="ink"] .tcard.feat ul li { color: var(--ink-2); }
+  [data-theme="ink"] .tcard.feat ul li.h { color: var(--ink); }
+  [data-theme="ink"] .tcard.feat ul li::before { background: var(--accent); }
+
+  [data-theme="ink"] .tier-progress {
+    background: var(--paper-2);
+    border-color: var(--rule-strong);
+  }
+
+  [data-theme="ink"] .estim {
+    background: var(--paper-3);
+    border-color: var(--rule-strong);
+  }
+  [data-theme="ink"] .estim .e-right { background: var(--paper-2); }
+  [data-theme="ink"] .estim .ctrl .cval { color: var(--ink); }
+  [data-theme="ink"] .estim .e-left {
+    border-right-color: var(--rule-strong);
+    border-bottom-color: var(--rule-strong);
+  }
+  [data-theme="ink"] .plan-presets button {
+    color: var(--muted); border-color: var(--rule-strong);
+  }
+  [data-theme="ink"] .plan-presets button:hover { color: var(--ink); border-color: var(--ink); }
+
+  [data-theme="ink"] .form-side { background: var(--paper-2); }
+  [data-theme="ink"] .form-foot button {
+    background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+  }
+  [data-theme="ink"] .form-foot button:hover {
+    background: color-mix(in oklab, var(--accent) 85%, #fff);
+    border-color: color-mix(in oklab, var(--accent) 85%, #fff);
+  }
+  .pgbg-aff svg {
+    right: -4%; top: 50%;
+    transform: translateY(-50%);
+    width: clamp(640px, 80vw, 1080px);
+    aspect-ratio: 1;
+  }
+  .pgbg-aff .ch1 { animation: chStep 5s ease-in-out infinite; }
+  .pgbg-aff .ch2 { animation: chStep 5s 0.6s ease-in-out infinite; }
+  .pgbg-aff .ch3 { animation: chStep 5s 1.2s ease-in-out infinite; }
+  .pgbg-aff .ch4 { animation: chStep 5s 1.8s ease-in-out infinite; }
+  @keyframes chStep {
+    0%, 80%, 100% { opacity: 0.6; }
+    40%, 50% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAV
+============================================ -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="Hyper.html" class="nav-mark" aria-label="Nivara home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>nivara<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="Hyper.html#platform">Platform</a></li>
+      <li><a href="Hyper.html#modules">Modules</a></li>
+      <li><a href="Hyper.html#pricing">Pricing</a></li>
+      <li><a href="affiliates.html" style="color: var(--accent);">Affiliate</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <span class="mono nav-meta">Affiliate · v1</span>
+      <a href="#apply" class="btn">
+        Apply now
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Breadcrumb -->
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="Hyper.html"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Home</a>
+      <span class="sep">/</span>
+      <span class="here">Affiliate program</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     HERO
+============================================ -->
+<section class="mhero" data-screen-label="01 Hero">
+
+  <!-- ascending-chevron background -->
+  <div class="pgbg pgbg-aff" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000" fill="none">
+      <g fill="currentColor">
+        <!-- four chevron pairs ascending diagonally -->
+        <g class="ch1" transform="translate(80,720)">
+          <path d="M0 0 L70 0 L130 90 L70 180 L0 180 L60 90 Z" />
+          <path d="M100 0 L170 0 L230 90 L170 180 L100 180 L160 90 Z" />
+        </g>
+        <g class="ch2" transform="translate(280,560)">
+          <path d="M0 0 L80 0 L150 100 L80 200 L0 200 L70 100 Z" />
+          <path d="M115 0 L195 0 L265 100 L195 200 L115 200 L185 100 Z" />
+        </g>
+        <g class="ch3" transform="translate(480,380)">
+          <path d="M0 0 L96 0 L176 120 L96 240 L0 240 L80 120 Z" />
+          <path d="M138 0 L234 0 L314 120 L234 240 L138 240 L218 120 Z" />
+        </g>
+        <g class="ch4" transform="translate(720,180)" fill="var(--accent)">
+          <path d="M0 0 L110 0 L200 140 L110 280 L0 280 L90 140 Z" />
+          <path d="M158 0 L268 0 L358 140 L268 280 L158 280 L248 140 Z" />
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="mhero-top">
+      <div>
+        <div class="aff-eyebrow">// Affiliate program · open</div>
+        <h1>Earn while<br/>India <span class="it">builds</span><br/>with AI.</h1>
+      </div>
+    </div>
+
+    <div class="mhero-foot">
+      <p>
+        Refer developers, creators and businesses to <em>Nivara</em>. Get a unique link. Earn <strong style="color: var(--ink);">10–20%</strong> of every payment your referrals make — every month, for as long as they stay subscribed.
+      </p>
+      <div class="mhero-meta">
+        <div class="row"><span class="l">Commission</span><span>10–20% · recurring</span></div>
+        <div class="row"><span class="l">Payout</span><span>Monthly · UPI / bank</span></div>
+        <div class="row"><span class="l">Cookie</span><span>30 days → lifetime</span></div>
+        <div class="row"><span class="l">Cost</span><span>Free · no minimum audience</span></div>
+      </div>
+      <div class="mhero-cta">
+        <a href="#apply" class="btn">
+          Apply to become an affiliate
+          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+        <a href="#how-it-works" class="note" style="border-bottom: 1px solid var(--muted-2); padding-bottom: 2px;">See how it works ↓</a>
+      </div>
+    </div>
+
+    <!-- tier pills strip -->
+    <div class="tier-pills">
+      <span class="tier-pill">Starter · 10%</span>
+      <span class="tier-pill t-builder">Builder · 13%</span>
+      <span class="tier-pill t-partner">Partner · 16%</span>
+      <span class="tier-pill t-elite">Elite · 20%</span>
+    </div>
+
+    <!-- hero stat grid -->
+    <div class="aff-stats">
+      <div class="aff-stat acc">
+        <span class="lbl">// Commission rate</span>
+        <span class="val">10<span class="u">–</span>20<span class="u">%</span></span>
+        <span class="sub">Recurring · every payment</span>
+      </div>
+      <div class="aff-stat">
+        <span class="lbl">// Payouts</span>
+        <span class="val">Monthly<span class="it">.</span></span>
+        <span class="sub">Auto · UPI / bank · 7th of month</span>
+      </div>
+      <div class="aff-stat">
+        <span class="lbl">// Level tiers</span>
+        <span class="val">4 <span class="u">levels</span></span>
+        <span class="sub">Auto-upgrade · no application</span>
+      </div>
+      <div class="aff-stat">
+        <span class="lbl">// Cost to join</span>
+        <span class="val"><span style="font-family: var(--font-mono); font-size: 0.7em; opacity: 0.6;">₹</span>0<span class="it"> / forever</span></span>
+        <span class="sub">No minimum audience · approval in 24h</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PROCESS
+============================================ -->
+<section class="fsec" id="how-it-works" data-screen-label="02 Process">
+  <div class="wrap">
+    <div class="fsec-text" style="margin-bottom: 48px; max-width: none;">
+      <div class="seyebrow"><span class="num">01</span><span class="label">Process</span></div>
+      <h2 style="max-width: 22ch;">Three steps<br/>to <span class="it">earning.</span></h2>
+      <p style="max-width: 64ch;">No approval waitlist. No minimum audience size. If you can share a link, you can earn with Nivara.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">// 01 / apply</div>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="4" y="3" width="16" height="18" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        <h3>Apply and get your <span class="it">link.</span></h3>
+        <p>Fill in the form below. We review within <strong style="color: var(--ink); font-weight: 500;">24 hours</strong>. Once approved, you get a unique referral link like <code>nivara.tech/?ref=yourname</code>.</p>
+        <div class="arrow">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">// 02 / share</div>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            <circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="2"/>
+            <circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M9 11l6-4M9 13l6 4" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        <h3>Share with your <span class="it">audience.</span></h3>
+        <p>Post your link in YouTube descriptions, X bios, LinkedIn articles, Discord servers, dev newsletters — wherever your audience is. Every click is tracked in real-time.</p>
+        <div class="arrow">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">// 03 / earn</div>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="6" width="18" height="14" stroke="currentColor" stroke-width="2"/>
+            <path d="M3 10h18" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 16h4" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17" cy="16" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3>Earn every month <span class="it">they pay.</span></h3>
+        <p>When a referred user upgrades to a paid plan, you earn <strong style="color: var(--ink); font-weight: 500;">10–20%</strong> of their payment — every single month they remain subscribed. Compounds as your level rises.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     TIERS
+============================================ -->
+<section class="fsec" data-screen-label="03 Tiers">
+  <div class="wrap">
+    <div class="fsec-text" style="margin-bottom: 48px; max-width: none;">
+      <div class="seyebrow"><span class="num">02</span><span class="label">Commission tiers</span></div>
+      <h2 style="max-width: 22ch;">The more you grow,<br/>the more you <span class="it">earn.</span></h2>
+      <p style="max-width: 64ch;">Your commission rate increases automatically as your active referral base grows. No applications needed to upgrade tiers — it happens instantly when you hit the threshold.</p>
+    </div>
+
+    <div class="tiers-grid">
+
+      <!-- STARTER -->
+      <div class="tcard">
+        <div class="tridge">01 / starter</div>
+        <div class="thead">
+          <span class="tname">Starter</span>
+          <svg class="ticon" viewBox="0 0 22 22" fill="none"><path d="M11 3 L19 11 L11 19 L3 11 Z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="trate">
+          <span class="pct">%</span>10
+          <span class="per">/ payment</span>
+        </div>
+        <div class="trange"><b>1 – 10</b> active paying referrals</div>
+        <ul>
+          <li class="h">Unique referral link</li>
+          <li>Monthly payout · UPI / bank</li>
+          <li>Real-time referral dashboard</li>
+          <li>Click + conversion analytics</li>
+          <li>30-day cookie window</li>
+        </ul>
+      </div>
+
+      <!-- BUILDER -->
+      <div class="tcard">
+        <div class="tridge">02 / builder</div>
+        <div class="thead">
+          <span class="tname">Builder</span>
+          <svg class="ticon" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2 L21 11 L11 20 L1 11 Z" fill="currentColor"/>
+            <path d="M11 7 L16 11 L11 15 L6 11 Z" fill="var(--paper)"/>
+          </svg>
+        </div>
+        <div class="trate">
+          <span class="pct">%</span>13
+          <span class="per">/ payment</span>
+        </div>
+        <div class="trange"><b>11 – 30</b> active paying referrals</div>
+        <ul>
+          <li class="h">Everything in Starter</li>
+          <li>Priority support response</li>
+          <li>90-day cookie window</li>
+          <li>Early access to new modules</li>
+          <li>Featured in affiliate directory</li>
+        </ul>
+      </div>
+
+      <!-- PARTNER -->
+      <div class="tcard">
+        <div class="tridge">03 / partner</div>
+        <div class="thead">
+          <span class="tname">Partner</span>
+          <svg class="ticon" viewBox="0 0 22 22" fill="none">
+            <path d="M11 1 L21 11 L11 21 L1 11 Z" fill="currentColor"/>
+            <path d="M11 6 L16 11 L11 16 L6 11 Z" fill="var(--paper)"/>
+            <circle cx="11" cy="11" r="2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="trate">
+          <span class="pct">%</span>16
+          <span class="per">/ payment</span>
+        </div>
+        <div class="trange"><b>31 – 99</b> active paying referrals</div>
+        <ul>
+          <li class="h">Everything in Builder</li>
+          <li>Co-marketing opportunities</li>
+          <li>120-day cookie window</li>
+          <li>Dedicated partner manager</li>
+          <li>Custom landing page option</li>
+        </ul>
+      </div>
+
+      <!-- ELITE — featured -->
+      <div class="tcard feat">
+        <div class="tridge tridge-elite">★ 04 / elite</div>
+        <div class="thead">
+          <span class="tname">Elite</span>
+          <svg class="ticon" viewBox="0 0 22 22" fill="none">
+            <path d="M11 1 L21 11 L11 21 L1 11 Z" fill="currentColor"/>
+            <path d="M11 5 L17 11 L11 17 L5 11 Z" fill="var(--ink)"/>
+            <path d="M11 8 L14 11 L11 14 L8 11 Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="trate">
+          <span class="pct">%</span>20
+          <span class="per">/ payment</span>
+        </div>
+        <div class="trange"><b>100+</b> active paying referrals</div>
+        <ul>
+          <li class="h">Everything in Partner</li>
+          <li>Quarterly bonus payouts</li>
+          <li>Lifetime cookie window</li>
+          <li>Equity conversation eligibility</li>
+          <li>Direct founder access</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Tier progress visualization -->
+    <div class="tier-progress">
+      <span class="pl">// auto-tier · <b>10 → 11 → 31 → 100+</b></span>
+      <div>
+        <div class="ptrack">
+          <span class="pthresh t-builder"></span>
+          <span class="pthresh t-partner"></span>
+          <span class="pthresh t-elite"></span>
+          <span class="pmarker" style="left: 0;"></span>
+        </div>
+        <div class="pscale">
+          <span style="left:0;transform:none">01 · Starter</span>
+          <span style="left:10%;transform:translateX(-50%)">11 · Builder</span>
+          <span style="left:30%;transform:translateX(-50%)">31 · Partner</span>
+          <span style="left:100%;transform:translateX(-100%)">100 · Elite</span>
+        </div>
+      </div>
+      <div class="pnote">↑ tiers upgrade<br/><b>automatically</b></div>
+    </div>
+
+    <div class="tier-fineprint">
+      <b>Active paying referral</b> = a user who signed up via your link and has an active paid plan in the current month. Commission is calculated on the <b>net payment amount</b> (after payment gateway fees). Payouts are processed on the <span class="num">7th</span> of every month for the previous month's earnings.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     ESTIMATOR
+============================================ -->
+<section class="fsec" data-screen-label="04 Estimator">
+  <div class="wrap">
+    <div class="fsec-text" style="margin-bottom: 48px; max-width: none;">
+      <div class="seyebrow"><span class="num">03</span><span class="label">Estimate</span></div>
+      <h2 style="max-width: 22ch;">Calculate your <span class="it">potential.</span></h2>
+      <p style="max-width: 60ch;">Move the sliders to see what you could earn based on your referral count and the plans your audience is likely to choose.</p>
+    </div>
+
+    <div class="estim">
+      <!-- LEFT — controls -->
+      <div class="e-left">
+        <h3>Earnings <span class="it">estimator</span></h3>
+        <p class="e-sub">Drag the sliders. Earnings update live. Numbers reflect real Nivara plan pricing.</p>
+
+        <div class="ctrl">
+          <div class="clbl">
+            <span>// Active paying referrals</span>
+            <span class="cval"><span id="refsVal">15</span> <span class="u">refs</span></span>
+          </div>
+          <input type="range" id="refsRange" min="1" max="200" value="15" step="1" />
+          <div class="ticks">
+            <span style="left:0;transform:none">1</span>
+            <span style="left:7%;transform:translateX(-50%)">10</span>
+            <span style="left:16.5%;transform:translateX(-50%)">30</span>
+            <span style="left:50%;transform:translateX(-50%)">100</span>
+            <span style="left:100%;transform:translateX(-100%)">200</span>
+          </div>
+        </div>
+
+        <div class="ctrl">
+          <div class="clbl">
+            <span>// Average plan value</span>
+            <span class="cval"><span style="font-size: 14px; opacity: 0.6; margin-right: 2px;">₹</span><span id="planVal">799</span> <span class="u">/ mo</span></span>
+          </div>
+          <input type="range" id="planRange" min="0" max="4999" value="799" step="1" />
+          <div class="ticks">
+            <span style="left:0;transform:none">₹0</span>
+            <span style="left:18%;transform:translateX(-50%)">Solo</span>
+            <span style="left:40%;transform:translateX(-50%)">Builder</span>
+            <span style="left:100%;transform:translateX(-100%)">Pro</span>
+          </div>
+          <div class="plan-presets">
+            <button data-plan="0">Free · ₹0</button>
+            <button data-plan="799" class="active">Solo · ₹799</button>
+            <button data-plan="1999">Builder · ₹1,999</button>
+            <button data-plan="4999">Pro · ₹4,999</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — output -->
+      <div class="e-right">
+        <div>
+          <div class="e-tag">// monthly earnings · estimate</div>
+          <div class="e-monthly">
+            <span class="cur">₹</span><span id="monthlyVal">1,558</span><span class="per">/ month</span>
+          </div>
+          <div class="e-tier">
+            <span class="dot"></span>
+            Your tier · <span class="acc" id="tierName">Builder</span> · <span id="tierRate">13%</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="e-breakdown">
+            <div class="eb">
+              <span class="ll">// referrals</span>
+              <span class="vv"><span id="refsOut">15</span> paying</span>
+            </div>
+            <div class="eb">
+              <span class="ll">// commission rate</span>
+              <span class="vv" id="rateOut">13<span style="font-size: 14px; opacity: 0.55;">%</span></span>
+            </div>
+            <div class="eb">
+              <span class="ll">// gross referral revenue</span>
+              <span class="vv"><span class="cur">₹</span><span id="grossOut">11,985</span></span>
+            </div>
+            <div class="eb acc">
+              <span class="ll">// your monthly cut</span>
+              <span class="vv"><span class="cur">₹</span><span id="cutOut">1,558</span></span>
+            </div>
+          </div>
+
+          <div class="e-annual">
+            <span class="ll">// annual projection</span>
+            <span class="vv"><span class="cur">₹</span><span id="annualVal">18,697</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     APPLY
+============================================ -->
+<section class="fsec" id="apply" data-screen-label="05 Apply">
+  <div class="wrap">
+    <div class="fsec-text" style="margin-bottom: 48px; max-width: none;">
+      <div class="seyebrow"><span class="num">04</span><span class="label">Apply</span></div>
+      <h2 style="max-width: 22ch;">Join the <span class="it">program.</span></h2>
+      <p style="max-width: 60ch;">Applications are reviewed within 24 hours. We'll send your unique link and dashboard access as soon as you're approved.</p>
+    </div>
+
+    <div class="form-wrap">
+      <aside class="form-side">
+        <div class="ftag">// affiliate application</div>
+        <h3>Tell us a bit about yourself <span class="it">and how you'll promote Nivara.</span></h3>
+        <p>Honest answers help us review faster. We don't share your information with third parties.</p>
+
+        <ul class="checklist">
+          <li>Reviewed within 24h</li>
+          <li>Unique <code style="font-family: var(--font-mono); font-size: 12px;">?ref=</code> link sent on approval</li>
+          <li>Live dashboard from day one</li>
+          <li>First payout on the 7th of next month</li>
+        </ul>
+      </aside>
+
+      <div class="form-main">
+        <form id="affForm" class="form-grid" onsubmit="return submitApp(event)">
+          <div class="form-row">
+            <label>First name <span class="req">*</span></label>
+            <input type="text" name="fn" placeholder="Rahul" required />
+          </div>
+          <div class="form-row">
+            <label>Last name <span class="req">*</span></label>
+            <input type="text" name="ln" placeholder="Sharma" required />
+          </div>
+          <div class="form-row">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="rahul@gmail.com" required />
+          </div>
+          <div class="form-row">
+            <label>Phone (optional)</label>
+            <input type="tel" name="phone" placeholder="+91 98765 43210" />
+          </div>
+          <div class="form-row full">
+            <label>Your website or social profile <span class="req">*</span></label>
+            <input type="url" name="url" placeholder="https://youtube.com/@yourchannel  or  https://x.com/yourhandle" required />
+            <span class="hint">YouTube, X, LinkedIn, Discord — anywhere your audience already follows you.</span>
+          </div>
+          <div class="form-row">
+            <label>Audience type <span class="req">*</span></label>
+            <select name="audience" required>
+              <option value="">Select your primary audience</option>
+              <option>Developers · indie / solo</option>
+              <option>Developers · agency / team</option>
+              <option>Creators · YouTube / podcast</option>
+              <option>Creators · writers / newsletter</option>
+              <option>Founders &amp; startup operators</option>
+              <option>Students &amp; learners</option>
+              <option>Small business owners</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Monthly audience reach <span class="req">*</span></label>
+            <select name="reach" required>
+              <option value="">Select range</option>
+              <option>Under 1,000</option>
+              <option>1,000 – 10,000</option>
+              <option>10,000 – 50,000</option>
+              <option>50,000 – 250,000</option>
+              <option>250,000+</option>
+            </select>
+          </div>
+          <div class="form-row full">
+            <label>How will you promote Nivara? <span class="req">*</span></label>
+            <textarea name="plan" placeholder="e.g. I run a YouTube channel for Indian developers — 18K subs. I'll feature Nivara in my AI tools reviews and coding tutorial videos, with the affiliate link in description + pinned comment..." required></textarea>
+            <span class="hint">Be specific. The clearer your plan, the faster we approve.</span>
+          </div>
+
+          <div class="form-row full form-foot">
+            <span class="terms">By applying, you agree to our <a href="#">affiliate terms</a>. We do not share your information with third parties.</span>
+            <button type="submit" id="submitBtn">
+              <span id="submitLabel">Submit application</span>
+              <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FAQ
+============================================ -->
+<section class="fsec" data-screen-label="06 FAQ">
+  <div class="wrap">
+    <div class="fsec-text" style="margin-bottom: 36px; max-width: none;">
+      <div class="seyebrow"><span class="num">05</span><span class="label">FAQ</span></div>
+      <h2 style="max-width: 22ch;">Common <span class="it">questions.</span></h2>
+    </div>
+
+    <div class="faq-grid">
+
+      <details class="faq-item">
+        <summary>How are commissions calculated?<span class="ico"></span></summary>
+        <div class="answer">
+          Commission is your <strong>tier rate</strong> applied to the <strong>net payment amount</strong> (after payment gateway fees, typically 1.5–2.5%) of every active paying referral, every month they stay subscribed. So a Builder-tier affiliate (13%) with a referral paying ₹1,999/month earns roughly ₹254 from that single referral, every month, automatically.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>When and how do I get paid?<span class="ico"></span></summary>
+        <div class="answer">
+          On the <strong>7th of every month</strong>, we process the previous month's earnings. Payouts go via <strong>UPI</strong> for amounts under ₹50K, or <strong>direct bank transfer (NEFT/IMPS)</strong> above that. Minimum payout threshold is ₹500 — anything below rolls to the next month.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How long does my referral cookie last?<span class="ico"></span></summary>
+        <div class="answer">
+          <strong>30 days</strong> on Starter, <strong>90 days</strong> on Builder, <strong>120 days</strong> on Partner, and a <strong>lifetime</strong> attribution window on Elite. So if a user clicks your link on Monday and signs up for Nivara two weeks later, you still get credit (and ongoing commission).
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What happens when a referred user cancels their plan?<span class="ico"></span></summary>
+        <div class="answer">
+          Commissions stop the month they cancel — but you keep everything earned before. They also stop counting toward your active referral total, which could move you down a tier the next month. You can downgrade tiers, but you'll go right back up the moment your active count crosses the threshold again.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Do free plan users count toward my referral count?<span class="ico"></span></summary>
+        <div class="answer">
+          No. Only users on a <strong>paid plan</strong> (Solo, Builder or Pro) count toward your active referral total. Free Explore-tier users are tracked in your dashboard so you can see total reach, but they don't generate commission until they upgrade.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Is there a minimum audience size to apply?<span class="ico"></span></summary>
+        <div class="answer">
+          No minimum. We've approved affiliates with as few as <strong>200 newsletter subscribers</strong> — what matters is fit, not size. If your audience overlaps with Indian developers, creators or small businesses building with AI, we want to talk.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I use Nivara myself and refer it?<span class="ico"></span></summary>
+        <div class="answer">
+          Yes — we encourage it. Most of our best affiliates are paying users themselves. <strong>You cannot self-refer</strong> (signing up via your own link doesn't count), but you can absolutely talk about your own usage when promoting.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I track my referrals and earnings?<span class="ico"></span></summary>
+        <div class="answer">
+          You get a real-time dashboard at <code>nivara.tech/affiliate/dashboard</code> showing every click, signup, upgrade, and commission accrued. Filter by date, source URL, or referral status. Export as CSV anytime for your accounting.
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     CALLOUT
+============================================ -->
+<section class="callout" data-screen-label="07 CTA">
+  <div class="wrap">
+    <h3>Start earning<br/>with <span class="it">India's AI OS.</span></h3>
+    <p>Free to join. Approved in 24h. First payout on the 7th of next month. No minimum audience — only quality of fit.</p>
+    <div class="btn-row">
+      <a href="#apply" class="btn">
+        Apply now
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+      <a href="Hyper.html#pricing" class="btn alt">See Nivara plans</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+============================================ -->
+<footer data-screen-label="08 Footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="Hyper.html">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>nivara</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Affiliate</h3>
+        <ul>
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="#apply">Apply now</a></li>
+          <li><a href="#">Affiliate terms</a></li>
+          <li><a href="#">Dashboard login</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="Hyper.html#platform">About</a></li>
+          <li><a href="Hyper.html#modules">Modules</a></li>
+          <li><a href="Hyper.html#pricing">Pricing</a></li>
+          <li><a href="Hyper.html#waitlist">Waitlist</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="mailto:hello@nivara.tech">hello@nivara.tech</a></li>
+          <li><a href="#">X / @nivara_tech</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 Nivara Technologies · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+  // ============= ESTIMATOR =============
+  const refsRange = document.getElementById('refsRange');
+  const planRange = document.getElementById('planRange');
+  const refsVal   = document.getElementById('refsVal');
+  const planVal   = document.getElementById('planVal');
+  const refsOut   = document.getElementById('refsOut');
+  const rateOut   = document.getElementById('rateOut');
+  const grossOut  = document.getElementById('grossOut');
+  const cutOut    = document.getElementById('cutOut');
+  const monthlyVal= document.getElementById('monthlyVal');
+  const annualVal = document.getElementById('annualVal');
+  const tierName  = document.getElementById('tierName');
+  const tierRate  = document.getElementById('tierRate');
+
+  function tierFromRefs(n) {
+    if (n >= 100) return { name: 'Elite',   rate: 0.20 };
+    if (n >= 31)  return { name: 'Partner', rate: 0.16 };
+    if (n >= 11)  return { name: 'Builder', rate: 0.13 };
+    return         { name: 'Starter', rate: 0.10 };
+  }
+  function inr(n) {
+    return Math.round(n).toLocaleString('en-IN');
+  }
+  function updateEstim() {
+    const refs = parseInt(refsRange.value, 10);
+    const plan = parseInt(planRange.value, 10);
+    const t = tierFromRefs(refs);
+    const gross = refs * plan;
+    const cut = gross * t.rate;
+
+    refsVal.textContent = refs;
+    planVal.textContent = inr(plan);
+    refsOut.textContent = refs;
+    rateOut.innerHTML = Math.round(t.rate * 100) + '<span style="font-size: 14px; opacity: 0.55;">%</span>';
+    grossOut.textContent = inr(gross);
+    cutOut.textContent = inr(cut);
+    monthlyVal.textContent = inr(cut);
+    annualVal.textContent = inr(cut * 12);
+    tierName.textContent = t.name;
+    tierRate.textContent = Math.round(t.rate * 100) + '%';
+
+    // sync plan preset buttons
+    document.querySelectorAll('.plan-presets button').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.plan, 10) === plan);
+    });
+
+    // sync tier-progress marker (visual)
+    const marker = document.querySelector('.tier-progress .pmarker');
+    if (marker) {
+      const pct = Math.min(100, (refs / 100) * 100);
+      marker.style.left = pct + '%';
+    }
+  }
+  refsRange.addEventListener('input', updateEstim);
+  planRange.addEventListener('input', updateEstim);
+  document.querySelectorAll('.plan-presets button').forEach(b => {
+    b.addEventListener('click', e => {
+      planRange.value = b.dataset.plan;
+      updateEstim();
+    });
+  });
+  updateEstim();
+
+  // ============= FORM SUBMIT =============
+  function submitApp(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const label = document.getElementById('submitLabel');
+    btn.classList.add('ok');
+    label.textContent = '✓ Application sent — we\'ll be in touch in 24h';
+    setTimeout(() => {
+      btn.disabled = true;
+    }, 100);
+    return false;
+  }
+</script>
+</body>
+</html>

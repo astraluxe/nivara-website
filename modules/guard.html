@@ -1,0 +1,899 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guard — Cybersecurity · Nivara</title>
+<meta name="description" content="Your AI security team. Always watching. Threat detection, contract scanning, phishing defense — fully autonomous." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../module-pages.css" />
+<link rel="stylesheet" href="../backgrounds.css" />
+
+<style>
+  /* Guard-specific visuals */
+  .guard-stage {
+    aspect-ratio: 16/9;
+    background: #0E0E0C;
+    color: #F2EFE9;
+    border: 1px solid rgba(242,239,233,0.12);
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 0;
+    overflow: hidden;
+  }
+  .guard-stage .gleft {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid rgba(242,239,233,0.08);
+    text-align: center;
+  }
+  .guard-stage .gauge {
+    position: relative;
+    width: 280px; height: 160px;
+    margin-bottom: 16px;
+  }
+  .guard-stage .gauge svg { width: 100%; height: 100%; }
+  .guard-stage .gauge-val {
+    position: absolute;
+    bottom: 8px; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 56px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .guard-stage .gauge-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(242,239,233,0.55);
+    margin-top: 4px;
+  }
+  .guard-stage .gstats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(242,239,233,0.08);
+    width: 100%;
+    margin-top: 24px;
+    border-top: 1px solid rgba(242,239,233,0.08);
+    border-bottom: 1px solid rgba(242,239,233,0.08);
+  }
+  .guard-stage .gstat {
+    background: #0E0E0C;
+    padding: 14px 12px;
+  }
+  .guard-stage .gstat .gv {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 24px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .guard-stage .gstat .gl {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: rgba(242,239,233,0.45);
+    text-transform: uppercase;
+  }
+
+  .guard-stage .gright {
+    padding: 24px 28px;
+    display: flex; flex-direction: column;
+  }
+  .guard-stage .gh {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: rgba(242,239,233,0.5);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; justify-content: space-between;
+  }
+  .guard-stage .gfeed {
+    flex: 1;
+    display: flex; flex-direction: column;
+    gap: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    overflow: hidden;
+  }
+  .guard-stage .gline {
+    display: grid;
+    grid-template-columns: 76px 60px 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(242,239,233,0.05);
+    align-items: center;
+    color: rgba(242,239,233,0.85);
+  }
+  .guard-stage .gline:last-child { border-bottom: none; }
+  .guard-stage .gline .gt { color: rgba(242,239,233,0.45); font-size: 11px; }
+  .guard-stage .gline .gsev {
+    font-size: 9px; letter-spacing: 0.1em; padding: 3px 6px;
+    border: 1px solid; text-align: center;
+  }
+  .guard-stage .gsev.low { color: #6BFFB8; border-color: rgba(107,255,184,0.4); }
+  .guard-stage .gsev.med { color: #FFD83C; border-color: rgba(255,216,60,0.4); }
+  .guard-stage .gsev.high { color: #FF6B6B; border-color: rgba(255,107,107,0.4); }
+  .guard-stage .gsev.crit { color: #F2EFE9; background: #FF3D3D; border-color: #FF3D3D; }
+
+  @media (max-width: 880px) {
+    .guard-stage { grid-template-columns: 1fr; aspect-ratio: auto; }
+    .guard-stage .gleft { border-right: none; border-bottom: 1px solid rgba(242,239,233,0.08); }
+  }
+
+  /* Contract scanner mock */
+  .scanner {
+    border: 1px solid var(--rule-strong);
+    background: #F7F4ED;
+    padding: 24px;
+  }
+  .scanner .dropzone {
+    border: 1.5px dashed var(--rule-strong);
+    padding: 28px;
+    text-align: center;
+    background: rgba(124,92,255,0.04);
+    margin-bottom: 16px;
+  }
+  .scanner .dropzone .ic {
+    width: 36px; height: 36px; background: var(--ink); color: var(--paper);
+    display: inline-grid; place-items: center;
+    margin-bottom: 8px;
+  }
+  .scanner .dropzone p { color: var(--muted); font-size: 13px; }
+  .scanner .dropzone strong { font-weight: 500; color: var(--ink); }
+  .scanner .findings {
+    display: flex; flex-direction: column;
+    background: #FFFFFF;
+    border: 1px solid var(--rule-strong);
+  }
+  .scanner .finding {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .scanner .finding:last-child { border-bottom: none; }
+  .scanner .finding .sev {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 6px;
+    text-align: center;
+    border: 1px solid;
+  }
+  .scanner .sev.low { color: #2D9E5F; border-color: #2D9E5F; }
+  .scanner .sev.med { color: #C68A00; border-color: #C68A00; }
+  .scanner .sev.high { color: #C62828; border-color: #C62828; }
+  .scanner .finding .ftitle {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .scanner .finding p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .scanner .risk-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .scanner .risk-bar .score {
+    font-family: var(--font-sans);
+    font-size: 28px;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+
+  /* Phishing email mock */
+  .email-mock {
+    background: #FFFFFF;
+    border: 1px solid var(--rule-strong);
+    overflow: hidden;
+  }
+  .email-mock .ehead {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+  }
+  .email-mock .ealert {
+    background: #FFEFEF;
+    border-bottom: 1px solid #FFCDCD;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
+    color: #C62828;
+    font-size: 13px;
+  }
+  .email-mock .ealert .ic {
+    width: 24px; height: 24px;
+    background: #C62828;
+    color: #FFFFFF;
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .email-mock .ealert strong { font-weight: 600; }
+  .email-mock .ebody {
+    padding: 24px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .email-mock .ebody h6 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .email-mock .ebody p { margin-bottom: 12px; color: var(--ink-2); }
+  .email-mock .ebody .flag {
+    background: #FFEFEF;
+    border-bottom: 1.5px solid #C62828;
+    padding: 0 4px;
+    color: #C62828;
+    font-weight: 500;
+  }
+
+  /* Vuln briefing card */
+  .vuln-card {
+    background: #F7F4ED;
+    border: 1px solid var(--rule-strong);
+    padding: 24px;
+  }
+  .vuln-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 16px;
+  }
+  .vuln-head h6 {
+    font-size: 18px; font-weight: 500; letter-spacing: -0.01em;
+  }
+  .vuln-head .when {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .vuln-stack {
+    display: flex; gap: 6px;
+    margin-bottom: 18px;
+  }
+  .vuln-stack .chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    color: var(--ink-2);
+  }
+  .vuln-item {
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+  .vuln-item .vname { font-size: 14px; font-weight: 500; }
+  .vuln-item .vdesc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 4px; max-width: 40ch; }
+  .vuln-item .vsev {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 4px 8px;
+    border: 1px solid;
+  }
+  .vuln-item .vsev.high { color: #C62828; border-color: #C62828; }
+  .vuln-item .vsev.med { color: #C68A00; border-color: #C68A00; }
+  .vuln-item .vact {
+    padding: 6px 12px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+  }
+  .vuln-affected {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #C62828;
+  }
+  .vuln-affected.no { color: #2D9E5F; }
+
+  /* Compliance checker */
+  .compl {
+    background: #F7F4ED;
+    border: 1px solid var(--rule-strong);
+    padding: 24px;
+  }
+  .compl-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .compl-form .field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .compl-form .field .sel {
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: 1px solid var(--rule-strong);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .compl-form .field .sel::after {
+    content: "▾";
+    color: var(--muted);
+  }
+  .compl-rows {
+    border: 1px solid var(--rule-strong);
+    background: #FFFFFF;
+  }
+  .compl-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+  }
+  .compl-row:last-child { border-bottom: none; }
+  .compl-row .cname {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .compl-row .cdesc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .compl-row .cmark {
+    width: 22px; height: 22px;
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+  .compl-row .cmark.ok { background: #2D9E5F; color: #FFFFFF; }
+  .compl-row .cmark.no { background: #C62828; color: #FFFFFF; }
+  .compl-row .cmark.warn { background: #C68A00; color: #FFFFFF; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="../NIVARA.html" class="nav-mark" aria-label="Nivara home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>Nivara<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../NIVARA.html#platform">Platform</a></li>
+      <li><a href="../NIVARA.html#modules">Modules</a></li>
+      <li><a href="../NIVARA.html#pricing">Pricing</a></li>
+      <li><a href="../download.html">Download</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <span class="mono nav-meta">06 · Guard</span>
+      <a href="../download.html" class="btn">
+        Download
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- COMING SOON BANNER -->
+<section class="cs-banner">
+  <div class="wrap">
+    <div class="cs-banner-row">
+      <span class="cs-banner-tag">Preview</span>
+      <p class="cs-banner-text">
+        <strong>Guard</strong> is shipping soon. This page is a design preview of how the product will look — features below aren't live yet. Krew agents are <a href="krew.html" style="color: var(--accent); border-bottom: 1px solid currentColor;">already live today</a>.
+      </p>
+      <a href="../download.html" class="cs-banner-cta">
+        Download →
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="../NIVARA.html"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Modules</a>
+      <span class="sep">/</span>
+      <span class="here">06 · Guard</span>
+    </div>
+  </div>
+</section>
+
+<!-- HERO -->
+<section class="mhero" data-screen-label="01 Hero">
+  <div class="pgbg pgbg-radar" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000" fill="none">
+      <g stroke="currentColor" stroke-width="1" fill="none">
+        <circle class="ping"    cx="500" cy="500" r="120"/>
+        <circle class="ping p2" cx="500" cy="500" r="220"/>
+        <circle class="ping p3" cx="500" cy="500" r="320"/>
+        <circle cx="500" cy="500" r="420" opacity="0.4"/>
+        <circle cx="500" cy="500" r="480" opacity="0.25"/>
+      </g>
+      <g stroke="currentColor" stroke-width="1" opacity="0.4">
+        <line x1="20"  y1="500" x2="980" y2="500"/>
+        <line x1="500" y1="20"  x2="500" y2="980"/>
+      </g>
+      <g class="sweep">
+        <path d="M500 500 L500 60 A440 440 0 0 1 870 280 Z" fill="var(--accent)" opacity="0.18"/>
+        <line x1="500" y1="500" x2="500" y2="60" stroke="var(--accent)" stroke-width="2" opacity="0.7"/>
+      </g>
+      <g fill="currentColor">
+        <circle cx="660" cy="350" r="4"/>
+        <circle cx="380" cy="610" r="4"/>
+        <circle cx="730" cy="600" r="4"/>
+      </g>
+      <circle cx="500" cy="500" r="6" fill="var(--accent)"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="mhero-top">
+      <div>
+        <div class="mhero-tag up"><span class="ind"></span>Pro tier · ships 2026 H2</div>
+        <h1>Your AI<br/>security team.<br/><span class="it">Always watching.</span></h1>
+      </div>
+    </div>
+
+    <div class="mhero-foot">
+      <p>
+        Contract scanning, threat monitoring, phishing detection, vulnerability briefings — all <em>autonomous</em>. Guard is the security analyst that small businesses could never afford, running 24/7 on top of your stack.
+      </p>
+      <div class="mhero-meta">
+        <div class="row"><span class="l">Coverage</span><span>Email · Repos · Files · Docs</span></div>
+        <div class="row"><span class="l">Compliance</span><span>GDPR · DPDP · PCI-DSS</span></div>
+        <div class="row"><span class="l">Monitoring</span><span>Continuous · weekly digest</span></div>
+        <div class="row"><span class="l">Runs</span><span>Locally · always available</span></div>
+      </div>
+      <div class="mhero-cta">
+        <a href="../download.html" class="btn">
+          Download
+          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+        <span class="note">Contract scanner · on every plan</span>
+      </div>
+    </div>
+
+    <!-- STAGE: war-room dashboard -->
+    <div class="mstage">
+      <div class="mstage-head">
+        <span>// Live dashboard · risk + feed</span>
+        <span class="right">↻ updated 12s ago</span>
+      </div>
+
+      <div class="guard-stage">
+        <div class="gleft">
+          <div class="gauge">
+            <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+              <!-- gauge arc -->
+              <path d="M30 140 A110 110 0 0 1 250 140" stroke="rgba(242,239,233,0.1)" stroke-width="12" fill="none" stroke-linecap="square"/>
+              <!-- value arc (low risk = 22/100, sweep ~22% of arc) -->
+              <path d="M30 140 A110 110 0 0 1 100 35" stroke="#6BFFB8" stroke-width="12" fill="none" stroke-linecap="square"/>
+              <!-- ticks -->
+              <g stroke="rgba(242,239,233,0.3)" stroke-width="1">
+                <line x1="30" y1="140" x2="20" y2="146"/>
+                <line x1="140" y1="30" x2="140" y2="20"/>
+                <line x1="250" y1="140" x2="260" y2="146"/>
+              </g>
+            </svg>
+            <div class="gauge-val">22</div>
+          </div>
+          <div class="gauge-label">Risk score · low</div>
+
+          <div class="gstats">
+            <div class="gstat">
+              <div class="gv">1,247</div>
+              <div class="gl">Threats blocked</div>
+            </div>
+            <div class="gstat">
+              <div class="gv">04</div>
+              <div class="gl">Risky logins</div>
+            </div>
+            <div class="gstat">
+              <div class="gv">31</div>
+              <div class="gl">Phishing caught</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gright">
+          <div class="gh">
+            <span>// Threat feed · real-time</span>
+            <span>5 active</span>
+          </div>
+          <div class="gfeed">
+            <div class="gline">
+              <span class="gt">14:32:18</span>
+              <span class="gsev high">HIGH</span>
+              <span>Suspicious login · Lagos · admin@yourco.in · blocked</span>
+            </div>
+            <div class="gline">
+              <span class="gt">14:28:04</span>
+              <span class="gsev med">MED</span>
+              <span>Bulk export attempted · S3 bucket · paused for review</span>
+            </div>
+            <div class="gline">
+              <span class="gt">14:25:51</span>
+              <span class="gsev low">LOW</span>
+              <span>New device on account · Bengaluru · verified</span>
+            </div>
+            <div class="gline">
+              <span class="gt">14:22:33</span>
+              <span class="gsev crit">CRIT</span>
+              <span>Phishing campaign · 8 emails quarantined</span>
+            </div>
+            <div class="gline">
+              <span class="gt">14:18:12</span>
+              <span class="gsev low">LOW</span>
+              <span>Vendor contract scanned · 2 medium clauses</span>
+            </div>
+            <div class="gline">
+              <span class="gt">14:15:00</span>
+              <span class="gsev med">MED</span>
+              <span>Unpatched dep · Next.js 14.0.2 · CVE-2025-1042</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1 — CONTRACT SCANNER -->
+<section class="fsec" data-screen-label="02 Contract Scanner">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">01</span><span class="label">Contract Scanner</span></div>
+        <h2>Read every clause.<br/><span class="it">In plain English.</span></h2>
+        <p>Drop a PDF — vendor agreement, employment contract, terms of service. Guard returns a risk score and a plain-English summary in 12 seconds. No legal training needed to spot the traps.</p>
+        <ul>
+          <li class="acc">Flags risky clauses, auto-renewals, liability traps, non-standard terms</li>
+          <li>Risk score out of 100 with breakdown by category</li>
+          <li>Plain-English explanation for every flag — no jargon</li>
+          <li>GDPR &amp; DPDP-aware — knows what's required for Indian businesses</li>
+          <li>Available on every plan — runs on your token balance</li>
+        </ul>
+      </div>
+
+      <div class="scanner">
+        <div class="dropzone">
+          <div class="ic">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 2v10M3 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <p><strong>Drop a PDF here</strong> or click to upload</p>
+          <p style="font-size: 11px; margin-top: 4px; font-family: var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;">vendor-agreement.pdf · 2.4 MB · scanning…</p>
+        </div>
+
+        <div class="findings">
+          <div class="finding">
+            <span class="sev high">HIGH</span>
+            <div>
+              <div class="ftitle">Auto-renewal at 1.4× current rate</div>
+              <p>Section 8.2: contract auto-renews for 24 months unless cancelled 90 days prior, with annual price increase capped at 40% — unusually high.</p>
+            </div>
+          </div>
+          <div class="finding">
+            <span class="sev med">MED</span>
+            <div>
+              <div class="ftitle">Unlimited liability clause</div>
+              <p>Section 14.1: liability is uncapped. Industry standard is 12 months of fees. Push back on this in negotiation.</p>
+            </div>
+          </div>
+          <div class="finding">
+            <span class="sev low">LOW</span>
+            <div>
+              <div class="ftitle">Data residency unspecified</div>
+              <p>Section 6.3: vendor may store data outside India. Required disclosure under DPDP Act 2023.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="risk-bar">
+          <span>Overall risk score</span>
+          <span class="score">68 / 100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2 — PHISHING -->
+<section class="fsec reverse" data-screen-label="03 Phishing">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">02</span><span class="label">Phishing &amp; email guard</span></div>
+        <h2>The email that's<br/>after your<br/><span class="it">password.</span></h2>
+        <p>Connects to your inbox and reads what arrives. Every email checked for phishing patterns, suspicious links, spoofed senders, and payment-fraud language — before you open it.</p>
+        <ul>
+          <li class="acc">Link inspection — flags lookalike domains and URL shorteners</li>
+          <li>Sender verification with SPF / DKIM / DMARC checks</li>
+          <li>Payment-fraud detection — invoice scams, vendor impersonation</li>
+          <li>Connects via your inbox integration · no browser extension needed</li>
+        </ul>
+      </div>
+
+      <div class="email-mock">
+        <div class="ehead">
+          <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--accent); display: inline-grid; place-items: center; color: var(--accent-ink); font-weight: 500;">R</span>
+          <span>Razorpay Security &lt;security@razorрay.com&gt;</span>
+          <span style="margin-left: auto; font-size: 11px;">2:14 PM</span>
+        </div>
+        <div class="ealert">
+          <span class="ic">!</span>
+          <span><strong>Suspicious link detected.</strong> Sender domain uses Cyrillic "р" — likely impersonation of razorpay.com.</span>
+        </div>
+        <div class="ebody">
+          <h6>Urgent: verify your account to avoid suspension</h6>
+          <p>Hi there,</p>
+          <p>We've detected unusual activity on your Razorpay merchant account. To prevent suspension within 24 hours, please <span class="flag">verify your details here</span> immediately.</p>
+          <p>Failure to act will result in funds being held indefinitely.</p>
+          <p style="color: var(--muted); font-size: 12px;">— Razorpay Security Team</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 — VULN BRIEFING -->
+<section class="fsec" data-screen-label="04 Vulnerability">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">03</span><span class="label">Vulnerability briefing</span></div>
+        <h2>Your stack.<br/><span class="it">Every Monday.</span></h2>
+        <p>Guard knows what you run. Every Monday morning it sends a one-page briefing of new vulnerabilities disclosed in your tech stack, scored by whether you're actually affected. No noise.</p>
+        <ul>
+          <li>Auto-detects your stack from connected GitHub repos</li>
+          <li class="acc">Filters out CVEs that don't affect your version or config</li>
+          <li>Pinpoints the exact version and file — see the fix, apply it when you're ready</li>
+          <li>Covers your full dependency tree — npm, pip, cargo and more</li>
+        </ul>
+      </div>
+
+      <div class="vuln-card">
+        <div class="vuln-head">
+          <h6>This week's briefing</h6>
+          <span class="when">Mon · 12 May 2026</span>
+        </div>
+        <div class="vuln-stack">
+          <span class="chip">Next.js 14.0.2</span>
+          <span class="chip">Supabase 2.39</span>
+          <span class="chip">Vercel</span>
+          <span class="chip">Postgres 16</span>
+        </div>
+
+        <div class="vuln-item">
+          <div>
+            <div class="vname">CVE-2025-1042 · Next.js SSRF in image optimizer</div>
+            <p class="vdesc">Server-side request forgery via the next/image loader when remotePatterns isn't strictly set.</p>
+            <span class="vuln-affected">↳ You are affected · Next.js 14.0.2</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+            <span class="vsev high">HIGH</span>
+            <a href="#" class="vact">Fix this →</a>
+          </div>
+        </div>
+
+        <div class="vuln-item">
+          <div>
+            <div class="vname">CVE-2025-1101 · Postgres planner crash</div>
+            <p class="vdesc">Crash on malformed JSON in jsonb_path_match. Requires authenticated DB access.</p>
+            <span class="vuln-affected no">↳ Not affected · your version is patched</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+            <span class="vsev med">MED</span>
+            <a href="#" class="vact" style="background: transparent; color: var(--muted); border-color: var(--rule-strong);">Mark read</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 — COMPLIANCE -->
+<section class="fsec reverse" data-screen-label="05 Compliance">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">04</span><span class="label">Compliance checker</span></div>
+        <h2>Are you<br/>actually <span class="it">compliant?</span></h2>
+        <p>Tell Guard what your business does and what data you handle. It checks you against GDPR, DPDP Act (India), PCI-DSS, ISO 27001 and gives you a readable scorecard.</p>
+        <ul>
+          <li>One-page report you can show to a client or investor</li>
+          <li class="acc">Specific to your business type — no generic checklists</li>
+          <li>Actionable gaps — "do X to close this"</li>
+          <li>Re-runs monthly, alerts on drift</li>
+        </ul>
+      </div>
+
+      <div class="compl">
+        <div class="compl-form">
+          <div class="field">
+            <label>Business type</label>
+            <div class="sel"><span>SaaS · B2B</span></div>
+          </div>
+          <div class="field">
+            <label>Data you handle</label>
+            <div class="sel"><span>PII + payment</span></div>
+          </div>
+        </div>
+
+        <div class="compl-rows">
+          <div class="compl-row">
+            <div>
+              <div class="cname">DPDP Act 2023 · Consent &amp; purpose</div>
+              <div class="cdesc">Consent collection, withdrawal flows, purpose limitation</div>
+            </div>
+            <div class="cmark ok">✓</div>
+          </div>
+          <div class="compl-row">
+            <div>
+              <div class="cname">DPDP Act 2023 · Data residency</div>
+              <div class="cdesc">Storage of personal data of Indian users</div>
+            </div>
+            <div class="cmark warn">!</div>
+          </div>
+          <div class="compl-row">
+            <div>
+              <div class="cname">GDPR · Right to erasure</div>
+              <div class="cdesc">User-initiated data deletion within 30 days</div>
+            </div>
+            <div class="cmark ok">✓</div>
+          </div>
+          <div class="compl-row">
+            <div>
+              <div class="cname">PCI-DSS · Tokenisation</div>
+              <div class="cdesc">No raw card data in your DB</div>
+            </div>
+            <div class="cmark ok">✓</div>
+          </div>
+          <div class="compl-row">
+            <div>
+              <div class="cname">PCI-DSS · Vulnerability scans</div>
+              <div class="cdesc">Quarterly ASV scan from a certified vendor</div>
+            </div>
+            <div class="cmark no">✕</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALLOUT -->
+<section class="callout" data-screen-label="06 CTA">
+  <div class="wrap">
+    <h3>Stop guessing.<br/><span class="it">Start watching.</span></h3>
+    <p>Contract scanning available from day one. Full threat dashboard ships in 2026 H2.</p>
+    <div class="btn-row">
+      <a href="../download.html" class="btn">
+        Download →
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+      <a href="../NIVARA.html#modules" class="btn alt">See all modules</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer data-screen-label="07 Footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="../NIVARA.html">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>Nivara</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="krew.html">Krew</a></li>
+          <li><a href="automation.html">Studio</a></li>
+          <li><a href="coder.html">Coder</a></li>
+          <li><a href="models.html">Models</a></li>
+          <li><a href="vault.html">Vault</a></li>
+          <li><a href="guard.html">Guard</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="../NIVARA.html#platform">About</a></li>
+          <li><a href="../NIVARA.html#audience">Who it's for</a></li>
+          <li><a href="../NIVARA.html#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="../download.html">Download</a></li>
+          <li><a href="mailto:hi@nivara.tech">hi@nivara.tech</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 Nivara Technologies · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../shared.js"></script>
+<script src="tour.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="../tweaks-panel.jsx"></script>
+<script type="text/babel" src="../tweaks-app.jsx"></script>
+</body>
+</html>
+

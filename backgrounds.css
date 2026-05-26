@@ -1,0 +1,174 @@
+/* ============================================
+   backgrounds.css — Ambient page backgrounds
+   Shared keyframes + per-page classes.
+   Add <link rel="stylesheet" href="../backgrounds.css">
+   then drop a <div class="pgbg pgbg-[name]"> into any hero.
+============================================ */
+
+/* ── Position context ── */
+.mhero { position: relative; }
+.hero  { position: relative; }
+
+/* ── Shared base ── */
+.pgbg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.16; /* Paper (light) default */
+}
+[data-theme="ink"] .pgbg {
+  opacity: 0.28; /* Ink (dark) mode — more visible */
+}
+.pgbg svg,
+.pgbg canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Globe uses its own per-element opacity — override container default */
+.pgbg-globe,
+[data-theme="ink"] .pgbg-globe {
+  opacity: 1;
+}
+
+/* Content always above background */
+.mhero > .wrap,
+.hero  > .wrap {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Shared keyframes ── */
+@keyframes bg-orbit-cw  { to { transform: rotate(360deg);  } }
+@keyframes bg-orbit-ccw { to { transform: rotate(-360deg); } }
+@keyframes bg-radar-sweep { to { transform: rotate(360deg); } }
+@keyframes bg-globe-sweep { to { transform: rotate(360deg); } }
+
+@keyframes bg-node-pulse {
+  0%   { transform: scale(1);   opacity: 1; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+@keyframes bg-path-dash {
+  to { stroke-dashoffset: -360; }
+}
+
+@keyframes bg-hex-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.08; }
+}
+
+@keyframes bg-ping-fade {
+  0%   { opacity: 0.8; }
+  50%  { opacity: 0.2; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes bg-blr-pulse {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(2.6); opacity: 0;   }
+}
+
+/* ══════════════════════════════════════════
+   01 · Krew — Concentric dashed orbit rings
+   Three orbits revolve at different speeds
+   around a central agent node.
+══════════════════════════════════════════ */
+.pgbg-orbit .o1 {
+  transform-origin: 500px 500px;
+  animation: bg-orbit-cw 20s linear infinite;
+}
+.pgbg-orbit .o2 {
+  transform-origin: 500px 500px;
+  animation: bg-orbit-ccw 32s linear infinite;
+}
+.pgbg-orbit .o3 {
+  transform-origin: 500px 500px;
+  animation: bg-orbit-cw 46s linear infinite;
+}
+
+/* ══════════════════════════════════════════
+   02 · Studio — Node-graph with pulse path
+   One path animates a marching-dash pulse
+   through the workflow graph.
+══════════════════════════════════════════ */
+.pgbg-graph .pulse {
+  stroke: var(--accent, #7C5CFF);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-dasharray: 60 100;
+  animation: bg-path-dash 3s linear infinite;
+}
+.pgbg-graph .node-acc {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bg-node-pulse 2.4s ease-out infinite;
+}
+
+/* ══════════════════════════════════════════
+   03 · Coder — Triangulated compute-mesh
+   Three peer-node accent circles pulse
+   at staggered intervals (delays set inline).
+══════════════════════════════════════════ */
+.pgbg-mesh .nodepulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bg-node-pulse 2.4s ease-out infinite;
+}
+
+/* ══════════════════════════════════════════
+   04 · Models — Stacked octahedra
+   Outer rotates clockwise, inner counter-CW.
+══════════════════════════════════════════ */
+.pgbg-models .stk1 {
+  transform-origin: 500px 500px;
+  animation: bg-orbit-cw 14s linear infinite;
+}
+.pgbg-models .stk2 {
+  transform-origin: 500px 500px;
+  animation: bg-orbit-ccw 9s linear infinite;
+}
+
+/* ══════════════════════════════════════════
+   05 · Vault — Honeycomb shield-mesh
+   Two accent hex cells pulse alternately.
+══════════════════════════════════════════ */
+.pgbg-shield .hex-acc {
+  animation: bg-hex-pulse 2.6s ease-in-out infinite;
+}
+.pgbg-shield .hex-acc-2 {
+  animation: bg-hex-pulse 2.6s ease-in-out infinite 1.3s;
+}
+
+/* ══════════════════════════════════════════
+   06 · Guard — Radar rings + sweep wedge
+   Inner rings fade in/out; wedge rotates.
+══════════════════════════════════════════ */
+.pgbg-radar .sweep {
+  transform-origin: 500px 500px;
+  animation: bg-radar-sweep 4s linear infinite;
+}
+.pgbg-radar .ping      { animation: bg-ping-fade 3s ease-in-out infinite; }
+.pgbg-radar .ping.p2   { animation-delay: 1s; }
+.pgbg-radar .ping.p3   { animation-delay: 2s; }
+
+/* ══════════════════════════════════════════
+   00 · Homepage — Wireframe globe
+   One accent meridian sweeps slowly;
+   BLR rings pulse outward to the world.
+══════════════════════════════════════════ */
+.pgbg-globe .globe-sweep {
+  transform-origin: 800px 350px;
+  animation: bg-globe-sweep 10s linear infinite;
+}
+.pgbg-globe .blr-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bg-blr-pulse 2.4s ease-out infinite;
+}
+.pgbg-globe .blr-ring.r2 { animation-delay: 0.8s; }
+.pgbg-globe .blr-ring.r3 { animation-delay: 1.6s; }

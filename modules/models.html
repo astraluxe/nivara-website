@@ -1,0 +1,1180 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Models — Open Hub · Nivara</title>
+<meta name="description" content="Every open-source AI model. One place. Browse, download, run locally. No account needed for free models." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../module-pages.css" />
+<link rel="stylesheet" href="../backgrounds.css" />
+
+<style>
+  /* Unified model hub */
+  .hub-topbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 20px 0;
+    flex-wrap: wrap;
+  }
+  .hub-topbar input[type="search"] {
+    flex: 1;
+    min-width: 200px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    padding: 8px 14px;
+    outline: none;
+  }
+  .hub-topbar input[type="search"]::placeholder { color: var(--muted-2); }
+  .hub-topbar input[type="search"]:focus { border-color: var(--ink); }
+  .hub-topbar select {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    padding: 8px 12px;
+    cursor: pointer;
+    outline: none;
+  }
+  .hub-topbar select:focus { border-color: var(--ink); }
+  .hub-ram-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .hub-count-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    padding-left: 4px;
+  }
+  .hub-count-text strong { color: var(--ink); font-family: var(--font-sans); font-size: 14px; }
+
+  .hub-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 12px 20px 0;
+    align-items: center;
+  }
+  .hpill {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--rule-strong);
+    background: none;
+    color: var(--muted);
+    padding: 5px 11px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .hpill:hover { border-color: var(--ink); color: var(--ink); }
+  .hpill.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .mesh-hpill { border-color: #C1440E; color: #C1440E; }
+  .mesh-hpill.on { background: #C1440E; color: #fff; border-color: #C1440E; }
+
+  .hub-mesh-banner {
+    margin: 8px 20px 0;
+    padding: 8px 14px;
+    background: rgba(193,68,14,0.06);
+    border: 1px solid rgba(193,68,14,0.25);
+    border-left: 3px solid #C1440E;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #C1440E;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    padding: 16px 20px 20px;
+  }
+  .hubcard {
+    background: #FFFFFF;
+    border: 1px solid var(--rule);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .hubcard:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .hubcard.mesh-card { border-left: 3px solid #C1440E; }
+  .hubcard .htop {
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .hubcard .hbadge {
+    width: 36px; height: 36px;
+    background: var(--ink);
+    color: var(--paper);
+    display: grid; place-items: center;
+    font-family: var(--font-mono);
+    font-size: 14px; font-weight: 500;
+    flex-shrink: 0;
+  }
+  .hubcard.mesh-card .hbadge { background: #C1440E; color: #fff; }
+  .hubcard h5 {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+  }
+  .hubcard .hcre {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+  .hubcard .htags {
+    display: flex; gap: 4px; flex-wrap: wrap;
+  }
+  .hubcard .htag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 3px 7px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .hubcard .hstats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+  }
+  .hubcard .hstats .lbl { color: var(--muted-2); display: block; margin-bottom: 2px; }
+  .hubcard .hstats .v { color: var(--ink); font-size: 12px; }
+  .hubcard .hactions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .hubcard .hactions a {
+    text-align: center;
+    padding: 8px 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+  }
+  .hubcard .hactions .cloud {
+    background: var(--ink); color: var(--paper);
+  }
+  .hubcard .hactions .local {
+    color: var(--ink);
+  }
+  .hubcard .hactions .local:hover { background: var(--ink); color: var(--paper); }
+  .hubcard .hactions .mesh-run {
+    grid-column: 1 / -1;
+    background: #C1440E; color: #fff; border-color: #C1440E;
+  }
+  .hubcard .hactions .mesh-run:hover { opacity: 0.85; }
+
+  .hub-more-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px 20px;
+  }
+  .hub-more-btn {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid var(--rule-strong); background: none;
+    color: var(--ink); padding: 10px 28px; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .hub-more-btn:hover { border-color: var(--ink); background: var(--paper-2); }
+  .hub-more-info { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+
+  @media (max-width: 1100px) {
+    .hub-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 680px) {
+    .hub-grid { grid-template-columns: 1fr; }
+    .hub-topbar { flex-direction: column; align-items: stretch; }
+  }
+
+  /* One-command setup */
+  .setup {
+    background: #0E0E0C;
+    color: #F2EFE9;
+    border: 1px solid rgba(242,239,233,0.12);
+  }
+  .setup-h {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(242,239,233,0.08);
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.1em; color: rgba(242,239,233,0.6);
+    text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  /* Compare — in-app callout (replaces fake mockup) */
+  .compare-inapp {
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .compare-inapp-icon {
+    color: var(--ink);
+    opacity: 0.5;
+  }
+  .compare-inapp-title {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .compare-inapp-sub {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    max-width: 420px;
+  }
+  .compare-inapp-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .cistep {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .cistep .csnum {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+    background: var(--paper-2);
+    border: 1px solid var(--rule-strong);
+    padding: 2px 7px;
+    min-width: 32px;
+    text-align: center;
+  }
+  .compare-inapp-cta {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 18px;
+    transition: opacity 0.15s;
+  }
+  .compare-inapp-cta:hover { opacity: 0.8; }
+
+  /* Hosted inference */
+  .api-card {
+    background: #0E0E0C;
+    color: #F2EFE9;
+    border: 1px solid rgba(242,239,233,0.12);
+    padding: 24px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+  }
+  .api-card .who {
+    font-size: 10px; letter-spacing: 0.1em;
+    color: rgba(242,239,233,0.5);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .api-card .req {
+    padding-bottom: 16px; margin-bottom: 16px;
+    border-bottom: 1px solid rgba(242,239,233,0.08);
+  }
+  .api-card .key { color: #82AAFF; }
+  .api-card .str { color: #C3E88D; }
+  .api-card .met { color: #C792EA; }
+
+  .pricing-mini {
+    margin-top: 16px;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+  }
+  .pricing-mini .prow {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .pricing-mini .prow:last-child { border-bottom: none; }
+  .pricing-mini .prow.head {
+    background: var(--ink); color: var(--paper);
+    font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .pricing-mini .name { color: var(--ink); }
+  .pricing-mini .price { color: var(--ink-2); font-size: 11px; }
+
+  /* Model pull command strip */
+  .hub-cmd {
+    display: flex; align-items: center; gap: 8px;
+    background: #0E0E0C; color: rgba(242,239,233,0.7);
+    padding: 7px 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    border-top: 1px solid rgba(242,239,233,0.06);
+  }
+  .hub-cmd .pfx { color: var(--accent); }
+  .hub-cmd code { flex: 1; color: rgba(242,239,233,0.85); }
+  .hub-cmd button {
+    background: none; border: 1px solid rgba(242,239,233,0.15);
+    color: rgba(242,239,233,0.5); font-family: var(--font-mono);
+    font-size: 9px; padding: 2px 8px; cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .hub-cmd button:hover { border-color: rgba(242,239,233,0.4); color: rgba(242,239,233,0.9); }
+
+  /* Mesh badge on hub cards */
+  .hubcard .htag.mesh-badge {
+    border-color: #C1440E; color: #C1440E; font-weight: 600; letter-spacing: 0.08em;
+  }
+
+  /* Collection cards — interactive */
+  .grid-card[data-collection] {
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s, background 0.15s;
+    position: relative;
+  }
+  .grid-card[data-collection]:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    background: var(--paper-2);
+  }
+  .grid-card[data-collection].coll-active {
+    border-color: var(--accent);
+    background: var(--paper-2);
+  }
+  .grid-card[data-collection] .coll-cta {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.15s;
+  }
+  .grid-card[data-collection]:hover .coll-cta { color: var(--ink); }
+  .grid-card[data-collection].coll-active .coll-cta {
+    color: var(--accent);
+  }
+  .grid-card[data-collection].coll-active .coll-cta::before {
+    content: '✓ ';
+  }
+
+  /* Active collection bar in hub */
+  .hub-coll-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px;
+    background: color-mix(in oklab, var(--accent) 8%, var(--paper));
+    border-bottom: 1px solid color-mix(in oklab, var(--accent) 25%, transparent);
+    font-family: var(--font-mono); font-size: 11px; color: var(--ink);
+  }
+  .hub-coll-bar .coll-label { color: var(--muted); margin-right: 2px; }
+  .hub-coll-bar .coll-name { color: var(--accent); font-weight: 600; }
+  .hub-coll-bar .coll-clear {
+    margin-left: auto;
+    background: none; border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+    color: var(--muted); font-family: var(--font-mono); font-size: 10px;
+    padding: 3px 10px; cursor: pointer; letter-spacing: 0.05em;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .hub-coll-bar .coll-clear:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* Feature status badges */
+  .feat-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 4px 10px;
+    border: 1px solid var(--rule-strong); color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .feat-badge.in-app { border-color: var(--accent); color: var(--accent); }
+  .feat-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* polished pill button for install option cards */
+  .install-opt .iocta {
+    padding: 13px 22px;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    text-transform: none;
+    border: 1px solid var(--ink);
+    background: var(--ink); color: var(--paper);
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 999px;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .install-opt .iocta:hover {
+    background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+    transform: translateY(-1px);
+  }
+  .install-opt.dark .iocta {
+    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+    box-shadow: 0 8px 28px -14px color-mix(in oklab, var(--accent) 70%, transparent);
+  }
+  .install-opt.dark .iocta:hover {
+    background: #F2EFE9; color: #0E0E0C; border-color: #F2EFE9;
+  }
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="../NIVARA.html" class="nav-mark" aria-label="Nivara home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>Nivara<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../NIVARA.html#platform">Platform</a></li>
+      <li><a href="../NIVARA.html#modules">Modules</a></li>
+      <li><a href="../NIVARA.html#pricing">Pricing</a></li>
+      <li><a href="../download.html">Download</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <span class="mono nav-meta">04 · Models</span>
+      <a href="../download.html" class="btn">
+        Download — Free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="../NIVARA.html"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Modules</a>
+      <span class="sep">/</span>
+      <span class="here">04 · Models</span>
+    </div>
+  </div>
+</section>
+
+<section class="mhero" data-screen-label="01 Hero">
+  <div class="pgbg pgbg-models" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000" fill="none">
+      <g class="stk1" stroke="currentColor" stroke-width="1.2" fill="none">
+        <path d="M500 140 L860 320 L500 500 L140 320 Z"/>
+        <path d="M140 320 L500 680 L860 320"/>
+        <path d="M140 320 L500 860 L860 320"/>
+        <path d="M500 140 L860 320" opacity="0.6"/>
+        <path d="M500 140 L140 320" opacity="0.6"/>
+      </g>
+      <g class="stk2" stroke="var(--accent)" stroke-width="1.4" fill="none" opacity="0.6">
+        <path d="M500 280 L720 380 L500 480 L280 380 Z"/>
+        <path d="M280 380 L500 580 L720 380"/>
+        <circle cx="500" cy="430" r="6" fill="var(--accent)" stroke="none"/>
+      </g>
+      <g fill="currentColor" opacity="0.6">
+        <circle cx="140" cy="320" r="6"/>
+        <circle cx="860" cy="320" r="6"/>
+        <circle cx="500" cy="140" r="6"/>
+        <circle cx="500" cy="860" r="6"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="mhero-top">
+      <div>
+        <div class="mhero-tag up"><span class="ind"></span>Live · Free forever</div>
+        <h1>Every open<br/>AI model.<br/><span class="it">One place.</span></h1>
+      </div>
+    </div>
+
+    <div class="mhero-foot">
+      <p>
+        Browse, compare and download every meaningful open-source model. <em>Free</em>. One-command local setup. Or skip the install and run them on our cloud at-cost — Mumbai &amp; Chennai mirrors mean 10× faster downloads.
+      </p>
+      <div class="mhero-meta">
+        <div class="row"><span class="l">Catalog</span><span>2,400+ models · updated daily</span></div>
+        <div class="row"><span class="l">Mirrors</span><span>BLR · MUM · CHN</span></div>
+        <div class="row"><span class="l">Runners</span><span>Ollama · llama.cpp · Docker</span></div>
+        <div class="row"><span class="l">Hosted</span><span>API · pay per call</span></div>
+      </div>
+      <div class="mhero-cta">
+        <a href="../download.html" class="btn">
+          Download Nivara — Free
+          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+        <span class="note">Windows · macOS coming soon</span>
+      </div>
+    </div>
+
+    <!-- Model Hub — unified browser -->
+    <div class="mstage" id="model-hub">
+      <div class="mstage-head">
+        <span>// Model Hub · open source catalogue</span>
+        <span class="right" id="hub-live-count">— models · tiny to frontier</span>
+      </div>
+
+      <div class="hub-coll-bar" id="hub-coll-bar" style="display:none">
+        <span class="coll-label">Collection:</span>
+        <span class="coll-name" id="coll-bar-name"></span>
+        <button class="coll-clear" id="coll-clear">× Clear</button>
+      </div>
+
+      <div class="hub-topbar">
+        <input id="hub-q" type="search" placeholder="Search by name, creator, use case…" autocomplete="off" spellcheck="false" />
+        <select id="hub-sort">
+          <option value="frontier">Frontier first</option>
+          <option value="smallest">Smallest first</option>
+          <option value="largest">Largest first</option>
+          <option value="az">A → Z</option>
+        </select>
+        <label class="hub-ram-label">RAM:
+          <select id="hub-ram">
+            <option value="0">Any</option>
+            <option value="4">≤ 4 GB</option>
+            <option value="8">≤ 8 GB</option>
+            <option value="16">≤ 16 GB</option>
+            <option value="32">≤ 32 GB</option>
+            <option value="999">32 GB+</option>
+          </select>
+        </label>
+        <span class="hub-count-text"><strong id="hub-count">—</strong> models shown</span>
+      </div>
+
+      <div class="hub-pills-row">
+        <button class="hpill on" data-cat="">All</button>
+        <button class="hpill" data-cat="coding">Coding</button>
+        <button class="hpill" data-cat="chat">Chat</button>
+        <button class="hpill" data-cat="reasoning">Reasoning</button>
+        <button class="hpill" data-cat="writing">Writing</button>
+        <button class="hpill" data-cat="indic">Indian langs</button>
+        <button class="hpill" data-cat="quick">Quick tasks</button>
+        <button class="hpill mesh-hpill" data-cat="mesh">Mesh frontier</button>
+      </div>
+
+      <div class="hub-mesh-banner" id="hub-mesh-banner" style="display:none">
+        ⚡ These frontier models require Mesh to run — they're too large for any single machine. Mesh pools RAM across multiple devices. It also speeds up any model with 32 GB+ RAM.
+      </div>
+
+      <div class="hub-grid" id="hub-grid">
+        <div style="grid-column:1/-1;padding:40px 0;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--muted)">Loading models…</div>
+      </div>
+
+      <div class="hub-more-row" id="hub-more-row" style="display:none">
+        <span class="hub-more-info" id="hub-more-info"></span>
+        <button class="hub-more-btn" id="hub-more-btn">Load more</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1 — ONE COMMAND -->
+<section class="fsec" data-screen-label="02 One command">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">01</span><span class="label">One-command setup</span></div>
+        <div class="feat-badge"><span class="dot"></span>Ships with App Release</div>
+        <h2>Zero config.<br/><span class="it">One line.</span></h2>
+        <p>No .exe. No fifteen-step install. One bash command auto-installs Ollama, downloads the model from the nearest mirror, configures the runtime. You'll be talking to the model in 90 seconds.</p>
+        <ul>
+          <li class="acc">Auto-detects your hardware — picks the right quantisation</li>
+          <li>Works on Mac, Linux, Windows (via WSL), and Docker</li>
+          <li>Verifies download integrity with checksums</li>
+          <li>Mirrors in Mumbai, Bengaluru, Chennai for 10× faster downloads</li>
+        </ul>
+      </div>
+
+      <div class="setup">
+        <div class="setup-h">
+          <span>// install · deepseek-v3</span>
+          <span>~90s to first token</span>
+        </div>
+
+        <div class="install">
+          <div class="install-tabs">
+            <button class="on" data-tab="mac">Mac / Linux</button>
+            <button data-tab="win">Windows (WSL)</button>
+            <button data-tab="dkr">Docker</button>
+          </div>
+
+          <div class="install-cmd" data-tab="mac" style="display:flex;">
+            <span class="pfx">$</span>
+            <span class="cmd-text">curl -sSL https://nivara.tech/run/deepseek | bash</span>
+            <button class="copy">Copy</button>
+          </div>
+          <div class="install-cmd" data-tab="win" style="display:none;">
+            <span class="pfx">PS&gt;</span>
+            <span class="cmd-text">iwr -useb https://nivara.tech/run/deepseek.ps1 | iex</span>
+            <button class="copy">Copy</button>
+          </div>
+          <div class="install-cmd" data-tab="dkr" style="display:none;">
+            <span class="pfx">$</span>
+            <span class="cmd-text">docker run -it nivara/run deepseek-v3</span>
+            <button class="copy">Copy</button>
+          </div>
+
+          <div style="padding: 16px 24px 20px; font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.5); border-top: 1px solid rgba(242,239,233,0.08); line-height: 1.7;">
+            <div>→ detecting hardware… M2 Pro · 16GB</div>
+            <div>→ selecting deepseek-v3-q4_k_m · 23 GB</div>
+            <div>→ downloading from <span style="color: var(--accent);">mum.mirror.nivara.tech</span> · 940 MB/s</div>
+            <div>→ checksum verified · loading…</div>
+            <div style="color: #6BFFB8;">✓ ready · type a prompt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2 — COMPARISON TOOL -->
+<section class="fsec reverse" data-screen-label="03 Compare">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">02</span><span class="label">Compare</span></div>
+        <div class="feat-badge in-app"><span class="dot"></span>Available in App</div>
+        <h2>Pick the right<br/>model. <span class="it">Before you<br/>commit.</span></h2>
+        <p>Select two or three models, run the same prompt against all of them, see the outputs side-by-side with timing and cost. Stop guessing which one is best for your use case.</p>
+        <ul>
+          <li>Up to 4 models in parallel</li>
+          <li class="acc">Same prompt, same temperature, same seed</li>
+          <li>Latency, cost, and output length tracked</li>
+          <li>Share a comparison link with your team</li>
+        </ul>
+      </div>
+
+      <div class="compare-inapp">
+        <div class="compare-inapp-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="2" y="6" width="11" height="16" rx="1.5" stroke="currentColor" stroke-width="1.4" fill="none"/>
+            <rect x="15" y="6" width="11" height="16" rx="1.5" stroke="currentColor" stroke-width="1.4" fill="none"/>
+            <path d="M7 10h3M7 13h5M7 16h2" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+            <path d="M20 10h3M20 13h5M20 16h2" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+        </div>
+        <p class="compare-inapp-title">Live comparison · inside the app</p>
+        <p class="compare-inapp-sub">Download two or more models. Type a prompt. Nivara runs them on your machine — one by one, or all at once if your RAM supports it — and shows the real outputs side by side with timing.</p>
+        <div class="compare-inapp-steps">
+          <div class="cistep"><span class="csnum">01</span><span>Download models from the hub above</span></div>
+          <div class="cistep"><span class="csnum">02</span><span>Open Compare tab · select 2–4 models</span></div>
+          <div class="cistep"><span class="csnum">03</span><span>Type your prompt · hit Compare</span></div>
+          <div class="cistep"><span class="csnum">04</span><span>Real outputs · real timing · no fake data</span></div>
+        </div>
+        <a href="../download.html" class="compare-inapp-cta">
+          Download Nivara — Free
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 — HOSTED INFERENCE -->
+<section class="fsec" data-screen-label="04 Hosted">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">03</span><span class="label">Hosted inference</span></div>
+        <div class="feat-badge"><span class="dot"></span>Coming Soon</div>
+        <h2>No GPU?<br/><span class="it">No problem.</span></h2>
+        <p>Don't want to run anything locally? Use Nivara's hosted inference endpoint. One API call. Pay only for what you use. No GPU on your end, no monthly subscription.</p>
+        <ul>
+          <li class="acc">Same OpenAI-compatible API — works with existing SDKs</li>
+          <li>Sub-200ms response times from BLR &amp; MUM</li>
+          <li>Pay-per-token. ₹0 idle.</li>
+          <li>Free credits every month on Solo and Builder plans</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="api-card">
+          <div class="who">// POST · api.nivara.tech/v1/chat</div>
+          <div class="req">
+            <span class="met">curl</span> https://api.nivara.tech/v1/chat \<br/>
+            &nbsp;&nbsp;-H <span class="str">"Authorization: Bearer $KREW_AI_KEY"</span> \<br/>
+            &nbsp;&nbsp;-d <span class="str">'{</span><br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"model"</span>: <span class="str">"deepseek-v3"</span>,<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"messages"</span>: [{<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"role"</span>: <span class="str">"user"</span>,<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"content"</span>: <span class="str">"Hello in Hindi"</span><br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;}]<br/>
+            &nbsp;&nbsp;<span class="str">}'</span>
+          </div>
+          <div class="who">// 200 OK · 184ms · 12 tokens</div>
+          <div>
+            { <span class="key">"choices"</span>: [{<br/>
+            &nbsp;&nbsp;<span class="key">"content"</span>: <span class="str">"नमस्ते! कैसे हो?"</span><br/>
+            &nbsp;&nbsp;}] }
+          </div>
+        </div>
+
+        <div class="pricing-mini">
+          <div class="prow head">
+            <span>Model</span>
+            <span>Input / 1k tok</span>
+            <span>Output / 1k tok</span>
+          </div>
+          <div class="prow">
+            <span class="name">DeepSeek V3</span>
+            <span class="price">₹0.04</span>
+            <span class="price">₹0.12</span>
+          </div>
+          <div class="prow">
+            <span class="name">Llama 3.3 70B</span>
+            <span class="price">₹0.06</span>
+            <span class="price">₹0.18</span>
+          </div>
+          <div class="prow">
+            <span class="name">Sarvam-1 Indic</span>
+            <span class="price">₹0.02</span>
+            <span class="price">₹0.06</span>
+          </div>
+          <div class="prow">
+            <span class="name">Claude Sonnet 4.5</span>
+            <span class="price">₹0.24</span>
+            <span class="price">₹1.20</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 — COLLECTIONS -->
+<section class="fsec reverse" data-screen-label="05 Collections">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">04</span><span class="label">Collections</span></div>
+        <h2>Curated by us.<br/><span class="it">Updated weekly.</span></h2>
+        <p>Browsing 2,000+ models is paralysis. Our team publishes short lists for the situations you'll actually face. "Best models for Hindi". "Runs on 8 GB RAM". "Free coding model that beats GPT-4". Curated, opinionated, current.</p>
+      </div>
+
+      <div class="grid-4" style="grid-template-columns: 1fr 1fr;">
+        <div class="grid-card" data-collection="indic">
+          <span class="gnum">Collection · 12 models</span>
+          <h4>Indian language stars</h4>
+          <p>Best models with Hindi, Tamil, Telugu, Bengali support — ranked by BLEU on IndicGenBench.</p>
+          <div class="coll-cta">Browse collection →</div>
+        </div>
+        <div class="grid-card" data-collection="ram8">
+          <span class="gnum">Collection · 8 models</span>
+          <h4>Runs on 8 GB RAM</h4>
+          <p>Smaller quantised models that fit in a typical Indian dev laptop without a discrete GPU.</p>
+          <div class="coll-cta">Browse collection →</div>
+        </div>
+        <div class="grid-card" data-collection="coding">
+          <span class="gnum">Collection · 6 models</span>
+          <h4>Free coding heroes</h4>
+          <p>Open models that match or beat closed models on HumanEval and SWE-bench at zero cost.</p>
+          <div class="coll-cta">Browse collection →</div>
+        </div>
+        <div class="grid-card" data-collection="quick">
+          <span class="gnum">Collection · 10 models</span>
+          <h4>Fast &amp; tiny</h4>
+          <p>Sub-3B models for edge devices, mobile, and embedded use. Latency under 100ms.</p>
+          <div class="coll-cta">Browse collection →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALLOUT -->
+<section class="callout" data-screen-label="06 CTA">
+  <div class="wrap">
+    <h3>Browse all models.<br/><span class="it">Free, forever.</span></h3>
+    <p>No signup needed to browse and download. Sign up only when you want hosted inference or to save your collections.</p>
+    <div class="btn-row">
+      <a href="../download.html" class="btn">
+        Download Nivara — Free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+      <a href="coder.html" class="btn alt">Explore Coder</a>
+    </div>
+  </div>
+</section>
+
+<footer data-screen-label="07 Footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="../NIVARA.html">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>Nivara</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="krew.html">Krew</a></li>
+          <li><a href="automation.html">Studio</a></li>
+          <li><a href="coder.html">Coder</a></li>
+          <li><a href="models.html">Models</a></li>
+          <li><a href="vault.html">Vault</a></li>
+          <li><a href="guard.html">Guard</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="../NIVARA.html#platform">About</a></li>
+          <li><a href="../NIVARA.html#audience">Who it's for</a></li>
+          <li><a href="../NIVARA.html#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="../download.html">Download</a></li>
+          <li><a href="mailto:hi@nivara.tech">hi@nivara.tech</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 Nivara Technologies · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Embedded model catalogue — 50 models, no external API ── */
+var MODELS_DATA = [
+  // ── MESH FRONTIER (448 GB+ RAM) — shown first by default ─────────────────
+  {id:'deepseek-r1-671b-q4',name:'DeepSeek R1 671B',creator:'DeepSeek',params:'671B MoE',quantization:'Q4_K_M',size_gb:404.0,ram_min_gb:448,ram_recommended_gb:512,context_length:131072,best_for:['reasoning'],benchmark_mmlu:93,license:'MIT',gated:false,description:'Full DeepSeek R1 — o1 level reasoning. Most powerful open model. Mesh only.',featured:false,mesh_required:true},
+  {id:'deepseek-v3-671b-q4',name:'DeepSeek V3',creator:'DeepSeek',params:'671B MoE',quantization:'Q4_K_M',size_gb:404.0,ram_min_gb:448,ram_recommended_gb:512,context_length:131072,best_for:['coding','reasoning','chat'],benchmark_mmlu:91,license:'DeepSeek',gated:false,description:'DeepSeek 671B MoE frontier. GPT-4 class coding. Runs only on Mesh.',featured:false,mesh_required:true},
+  {id:'llama31-405b-q4',name:'Llama 3.1 405B',creator:'Meta',params:'405B',quantization:'Q4_K_M',size_gb:244.0,ram_min_gb:256,ram_recommended_gb:320,context_length:131072,best_for:['chat','reasoning','writing','coding'],benchmark_mmlu:92,license:'Llama 3.1',gated:true,description:'Meta frontier model. GPT-4 tier quality. Requires Mesh across multiple machines.',featured:false,mesh_required:true},
+  {id:'deepseek-v2-236b-q4',name:'DeepSeek V2 236B',creator:'DeepSeek',params:'236B MoE',quantization:'Q4_K_M',size_gb:142.0,ram_min_gb:160,ram_recommended_gb:192,context_length:131072,best_for:['coding','reasoning'],benchmark_mmlu:84,license:'DeepSeek',gated:false,description:'Previous DeepSeek flagship MoE. Excellent at scale with Mesh.',featured:false,mesh_required:true},
+  {id:'mixtral-8x22b-q4',name:'Mixtral 8×22B',creator:'Mistral AI',params:'141B MoE',quantization:'Q4_K_M',size_gb:87.0,ram_min_gb:96,ram_recommended_gb:128,context_length:65536,best_for:['chat','coding','reasoning'],benchmark_mmlu:78,license:'Apache 2.0',gated:false,description:'8-expert MoE at 22B each. Fast inference for its size via Mesh.',featured:false,mesh_required:true},
+  {id:'mistral-large-123b-q4',name:'Mistral Large 123B',creator:'Mistral AI',params:'123B',quantization:'Q4_K_M',size_gb:74.0,ram_min_gb:80,ram_recommended_gb:96,context_length:131072,best_for:['chat','reasoning','writing','coding'],benchmark_mmlu:84,license:'Mistral',gated:false,description:'Mistral flagship 123B with 128K context. Needs Mesh or high-VRAM workstation.',featured:false,mesh_required:true},
+  // ── 48 GB+ RAM (Mesh recommended) ────────────────────────────────────────
+  {id:'deepseek-r1-70b-q4',name:'DeepSeek R1 70B',creator:'DeepSeek',params:'70B',quantization:'Q4_K_M',size_gb:43.0,ram_min_gb:48,ram_recommended_gb:64,context_length:131072,best_for:['reasoning','coding'],benchmark_mmlu:90,license:'MIT',gated:false,description:'Near o1 quality reasoning on maths, science, and complex analysis.',featured:false,mesh_required:false},
+  {id:'qwen25-72b-q4',name:'Qwen 2.5 72B',creator:'Alibaba',params:'72B',quantization:'Q4_K_M',size_gb:44.0,ram_min_gb:48,ram_recommended_gb:64,context_length:131072,best_for:['coding','reasoning','chat'],benchmark_mmlu:86,license:'Apache 2.0',gated:false,description:'Outperforms Llama 3.3 70B on coding and maths. 48 GB+ or Mesh.',featured:false,mesh_required:false},
+  {id:'llama33-70b-q4',name:'Llama 3.3 70B',creator:'Meta',params:'70B',quantization:'Q4_K_M',size_gb:43.0,ram_min_gb:48,ram_recommended_gb:64,context_length:131072,best_for:['chat','reasoning','writing','coding'],benchmark_mmlu:88,license:'Llama 3.3',gated:true,description:'Meta flagship. Competes directly with GPT-4. Needs 48 GB+ RAM or Mesh.',featured:false,mesh_required:false},
+  // ── 32 GB RAM ─────────────────────────────────────────────────────────────
+  {id:'falcon-40b-q4',name:'Falcon 40B',creator:'TII',params:'40B',quantization:'Q4_K_M',size_gb:24.0,ram_min_gb:32,ram_recommended_gb:40,context_length:2048,best_for:['chat'],license:'Apache 2.0',gated:false,description:'TII open-source 40B. Highly permissive Apache 2.0 licence for commercial use.',featured:false,mesh_required:false},
+  {id:'mixtral-8x7b-q4',name:'Mixtral 8×7B',creator:'Mistral AI',params:'47B MoE',quantization:'Q4_K_M',size_gb:26.0,ram_min_gb:32,ram_recommended_gb:40,context_length:32768,best_for:['chat','coding','reasoning'],benchmark_mmlu:70,license:'Apache 2.0',gated:false,description:'8-expert MoE (7B each). Fast for its effective parameter count. Mesh recommended.',featured:false,mesh_required:false},
+  // ── 24 GB RAM ─────────────────────────────────────────────────────────────
+  {id:'qwen25-coder-32b-q4',name:'Qwen 2.5 Coder 32B',creator:'Alibaba',params:'32B',quantization:'Q4_K_M',size_gb:19.0,ram_min_gb:24,ram_recommended_gb:28,context_length:131072,best_for:['coding'],benchmark_humaneval:92,license:'Apache 2.0',gated:false,description:'Best open code model at 32B — beats GPT-4 on several coding benchmarks.',featured:false,mesh_required:false},
+  {id:'deepseek-r1-32b-q4',name:'DeepSeek R1 32B',creator:'DeepSeek',params:'32B',quantization:'Q4_K_M',size_gb:19.0,ram_min_gb:24,ram_recommended_gb:28,context_length:131072,best_for:['reasoning','coding'],benchmark_mmlu:83,license:'MIT',gated:false,description:'R1 reasoning at 32B. Excellent for complex maths and multi-step problems.',featured:false,mesh_required:false},
+  {id:'qwq-32b-q4',name:'QwQ 32B',creator:'Alibaba',params:'32B',quantization:'Q4_K_M',size_gb:19.0,ram_min_gb:24,ram_recommended_gb:28,context_length:131072,best_for:['reasoning','coding'],benchmark_mmlu:85,license:'Apache 2.0',gated:false,description:'Alibaba reasoning model. Competitive with o1-mini on MATH and code benchmarks.',featured:false,mesh_required:false},
+  {id:'qwen25-32b-q4',name:'Qwen 2.5 32B',creator:'Alibaba',params:'32B',quantization:'Q4_K_M',size_gb:19.0,ram_min_gb:24,ram_recommended_gb:28,context_length:131072,best_for:['coding','chat','reasoning'],benchmark_mmlu:83,license:'Apache 2.0',gated:false,description:'Top-tier coding and reasoning, near 70B quality at half the size.',featured:false,mesh_required:false},
+  {id:'codellama-34b-q4',name:'Code Llama 34B',creator:'Meta',params:'34B',quantization:'Q4_K_M',size_gb:20.0,ram_min_gb:24,ram_recommended_gb:28,context_length:16384,best_for:['coding'],benchmark_humaneval:53,license:'Llama 2',gated:false,description:'Meta code specialised 34B. Fill-in-middle completion across many languages.',featured:false,mesh_required:false},
+  {id:'command-r-35b-q4',name:'Command R 35B',creator:'Cohere',params:'35B',quantization:'Q4_K_M',size_gb:20.0,ram_min_gb:24,ram_recommended_gb:28,context_length:131072,best_for:['chat','writing','reasoning'],license:'CC-BY-NC',gated:false,description:'Cohere flagship with RAG and tool-use capabilities. 128K context.',featured:false,mesh_required:false},
+  {id:'aya-expanse-32b-q4',name:'Aya Expanse 32B',creator:'Cohere',params:'32B',quantization:'Q4_K_M',size_gb:19.0,ram_min_gb:24,ram_recommended_gb:28,context_length:131072,best_for:['chat','writing','indic'],license:'CC-BY-NC',gated:false,description:'Multilingual model covering 23 languages including Hindi, Arabic, Turkish.',featured:false,mesh_required:false},
+  {id:'yi15-34b-q4',name:'Yi 1.5 34B',creator:'01.AI',params:'34B',quantization:'Q4_K_M',size_gb:19.5,ram_min_gb:24,ram_recommended_gb:28,context_length:4096,best_for:['chat','reasoning'],benchmark_mmlu:77,license:'Apache 2.0',gated:false,description:'Strong multilingual 34B from 01.AI. Competes with much larger models on reasoning.',featured:false,mesh_required:false},
+  // ── 16–20 GB RAM ──────────────────────────────────────────────────────────
+  {id:'gemma3-27b-q4',name:'Gemma 3 27B',creator:'Google',params:'27B',quantization:'Q4_K_M',size_gb:16.0,ram_min_gb:20,ram_recommended_gb:24,context_length:131072,best_for:['chat','reasoning','indic'],benchmark_mmlu:83,license:'Gemma',gated:true,description:'Google powerful Gemma 3. Best Indian language support among open models.',featured:false,mesh_required:false},
+  {id:'internlm25-20b-q4',name:'InternLM 2.5 20B',creator:'Shanghai AI Lab',params:'20B',quantization:'Q4_K_M',size_gb:12.0,ram_min_gb:16,ram_recommended_gb:18,context_length:1000000,best_for:['reasoning','coding','chat'],benchmark_mmlu:79,license:'InternLM',gated:false,description:'1 million token context window. Exceptional for long document analysis.',featured:false,mesh_required:false},
+  {id:'codestral-22b-q4',name:'Codestral 22B',creator:'Mistral AI',params:'22B',quantization:'Q4_K_M',size_gb:12.5,ram_min_gb:16,ram_recommended_gb:20,context_length:32768,best_for:['coding'],benchmark_humaneval:91,license:'MNPL',gated:false,description:'Mistral dedicated code model. Best-in-class completion across 80+ languages.',featured:false,mesh_required:false},
+  {id:'phi4-22b-q4',name:'Phi-4 22B',creator:'Microsoft',params:'22B',quantization:'Q4_K_M',size_gb:13.5,ram_min_gb:16,ram_recommended_gb:20,context_length:16384,best_for:['reasoning','coding','chat'],benchmark_mmlu:87,license:'MIT',gated:false,description:'Near-GPT-4 reasoning at 22B. Outperforms many 70B models.',featured:false,mesh_required:false},
+  {id:'mistral-small-24b-q4',name:'Mistral Small 24B',creator:'Mistral AI',params:'24B',quantization:'Q4_K_M',size_gb:14.0,ram_min_gb:16,ram_recommended_gb:20,context_length:131072,best_for:['chat','coding','writing'],license:'Apache 2.0',gated:false,description:'Production-grade 24B with 128K context. Great all-rounder for teams.',featured:false,mesh_required:false},
+  // ── 10–14 GB RAM ──────────────────────────────────────────────────────────
+  {id:'phi4-14b-q4',name:'Phi-4 14B',creator:'Microsoft',params:'14B',quantization:'Q4_K_M',size_gb:8.5,ram_min_gb:12,ram_recommended_gb:16,context_length:16384,best_for:['reasoning','coding','chat'],benchmark_mmlu:84,license:'MIT',gated:false,description:'Competes with 70B models on reasoning. Fits in 12 GB RAM.',featured:true,mesh_required:false},
+  {id:'qwen25-14b-q4',name:'Qwen 2.5 14B',creator:'Alibaba',params:'14B',quantization:'Q4_K_M',size_gb:8.5,ram_min_gb:12,ram_recommended_gb:16,context_length:131072,best_for:['coding','chat','reasoning'],benchmark_mmlu:79,license:'Apache 2.0',gated:false,description:'Strong all-round 14B with 128K context. Best at coding and multilingual tasks.',featured:true,mesh_required:false},
+  {id:'deepseek-r1-14b-q4',name:'DeepSeek R1 14B',creator:'DeepSeek',params:'14B',quantization:'Q4_K_M',size_gb:8.5,ram_min_gb:12,ram_recommended_gb:14,context_length:131072,best_for:['reasoning','coding'],benchmark_mmlu:78,license:'MIT',gated:false,description:'Larger R1 distillation. Better reasoning than 7B, still fits in 12 GB RAM.',featured:false,mesh_required:false},
+  {id:'deepseek-coder-v2-16b-q4',name:'DeepSeek Coder V2 16B',creator:'DeepSeek',params:'16B',quantization:'Q4_K_M',size_gb:9.4,ram_min_gb:12,ram_recommended_gb:16,context_length:131072,best_for:['coding'],benchmark_humaneval:90,license:'DeepSeek',gated:false,description:'MoE architecture — 16B active but near 30B+ quality on code.',featured:false,mesh_required:false},
+  {id:'starcoder2-15b-q4',name:'StarCoder2 15B',creator:'BigCode',params:'15B',quantization:'Q4_K_M',size_gb:9.0,ram_min_gb:12,ram_recommended_gb:14,context_length:16384,best_for:['coding'],license:'BigCode RAIL',gated:false,description:'600+ programming languages. State of the art fill-in-middle code completion.',featured:false,mesh_required:false},
+  {id:'gemma3-12b-q4',name:'Gemma 3 12B',creator:'Google',params:'12B',quantization:'Q4_K_M',size_gb:7.5,ram_min_gb:10,ram_recommended_gb:12,context_length:131072,best_for:['chat','reasoning','indic'],benchmark_mmlu:76,license:'Gemma',gated:true,description:'Google mid-size Gemma 3. Excellent Indian language support.',featured:true,mesh_required:false},
+  {id:'llama32-11b-vision-q4',name:'Llama 3.2 11B Vision',creator:'Meta',params:'11B',quantization:'Q4_K_M',size_gb:7.0,ram_min_gb:10,ram_recommended_gb:12,context_length:131072,best_for:['chat','reasoning'],license:'Llama 3.2',gated:true,description:'Meta multimodal model — understands images alongside text.',featured:false,mesh_required:false},
+  {id:'mistral-nemo-12b-q4',name:'Mistral Nemo 12B',creator:'Mistral AI',params:'12B',quantization:'Q4_K_M',size_gb:7.2,ram_min_gb:10,ram_recommended_gb:12,context_length:131072,best_for:['coding','writing','chat'],license:'Apache 2.0',gated:false,description:'Mistral + NVIDIA collaboration. 128K context, strong coding and reasoning.',featured:false,mesh_required:false},
+  // ── 6–10 GB RAM ───────────────────────────────────────────────────────────
+  {id:'gemma3-9b-q4',name:'Gemma 3 9B',creator:'Google',params:'9B',quantization:'Q4_K_M',size_gb:5.7,ram_min_gb:8,ram_recommended_gb:10,context_length:131072,best_for:['chat','writing','indic'],benchmark_mmlu:72,license:'Gemma',gated:true,description:'Google compact mid-size. Excellent multilingual instruction following.',featured:false,mesh_required:false},
+  {id:'gemma2-9b-q4',name:'Gemma 2 9B',creator:'Google',params:'9B',quantization:'Q4_K_M',size_gb:5.7,ram_min_gb:8,ram_recommended_gb:10,context_length:8192,best_for:['chat','reasoning'],benchmark_mmlu:71,license:'Gemma',gated:true,description:'Previous Gemma 2 generation. Solid for chat and reasoning tasks.',featured:false,mesh_required:false},
+  {id:'solar-10b-q4',name:'SOLAR 10.7B',creator:'Upstage',params:'10.7B',quantization:'Q4_K_M',size_gb:6.5,ram_min_gb:8,ram_recommended_gb:10,context_length:4096,best_for:['chat','reasoning'],license:'Apache 2.0',gated:false,description:'Outperforms Llama 2 70B despite being 10B, using depth upscaling.',featured:false,mesh_required:false},
+  {id:'deepseek-r1-7b-q4',name:'DeepSeek R1 7B',creator:'DeepSeek',params:'7B',quantization:'Q4_K_M',size_gb:4.5,ram_min_gb:6,ram_recommended_gb:8,context_length:32768,best_for:['reasoning'],benchmark_mmlu:67,license:'MIT',gated:false,description:'Strong chain-of-thought reasoning at 7B. Best for maths, logic, analysis.',featured:true,mesh_required:false},
+  {id:'qwen25-coder-7b-q4',name:'Qwen 2.5 Coder 7B',creator:'Alibaba',params:'7B',quantization:'Q4_K_M',size_gb:4.3,ram_min_gb:6,ram_recommended_gb:8,context_length:131072,best_for:['coding'],benchmark_humaneval:88,license:'Apache 2.0',gated:false,description:'Top coder at 7B — beats models 2× its size. 128K context.',featured:true,mesh_required:false},
+  {id:'mistral-7b-q4',name:'Mistral 7B',creator:'Mistral AI',params:'7B',quantization:'Q4_K_M',size_gb:4.4,ram_min_gb:6,ram_recommended_gb:8,context_length:32768,best_for:['chat','writing','coding'],benchmark_mmlu:62,license:'Apache 2.0',gated:false,description:'Best quality-to-size at 7B. Great all-rounder for writing and chat.',featured:true,mesh_required:false},
+  {id:'sarvam1-7b-q4',name:'Sarvam-1 7B',creator:'Sarvam AI',params:'7.3B',quantization:'Q4_K_M',size_gb:4.6,ram_min_gb:6,ram_recommended_gb:8,context_length:4096,best_for:['chat','indic'],license:'Apache 2.0',gated:false,description:'India-first model. Best Indic support — Hindi, Tamil, Telugu, Kannada, Bengali and more.',featured:false,mesh_required:false},
+  {id:'llama31-8b-q4',name:'Llama 3.1 8B',creator:'Meta',params:'8B',quantization:'Q4_K_M',size_gb:4.9,ram_min_gb:6,ram_recommended_gb:8,context_length:131072,best_for:['chat','writing','reasoning'],benchmark_mmlu:73,license:'Llama 3.1',gated:true,description:'Meta flagship small model. 128K context, 8-language support.',featured:true,mesh_required:false},
+  {id:'deepseek-coder-6b-q4',name:'DeepSeek Coder 6.7B',creator:'DeepSeek',params:'6.7B',quantization:'Q4_K_M',size_gb:3.9,ram_min_gb:6,ram_recommended_gb:8,context_length:16384,best_for:['coding'],benchmark_humaneval:74,license:'DeepSeek',gated:false,description:'Code-specialised. Excellent Python, JavaScript, TypeScript generation.',featured:true,mesh_required:false},
+  // ── 2–6 GB RAM ────────────────────────────────────────────────────────────
+  {id:'gemma3-4b-q4',name:'Gemma 3 4B',creator:'Google',params:'4B',quantization:'Q4_K_M',size_gb:3.0,ram_min_gb:4,ram_recommended_gb:6,context_length:131072,best_for:['chat','reasoning','indic'],benchmark_mmlu:72,license:'Gemma',gated:true,description:'Google compact model. Strong multilingual and reasoning per GB of RAM.',featured:true,mesh_required:false},
+  {id:'phi4-mini-q4',name:'Phi-4 Mini',creator:'Microsoft',params:'3.8B',quantization:'Q4_K_M',size_gb:2.4,ram_min_gb:4,ram_recommended_gb:6,context_length:128000,best_for:['chat','reasoning','indic'],benchmark_mmlu:69,license:'MIT',gated:false,description:'Runs on 4 GB RAM. Surprisingly capable for its size. Great for budget laptops.',featured:true,mesh_required:false},
+  {id:'phi35-mini-q4',name:'Phi-3.5 Mini',creator:'Microsoft',params:'3.8B',quantization:'Q4_K_M',size_gb:2.4,ram_min_gb:4,ram_recommended_gb:4,context_length:131072,best_for:['chat','reasoning'],benchmark_mmlu:69,license:'MIT',gated:false,description:'Strong reasoning at 3.8B with 128K context. Good for CPU-only machines.',featured:false,mesh_required:false},
+  {id:'llama32-3b-q4',name:'Llama 3.2 3B',creator:'Meta',params:'3B',quantization:'Q4_K_M',size_gb:2.0,ram_min_gb:4,ram_recommended_gb:4,context_length:131072,best_for:['chat','quick'],license:'Llama 3.2',gated:true,description:'Meta small instruction model. Fast, multilingual, 4 GB RAM.',featured:true,mesh_required:false},
+  {id:'qwen25-3b-q4',name:'Qwen 2.5 3B',creator:'Alibaba',params:'3B',quantization:'Q4_K_M',size_gb:2.0,ram_min_gb:4,ram_recommended_gb:4,context_length:32768,best_for:['coding','chat'],license:'Apache 2.0',gated:false,description:'Qwen 2.5 at 3B — solid coding model for low-RAM devices.',featured:false,mesh_required:false},
+  {id:'gemma2-2b-q4',name:'Gemma 2 2B',creator:'Google',params:'2B',quantization:'Q4_K_M',size_gb:1.5,ram_min_gb:2,ram_recommended_gb:3,context_length:8192,best_for:['quick','chat'],license:'Gemma',gated:true,description:'Tiny but capable. Good for simple tasks on low-end hardware.',featured:false,mesh_required:false},
+  {id:'qwen25-1b-q4',name:'Qwen 2.5 1.5B',creator:'Alibaba',params:'1.5B',quantization:'Q4_K_M',size_gb:1.0,ram_min_gb:2,ram_recommended_gb:2,context_length:32768,best_for:['quick'],license:'Apache 2.0',gated:false,description:'Runs on 2 GB RAM. For the most basic on-device tasks.',featured:false,mesh_required:false},
+  {id:'smollm2-1b-q4',name:'SmolLM2 1.7B',creator:'Nivara Labs',params:'1.7B',quantization:'Q4_K_M',size_gb:1.1,ram_min_gb:2,ram_recommended_gb:2,context_length:8192,best_for:['quick'],license:'Apache 2.0',gated:false,description:'Built for on-device use. Tiny, fast, and surprisingly capable.',featured:false,mesh_required:false},
+  {id:'llama32-1b-q4',name:'Llama 3.2 1B',creator:'Meta',params:'1B',quantization:'Q4_K_M',size_gb:0.8,ram_min_gb:2,ram_recommended_gb:2,context_length:131072,best_for:['quick'],license:'Llama 3.2',gated:true,description:'Meta ultra-tiny model. For extremely low-RAM or edge devices.',featured:false,mesh_required:false},
+  {id:'tinyllama-1b-q4',name:'TinyLlama 1.1B',creator:'TinyLlama',params:'1.1B',quantization:'Q4_K_M',size_gb:0.7,ram_min_gb:2,ram_recommended_gb:2,context_length:2048,best_for:['quick','chat'],license:'Apache 2.0',gated:false,description:'Ultra-tiny. Runs on any device. Great for quick offline tasks.',featured:true,mesh_required:false}
+];
+
+/* ── Unified model hub ── */
+(function () {
+  var PAGE_SIZE = 15;
+  var shown = PAGE_SIZE;
+  var activeCat = '';
+  var activeRam = 0;
+  var searchQ = '';
+  var sortVal = 'frontier';
+  var activeCollection = '';
+
+  var COLLECTIONS = {
+    indic:  { name: 'Indian language stars', cat: 'indic',  ram: 0 },
+    ram8:   { name: 'Runs on 8 GB RAM',       cat: '',       ram: 8 },
+    coding: { name: 'Free coding heroes',     cat: 'coding', ram: 0 },
+    quick:  { name: 'Fast & tiny',            cat: 'quick',  ram: 4 }
+  };
+
+  function applyCollection(key) {
+    var c = COLLECTIONS[key];
+    if (!c) return;
+    activeCollection = key;
+    activeCat = c.cat;
+    activeRam = c.ram;
+    shown = PAGE_SIZE;
+    document.querySelectorAll('[data-cat]').forEach(function (b) { b.classList.remove('on'); });
+    var targetCat = c.cat || '';
+    var pill = document.querySelector('[data-cat="' + targetCat + '"]');
+    if (pill) pill.classList.add('on');
+    var ramEl = document.getElementById('hub-ram');
+    if (ramEl) ramEl.value = String(c.ram);
+    var bar = document.getElementById('hub-coll-bar');
+    var barName = document.getElementById('coll-bar-name');
+    if (bar) bar.style.display = 'flex';
+    if (barName) barName.textContent = c.name;
+    document.querySelectorAll('[data-collection]').forEach(function (el) { el.classList.remove('coll-active'); });
+    var card = document.querySelector('[data-collection="' + key + '"]');
+    if (card) card.classList.add('coll-active');
+    var hub = document.getElementById('model-hub');
+    if (hub) hub.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    render();
+  }
+
+  function clearCollection() {
+    activeCollection = '';
+    activeCat = '';
+    activeRam = 0;
+    shown = PAGE_SIZE;
+    document.querySelectorAll('[data-cat]').forEach(function (b) { b.classList.remove('on'); });
+    var allPill = document.querySelector('[data-cat=""]');
+    if (allPill) allPill.classList.add('on');
+    var ramEl = document.getElementById('hub-ram');
+    if (ramEl) ramEl.value = '0';
+    var bar = document.getElementById('hub-coll-bar');
+    if (bar) bar.style.display = 'none';
+    document.querySelectorAll('[data-collection]').forEach(function (el) { el.classList.remove('coll-active'); });
+    render();
+  }
+
+  function filtered() {
+    var q = searchQ.toLowerCase();
+    return MODELS_DATA.filter(function (m) {
+      if (q) {
+        var hay = (m.name + ' ' + m.creator + ' ' + m.params + ' ' + (m.best_for || []).join(' ')).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      if (activeCat === 'mesh') {
+        if (!m.mesh_required) return false;
+      } else if (activeCat) {
+        if ((m.best_for || []).indexOf(activeCat) < 0) return false;
+      }
+      if (activeRam === 999) {
+        if (m.ram_min_gb < 33) return false;
+      } else if (activeRam > 0) {
+        if (m.ram_min_gb > activeRam) return false;
+      }
+      return true;
+    }).sort(function (a, b) {
+      if (sortVal === 'frontier') return (b.ram_min_gb - a.ram_min_gb) || (b.size_gb - a.size_gb);
+      if (sortVal === 'smallest') return a.size_gb - b.size_gb;
+      if (sortVal === 'largest')  return b.size_gb - a.size_gb;
+      if (sortVal === 'az')       return a.name.localeCompare(b.name);
+      return 0;
+    });
+  }
+
+  function cardHTML(m) {
+    var isMesh = m.mesh_required;
+    var tags = (m.best_for || []).map(function (t) { return '<span class="htag">' + t + '</span>'; }).join('');
+    var meshTag = isMesh ? '<span class="htag mesh-badge">MESH</span>' : '';
+    var gatedTag = m.gated ? '<span class="htag" style="color:var(--accent)">token req.</span>' : '';
+    var bench = m.benchmark_humaneval
+      ? '<div><span class="lbl">HumanEval</span><span class="v">' + m.benchmark_humaneval + '%</span></div>'
+      : m.benchmark_mmlu
+      ? '<div><span class="lbl">MMLU</span><span class="v">' + m.benchmark_mmlu + '%</span></div>'
+      : '<div></div>';
+    var ctxK = m.context_length >= 500000 ? '1M' : m.context_length >= 100000 ? '128K' : m.context_length >= 30000 ? '32K' : Math.round(m.context_length / 1000) + 'K';
+    var pullCmd = 'nivara pull ' + m.id;
+    var copyId = 'copy-' + m.id;
+    var actions = isMesh
+      ? '<a href="../download.html" class="mesh-run">Run with Mesh</a>'
+      : '<a href="../download.html" class="cloud">Download app</a><a href="../download.html" class="local">Get Nivara</a>';
+    return '<article class="hubcard' + (isMesh ? ' mesh-card' : '') + '">'
+      + '<div class="htop"><div class="hbadge">' + m.name[0] + '</div><div>'
+      + '<h5>' + m.name + '</h5>'
+      + '<div class="hcre">' + m.creator + ' · ' + m.license + (m.gated ? ' · <span style="color:var(--accent)">token req.</span>' : '') + '</div>'
+      + '</div></div>'
+      + '<div class="htags"><span class="htag">' + m.params + '</span><span class="htag">' + m.quantization + '</span><span class="htag">' + ctxK + ' ctx</span>' + meshTag + tags + gatedTag + '</div>'
+      + '<div class="hstats">'
+      + '<div><span class="lbl">size</span><span class="v">' + m.size_gb + ' GB</span></div>'
+      + '<div><span class="lbl">RAM min</span><span class="v">' + m.ram_min_gb + ' GB</span></div>'
+      + bench
+      + '</div>'
+      + '<div class="hub-cmd"><span class="pfx">$</span><code>' + pullCmd + '</code>'
+      + '<button id="' + copyId + '" onclick="var b=this;navigator.clipboard.writeText(\'' + pullCmd + '\').then(function(){b.textContent=\'✓\';setTimeout(function(){b.textContent=\'Copy\'},1200)})">Copy</button></div>'
+      + '<div class="hactions">' + actions + '</div>'
+      + '</article>';
+  }
+
+  function render() {
+    var list = filtered();
+    var visible = list.slice(0, shown);
+    var grid = document.getElementById('hub-grid');
+    if (!grid) return;
+    var liveCount = document.getElementById('hub-live-count');
+    var countEl = document.getElementById('hub-count');
+    var moreRow = document.getElementById('hub-more-row');
+    var moreInfo = document.getElementById('hub-more-info');
+    var meshBanner = document.getElementById('hub-mesh-banner');
+    if (liveCount) liveCount.textContent = MODELS_DATA.length + ' models · tiny to frontier';
+    if (countEl) countEl.textContent = visible.length + ' of ' + list.length;
+    if (meshBanner) meshBanner.style.display = activeCat === 'mesh' ? 'block' : 'none';
+    if (list.length === 0) {
+      grid.innerHTML = '<div style="grid-column:1/-1;padding:40px 0;text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--muted)">No models match your filters.</div>';
+      if (moreRow) moreRow.style.display = 'none';
+      return;
+    }
+    grid.innerHTML = visible.map(cardHTML).join('');
+    if (moreRow) moreRow.style.display = visible.length < list.length ? 'flex' : 'none';
+    if (moreInfo) moreInfo.textContent = visible.length + ' of ' + list.length + ' shown';
+  }
+
+  var debounceTimer;
+  document.addEventListener('DOMContentLoaded', function () {
+    render();
+
+    var searchEl = document.getElementById('hub-q');
+    if (searchEl) {
+      searchEl.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+          searchQ = searchEl.value.trim();
+          shown = PAGE_SIZE;
+          render();
+        }, 280);
+      });
+    }
+
+    var sortEl = document.getElementById('hub-sort');
+    if (sortEl) {
+      sortEl.addEventListener('change', function () {
+        sortVal = this.value;
+        shown = PAGE_SIZE;
+        render();
+      });
+    }
+
+    var ramEl = document.getElementById('hub-ram');
+    if (ramEl) {
+      ramEl.addEventListener('change', function () {
+        activeRam = parseInt(this.value) || 0;
+        shown = PAGE_SIZE;
+        render();
+      });
+    }
+
+    document.querySelectorAll('[data-cat]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('[data-cat]').forEach(function (b) { b.classList.remove('on'); });
+        this.classList.add('on');
+        activeCat = this.dataset.cat;
+        shown = PAGE_SIZE;
+        render();
+      });
+    });
+
+    var moreBtn = document.getElementById('hub-more-btn');
+    if (moreBtn) {
+      moreBtn.addEventListener('click', function () {
+        shown += PAGE_SIZE;
+        render();
+      });
+    }
+
+    document.querySelectorAll('[data-collection]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        applyCollection(this.dataset.collection);
+      });
+    });
+
+    var clearBtn = document.getElementById('coll-clear');
+    if (clearBtn) clearBtn.addEventListener('click', clearCollection);
+  });
+})();
+</script>
+<script src="../shared.js"></script>
+<script src="tour.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="../tweaks-panel.jsx"></script>
+<script type="text/babel" src="../tweaks-app.jsx"></script>
+</body>
+</html>
+

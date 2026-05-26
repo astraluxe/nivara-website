@@ -1,0 +1,10 @@
+{
+  "name": "nivara",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd \"copy of krew folder\" && npm run dev",
+    "build": "cd \"copy of krew folder\" && npm run build",
+    "start": "cd \"copy of krew folder\" && npm run start"
+  }
+}
