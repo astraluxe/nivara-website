@@ -633,48 +633,48 @@
         <div class="seyebrow"><span class="num">01</span><span class="label">One-command setup</span></div>
         <div class="feat-badge"><span class="dot"></span>Ships with App Release</div>
         <h2>Zero config.<br/><span class="it">One line.</span></h2>
-        <p>No .exe. No fifteen-step install. One bash command auto-installs Ollama, downloads the model from the nearest mirror, configures the runtime. You'll be talking to the model in 90 seconds.</p>
+        <p>No .exe chaos. No fifteen-step install. Open Nivara, pick a model, click Download — Ollama is auto-configured behind the scenes. You'll be talking to the model in under 90 seconds.</p>
         <ul>
           <li class="acc">Auto-detects your hardware — picks the right quantisation</li>
-          <li>Works on Mac, Linux, Windows (via WSL), and Docker</li>
+          <li>Works on Windows via the built-in Ollama runner</li>
           <li>Verifies download integrity with checksums</li>
-          <li>Mirrors in Mumbai, Bengaluru, Chennai for 10× faster downloads</li>
+          <li>Browse without signup — download only requires an account</li>
         </ul>
       </div>
 
       <div class="setup">
         <div class="setup-h">
-          <span>// install · deepseek-v3</span>
+          <span>// install · deepseek-r1:7b</span>
           <span>~90s to first token</span>
         </div>
 
         <div class="install">
           <div class="install-tabs">
             <button class="on" data-tab="mac">Mac / Linux</button>
-            <button data-tab="win">Windows (WSL)</button>
+            <button data-tab="win">Windows</button>
             <button data-tab="dkr">Docker</button>
           </div>
 
           <div class="install-cmd" data-tab="mac" style="display:flex;">
             <span class="pfx">$</span>
-            <span class="cmd-text">curl -sSL https://nivara.tech/run/deepseek | bash</span>
+            <span class="cmd-text">curl -fsSL https://ollama.com/install.sh | sh &amp;&amp; ollama run deepseek-r1:7b</span>
             <button class="copy">Copy</button>
           </div>
           <div class="install-cmd" data-tab="win" style="display:none;">
             <span class="pfx">PS&gt;</span>
-            <span class="cmd-text">iwr -useb https://nivara.tech/run/deepseek.ps1 | iex</span>
+            <span class="cmd-text">winget install Ollama.Ollama; ollama run deepseek-r1:7b</span>
             <button class="copy">Copy</button>
           </div>
           <div class="install-cmd" data-tab="dkr" style="display:none;">
             <span class="pfx">$</span>
-            <span class="cmd-text">docker run -it nivara/run deepseek-v3</span>
+            <span class="cmd-text">docker run -d -p 11434:11434 ollama/ollama &amp;&amp; ollama run deepseek-r1:7b</span>
             <button class="copy">Copy</button>
           </div>
 
           <div style="padding: 16px 24px 20px; font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.5); border-top: 1px solid rgba(242,239,233,0.08); line-height: 1.7;">
-            <div>→ detecting hardware… M2 Pro · 16GB</div>
-            <div>→ selecting deepseek-v3-q4_k_m · 23 GB</div>
-            <div>→ downloading from <span style="color: var(--accent);">mum.mirror.nivara.tech</span> · 940 MB/s</div>
+            <div>→ detecting hardware… 16GB RAM · GPU found</div>
+            <div>→ selecting deepseek-r1-q4_k_m · 4.7 GB</div>
+            <div>→ downloading from Nivara hub…</div>
             <div>→ checksum verified · loading…</div>
             <div style="color: #6BFFB8;">✓ ready · type a prompt</div>
           </div>
@@ -727,42 +727,38 @@
   </div>
 </section>
 
-<!-- SECTION 3 — HOSTED INFERENCE -->
-<section class="fsec" data-screen-label="04 Hosted">
+<!-- SECTION 3 — BYOK INFERENCE -->
+<section class="fsec" data-screen-label="04 Cloud AI">
   <div class="wrap">
     <div class="fsec-grid">
       <div class="fsec-text">
-        <div class="seyebrow"><span class="num">03</span><span class="label">Hosted inference</span></div>
-        <div class="feat-badge"><span class="dot"></span>Coming Soon</div>
-        <h2>No GPU?<br/><span class="it">No problem.</span></h2>
-        <p>Don't want to run anything locally? Use Nivara's hosted inference endpoint. One API call. Pay only for what you use. No GPU on your end, no monthly subscription.</p>
+        <div class="seyebrow"><span class="num">03</span><span class="label">Bring your own key</span></div>
+        <div class="feat-badge"><span class="dot"></span>Live Now</div>
+        <h2>No GPU?<br/><span class="it">Use the cloud.</span></h2>
+        <p>Plug in your own OpenAI, Gemini, or Claude API key in Connect Apps. Nivara routes Krew, Coder, and Guard through your key — at provider cost, zero markup. Your key, your bill, your data.</p>
         <ul>
-          <li class="acc">Same OpenAI-compatible API — works with existing SDKs</li>
-          <li>Sub-200ms response times from BLR &amp; MUM</li>
-          <li>Pay-per-token. ₹0 idle.</li>
-          <li>Free credits every month on Solo and Builder plans</li>
+          <li class="acc">OpenAI · Gemini · Claude — all supported</li>
+          <li>One-time setup in Connect Apps · works instantly</li>
+          <li>Provider pricing directly — ₹0 Nivara markup</li>
+          <li>Keys stored in Windows Credential Manager — never in plaintext</li>
         </ul>
       </div>
 
       <div>
         <div class="api-card">
-          <div class="who">// POST · api.nivara.tech/v1/chat</div>
+          <div class="who">// Connect Apps → Add key → done</div>
           <div class="req">
-            <span class="met">curl</span> https://api.nivara.tech/v1/chat \<br/>
-            &nbsp;&nbsp;-H <span class="str">"Authorization: Bearer $KREW_AI_KEY"</span> \<br/>
-            &nbsp;&nbsp;-d <span class="str">'{</span><br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"model"</span>: <span class="str">"deepseek-v3"</span>,<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"messages"</span>: [{<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"role"</span>: <span class="str">"user"</span>,<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"content"</span>: <span class="str">"Hello in Hindi"</span><br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;}]<br/>
-            &nbsp;&nbsp;<span class="str">}'</span>
+            <span class="met">Step 1:</span> Open Nivara → Connect Apps<br/>
+            <span class="met">Step 2:</span> Paste your <span class="str">OpenAI / Gemini / Claude</span> key<br/>
+            <span class="met">Step 3:</span> Hit <span class="str">Save &amp; Test</span><br/><br/>
+            Nivara pings the provider to verify the key,<br/>
+            then stores it in Windows Credential Manager.
           </div>
-          <div class="who">// 200 OK · 184ms · 12 tokens</div>
+          <div class="who">// ✓ connected · all AI features unlocked</div>
           <div>
-            { <span class="key">"choices"</span>: [{<br/>
-            &nbsp;&nbsp;<span class="key">"content"</span>: <span class="str">"नमस्ते! कैसे हो?"</span><br/>
-            &nbsp;&nbsp;}] }
+            { <span class="key">"status"</span>: <span class="str">"connected"</span>,<br/>
+            &nbsp;&nbsp;<span class="key">"provider"</span>: <span class="str">"openai"</span>,<br/>
+            &nbsp;&nbsp;<span class="key">"model"</span>: <span class="str">"gpt-4o"</span> }
           </div>
         </div>
 

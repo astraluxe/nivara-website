@@ -69,29 +69,105 @@
   line-height: 1.6;
 }
 
+/* ── Download options (two cards) ── */
+.dl-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.dl-card {
+  width: 100%;
+  border-radius: 12px;
+  padding: 20px 24px;
+  border: 1px solid rgba(124,92,255,.2);
+  background: rgba(124,92,255,.05);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.dl-card--lite {
+  border-color: var(--rule-strong);
+  background: transparent;
+  padding: 14px 20px;
+}
+
+.dl-card-badge {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.dl-card-body { flex: 1; text-align: left; }
+.dl-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.dl-card--lite .dl-card-name { font-size: 13px; color: var(--muted); }
+.dl-card-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted-2);
+  letter-spacing: .04em;
+}
+
 /* ── Primary download button ── */
 .dl-btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   background: var(--accent);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 16px 36px;
+  padding: 12px 24px;
   border-radius: 6px;
   text-decoration: none;
   letter-spacing: -0.01em;
   transition: opacity .15s, transform .15s;
   cursor: pointer;
   border: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.dl-btn-primary:hover {
-  opacity: .88;
-  transform: translateY(-1px);
-}
+.dl-btn-primary:hover { opacity: .88; transform: translateY(-1px); }
 .dl-btn-primary svg { flex-shrink: 0; }
+
+.dl-btn-lite {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 9px 18px;
+  border-radius: 6px;
+  border: 1px solid var(--rule-strong);
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.dl-btn-lite:hover { color: var(--ink); border-color: var(--muted); }
 
 .dl-platform-note {
   font-family: var(--font-mono);
@@ -428,22 +504,32 @@
   </h1>
 
   <p class="dl-sub">
-    Six AI modules. One installer. Your conversations, your files, your agents — all on your machine. Nothing leaves your device.
+    Six AI modules. One installer. Mesh, Voice, and everything else — included. Your data stays on your machine. Nothing leaves your device.
   </p>
 
-  <div id="download-now">
-    <button class="dl-btn-primary" id="primaryDlBtn" onclick="handleDownload()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-      </svg>
-      <span id="primaryDlLabel">Download for Windows — Free</span>
-    </button>
-    <p class="dl-platform-note" id="platformNote">Windows 10 or later · ~10 MB installer · No credit card</p>
+  <div id="download-now" class="dl-options">
+
+    <!-- Single installer — everything included -->
+    <div class="dl-card" id="completeCard">
+      <div class="dl-card-badge">Everything included</div>
+      <div class="dl-card-body">
+        <div class="dl-card-name">Nivara for Windows</div>
+        <div class="dl-card-sub">All 6 modules · Mesh · Voice · ~1.5 GB · one installer</div>
+      </div>
+      <button class="dl-btn-primary" id="completeDlBtn" onclick="handleDownload()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <span id="completeDlLabel">Download Nivara</span>
+      </button>
+    </div>
+
+    <p class="dl-platform-note" id="platformNote">Windows 10 or later · No credit card required · Everything works out of the box</p>
   </div>
 
-  <div class="dl-platforms">
-    <span>Also available:</span>
+  <div class="dl-platforms" style="margin-top:20px;">
+    <span>Other platforms:</span>
     <a href="#" class="dl-platform-link disabled" id="macBtn">macOS — coming soon</a>
     <a href="#" class="dl-platform-link disabled" id="linuxBtn">Linux — coming soon</a>
   </div>
@@ -602,7 +688,7 @@
       <ul>
         <li>Windows 10 or Windows 11</li>
         <li>4 GB RAM minimum (8 GB recommended)</li>
-        <li>200 MB disk space (+ models if downloaded)</li>
+        <li>2 GB disk space (Mesh + Voice engines included)</li>
         <li>Internet for Nivara account login</li>
         <li>WebView2 runtime (pre-installed on Win 11)</li>
       </ul>
@@ -626,13 +712,15 @@
   <h2>Download once.<br/><em>Use everything.</em></h2>
   <p>One login. Six modules. Your data stays on your machine — always. Start free, upgrade when you need more.</p>
 
-  <button class="dl-btn-primary" onclick="handleDownload()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-    </svg>
-    Download Nivara — Free
-  </button>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <button class="dl-btn-primary" onclick="handleDownload()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      Download Nivara for Windows
+    </button>
+  </div>
 
   <div class="dl-privacy">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -663,7 +751,7 @@
           <li><a href="modules/automation.html">Studio · automation</a></li>
           <li><a href="modules/coder.html">Coder · dev tools</a></li>
           <li><a href="modules/models.html">Models · open hub</a></li>
-          <li><a href="modules/vault.html">Vault · VPN</a></li>
+          <li><a href="modules/vault.html">Vault · DNS Protection</a></li>
           <li><a href="modules/guard.html">Guard · security</a></li>
         </ul>
       </div>
@@ -723,48 +811,43 @@
     });
   });
 
-  // ── Platform detection — show right primary button
+  // ── Platform detection
   (function () {
     const ua = navigator.userAgent.toLowerCase();
-    const isMac = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
+    const isMac   = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
     const isLinux = /linux/.test(ua) && !/android/.test(ua);
-    const label = document.getElementById('primaryDlLabel');
-    const note = document.getElementById('platformNote');
 
-    if (isMac) {
-      label.textContent = 'Download for macOS — Coming soon';
-      note.textContent  = 'macOS 12+ · Available when Phase 9 ships';
-      document.getElementById('primaryDlBtn').style.opacity = '.5';
-      document.getElementById('primaryDlBtn').style.cursor  = 'default';
-      document.getElementById('macBtn').classList.remove('disabled');
-      document.getElementById('macBtn').textContent = 'macOS — coming soon';
-    } else if (isLinux) {
-      label.textContent = 'Download for Linux — Coming soon';
-      note.textContent  = 'AppImage · Available when Phase 9 ships';
-      document.getElementById('primaryDlBtn').style.opacity = '.5';
-      document.getElementById('primaryDlBtn').style.cursor  = 'default';
-      document.getElementById('linuxBtn').classList.remove('disabled');
-      document.getElementById('linuxBtn').textContent = 'Linux — coming soon';
+    if (isMac || isLinux) {
+      const os = isMac ? 'macOS' : 'Linux';
+      ['completeDlBtn','liteDlBtn'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) { btn.style.opacity = '.45'; btn.style.cursor = 'default'; }
+      });
+      document.getElementById('platformNote').textContent = os + ' builds coming soon · Windows 10+ available now';
+      if (isMac) { document.getElementById('macBtn').classList.remove('disabled'); document.getElementById('macBtn').textContent = 'macOS — coming soon'; }
+      if (isLinux) { document.getElementById('linuxBtn').classList.remove('disabled'); document.getElementById('linuxBtn').textContent = 'Linux — coming soon'; }
     }
   })();
 
-  // ── Download handler
-  const WIN_DOWNLOAD = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/Nivara_1.0.0_x64-setup.exe';
+  // ── Download URLs
+  const WIN_INSTALLER = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/Nivara_1.0.0_x64-setup.exe';
 
-  function handleDownload() {
+  function _isWindowsUser() {
     const ua = navigator.userAgent.toLowerCase();
     const isMac   = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
-    const isLinux  = /linux/.test(ua) && !/android/.test(ua);
+    const isLinux = /linux/.test(ua) && !/android/.test(ua);
     if (isMac || isLinux) {
       alert('macOS and Linux builds are coming soon. Follow @nivaratech_in for updates.');
-      return;
+      return false;
     }
-    const label = document.getElementById('primaryDlLabel');
-    if (label) {
-      label.textContent = 'Starting download…';
-      setTimeout(() => { label.textContent = 'Download for Windows — Free'; }, 3000);
-    }
-    window.location.href = WIN_DOWNLOAD;
+    return true;
+  }
+
+  function handleDownload() {
+    if (!_isWindowsUser()) return;
+    const lbl = document.getElementById('completeDlLabel');
+    if (lbl) { lbl.textContent = 'Starting download…'; setTimeout(() => { lbl.textContent = 'Download Nivara'; }, 3000); }
+    window.location.href = WIN_INSTALLER;
   }
 
   // ── Reveal on scroll
