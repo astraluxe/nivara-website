@@ -1,20 +1,9 @@
 {
-  "buildCommand": "echo 'No build step needed'",
-  "installCommand": "echo skip",
-  "outputDirectory": ".",
-  "cleanUrls": true,
+  "buildCommand": "echo done",
+  "installCommand": "echo done",
   "rewrites": [
     { "source": "/", "destination": "/NIVARA.html" },
-    { "source": "/affiliates", "destination": "/affiliates.html" },
-    { "source": "/download", "destination": "/download.html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" }
-      ]
-    }
+    { "source": "/download", "destination": "/download.html" },
+    { "source": "/affiliates", "destination": "/affiliates.html" }
   ]
 }
