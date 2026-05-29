@@ -1,4 +1,7 @@
 {
+  "buildCommand": null,
+  "installCommand": "echo skip",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "rewrites": [
     { "source": "/", "destination": "/NIVARA.html" },
