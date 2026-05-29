@@ -1,6 +1,7 @@
 {
   "buildCommand": "echo done",
   "installCommand": "echo done",
+  "outputDirectory": ".",
   "rewrites": [
     { "source": "/", "destination": "/NIVARA.html" },
     { "source": "/download", "destination": "/download.html" },
