@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -29,6 +29,73 @@
 
 <style>
 /* ── Partner page ──────────────────────────────────────────── */
+
+/* Crumb: tighten top gap on this page */
+.crumb { padding-top: 10px; }
+
+/* Hero layout */
+.mhero { padding-top: clamp(24px,3vw,40px); padding-bottom: clamp(32px,4vw,56px); }
+.mhero-inner { max-width: 780px; }
+
+/* Eyebrow row inside hero */
+.ptnr-meta {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+}
+.ptnr-meta .sep { color: var(--muted-2); }
+
+.mhero-h {
+  font-size: clamp(44px, 7.5vw, 88px);
+  line-height: 0.91; letter-spacing: -0.04em;
+  font-weight: 500; color: var(--ink);
+  margin: 20px 0 22px;
+}
+.mhero-h em {
+  font-family: var(--font-serif); font-style: italic; font-weight: 400;
+}
+.mhero-sub {
+  font-size: clamp(15px, 1.3vw, 18px); line-height: 1.55;
+  color: var(--ink-2); max-width: 58ch; margin: 0 0 28px;
+}
+.mhero-ctas {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+
+/* Chevron background SVG positioning */
+.chevron-bg {
+  position: absolute; inset: 0;
+  overflow: hidden; pointer-events: none; z-index: 0;
+  opacity: 0.09; color: var(--ink);
+}
+.chevron-bg svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ── Stats grid (same pattern as affiliates.html) ── */
+.aff-stats {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: var(--rule-strong);
+  border: 1px solid var(--rule-strong);
+}
+@media (max-width: 880px) { .aff-stats { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .aff-stats { grid-template-columns: 1fr; } }
+.aff-stat {
+  background: var(--paper); padding: 24px 28px 22px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.aff-stat .lbl {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted-2);
+}
+.aff-stat .val {
+  font-size: clamp(40px,5vw,64px); font-weight: 500;
+  letter-spacing: -0.04em; line-height: 0.95; color: var(--ink);
+}
+.aff-stat .sub {
+  margin-top: 4px; font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+}
 
 .partner-grid {
   display: grid;
@@ -330,7 +397,7 @@
 
   <div class="wrap">
     <div class="mhero-inner">
-      <div class="mhero-meta mono">
+      <div class="ptnr-meta">
         <span>adris.tech</span>
         <span class="sep">·</span>
         <span>Partner Program</span>
@@ -394,25 +461,33 @@
   </div>
 </section>
 
-<!-- WHO WE'RE BUILDING WITH -->
+<!-- PLATFORM SCALE -->
 <section class="msection" data-screen-label="03 Stats">
   <div class="wrap">
-    <div class="aff-stats" style="margin-top:0;">
+    <div class="msec-head" style="margin-bottom:32px;">
+      <span class="msec-label mono">The platform</span>
+      <h2 class="msec-h">What you're integrating with</h2>
+    </div>
+    <div class="aff-stats">
       <div class="aff-stat">
-        <span class="aff-stat-n">8</span>
-        <span class="aff-stat-l">Krew integrations<br/>(Gmail, Slack, Notion, GitHub…)</span>
+        <span class="lbl">Integrations</span>
+        <span class="val">8</span>
+        <span class="sub">Gmail · Slack · Notion · GitHub…</span>
       </div>
       <div class="aff-stat">
-        <span class="aff-stat-n">43</span>
-        <span class="aff-stat-l">AI agents across<br/>9 categories</span>
+        <span class="lbl">AI agents</span>
+        <span class="val">43</span>
+        <span class="sub">Across 9 categories</span>
       </div>
       <div class="aff-stat">
-        <span class="aff-stat-n">6</span>
-        <span class="aff-stat-l">Core modules in<br/>one install</span>
+        <span class="lbl">Core modules</span>
+        <span class="val">6</span>
+        <span class="sub">In one install</span>
       </div>
       <div class="aff-stat">
-        <span class="aff-stat-n">∞</span>
-        <span class="aff-stat-l">Open to MCP makers<br/>and tool builders</span>
+        <span class="lbl">MCP slots</span>
+        <span class="val">∞</span>
+        <span class="sub">Open to tool builders</span>
       </div>
     </div>
   </div>
