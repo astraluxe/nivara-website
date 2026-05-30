@@ -1368,6 +1368,38 @@
 <script type="text/babel" src="tweaks-panel.jsx"></script>
 <script type="text/babel" src="tweaks-app.jsx"></script>
 <script src="tour.js"></script>
+
+<script>
+(function () {
+  var SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+  var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+
+  var ref = new URLSearchParams(window.location.search).get('ref');
+  if (!ref) return;
+
+  try { localStorage.setItem('aff_ref', ref); } catch (_) {}
+
+  fetch(SUPA_URL + '/rest/v1/affiliates?ref_code=eq.' + encodeURIComponent(ref) + '&select=id&limit=1', {
+    headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON }
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (rows) {
+    var id = rows && rows[0] && rows[0].id;
+    if (!id) return;
+    fetch(SUPA_URL + '/rest/v1/affiliate_clicks', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_ANON,
+        'Authorization': 'Bearer ' + SUPA_ANON,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ affiliate_id: id, source_url: location.href })
+    });
+  })
+  .catch(function () {});
+})();
+</script>
 </body>
 </html>
 
