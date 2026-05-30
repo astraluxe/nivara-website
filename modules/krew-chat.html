@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -673,7 +673,7 @@
   <!-- TOPBAR -->
   <header class="topbar">
     <div class="topbar-l">
-      <a class="topbar-mark" href="../NIVARA.html">
+      <a class="topbar-mark" href="../adris.tech.html">
         <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
         <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
         <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
@@ -940,7 +940,7 @@
 // Theme toggle (matches the rest of the site)
 (function() {
   const root = document.documentElement;
-  const stored = localStorage.getItem('nivara-theme');
+  const stored = localStorage.getItem('adris.tech-theme');
   if (stored === 'paper') root.setAttribute('data-theme', 'paper');
   const btn = document.getElementById('themeToggle');
   function update() {
@@ -952,7 +952,7 @@
     const next = cur === 'paper' ? 'ink' : 'paper';
     if (next === 'paper') root.setAttribute('data-theme', 'paper');
     else root.removeAttribute('data-theme');
-    localStorage.setItem('nivara-theme', next);
+    localStorage.setItem('adris.tech-theme', next);
     update();
   });
 })();
@@ -1121,7 +1121,7 @@ form.addEventListener('submit', async (e) => {
 
   try {
     const a = AGENTS[currentAgent];
-    const sys = `You are ${a.name}, a specialist AI agent inside Krew (Nivara Technologies' AI office product). Your role: ${a.role.replace(/&amp;/g, '&')}. Keep responses concise (under 200 words unless asked). Use short paragraphs, bullets when useful. Don't over-apologise or hedge. You are part of nivara.tech — a Bengaluru-based AI platform for Indian developers, creators and small businesses. Pricing is in ₹ rupees. When the user asks for something irreversible (sending an email, posting publicly, paying), ask for confirmation rather than acting.`;
+    const sys = `You are ${a.name}, a specialist AI agent inside Krew (adris.tech Technologies' AI office product). Your role: ${a.role.replace(/&amp;/g, '&')}. Keep responses concise (under 200 words unless asked). Use short paragraphs, bullets when useful. Don't over-apologise or hedge. You are part of adris.tech.tech — a Bengaluru-based AI platform for Indian developers, creators and small businesses. Pricing is in ₹ rupees. When the user asks for something irreversible (sending an email, posting publicly, paying), ask for confirmation rather than acting.`;
     const reply = await window.claude.complete({
       messages: [
         { role: 'user', content: `${sys}\n\nUser message: ${text}` },
