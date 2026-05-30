@@ -128,8 +128,7 @@ section {
   border-bottom: 1px solid var(--rule);
 }
 .nav-inner {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
   height: 64px;
 }
@@ -141,6 +140,7 @@ section {
   font-weight: 600;
   letter-spacing: -0.03em;
   font-size: 18px;
+  flex-shrink: 0;
 }
 .nav-mark .logo {
   width: 22px;
@@ -162,21 +162,23 @@ section {
 }
 .nav-links {
   display: flex;
-  gap: 28px;
-  justify-self: center;
+  flex: 1;
+  justify-content: center;
+  gap: 22px;
 }
 .nav-links a {
   font-size: 13px;
   color: var(--muted);
   transition: color 0.15s ease;
   font-weight: 500;
+  white-space: nowrap;
 }
 .nav-links a:hover { color: var(--ink); }
 .nav-right {
-  justify-self: end;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 .nav-right .btn {
   display: flex;
@@ -1888,7 +1890,6 @@ body.tour-open { overflow: hidden; }
   gap: 6px;
   padding: 0 14px;
   height: 32px;
-  margin-left: 20px;
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.1em;
@@ -1934,7 +1935,6 @@ body.tour-open { overflow: hidden; }
   .footer-top { grid-template-columns: 1fr 1fr; }
   .footer-brand { grid-column: 1 / -1; }
   .nav-links { display: none; }
-  .nav-inner { grid-template-columns: 1fr auto; }
   .section-head { grid-template-columns: 1fr; }
 }
 
