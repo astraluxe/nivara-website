@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Policy — adris.tech</title>
+<meta name="description" content="Privacy policy for adris.tech and the Adris desktop application." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="module-pages.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+<style>
+  .legal-wrap { max-width: 780px; margin: 0 auto; }
+  .legal-wrap h2 { font-size: clamp(18px,2vw,22px); font-weight:600; letter-spacing:-0.02em; margin:48px 0 12px; color:var(--ink); }
+  .legal-wrap h3 { font-size:16px; font-weight:600; margin:28px 0 8px; color:var(--ink); }
+  .legal-wrap p  { font-size:15px; line-height:1.75; color:var(--muted); margin-bottom:14px; }
+  .legal-wrap ul { margin:0 0 14px 20px; }
+  .legal-wrap ul li { font-size:15px; line-height:1.75; color:var(--muted); margin-bottom:6px; }
+  .legal-wrap a  { color:var(--accent); border-bottom:1px solid currentColor; }
+  .legal-meta { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; color:var(--muted-2); margin-bottom:40px; }
+  .legal-intro { font-size:clamp(16px,1.5vw,19px); line-height:1.7; color:var(--muted); margin-bottom:0; border-bottom:1px solid var(--rule); padding-bottom:32px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="NIVARA.html" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="NIVARA.html#platform">Platform</a></li>
+      <li><a href="NIVARA.html#modules">Modules</a></li>
+      <li><a href="NIVARA.html#pricing">Pricing</a></li>
+      <li><a href="download.html">Download</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="download.html" class="btn">Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="NIVARA.html"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Home</a>
+      <span class="sep">/</span>
+      <span class="here">Privacy Policy</span>
+    </div>
+  </div>
+</section>
+
+<section class="mhero" style="padding-bottom:clamp(48px,5vw,72px);">
+  <div class="wrap">
+    <div class="mhero-top">
+      <div>
+        <div class="mono" style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;">// Legal</div>
+        <h1>Privacy <span class="it">Policy</span></h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 0 clamp(72px,8vw,120px);">
+  <div class="wrap">
+    <div class="legal-wrap">
+      <p class="legal-meta">Last updated: 30 May 2026 · Effective immediately · Bengaluru, India</p>
+      <p class="legal-intro">adris.tech ("Adris", "we", "us", or "our") operates the adris.tech website and the Adris desktop application (the "App"). This policy explains what data we collect, why we collect it, and how you can control it. We've written it in plain language — not lawyer-speak.</p>
+
+      <h2>1. Who we are</h2>
+      <p>adris.tech is a software product built and operated from Bengaluru, India. Our primary contact for privacy matters is <a href="mailto:hello@adris.tech">hello@adris.tech</a>.</p>
+
+      <h2>2. Data we collect</h2>
+      <h3>2a. Account data</h3>
+      <p>When you create an account, we collect your email address and a hashed password (managed by Supabase Auth). We do not collect your name unless you provide it.</p>
+
+      <h3>2b. App usage data</h3>
+      <p>The Adris desktop app stores the following <strong>entirely on your device</strong> — it is never sent to our servers unless you explicitly use a cloud feature:</p>
+      <ul>
+        <li>Agent conversations and memory</li>
+        <li>Automation workflow configurations</li>
+        <li>Code projects and file paths</li>
+        <li>Vault (DNS) settings and blocklist preferences</li>
+        <li>API keys you enter via Connect Apps (stored in your OS keychain, never transmitted)</li>
+        <li>Downloaded AI model files</li>
+      </ul>
+
+      <h3>2c. Cloud feature data</h3>
+      <p>If you use Nivara Cloud AI (our server-side model inference), we process your message through our Supabase Edge Function and log token usage to enforce plan limits. We do not store message content beyond the immediate request/response cycle.</p>
+
+      <h3>2d. Payment data</h3>
+      <p>Payments are processed by Razorpay. We never see or store your card number, UPI PIN, or bank credentials. We receive a payment confirmation and subscription status from Razorpay's webhook.</p>
+
+      <h3>2e. Website analytics</h3>
+      <p>Our website may use privacy-respecting analytics (no cookies, no fingerprinting, no cross-site tracking). We collect only aggregate page view counts and referral sources.</p>
+
+      <h3>2f. Affiliate applications</h3>
+      <p>If you apply for our affiliate program, we store your name, email, website URL, audience description, and promotion plan. This data is used only to review your application and manage the affiliate relationship.</p>
+
+      <h2>3. How we use your data</h2>
+      <ul>
+        <li>To provide and operate the App and website</li>
+        <li>To send transactional emails (account verification, payment receipts, affiliate payouts)</li>
+        <li>To enforce plan limits and prevent abuse</li>
+        <li>To respond to support requests</li>
+        <li>To improve the product (using aggregate, anonymised patterns only)</li>
+      </ul>
+      <p>We do not sell your data. We do not use your data for advertising.</p>
+
+      <h2>4. Data sharing</h2>
+      <p>We share data only with the following sub-processors, strictly for the purpose of operating the service:</p>
+      <ul>
+        <li><strong>Supabase</strong> — database and authentication (hosted in AWS ap-south-1, Mumbai)</li>
+        <li><strong>Razorpay</strong> — payment processing (India-based, RBI-regulated)</li>
+        <li><strong>Google (Gemini API)</strong> — AI inference for Nivara Cloud mode only</li>
+        <li><strong>Cloudflare R2</strong> — file storage for uploaded assets (optional feature)</li>
+      </ul>
+      <p>We do not share data with any advertising networks, data brokers, or third-party analytics companies.</p>
+
+      <h2>5. Data retention</h2>
+      <ul>
+        <li>Account data: retained until you delete your account</li>
+        <li>Token usage logs: retained for 90 days for billing verification</li>
+        <li>Affiliate application data: retained for 3 years from the date of application</li>
+        <li>Payment records: retained for 7 years as required by Indian GST law</li>
+      </ul>
+
+      <h2>6. Your rights</h2>
+      <p>You have the right to:</p>
+      <ul>
+        <li>Access the data we hold about you</li>
+        <li>Correct inaccurate data</li>
+        <li>Delete your account and associated data (email us to request)</li>
+        <li>Export your data in a portable format</li>
+        <li>Withdraw consent where processing is consent-based</li>
+      </ul>
+      <p>To exercise any of these rights, email <a href="mailto:hello@adris.tech">hello@adris.tech</a> with the subject "Data Request". We respond within 7 business days.</p>
+
+      <h2>7. Cookies</h2>
+      <p>The Adris desktop app does not use cookies. The website uses strictly necessary cookies only (session state for the theme toggle and tour progress). No third-party tracking cookies are set.</p>
+
+      <h2>8. Security</h2>
+      <p>All data in transit is encrypted via TLS 1.2+. Data at rest in Supabase is AES-256 encrypted. API keys you enter in the App are stored in your operating system's native keychain (Windows Credential Manager), not in our database. We perform regular security audits and notify affected users within 72 hours of a confirmed data breach.</p>
+
+      <h2>9. Children's privacy</h2>
+      <p>Adris is not directed at children under 13. We do not knowingly collect data from children. If you believe we have inadvertently collected data from a child, email us immediately and we will delete it.</p>
+
+      <h2>10. Changes to this policy</h2>
+      <p>We may update this policy as the product evolves. We will notify you of material changes by email (if you have an account) and by updating the "Last updated" date above. Continued use of the App after the effective date constitutes acceptance.</p>
+
+      <h2>11. Contact</h2>
+      <p>Privacy questions, data requests, or concerns:</p>
+      <ul>
+        <li>Email: <a href="mailto:hello@adris.tech">hello@adris.tech</a></li>
+        <li>Subject line: "Privacy" or "Data Request"</li>
+        <li>Response time: within 7 business days</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="NIVARA.html">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="privacy.html" style="color:var(--accent);">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+          <li><a href="affiliates.html">Affiliate Terms</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="NIVARA.html#platform">About</a></li>
+          <li><a href="NIVARA.html#modules">Modules</a></li>
+          <li><a href="NIVARA.html#pricing">Pricing</a></li>
+          <li><a href="download.html">Download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="mailto:hello@adris.tech">hello@adris.tech</a></li>
+          <li><a href="affiliates.html">Affiliate program</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+</body>
+</html>

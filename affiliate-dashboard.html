@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Affiliate Dashboard — adris.tech</title>
+<meta name="description" content="Your adris.tech affiliate dashboard — referrals, earnings, and payouts." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+
+<style>
+/* ── LAYOUT ── */
+.dash-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+@media (max-width:800px) { .dash-shell { grid-template-columns: 1fr; } }
+
+/* ── SIDEBAR ── */
+.dash-side {
+  border-right: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+  padding: 28px 0;
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+@media (max-width:800px) { .dash-side { display:none; } }
+.dash-brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 24px 28px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 16px;
+}
+.dash-brand svg { width:22px; height:20px; color:var(--ink); }
+.dash-brand .name { font-size:14px; font-weight:600; letter-spacing:-0.02em; }
+.dash-brand .name span { color:var(--muted-2); font-weight:400; }
+.dash-nav { list-style:none; padding:0 12px; flex:1; }
+.dash-nav li a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  font-size: 13px; font-weight:500;
+  color: var(--muted);
+  border-radius: 6px;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.dash-nav li a:hover { background: var(--paper); color: var(--ink); }
+.dash-nav li a.active { background: var(--ink); color: var(--paper); }
+.dash-nav li a svg { width:16px; height:16px; opacity:0.7; flex-shrink:0; }
+.dash-nav li a.active svg { opacity:1; }
+.dash-meta {
+  padding: 20px 24px 0;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted-2);
+}
+.tier-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  margin-top: 8px;
+}
+.tier-badge::before { content:""; width:5px; height:5px; background:var(--accent-ink); border-radius:50%; }
+
+/* ── MAIN ── */
+.dash-main { overflow-x: hidden; }
+
+/* ── TOP BAR ── */
+.dash-topbar {
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--paper);
+  position: sticky; top: 0; z-index: 10;
+}
+.dash-topbar .greeting { font-size:14px; font-weight:500; color:var(--ink); }
+.dash-topbar .greeting .muted { color:var(--muted); font-weight:400; }
+.logout-btn {
+  padding: 6px 14px;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.logout-btn:hover { color:var(--ink); border-color:var(--ink); }
+
+/* ── CONTENT ── */
+.dash-content { padding: clamp(24px,3vw,40px) clamp(20px,3vw,40px); }
+
+/* ── STAT ROW ── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rule-strong);
+  border: 1px solid var(--rule-strong);
+  margin-bottom: 32px;
+}
+@media (max-width:1100px) { .stat-row { grid-template-columns: 1fr 1fr; } }
+@media (max-width:560px)  { .stat-row { grid-template-columns: 1fr; } }
+.stat-cell {
+  background: var(--paper);
+  padding: 24px 26px 20px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.stat-cell .slbl { font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted-2); }
+.stat-cell .sval { font-size:clamp(28px,3vw,44px); font-weight:500; letter-spacing:-0.04em; line-height:1; color:var(--ink); }
+.stat-cell .ssub { font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--muted-2); margin-top:4px; }
+.stat-cell.acc  { background:var(--ink); }
+.stat-cell.acc .slbl { color:rgba(242,239,233,0.5); }
+.stat-cell.acc .sval { color:var(--accent); }
+.stat-cell.acc .ssub { color:rgba(242,239,233,0.4); }
+
+/* ── REFERRAL LINK BOX ── */
+.ref-box {
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.ref-box .rl { font-family:var(--font-mono); font-size:13px; color:var(--ink); flex:1; min-width:200px; }
+.ref-box .rl .domain { color:var(--muted-2); }
+.ref-copy {
+  padding: 10px 18px;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: none; cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.ref-copy:hover { background: var(--accent); }
+.ref-copy.copied { background: #16a34a; }
+
+/* ── TWO-COL GRID ── */
+.dash-grid { display:grid; grid-template-columns:1.6fr 1fr; gap:24px; }
+@media (max-width:960px) { .dash-grid { grid-template-columns:1fr; } }
+
+/* ── TABLE ── */
+.dash-table {
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+}
+.dash-table .dth {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--rule-strong);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dash-table .dth h3 { font-size:14px; font-weight:600; letter-spacing:-0.01em; }
+.dash-table .dth .dtag { font-family:var(--font-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted-2); }
+table { width:100%; border-collapse:collapse; }
+th { font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted-2); padding:10px 20px; text-align:left; border-bottom:1px solid var(--rule); }
+td { font-size:13px; color:var(--ink); padding:12px 20px; border-bottom:1px solid var(--rule); }
+tr:last-child td { border-bottom:none; }
+.badge {
+  display:inline-block; padding:2px 8px;
+  font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+}
+.badge.paid { background:rgba(22,163,74,0.12); color:#16a34a; }
+.badge.pending { background:rgba(124,92,255,0.12); color:var(--accent); }
+.badge.active { background:rgba(22,163,74,0.12); color:#16a34a; }
+.badge.inactive { background:rgba(120,113,108,0.12); color:var(--muted); }
+
+/* ── PAYOUT PANEL ── */
+.payout-panel {
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+}
+.payout-panel .pph {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--rule-strong);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.payout-panel .pph h3 { font-size:14px; font-weight:600; letter-spacing:-0.01em; }
+.payout-panel .pph .ptag { font-family:var(--font-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted-2); }
+.payout-body { padding: 20px; }
+.payout-amt {
+  font-size: 48px; font-weight:500; letter-spacing:-0.05em; line-height:1;
+  color: var(--ink); margin-bottom: 6px;
+}
+.payout-amt .cur { font-size:22px; opacity:0.5; margin-right:2px; vertical-align:super; }
+.payout-note { font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; color:var(--muted-2); margin-bottom:24px; }
+.payout-line {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; border-top:1px solid var(--rule);
+  font-size:13px; color:var(--muted);
+}
+.payout-line b { color:var(--ink); font-weight:500; }
+.payout-line .acc { color:var(--accent); font-weight:500; }
+
+/* ── LOGIN GATE ── */
+.gate {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 20px;
+}
+.gate-box {
+  width: 100%; max-width: 400px;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  padding: 40px 36px;
+}
+.gate-box .gtag { font-family:var(--font-mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; }
+.gate-box h2 { font-size:26px; font-weight:500; letter-spacing:-0.025em; margin-bottom:6px; }
+.gate-box .gsub { font-size:14px; color:var(--muted); margin-bottom:28px; }
+.gate-field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+.gate-field label { font-family:var(--font-mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); }
+.gate-field input {
+  background:var(--paper); border:1px solid var(--rule-strong);
+  padding:11px 14px; font-size:14px; color:var(--ink); width:100%;
+  transition:border-color 0.2s;
+}
+.gate-field input:focus { outline:none; border-color:var(--accent); }
+.gate-submit {
+  width:100%; padding:13px;
+  background:var(--ink); color:var(--paper);
+  border:1px solid var(--ink); font-size:14px; font-weight:500;
+  cursor:pointer; transition:all 0.2s; margin-top:8px;
+}
+.gate-submit:hover { background:var(--accent); border-color:var(--accent); }
+.gate-err { font-size:13px; color:#dc2626; margin-top:10px; display:none; }
+.gate-note { font-size:12px; color:var(--muted-2); margin-top:16px; }
+.gate-note a { color:var(--accent); }
+
+/* ink-mode fixes */
+[data-theme="ink"] .dash-side { background:var(--paper-3); }
+[data-theme="ink"] .stat-cell { background:var(--paper-2); }
+[data-theme="ink"] .stat-cell.acc { background:var(--paper-3); }
+[data-theme="ink"] .ref-box, [data-theme="ink"] .dash-table, [data-theme="ink"] .payout-panel { background:var(--paper-2); }
+</style>
+</head>
+<body>
+
+<!-- ============== LOGIN GATE ============== -->
+<div class="gate" id="loginGate">
+  <div class="gate-box">
+    <div class="gtag">// Affiliate Portal</div>
+    <h2>Sign <span class="it">in</span></h2>
+    <p class="gsub">Use the email you applied with. Only approved affiliates can access this dashboard.</p>
+    <form id="loginForm">
+      <div class="gate-field">
+        <label>Email <span style="color:var(--accent)">*</span></label>
+        <input type="email" id="gEmail" placeholder="rahul@gmail.com" required />
+      </div>
+      <div class="gate-field">
+        <label>Password <span style="color:var(--accent)">*</span></label>
+        <input type="password" id="gPass" placeholder="••••••••" required />
+      </div>
+      <button class="gate-submit" type="submit" id="loginBtn">Sign in to dashboard</button>
+      <p class="gate-err" id="gateErr"></p>
+    </form>
+    <p class="gate-note">Not an affiliate yet? <a href="affiliates.html#apply">Apply here →</a><br/>
+    Forgot password? <a href="#" id="forgotLink">Reset via email</a></p>
+  </div>
+</div>
+
+<!-- ============== DASHBOARD (hidden until auth) ============== -->
+<div class="dash-shell" id="dashShell" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-side">
+    <div class="dash-brand">
+      <svg viewBox="0 0 26 24" fill="none">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span class="name">adris<span>.tech</span></span>
+    </div>
+    <ul class="dash-nav">
+      <li><a href="#" class="active">
+        <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" fill="currentColor"/><rect x="9" y="1" width="6" height="6" fill="currentColor" opacity="0.5"/><rect x="1" y="9" width="6" height="6" fill="currentColor" opacity="0.5"/><rect x="9" y="9" width="6" height="6" fill="currentColor"/></svg>
+        Overview
+      </a></li>
+      <li><a href="#">
+        <svg viewBox="0 0 16 16" fill="none"><circle cx="6" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 7l2-2M9 9l2 2" stroke="currentColor" stroke-width="1.5"/></svg>
+        Referrals
+      </a></li>
+      <li><a href="#">
+        <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="9" stroke="currentColor" stroke-width="1.5"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.5"/></svg>
+        Earnings
+      </a></li>
+      <li><a href="#">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5"/></svg>
+        Payouts
+      </a></li>
+      <li><a href="#">
+        <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="currentColor" stroke-width="1.5"/></svg>
+        Profile &amp; UPI
+      </a></li>
+    </ul>
+    <div class="dash-meta">
+      <div>Your tier</div>
+      <div class="tier-badge" id="sideTier">Starter · 10%</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- TOP BAR -->
+    <div class="dash-topbar">
+      <div class="greeting">Good work, <span id="greetName">—</span> <span class="muted">· Affiliate dashboard</span></div>
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="dash-content">
+
+      <!-- STAT ROW -->
+      <div class="stat-row">
+        <div class="stat-cell acc">
+          <span class="slbl">// Unpaid earnings</span>
+          <span class="sval"><span style="font-size:0.45em;opacity:0.6;vertical-align:super;">₹</span><span id="statUnpaid">0</span></span>
+          <span class="ssub">Pays out 7th of next month</span>
+        </div>
+        <div class="stat-cell">
+          <span class="slbl">// Active referrals</span>
+          <span class="sval" id="statActive">0</span>
+          <span class="ssub">Paid plan users</span>
+        </div>
+        <div class="stat-cell">
+          <span class="slbl">// Total earned</span>
+          <span class="sval"><span style="font-size:0.45em;opacity:0.5;vertical-align:super;">₹</span><span id="statTotal">0</span></span>
+          <span class="ssub">All time</span>
+        </div>
+        <div class="stat-cell">
+          <span class="slbl">// Commission rate</span>
+          <span class="sval" id="statRate">10<span style="font-size:0.5em;opacity:0.6;">%</span></span>
+          <span class="ssub" id="statTierName">Starter tier</span>
+        </div>
+      </div>
+
+      <!-- REFERRAL LINK -->
+      <div class="ref-box">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px;">Your referral link</div>
+          <div class="rl"><span class="domain">adris.tech/?ref=</span><span id="refCode" style="color:var(--accent);font-weight:600;">—</span></div>
+        </div>
+        <button class="ref-copy" id="copyBtn" onclick="copyRef()">Copy link</button>
+      </div>
+
+      <!-- TABLE + PAYOUT -->
+      <div class="dash-grid">
+
+        <!-- REFERRALS TABLE -->
+        <div class="dash-table">
+          <div class="dth">
+            <h3>Recent referrals</h3>
+            <span class="dtag" id="refCount">0 total</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Plan</th>
+                <th>Since</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="refTableBody">
+              <tr><td colspan="4" style="text-align:center;color:var(--muted-2);padding:32px 20px;">No referrals yet — share your link to get started.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAYOUT PANEL -->
+        <div class="payout-panel">
+          <div class="pph">
+            <h3>Next payout</h3>
+            <span class="ptag" id="payoutDate">—</span>
+          </div>
+          <div class="payout-body">
+            <div class="payout-amt"><span class="cur">₹</span><span id="payoutAmt">0</span></div>
+            <div class="payout-note">Estimated · final on <span id="payoutFinal">—</span></div>
+            <div class="payout-line"><span>Commission rate</span><span class="acc" id="plRate">10%</span></div>
+            <div class="payout-line"><span>Active referrals</span><b id="plActive">0</b></div>
+            <div class="payout-line"><span>Minimum threshold</span><b>₹500</b></div>
+            <div class="payout-line"><span>Payout method</span><b id="plMethod">UPI (not set)</b></div>
+            <div style="margin-top:20px;">
+              <a href="#" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid currentColor;">Add UPI / bank details →</a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /dash-grid -->
+
+      <!-- COMMISSION HISTORY -->
+      <div class="dash-table" style="margin-top:24px;">
+        <div class="dth">
+          <h3>Commission history</h3>
+          <span class="dtag">by month</span>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Month</th><th>Referrals</th><th>Rate</th><th>Commission</th><th>Status</th></tr>
+          </thead>
+          <tbody id="commTableBody">
+            <tr><td colspan="5" style="text-align:center;color:var(--muted-2);padding:32px 20px;">No commission history yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div><!-- /dash-content -->
+  </main>
+</div><!-- /dash-shell -->
+
+<script>
+const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+
+let currentSession = null;
+let affiliateData  = null;
+
+// ── Theme (reuse shared.js logic inline since we don't load it here) ──
+const saved = localStorage.getItem('theme') || 'paper';
+document.documentElement.setAttribute('data-theme', saved);
+
+// ── Auth helpers ──
+async function supaFetch(path, opts = {}) {
+  const headers = { 'apikey': SUPA_ANON, 'Content-Type': 'application/json', ...opts.headers };
+  if (currentSession?.access_token) headers['Authorization'] = 'Bearer ' + currentSession.access_token;
+  const res = await fetch(SUPA_URL + path, { ...opts, headers });
+  if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error_description || e.message || res.statusText); }
+  return res.status === 204 ? null : res.json();
+}
+
+async function signIn(email, password) {
+  const data = await supaFetch('/auth/v1/token?grant_type=password', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+  return data;
+}
+
+async function signOut() {
+  if (currentSession) {
+    await supaFetch('/auth/v1/logout', { method: 'POST' }).catch(() => {});
+  }
+  currentSession = null;
+  affiliateData = null;
+  localStorage.removeItem('aff_session');
+  showGate();
+}
+
+async function loadAffiliate() {
+  // Fetch affiliate row for this user
+  const rows = await supaFetch('/rest/v1/affiliates?select=*&limit=1', {
+    headers: { 'Accept': 'application/json' }
+  });
+  if (!rows || rows.length === 0) return null;
+  return rows[0];
+}
+
+async function loadClicks() {
+  if (!affiliateData) return [];
+  return supaFetch(`/rest/v1/affiliate_clicks?affiliate_id=eq.${affiliateData.id}&select=*&order=created_at.desc&limit=50`).catch(() => []);
+}
+
+async function loadCommissions() {
+  if (!affiliateData) return [];
+  return supaFetch(`/rest/v1/affiliate_commissions?affiliate_id=eq.${affiliateData.id}&select=*&order=period_month.desc&limit=12`).catch(() => []);
+}
+
+// ── UI helpers ──
+function inr(n) { return Math.round(n).toLocaleString('en-IN'); }
+
+function tierLabel(t) {
+  const map = { starter:'Starter · 10%', builder:'Builder · 13%', partner:'Partner · 16%', elite:'Elite · 20%' };
+  return map[t] || 'Starter · 10%';
+}
+function tierRate(t) {
+  const map = { starter:10, builder:13, partner:16, elite:20 };
+  return map[t] || 10;
+}
+
+function nextPayoutDate() {
+  const now = new Date();
+  const d7 = new Date(now.getFullYear(), now.getMonth() + (now.getDate() >= 7 ? 1 : 0), 7);
+  return d7.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function showGate() {
+  document.getElementById('loginGate').style.display = 'flex';
+  document.getElementById('dashShell').style.display = 'none';
+}
+
+function showDash() {
+  document.getElementById('loginGate').style.display = 'none';
+  document.getElementById('dashShell').style.display = 'grid';
+}
+
+function populateDash(aff, commissions) {
+  const rate = tierRate(aff.tier);
+  const unpaidRs = Math.round(aff.unpaid_paise / 100);
+  const totalRs  = Math.round(aff.total_earned_paise / 100);
+
+  document.getElementById('greetName').textContent   = aff.first_name;
+  document.getElementById('refCode').textContent     = aff.ref_code;
+  document.getElementById('statUnpaid').textContent  = inr(unpaidRs);
+  document.getElementById('statActive').textContent  = aff.active_referrals;
+  document.getElementById('statTotal').textContent   = inr(totalRs);
+  document.getElementById('statRate').innerHTML      = rate + '<span style="font-size:0.5em;opacity:0.6;">%</span>';
+  document.getElementById('statTierName').textContent = aff.tier.charAt(0).toUpperCase() + aff.tier.slice(1) + ' tier';
+  document.getElementById('sideTier').textContent   = tierLabel(aff.tier);
+  document.getElementById('payoutAmt').textContent  = inr(unpaidRs);
+  document.getElementById('payoutDate').textContent = 'Due ' + nextPayoutDate();
+  document.getElementById('payoutFinal').textContent = nextPayoutDate();
+  document.getElementById('plRate').textContent     = rate + '%';
+  document.getElementById('plActive').textContent   = aff.active_referrals;
+  document.getElementById('refCount').textContent   = aff.active_referrals + ' active';
+
+  if (commissions && commissions.length > 0) {
+    const tbody = document.getElementById('commTableBody');
+    tbody.innerHTML = commissions.map(c => `
+      <tr>
+        <td>${c.period_month}</td>
+        <td>${c.active_referrals ?? '—'}</td>
+        <td>${Math.round(c.commission_rate)}%</td>
+        <td>₹${inr(Math.round(c.commission_paise / 100))}</td>
+        <td><span class="badge ${c.status === 'paid' ? 'paid' : 'pending'}">${c.status}</span></td>
+      </tr>
+    `).join('');
+  }
+}
+
+function copyRef() {
+  const code = document.getElementById('refCode').textContent;
+  if (code === '—') return;
+  const url = `https://adris.tech/?ref=${code}`;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy link'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── Restore session ──
+async function tryRestoreSession() {
+  const saved = localStorage.getItem('aff_session');
+  if (!saved) return false;
+  try {
+    const s = JSON.parse(saved);
+    if (Date.now() > s.expires_at * 1000) { localStorage.removeItem('aff_session'); return false; }
+    currentSession = s;
+    const aff = await loadAffiliate();
+    if (!aff) { showGate(); return false; }
+    affiliateData = aff;
+    const comms = await loadCommissions();
+    populateDash(aff, comms);
+    showDash();
+    return true;
+  } catch { localStorage.removeItem('aff_session'); return false; }
+}
+
+// ── Login form ──
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('gateErr');
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+  err.style.display = 'none';
+  try {
+    const session = await signIn(
+      document.getElementById('gEmail').value.trim(),
+      document.getElementById('gPass').value
+    );
+    currentSession = session;
+    localStorage.setItem('aff_session', JSON.stringify(session));
+    const aff = await loadAffiliate();
+    if (!aff) {
+      err.textContent = 'Your application is pending review or has not been approved yet.';
+      err.style.display = 'block';
+      currentSession = null;
+      localStorage.removeItem('aff_session');
+      return;
+    }
+    affiliateData = aff;
+    const comms = await loadCommissions();
+    populateDash(aff, comms);
+    showDash();
+  } catch (ex) {
+    err.textContent = ex.message || 'Sign-in failed. Check your email and password.';
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign in to dashboard';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', signOut);
+
+document.getElementById('forgotLink').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('gEmail').value.trim();
+  if (!email) { alert('Enter your email address first.'); return; }
+  try {
+    await supaFetch('/auth/v1/recover', { method:'POST', body:JSON.stringify({ email }) });
+    alert('Password reset email sent — check your inbox.');
+  } catch (ex) { alert('Error: ' + ex.message); }
+});
+
+// ── Boot ──
+tryRestoreSession().then(restored => { if (!restored) showGate(); });
+</script>
+</body>
+</html>
