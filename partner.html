@@ -99,13 +99,13 @@
 
 .partner-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1px;
   background: var(--rule-strong);
   border: 1px solid var(--rule-strong);
   margin: clamp(48px, 6vw, 80px) 0;
 }
-@media (max-width: 860px) { .partner-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .partner-grid { grid-template-columns: 1fr; } }
 
 .ptype-card {
   background: var(--paper);
@@ -294,39 +294,52 @@
   color: var(--muted);
 }
 
-/* What we're open to section */
-.open-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: var(--rule-strong);
+/* What we're open to — button list */
+.open-btns {
+  margin-top: 36px;
   border: 1px solid var(--rule-strong);
-  margin-top: 40px;
 }
-@media (max-width: 640px) { .open-grid { grid-template-columns: 1fr; } }
-.open-card {
+.open-btn {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  width: 100%;
   background: var(--paper);
-  padding: 28px 26px;
-  display: flex; flex-direction: column; gap: 10px;
+  border: none;
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 22px 28px 22px 0;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+  text-decoration: none;
+  color: inherit;
 }
-.open-card .oc-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
+.open-btn:last-child { border-bottom: none; }
+.open-btn:hover { background: var(--paper-2); }
+.ob-num {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted-2); padding-left: 28px; flex-shrink: 0;
 }
-.open-card .oc-title {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+.ob-body { display: flex; flex-direction: column; gap: 2px; }
+.ob-tag {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 2px;
 }
-.open-card .oc-desc {
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--ink-2);
+.ob-title {
+  font-size: 16px; font-weight: 600;
+  letter-spacing: -0.02em; color: var(--ink);
 }
+.ob-desc {
+  font-size: 13px; color: var(--ink-2);
+  line-height: 1.5; margin-top: 4px; max-width: 60ch;
+}
+.ob-arrow {
+  flex-shrink: 0; margin-left: 24px;
+  color: var(--muted); transition: transform 0.15s, color 0.15s;
+}
+.open-btn:hover .ob-arrow { color: var(--ink); transform: translate(3px,-3px); }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -436,27 +449,43 @@
       <p class="msec-sub">We're a small team. We respond to every serious request — no corporate gatekeeping.</p>
     </div>
 
-    <div class="open-grid">
-      <div class="open-card">
-        <span class="oc-label">01 · MCP & Tools</span>
-        <span class="oc-title">Showcase your MCP or tool</span>
-        <p class="oc-desc">Built an MCP server, VS Code extension, CLI tool, or API that developers and builders would love? Get it in front of adris.tech users directly inside the app — in the MCP marketplace or as a featured integration in Krew.</p>
-      </div>
-      <div class="open-card">
-        <span class="oc-label">02 · Service Exchange</span>
-        <span class="oc-title">Give ↔ receive services</span>
-        <p class="oc-desc">Your company offers something we need (design, legal, infra, cloud credits) — and in return you get adris.tech licenses, integrations, or co-marketing. Mutual value, no middlemen. Common with SaaS companies and agencies.</p>
-      </div>
-      <div class="open-card">
-        <span class="oc-label">03 · Business Proposal</span>
-        <span class="oc-title">Collaborate commercially</span>
-        <p class="oc-desc">Resell our platform to your customers, embed adris.tech in your product, co-market to your audience, or propose an investment/acquisition conversation. If it creates value for Indian builders, we want to hear it.</p>
-      </div>
-      <div class="open-card">
-        <span class="oc-label">04 · Contact / Other</span>
-        <span class="oc-title">Reach out directly</span>
-        <p class="oc-desc">Press, feedback, complaints, integrations that don't fit the above, or anything else. This is also the primary contact channel for adris.tech — we read every submission. Response time: 24–48 hours.</p>
-      </div>
+    <div class="open-btns">
+      <button class="open-btn" data-select="mcp_showcase">
+        <span class="ob-num">01</span>
+        <span class="ob-body">
+          <span class="ob-tag">MCP &amp; Tools</span>
+          <span class="ob-title">Showcase your MCP or tool</span>
+          <span class="ob-desc">Built an MCP server, VS Code extension, CLI tool, or API that developers would love? Get it in front of adris.tech users directly inside the app.</span>
+        </span>
+        <svg class="ob-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 14L14 2M14 2H4M14 2V12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="open-btn" data-select="service_exchange">
+        <span class="ob-num">02</span>
+        <span class="ob-body">
+          <span class="ob-tag">Service Exchange</span>
+          <span class="ob-title">Give ↔ receive services</span>
+          <span class="ob-desc">Your company offers something we need (design, legal, infra, cloud credits) — and in return you get licenses, integrations, or co-marketing. Mutual value, no middlemen.</span>
+        </span>
+        <svg class="ob-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 14L14 2M14 2H4M14 2V12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="open-btn" data-select="business_proposal">
+        <span class="ob-num">03</span>
+        <span class="ob-body">
+          <span class="ob-tag">Business Proposal</span>
+          <span class="ob-title">Collaborate commercially</span>
+          <span class="ob-desc">Resell our platform, embed adris.tech in your product, co-market to your audience, or propose an investment conversation. If it creates value for Indian builders, we want to hear it.</span>
+        </span>
+        <svg class="ob-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 14L14 2M14 2H4M14 2V12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="open-btn" data-select="other">
+        <span class="ob-num">04</span>
+        <span class="ob-body">
+          <span class="ob-tag">Contact / Other</span>
+          <span class="ob-title">Reach out directly</span>
+          <span class="ob-desc">Press, feedback, complaints, or anything that doesn't fit above. This is the primary contact channel for adris.tech — we read every submission. Response: 24–48 h.</span>
+        </span>
+        <svg class="ob-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 14L14 2M14 2H4M14 2V12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -532,6 +561,16 @@
         </div>
         <span class="ptype-label">Business proposal</span>
         <span class="ptype-desc">Resell, embed, invest, co-market, or propose a commercial collaboration involving adris.tech.</span>
+      </label>
+
+      <label class="ptype-card" data-type="other">
+        <input type="radio" name="partnership_type" value="other" />
+        <div class="ptype-check"></div>
+        <div class="ptype-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M9 8v1m0 3h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <span class="ptype-label">Contact / Other</span>
+        <span class="ptype-desc">Press, feedback, complaints, or anything else — this is the primary contact channel for adris.tech.</span>
       </label>
     </div>
 
@@ -641,18 +680,38 @@
   var SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
   var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
 
-  // Type card selection
+  // Type card selection in apply form
   var cards = document.querySelectorAll('.ptype-card');
+  function selectCard(value) {
+    cards.forEach(function (c) {
+      var radio = c.querySelector('input[type="radio"]');
+      var match = radio && radio.value === value;
+      c.classList.toggle('selected', match);
+      if (match) radio.checked = true;
+    });
+  }
   cards.forEach(function (card) {
     card.addEventListener('click', function () {
-      cards.forEach(function (c) { c.classList.remove('selected'); });
-      card.classList.add('selected');
       var radio = card.querySelector('input[type="radio"]');
-      if (radio) radio.checked = true;
+      selectCard(radio ? radio.value : '');
     });
   });
   // Select first by default
-  if (cards.length > 0) cards[0].click();
+  if (cards.length > 0) {
+    var firstRadio = cards[0].querySelector('input[type="radio"]');
+    selectCard(firstRadio ? firstRadio.value : '');
+  }
+
+  // "What we're open to" buttons → scroll to form + pre-select type
+  document.querySelectorAll('.open-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var type = btn.getAttribute('data-select');
+      // Map 'other' to the first card value if no card matches
+      selectCard(type);
+      var applySection = document.getElementById('apply');
+      if (applySection) applySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
 
   // Form submission
   var form   = document.getElementById('partnerForm');
