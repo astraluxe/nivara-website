@@ -232,27 +232,33 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 28px;
-  background: var(--ink);
-  color: var(--paper);
+  height: 48px;
+  padding: 0 28px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
   font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  border: none;
   cursor: pointer;
-  transition: opacity 0.18s;
+  transition: transform 0.2s ease, opacity 0.2s ease;
   align-self: flex-start;
+  white-space: nowrap;
 }
-.partner-submit:hover { opacity: 0.85; }
-.partner-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+.partner-submit:hover { transform: translateY(-1px); }
+.partner-submit:hover .ps-arrow { transform: translate(2px,-2px); }
+.partner-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.ps-arrow { transition: transform 0.2s ease; flex-shrink: 0; }
 .partner-submit .spin {
   width: 14px; height: 14px;
-  border: 2px solid rgba(255,255,255,.3);
-  border-top-color: #fff;
+  border: 2px solid rgba(255,255,255,.35);
+  border-top-color: var(--accent-ink);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   display: none;
+  flex-shrink: 0;
 }
 .partner-submit.loading .spin { display: block; }
 .partner-submit.loading .btn-label { display: none; }
@@ -608,10 +614,8 @@
 
       <button type="submit" class="partner-submit" id="submitBtn">
         <span class="spin"></span>
-        <span class="btn-label">
-          Send request
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="margin-left:6px;vertical-align:-1px;"><path d="M1 11L11 1M11 1H2M11 1V10" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-        </span>
+        <span class="btn-label">Send request</span>
+        <svg class="ps-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H2M11 1V10" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
       </button>
     </form>
 
