@@ -3,8 +3,20 @@
   "installCommand": "echo done",
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/", "destination": "/NIVARA.html" },
-    { "source": "/download", "destination": "/download.html" },
-    { "source": "/affiliates", "destination": "/affiliates.html" }
+    { "source": "/",                    "destination": "/NIVARA.html" },
+    { "source": "/download",            "destination": "/download.html" },
+    { "source": "/affiliates",          "destination": "/affiliates.html" },
+    { "source": "/partner",             "destination": "/partner.html" },
+    { "source": "/terms",               "destination": "/terms.html" },
+    { "source": "/privacy",             "destination": "/privacy.html" },
+    { "source": "/affiliate-dashboard", "destination": "/affiliate-dashboard.html" },
+    { "source": "/modules/krew",        "destination": "/modules/krew.html" },
+    { "source": "/modules/krew-chat",   "destination": "/modules/krew-chat.html" },
+    { "source": "/modules/automation",  "destination": "/modules/automation.html" },
+    { "source": "/modules/coder",       "destination": "/modules/coder.html" },
+    { "source": "/modules/models",      "destination": "/modules/models.html" },
+    { "source": "/modules/vault",       "destination": "/modules/vault.html" },
+    { "source": "/modules/guard",       "destination": "/modules/guard.html" },
+    { "source": "/modules/mesh",        "destination": "/modules/mesh.html" }
   ]
 }
