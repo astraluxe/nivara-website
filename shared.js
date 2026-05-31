@@ -1,12 +1,12 @@
 ﻿/* ============================================
-   Nivara · shared front-end logic
+   adris.tech · shared front-end logic
    Used by all pages (homepage + modules)
 ============================================ */
 
 // ---- Theme toggle (Paper / Ink) — persisted to localStorage
 (function() {
   const root = document.documentElement;
-  const stored = localStorage.getItem('nivara-theme');
+  const stored = localStorage.getItem('adris-theme');
   if (stored === 'ink' || stored === 'paper') {
     if (stored === 'ink') root.setAttribute('data-theme', 'ink');
     else root.removeAttribute('data-theme');
@@ -19,7 +19,7 @@
       const next = cur === 'ink' ? 'paper' : 'ink';
       if (next === 'paper') root.removeAttribute('data-theme');
       else root.setAttribute('data-theme', next);
-      localStorage.setItem('nivara-theme', next);
+      localStorage.setItem('adris-theme', next);
     });
   });
 })();

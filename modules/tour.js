@@ -1,5 +1,5 @@
 ﻿/* ============================================
-   Nivara · Module page tours
+   adris.tech · Module page tours
    Spotlight walkthrough for each product page.
    Auto-detects the current page and injects
    a "Show me around" button into the nav.
@@ -17,17 +17,17 @@ const MODULE_TOURS = {
     {
       target: '.crumb',
       title: "How to navigate back.",
-      body: "This breadcrumb shows where you are. Click <strong>Modules</strong> to return to the Nivara homepage and see all six products side by side.",
+      body: "This breadcrumb shows where you are. Click <strong>Modules</strong> to return to the adris.tech homepage and see all six products side by side.",
     },
     {
       target: '.nav-links',
-      title: "Jump anywhere on Nivara.",
+      title: "Jump anywhere on adris.tech.",
       body: "These nav links take you to any section — Platform overview, all Modules, Pricing and the Waitlist. Always accessible from the top.",
     },
     {
       target: '.mhero',
       title: "Krew is live right now.",
-      body: "Krew is the only Nivara product running in production today. Hit <em>Open Krew</em> in the top-right to go straight to the live dashboard.",
+      body: "Krew is the only adris.tech product running in production today. Hit <em>Open Krew</em> in the top-right to go straight to the live dashboard.",
     },
     {
       target: 'section[data-screen-label="02 Agent grid"]',
@@ -42,7 +42,7 @@ const MODULE_TOURS = {
     {
       target: '.callout',
       title: "Ready to start?",
-      body: "Click here to jump into the live dashboard. Or scroll to the footer to explore the other five Nivara modules.",
+      body: "Click here to jump into the live dashboard. Or scroll to the footer to explore the other five adris.tech modules.",
     },
     {
       target: null,
@@ -57,17 +57,17 @@ const MODULE_TOURS = {
     {
       target: null,
       title: "Welcome to Studio.",
-      body: "Nivara's no-code workflow builder. Connect agents to triggers, schedules and external tools — no code needed.",
+      body: "adris.tech's no-code workflow builder. Connect agents to triggers, schedules and external tools — no code needed.",
       cta: "Start tour",
     },
     {
       target: '.crumb',
       title: "How to navigate back.",
-      body: "Click <strong>Modules</strong> in this breadcrumb to return to the Nivara homepage and see all six products together.",
+      body: "Click <strong>Modules</strong> in this breadcrumb to return to the adris.tech homepage and see all six products together.",
     },
     {
       target: '.nav-links',
-      title: "Jump anywhere on Nivara.",
+      title: "Jump anywhere on adris.tech.",
       body: "Platform, Modules, Pricing, Waitlist — all one click away from the top nav.",
     },
     {
@@ -114,11 +114,11 @@ const MODULE_TOURS = {
     {
       target: '.crumb',
       title: "How to navigate back.",
-      body: "This breadcrumb shows where you are. Click <strong>Modules</strong> to return to the Nivara homepage.",
+      body: "This breadcrumb shows where you are. Click <strong>Modules</strong> to return to the adris.tech homepage.",
     },
     {
       target: '.nav-links',
-      title: "Jump anywhere on Nivara.",
+      title: "Jump anywhere on adris.tech.",
       body: "Use the top nav to jump between Platform, Modules, Pricing or the Waitlist from any page.",
     },
     {
@@ -165,22 +165,22 @@ const MODULE_TOURS = {
     {
       target: '.crumb',
       title: "How to navigate back.",
-      body: "Click <strong>Modules</strong> in this breadcrumb to return to the Nivara homepage and see all six products.",
+      body: "Click <strong>Modules</strong> in this breadcrumb to return to the adris.tech homepage and see all six products.",
     },
     {
       target: '.nav-links',
-      title: "Jump anywhere on Nivara.",
+      title: "Jump anywhere on adris.tech.",
       body: "Platform, Modules, Pricing, Waitlist — all accessible from the top nav on every page.",
     },
     {
       target: '.mhero',
       title: "Models is free, forever.",
-      body: "No paywall, no sign-up needed to browse. The developer acquisition engine for Nivara — bring in builders for free.",
+      body: "No paywall, no sign-up needed to browse. The developer acquisition engine for adris.tech — bring in builders for free.",
     },
     {
       target: 'section[data-screen-label="02 One command"]',
       title: "One-command install.",
-      body: "<code>Nivara models install &lt;name&gt;</code> — that's all. Coder picks it up automatically and you're running locally in minutes.",
+      body: "<code>adris models install &lt;name&gt;</code> — that's all. Coder picks it up automatically and you're running locally in minutes.",
     },
     {
       target: 'section[data-screen-label="03 Compare"]',
@@ -210,23 +210,23 @@ const MODULE_TOURS = {
     {
       target: null,
       title: "Welcome to Vault.",
-      body: "A WireGuard VPN included with every Nivara account — completely free, even on the Explore tier.",
+      body: "A WireGuard VPN included with every adris.tech account — completely free, even on the Explore tier.",
       cta: "Start tour",
     },
     {
       target: '.crumb',
       title: "How to navigate back.",
-      body: "Use this breadcrumb to return to the Nivara modules page at any time.",
+      body: "Use this breadcrumb to return to the adris.tech modules page at any time.",
     },
     {
       target: '.nav-links',
-      title: "Jump anywhere on Nivara.",
+      title: "Jump anywhere on adris.tech.",
       body: "Platform, Modules, Pricing, Waitlist — always one click from the top of every page.",
     },
     {
       target: '.mhero',
       title: "Always on, even when you're not.",
-      body: "Unlike most VPNs, Vault runs in the background automatically — keeping Nivara present on your device every day, not just when you're actively using AI.",
+      body: "Unlike most VPNs, Vault runs in the background automatically — keeping adris.tech present on your device every day, not just when you're actively using AI.",
     },
     {
       target: 'section[data-screen-label="02 One click"]',
@@ -246,7 +246,7 @@ const MODULE_TOURS = {
     {
       target: '.callout',
       title: "Get Vault free.",
-      body: "Join the waitlist and Vault comes with your Nivara account at no extra cost — on every plan including the free Explore tier.",
+      body: "Join the waitlist and Vault comes with your adris.tech account at no extra cost — on every plan including the free Explore tier.",
     },
     {
       target: null,
@@ -267,11 +267,11 @@ const MODULE_TOURS = {
     {
       target: '.crumb',
       title: "How to navigate back.",
-      body: "Use this breadcrumb to return to the Nivara homepage and see all six modules together.",
+      body: "Use this breadcrumb to return to the adris.tech homepage and see all six modules together.",
     },
     {
       target: '.nav-links',
-      title: "Jump anywhere on Nivara.",
+      title: "Jump anywhere on adris.tech.",
       body: "Platform, Modules, Pricing, Waitlist — always accessible from the top nav.",
     },
     {
@@ -309,7 +309,7 @@ const MODULE_TOURS = {
   ],
 };
 
-const TOUR_PREFIX = 'nivara-module-tour-';
+const TOUR_PREFIX = 'adris-module-tour-';
 
 (function () {
 

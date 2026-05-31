@@ -1,19 +1,19 @@
 ﻿/* ============================================
-   Nivara · Product tour overlay
+   adris.tech · Product tour overlay
    Spotlight + tooltip walkthrough
 ============================================ */
 
 const TOUR_STEPS = [
   {
     target: null,
-    title: "Welcome to Nivara.",
+    title: "Welcome to adris.tech.",
     body: "India's AI operating system. Six products, one login. Built in Bengaluru for builders here. Take 30 seconds to look around — or skip and explore yourself.",
     cta: "Start tour",
   },
   {
     target: '[data-tour="modules"]',
     title: "Six products. One ecosystem.",
-    body: "Each card below is a module on the Nivara platform. Krew (agents) is live today. The other five are shipping soon — every card shows its status.",
+    body: "Each card below is a module on the adris.tech platform. Krew (agents) is live today. The other five are shipping soon — every card shows its status.",
   },
   {
     target: '[data-tour="krew-card"]',
@@ -44,7 +44,7 @@ const TOUR_STEPS = [
   },
 ];
 
-const TOUR_KEY = 'nivara-tour-seen';
+const TOUR_KEY = 'adris-tour-seen';
 
 (function() {
   // Inject overlay markup once DOM is ready

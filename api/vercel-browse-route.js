@@ -2,7 +2,7 @@
  * FILE: pages/api/models/browse.js  (place in your krew Next.js project)
  *
  * Proxies the open model catalogue server-side so no third-party URL
- * ever appears in the browser network tab. Returns clean Nivara-branded JSON.
+ * ever appears in the browser network tab. Returns clean adris.tech-branded JSON.
  *
  * GET /api/models/browse?page=0&q=mistral&sort=downloads
  */
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     const searchParam = q ? `&search=${encodeURIComponent(q)}` : '';
     const upstream = await fetch(
       `https://huggingface.co/api/models?filter=gguf&sort=${sort}&limit=${limit}&skip=${skip}&full=true${searchParam}`,
-      { headers: { 'User-Agent': 'NivaraModelsAPI/1.0' } }
+      { headers: { 'User-Agent': 'adris.techModelsAPI/1.0' } }
     );
 
     if (!upstream.ok) throw new Error(`upstream ${upstream.status}`);

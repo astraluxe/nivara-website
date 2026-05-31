@@ -337,9 +337,43 @@
         Download
         <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
       </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="../NIVARA.html#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="../NIVARA.html#modules"   onclick="closeMobileNav()">Modules</a></li>
+      <li><a href="../NIVARA.html#pricing"   onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"                onclick="closeMobileNav()">Download</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+</script>
 
 <!-- COMING SOON BANNER -->
 <div class="cs-banner">
