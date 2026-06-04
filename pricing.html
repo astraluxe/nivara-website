@@ -388,34 +388,9 @@
 }
 .cta-strip .btn-secondary:hover { background: rgba(242,239,233,.06); color: var(--on-dark); }
 
-/* ── Team plan (horizontal bar) ─────────────────────────────── */
-.team-card {
-  display: grid;
-  grid-template-columns: 260px 180px 1fr 160px;
-  gap: 24px;
-  align-items: center;
-  max-width: 100%;
-  padding: 24px 32px;
-}
-.team-info .plan-desc { margin-bottom: 0; max-width: 32ch; }
-.team-price { display: flex; flex-direction: column; }
-.team-features {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 20px;
-  margin-bottom: 0;
-  flex: none;
-}
-.team-cta { white-space: nowrap; }
-
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .plans-grid { grid-template-columns: 1fr; }
-  .team-card {
-    grid-template-columns: 1fr;
-    padding: 24px;
-  }
-  .team-features { grid-template-columns: 1fr; }
   .compare-table { font-size: 12px; }
   .compare-table th, .compare-table td { padding: 10px 10px; }
 }
@@ -650,48 +625,6 @@
         </ul>
         <a href="/download" class="plan-cta">Get Business</a>
       </div>
-
-    <!-- Team plan — horizontal bar -->
-    <p class="plans-section-label" style="margin-top:56px;">Team Plan — Scale AI across your whole organisation</p>
-    <div class="plan-card team-card">
-      <div class="team-info">
-        <div class="plan-name">Team</div>
-        <div class="plan-desc">Centralised billing, shared agent library, team analytics, and a dedicated success manager. Built for companies deploying AI across multiple seats.</div>
-      </div>
-      <div class="team-price">
-        <div class="plan-price india-price">₹24,999<sub>/mo</sub></div>
-        <div class="plan-price intl-price" style="display:none">$399<sub>/mo</sub></div>
-        <div class="plan-price-note india-price">Up to 10 seats · ₹2,500/seat</div>
-        <div class="plan-price-note intl-price" style="display:none">Up to 10 seats · $40/seat</div>
-      </div>
-      <ul class="plan-features team-features">
-        <li>
-          <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-          Everything in Business
-        </li>
-        <li>
-          <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-          10 seats included
-        </li>
-        <li>
-          <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-          Shared agent library
-        </li>
-        <li>
-          <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-          Team analytics &amp; audit logs
-        </li>
-        <li>
-          <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-          Dedicated success manager
-        </li>
-        <li>
-          <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-          Custom AI policies
-        </li>
-      </ul>
-      <a href="mailto:hello@adris.tech" class="plan-cta team-cta">Talk to us →</a>
-    </div>
 
     </div>
   </div>
