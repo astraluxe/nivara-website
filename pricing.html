@@ -260,7 +260,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <li><span class="iy">&#10003;</span>Mesh &mdash; 3 devices</li>
         <li><span class="in">&#10007;</span><span class="dm">Platform AI (bring own key)</span></li>
         <li><span class="in">&#10007;</span><span class="dm">Cloud automations</span></li>
-        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team</span></li>
+        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team workspace</span></li>
       </ul>
     </div>
 
@@ -283,7 +283,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <li><span class="iy">&#10003;</span>Standard AI included<span class="ch">~2,000 tasks/mo</span></li>
         <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">500/mo</span></li>
         <li><span class="iy">&#10003;</span>Mesh &mdash; 10 devices</li>
-        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team</span></li>
+        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team workspace</span></li>
       </ul>
     </div>
 
@@ -307,15 +307,15 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <li><span class="iy">&#10003;</span>Advanced AI included<span class="ch">~8,000 tasks/mo</span></li>
         <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">5,000/mo</span></li>
         <li><span class="iy">&#10003;</span>Mesh &mdash; 25 devices</li>
-        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team</span></li>
+        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team workspace</span></li>
       </ul>
     </div>
 
-    <!-- BUSINESS -->
+    <!-- TEAM -->
     <div class="pc">
       <div class="pb">adris.tech</div>
-      <div class="pn">Business</div>
-      <div class="pt">For teams running a full AI office with security and admin controls.</div>
+      <div class="pn">Team</div>
+      <div class="pt">For teams running a full AI office with security, collaboration, and admin controls.</div>
       <div class="pri">
         <div class="pi">&#8377;19,999<sub>/mo</sub></div>
         <div class="pu">$199 / month</div>
@@ -332,6 +332,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <li><span class="iy">&#10003;</span>Mesh &mdash; 50 devices</li>
         <li><span class="iy">&#10003;</span>Guard (security scanner)</li>
         <li><span class="iy">&#10003;</span>Team workspace + admin controls</li>
+        <li><span class="iy">&#10003;</span>Centralised billing + SSO</li>
         <li><span class="iy">&#10003;</span>Priority support + SLA</li>
       </ul>
     </div>
@@ -340,40 +341,6 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   <p style="font-size:11px;color:var(--mu);margin-top:16px;font-family:var(--font-mono);padding:0 2px">* Unlimited runs on Business are subject to fair use. Task estimates are approximate &mdash; actual usage varies by complexity.</p>
 </section>
 
-<!-- ── TEAM card — wide horizontal below the 4 plans ─────────── -->
-<section class="team-wrap">
-  <div class="tc">
-    <div>
-      <div class="tc-brand">adris.tech</div>
-      <div class="tc-name">
-        Team
-        <span class="tc-soon">Coming soon</span>
-      </div>
-      <div class="tc-desc">Power your whole team with adris.tech. Shared AI budget, centralised billing, team analytics, and a dedicated success manager.</div>
-    </div>
-    <div class="tc-col">
-      <h5>Collaboration</h5>
-      <ul>
-        <li>Up to 10 seats included</li>
-        <li>Shared agent library</li>
-        <li>Team analytics &amp; audit logs</li>
-        <li>Centralised billing &amp; admin</li>
-      </ul>
-    </div>
-    <div class="tc-col">
-      <h5>Enterprise</h5>
-      <ul>
-        <li>Everything in Business</li>
-        <li>SSO (Single sign-on)</li>
-        <li>Custom AI policies</li>
-        <li>Dedicated success manager</li>
-      </ul>
-    </div>
-    <div>
-      <a href="mailto:hello@adris.tech?subject=Team plan enquiry" class="tc-cta">Contact us &rarr;</a>
-    </div>
-  </div>
-</section>
 
 <!-- ── ALL PLANS INCLUDE ──────────────────────────────────────── -->
 <section class="ip">
@@ -404,7 +371,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
             <th class="c">Free</th>
             <th class="c">Solo</th>
             <th class="c hl">Builder &#11088;</th>
-            <th class="c">Business</th>
+            <th class="c">Team</th>
           </tr>
         </thead>
         <tbody>
@@ -506,7 +473,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
 const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
-const PLAN_NAMES = { solo:'Solo', builder:'Builder', pro:'Business' };
+const PLAN_NAMES = { solo:'Solo', builder:'Builder', pro:'Team' };
 
 function openLogin()  { document.getElementById('loginModal').classList.add('open'); }
 function closeLogin() { document.getElementById('loginModal').classList.remove('open'); }
