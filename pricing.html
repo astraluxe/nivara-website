@@ -586,9 +586,26 @@ async function startRazorpayPayment(planKey, session) {
       amount:      order.amount,
       currency:    order.currency,
       name:        'adris.tech',
+      image:       'https://adris.tech/icon.png',
       description: PLAN_NAMES[planKey] + ' Plan',
       prefill:     { email: userEmail, name: session.user.user_metadata?.full_name || '' },
       theme:       { color: '#7C5CFF' },
+      method: {
+        upi:        true,   // GPay, PhonePe, Paytm, BHIM
+        card:       true,
+        netbanking: true,
+        wallet:     true,
+        emi:        false,
+      },
+      config: {
+        display: {
+          blocks: {
+            upi: { name: 'UPI / GPay / PhonePe', instruments: [{ method: 'upi' }] },
+          },
+          sequence: ['block.upi', 'block.card', 'block.netbanking', 'block.wallet'],
+          preferences: { show_default_blocks: true },
+        },
+      },
       handler: function() {
         // Show success with email so user knows which account to use in the exe
         const planLabel = PLAN_NAMES[planKey] || planKey;
