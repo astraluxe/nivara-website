@@ -153,17 +153,25 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 .sib:hover { border-color:var(--ac); color:var(--ac); }
 
 /* ── Modals ──────────────────────────────────────────────────── */
-.mb { position:fixed; inset:0; background:rgba(0,0,0,.4); backdrop-filter:blur(6px); z-index:300; display:none; align-items:center; justify-content:center; }
+.mb { position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:blur(6px); z-index:300; display:none; align-items:center; justify-content:center; }
 .mb.open { display:flex; }
-.mbx { background:#fff; border:1px solid #e5e5e5; border-radius:16px; width:360px; max-width:95vw; padding:32px 28px 24px; position:relative; }
+.mbx { background:#fff; border:1px solid #e5e5e5; border-radius:16px; width:380px; max-width:95vw; padding:32px 28px 24px; position:relative; }
 .mbx .mx { position:absolute; top:14px; right:16px; background:none; border:none; font-size:20px; cursor:pointer; color:#bbb; }
 .mbx h3 { font-size:20px; font-weight:600; letter-spacing:-.02em; margin-bottom:6px; }
 .mbx p { font-size:13px; color:var(--mu); margin-bottom:20px; line-height:1.55; }
 .mbx .dl { display:block; width:100%; padding:12px; background:#111; color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; text-align:center; cursor:pointer; text-decoration:none; transition:background .15s; font-family:var(--font-sans); }
 .mbx .dl:hover { background:var(--ac); }
+.mbx .dl.google { background:#fff; color:#111; border:1px solid #e5e5e5; display:flex; align-items:center; justify-content:center; gap:10px; }
+.mbx .dl.google:hover { border-color:var(--ac); color:var(--ac); background:#fff; }
 .mbx .sep { text-align:center; font-size:11px; color:#ccc; margin:12px 0; font-family:var(--font-mono); }
 .mbx .oa { display:block; width:100%; padding:10px; border:1px solid #e5e5e5; border-radius:10px; font-size:13px; font-weight:500; text-align:center; cursor:pointer; color:#111; background:none; font-family:var(--font-sans); transition:all .15s; }
 .mbx .oa:hover { border-color:var(--ac); color:var(--ac); }
+/* Success email callout */
+.mbx .email-badge { display:inline-flex; align-items:center; gap:6px; background:#f5f5f5; border:1px solid #e5e5e5; border-radius:8px; padding:7px 12px; font-family:var(--font-mono); font-size:12px; color:#111; margin-bottom:14px; width:100%; box-sizing:border-box; }
+.mbx .email-badge .dot { width:8px; height:8px; background:var(--gr); border-radius:50%; flex-shrink:0; }
+.mbx .step { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#333; line-height:1.5; margin-bottom:10px; }
+.mbx .step .num { background:#111; color:#fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px; }
+.mbx .step-head { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:10px; }
 
 /* ── Affiliate popup ─────────────────────────────────────────── */
 .ap { position:fixed; bottom:20px; right:20px; z-index:400; max-width:300px; width:calc(100vw - 40px); background:#111; color:#fff; border-radius:14px; padding:20px 18px 16px; box-shadow:0 8px 36px rgba(0,0,0,.3); display:none; }
@@ -470,11 +478,22 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 
 <!-- ── SUCCESS MODAL ──────────────────────────────────────────── -->
 <div class="mb" id="successModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="mbx" style="text-align:center">
-    <div style="font-size:48px;margin-bottom:12px">&#127881;</div>
-    <h3>Payment successful!</h3>
-    <p>You are now on the <strong id="successPlan"></strong> plan. Download adris.tech to get started.</p>
-    <a href="/download" class="dl" style="margin-top:4px">Download adris.tech &rarr;</a>
+  <div class="mbx">
+    <button class="mx" onclick="document.getElementById('successModal').classList.remove('open')">&#215;</button>
+    <div style="font-size:36px;margin-bottom:12px">&#127881;</div>
+    <h3>You&rsquo;re on <span id="successPlan" style="color:var(--ac)"></span>!</h3>
+    <p style="margin-bottom:14px">Your plan is live. Here&rsquo;s how to activate it in the app:</p>
+
+    <div class="email-badge"><span class="dot"></span><span id="successEmail">your account</span></div>
+
+    <div class="step-head">// next steps</div>
+    <div class="step"><span class="num">1</span><span>Open the <strong>adris.tech</strong> desktop app (or download it below)</span></div>
+    <div class="step"><span class="num">2</span><span>Sign in with <strong id="successEmail2">the same Google account</strong> used to pay</span></div>
+    <div class="step"><span class="num">3</span><span>Your plan activates automatically &mdash; no code needed</span></div>
+
+    <div class="sep">// get the app</div>
+    <a href="/download" class="dl" style="margin-bottom:8px">Download adris.tech &rarr;</a>
+    <button class="oa" onclick="tryOpenApp()">Already installed &mdash; open the app &rarr;</button>
   </div>
 </div>
 
@@ -492,11 +511,14 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 <div class="mb" id="loginModal" onclick="if(event.target===this)closeLogin()">
   <div class="mbx">
     <button class="mx" onclick="closeLogin()">&#215;</button>
-    <h3>Sign in to adris.tech</h3>
-    <p>adris.tech is a Windows desktop app. Download it to create your account &mdash; payment happens inside the app after sign-up.</p>
-    <a href="/download" class="dl">Download &amp; get started &mdash; free</a>
-    <div class="sep">// already installed?</div>
-    <button class="oa" onclick="tryOpenApp()">Open adris.tech app &rarr;</button>
+    <h3>Sign in to pay</h3>
+    <p>We need to link your payment to your account. Sign in with Google &mdash; it takes 5 seconds &mdash; then payment continues automatically.</p>
+    <button id="googleSignInBtn" class="dl google" onclick="signInWithGoogle(window._pendingPlan)">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/><path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332Z" fill="#FBBC05"/><path d="M9 3.583c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.167 6.656 3.583 9 3.583Z" fill="#EA4335"/></svg>
+      Continue with Google &rarr;
+    </button>
+    <div class="sep">// why we need this</div>
+    <p style="font-size:12px;color:#999;margin-bottom:0;line-height:1.6">Your payment gets linked to your Google account. When you open the adris.tech app and sign in with the same Google account, your plan activates automatically.</p>
   </div>
 </div>
 
@@ -517,12 +539,16 @@ const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIs
 const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 const PLAN_NAMES = { solo:'Solo', builder:'Builder', pro:'Team' };
 
-function openLogin()  { document.getElementById('loginModal').classList.add('open'); }
+function openLogin(planKey) {
+  window._pendingPlan = planKey;
+  document.getElementById('loginModal').classList.add('open');
+}
 function closeLogin() { document.getElementById('loginModal').classList.remove('open'); }
 function tryOpenApp() { window.location.href='adris://open'; setTimeout(()=>window.location.href='/download',1500); }
 
 async function signInWithGoogle(pendingPlan) {
   if (pendingPlan) sessionStorage.setItem('pendingPlan', pendingPlan);
+  closeLogin();
   await _supa.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.origin + '/pricing' }
@@ -532,10 +558,7 @@ async function signInWithGoogle(pendingPlan) {
 async function payWithINR(planKey) {
   const { data: { session } } = await _supa.auth.getSession();
   if (!session) {
-    openLogin();
-    const dlBtn = document.querySelector('#loginModal .dl');
-    dlBtn.textContent = 'Continue with Google to pay';
-    dlBtn.onclick = (e) => { e.preventDefault(); signInWithGoogle(planKey); };
+    openLogin(planKey);
     return;
   }
   await startRazorpayPayment(planKey, session);
@@ -555,6 +578,8 @@ async function startRazorpayPayment(planKey, session) {
     const order = await res.json();
     if (!res.ok || order.error) { alert('Payment setup failed: ' + (order.error || 'Please try again.')); return; }
 
+    const userEmail = session.user.email || '';
+
     const rzp = new window.Razorpay({
       key:         order.key_id,
       order_id:    order.order_id,
@@ -562,10 +587,14 @@ async function startRazorpayPayment(planKey, session) {
       currency:    order.currency,
       name:        'adris.tech',
       description: PLAN_NAMES[planKey] + ' Plan',
-      prefill:     { email: session.user.email, name: session.user.user_metadata?.full_name || '' },
+      prefill:     { email: userEmail, name: session.user.user_metadata?.full_name || '' },
       theme:       { color: '#7C5CFF' },
       handler: function() {
-        document.getElementById('successPlan').textContent = PLAN_NAMES[planKey] || planKey;
+        // Show success with email so user knows which account to use in the exe
+        const planLabel = PLAN_NAMES[planKey] || planKey;
+        document.getElementById('successPlan').textContent = planLabel;
+        document.getElementById('successEmail').textContent = userEmail || 'your Google account';
+        document.getElementById('successEmail2').textContent = userEmail || 'the same Google account';
         document.getElementById('successModal').classList.add('open');
       },
     });
@@ -579,7 +608,10 @@ async function onLoad() {
   const { data: { session } } = await _supa.auth.getSession();
   if (session) {
     const pending = sessionStorage.getItem('pendingPlan');
-    if (pending) { sessionStorage.removeItem('pendingPlan'); await startRazorpayPayment(pending, session); }
+    if (pending) {
+      sessionStorage.removeItem('pendingPlan');
+      await startRazorpayPayment(pending, session);
+    }
   }
 }
 onLoad();
