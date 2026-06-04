@@ -477,7 +477,7 @@
         <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
         <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
       </svg>
-      <span>adris.tech<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
       <span class="dot"></span>
     </a>
     <ul class="nav-links">
@@ -581,12 +581,12 @@ document.getElementById('navHam').addEventListener('click', function() {
 
     <div class="mhero-foot">
       <p>
-        Browse, compare and download every meaningful open-source model. <em>Free</em>. One-command local setup. Or skip the install and run them on our cloud at-cost — Mumbai &amp; Chennai mirrors mean 10× faster downloads.
+        Browse, compare and download every meaningful open-source model. <em>Free</em>. One-click install inside adris.tech — no extra software needed. Or use adris.tech Cloud AI and skip the download entirely.
       </p>
       <div class="mhero-meta">
         <div class="row"><span class="l">Catalog</span><span>2,400+ models · updated daily</span></div>
         <div class="row"><span class="l">Mirrors</span><span>BLR · MUM · CHN</span></div>
-        <div class="row"><span class="l">Runners</span><span>Ollama · llama.cpp · Docker</span></div>
+        <div class="row"><span class="l">Engine</span><span>adris.tech built-in · no setup</span></div>
         <div class="row"><span class="l">Hosted</span><span>API · pay per call</span></div>
       </div>
       <div class="mhero-cta">
@@ -659,59 +659,60 @@ document.getElementById('navHam').addEventListener('click', function() {
   </div>
 </section>
 
-<!-- SECTION 1 — ONE COMMAND -->
-<section class="fsec" data-screen-label="02 One command">
+<!-- SECTION 1 — IN-APP SETUP -->
+<section class="fsec" data-screen-label="02 In-app setup">
   <div class="wrap">
     <div class="fsec-grid">
       <div class="fsec-text">
-        <div class="seyebrow"><span class="num">01</span><span class="label">One-command setup</span></div>
-        <div class="feat-badge"><span class="dot"></span>Ships with App Release</div>
-        <h2>Zero config.<br/><span class="it">One line.</span></h2>
-        <p>No .exe chaos. No fifteen-step install. Open adris.tech, pick a model, click Download — Ollama is auto-configured behind the scenes. You'll be talking to the model in under 90 seconds.</p>
+        <div class="seyebrow"><span class="num">01</span><span class="label">In-app setup</span></div>
+        <div class="feat-badge"><span class="dot"></span>Built into adris.tech</div>
+        <h2>No extra software.<br/><span class="it">One click.</span></h2>
+        <p>Open adris.tech, go to the Models tab, pick a model and click Download. The adris.tech engine handles the rest — no external tools, no terminal, no configuration.</p>
         <ul>
-          <li class="acc">Auto-detects your hardware — picks the right quantisation</li>
-          <li>Works on Windows via the built-in Ollama runner</li>
+          <li class="acc">Auto-detects your RAM — recommends the right model for your machine</li>
+          <li>Downloads directly into the app — no folder hunting</li>
           <li>Verifies download integrity with checksums</li>
-          <li>Browse without signup — download only requires an account</li>
+          <li>Run downloaded models in <strong>adris.tech Coder</strong> with one click</li>
         </ul>
       </div>
 
       <div class="setup">
         <div class="setup-h">
-          <span>// install · deepseek-r1:7b</span>
+          <span>// adris.tech · Models tab · DeepSeek R1 7B</span>
           <span>~90s to first token</span>
         </div>
 
         <div class="install">
           <div class="install-tabs">
-            <button class="on" data-tab="mac">Mac / Linux</button>
-            <button data-tab="win">Windows</button>
-            <button data-tab="dkr">Docker</button>
+            <button class="on" data-tab="step1">Step 1</button>
+            <button data-tab="step2">Step 2</button>
+            <button data-tab="step3">Step 3</button>
           </div>
 
-          <div class="install-cmd" data-tab="mac" style="display:flex;">
-            <span class="pfx">$</span>
-            <span class="cmd-text">curl -fsSL https://ollama.com/install.sh | sh &amp;&amp; ollama run deepseek-r1:7b</span>
-            <button class="copy">Copy</button>
+          <div class="install-cmd" data-tab="step1" style="display:flex;">
+            <span class="pfx">→</span>
+            <span class="cmd-text">Open adris.tech · go to Models tab · browse the hub</span>
           </div>
-          <div class="install-cmd" data-tab="win" style="display:none;">
-            <span class="pfx">PS&gt;</span>
-            <span class="cmd-text">winget install Ollama.Ollama; ollama run deepseek-r1:7b</span>
-            <button class="copy">Copy</button>
+          <div class="install-cmd" data-tab="step2" style="display:none;">
+            <span class="pfx">→</span>
+            <span class="cmd-text">Pick a model · click Download · wait for the progress bar</span>
           </div>
-          <div class="install-cmd" data-tab="dkr" style="display:none;">
-            <span class="pfx">$</span>
-            <span class="cmd-text">docker run -d -p 11434:11434 ollama/ollama &amp;&amp; ollama run deepseek-r1:7b</span>
-            <button class="copy">Copy</button>
+          <div class="install-cmd" data-tab="step3" style="display:none;">
+            <span class="pfx">→</span>
+            <span class="cmd-text">Click Run · model loads in Coder · start typing</span>
           </div>
 
           <div style="padding: 16px 24px 20px; font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.5); border-top: 1px solid rgba(242,239,233,0.08); line-height: 1.7;">
-            <div>→ detecting hardware… 16GB RAM · GPU found</div>
-            <div>→ selecting deepseek-r1-q4_k_m · 4.7 GB</div>
+            <div>→ detecting hardware… 16 GB RAM · 4 CPU cores</div>
+            <div>→ recommended: deepseek-r1-7b-q4 · 4.5 GB</div>
             <div>→ downloading from adris.tech hub…</div>
-            <div>→ checksum verified · loading…</div>
-            <div style="color: #6BFFB8;">✓ ready · type a prompt</div>
+            <div>→ checksum verified · engine loading…</div>
+            <div style="color: #6BFFB8;">✓ ready · open Coder to start</div>
           </div>
+        </div>
+
+        <div style="padding: 12px 24px; background: rgba(124,92,255,0.08); border-top: 1px solid rgba(124,92,255,0.2); font-family: var(--font-mono); font-size: 10px; color: rgba(242,239,233,0.6); letter-spacing: 0.08em;">
+          ⓘ &nbsp;Downloaded models are also available in <strong style="color: rgba(242,239,233,0.85);">adris.tech Coder</strong> — use them as your local coding assistant without any API key.
         </div>
       </div>
     </div>
