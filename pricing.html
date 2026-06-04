@@ -108,7 +108,7 @@ html,body { background:#fff!important; color:#111!important; }
 .ip h2 { font-size:clamp(22px,3vw,30px); font-weight:600; letter-spacing:-.03em; margin-bottom:28px; }
 .ig { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
 .ii { background:#fff; border:1px solid var(--br); border-radius:10px; padding:16px; }
-.ii .ico { font-size:18px; margin-bottom:8px; }
+.ii .ico { width:20px; height:20px; margin-bottom:10px; color:#111; }
 .ii .nm { font-size:13px; font-weight:600; }
 .ii .ds { font-size:11px; color:var(--mu); margin-top:3px; line-height:1.4; }
 
@@ -348,12 +348,54 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     <p class="ey">// every plan, every tier</p>
     <h2>Included in all plans</h2>
     <div class="ig">
-      <div class="ii"><div class="ico">&#129302;</div><div class="nm">45+ AI Agents</div><div class="ds">Full Krew &mdash; content, code, finance, sales, support</div></div>
-      <div class="ii"><div class="ico">&#128187;</div><div class="nm">Coder</div><div class="ds">AI pair programmer with terminal and file editor</div></div>
-      <div class="ii"><div class="ico">&#127917;</div><div class="nm">Studio</div><div class="ds">Video scripts, banner generator, visual asset creator</div></div>
-      <div class="ii"><div class="ico">&#128274;</div><div class="nm">Vault</div><div class="ds">Private AI with DNS-level network protection</div></div>
-      <div class="ii"><div class="ico">&#128230;</div><div class="nm">Models</div><div class="ds">Pull and run any Ollama model directly in-app</div></div>
-      <div class="ii"><div class="ico">&#128273;</div><div class="nm">BYOK support</div><div class="ds">Use your own Gemini, OpenAI or Claude API key</div></div>
+      <div class="ii">
+        <div class="ico">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="8" width="12" height="9" rx="2"/><line x1="10" y1="8" x2="10" y2="5"/><circle cx="10" cy="4" r="1.2"/><circle cx="7.5" cy="13" r="1.2"/><circle cx="12.5" cy="13" r="1.2"/>
+          </svg>
+        </div>
+        <div class="nm">45+ AI Agents</div><div class="ds">Full Krew &mdash; content, code, finance, sales, support</div>
+      </div>
+      <div class="ii">
+        <div class="ico">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6,7 2,10 6,13"/><polyline points="14,7 18,10 14,13"/><line x1="8" y1="15" x2="12" y2="5"/>
+          </svg>
+        </div>
+        <div class="nm">Coder</div><div class="ds">AI pair programmer with terminal and file editor</div>
+      </div>
+      <div class="ii">
+        <div class="ico">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="12" height="11" rx="1"/><polyline points="14,9 18,7 18,15 14,13"/><line x1="2" y1="10" x2="14" y2="10"/>
+          </svg>
+        </div>
+        <div class="nm">Studio</div><div class="ds">Video scripts, banner generator, visual asset creator</div>
+      </div>
+      <div class="ii">
+        <div class="ico">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="9" width="12" height="9" rx="2"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/><circle cx="10" cy="14" r="1.2"/>
+          </svg>
+        </div>
+        <div class="nm">Vault</div><div class="ds">Private AI with DNS-level network protection</div>
+      </div>
+      <div class="ii">
+        <div class="ico">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 2L18 6v8l-8 4-8-4V6z"/><path d="M10 2v12"/><path d="M2 6l8 4 8-4"/>
+          </svg>
+        </div>
+        <div class="nm">Models</div><div class="ds">Pull and run any Ollama model directly in-app</div>
+      </div>
+      <div class="ii">
+        <div class="ico">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7" cy="10" r="4"/><path d="M10.5 10H18"/><line x1="16" y1="10" x2="16" y2="13"/>
+          </svg>
+        </div>
+        <div class="nm">BYOK support</div><div class="ds">Use your own Gemini, OpenAI or Claude API key</div>
+      </div>
     </div>
   </div>
 </section>
