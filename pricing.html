@@ -4,401 +4,188 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pricing — adris.tech</title>
-<meta name="description" content="Simple, transparent pricing for India's AI operating system. Start free, scale as you grow." />
+<meta name="description" content="Simple pricing. Free to start, no hidden fees." />
 <link rel="canonical" href="https://adris.tech/pricing" />
-
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
-
 <style>
-/* ── Pricing-page extras ─────────────────────────────────────── */
+/* ── Force clean white/black ─────────────────────────────────── */
+html,body { background:#fff!important; color:#111!important; }
+.nav { background:#fff!important; border-bottom:1px solid #e5e5e5!important; }
+.nav .nav-mark, .nav .nav-links a { color:#111!important; }
+.nav .nav-links a:hover { color:#7C5CFF!important; }
+:root { --ac:#7C5CFF; --gr:#16a34a; --mu:#6b6b6b; --br:#e5e5e5; --g:#f5f5f5; }
 
-.pricing-hero {
-  padding: 120px var(--pad-x) 80px;
-  text-align: center;
-  border-bottom: 1px solid var(--rule);
-}
-.pricing-hero .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 20px;
-}
-.pricing-hero h1 {
-  font-size: clamp(40px, 6vw, 72px);
-  font-weight: 600;
-  letter-spacing: -.04em;
-  line-height: .95;
-  margin-bottom: 20px;
-}
-.pricing-hero p {
-  font-size: 17px;
-  color: var(--muted);
-  max-width: 480px;
-  margin: 0 auto 40px;
-  line-height: 1.6;
-}
-
-/* ── Market toggle ───────────────────────────────────────────── */
-.market-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  border: 1px solid var(--rule-strong);
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--paper-2);
-}
-.market-toggle button {
-  padding: 9px 22px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-  transition: all .15s;
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-family: var(--font-sans);
-}
-.market-toggle button.active {
-  background: var(--accent);
-  color: #fff;
-  border-radius: 8px;
-  margin: 2px;
-  padding: 7px 20px;
-}
+/* ── Hero ────────────────────────────────────────────────────── */
+.ph { padding:100px 48px 64px; max-width:600px; margin:0 auto; text-align:center; border-bottom:1px solid var(--br); }
+.ph .ey { font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:14px; }
+.ph h1 { font-size:clamp(38px,6vw,62px); font-weight:600; letter-spacing:-.04em; line-height:.93; margin-bottom:14px; }
+.ph p { font-size:15px; color:var(--mu); line-height:1.6; }
 
 /* ── Plans grid ──────────────────────────────────────────────── */
-.plans-wrap {
-  padding: 80px var(--pad-x);
-  background: var(--dark);
-}
-.plans-section-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--on-dark-3);
-  margin-bottom: 32px;
-}
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.plan-card {
-  background: rgba(242,239,233,.04);
-  border: 1px solid var(--rule-dark);
-  border-radius: 16px;
-  padding: 28px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  position: relative;
-  transition: border-color .2s;
-}
-.plan-card:hover { border-color: var(--rule-dark-2); }
-.plan-card.featured {
-  border-color: var(--accent);
-  background: rgba(124,92,255,.08);
-}
-.plan-badge {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--accent);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  padding: 3px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-.plan-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--on-dark-2);
-  text-transform: uppercase;
-  letter-spacing: .05em;
-  margin-bottom: 6px;
-}
-.plan-desc {
-  font-size: 12px;
-  color: var(--on-dark-3);
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-.plan-price {
-  font-size: 38px;
-  font-weight: 700;
-  letter-spacing: -.03em;
-  color: var(--on-dark);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.plan-price sub {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--on-dark-2);
-  vertical-align: baseline;
-  margin-left: 2px;
-}
-.plan-price-note {
-  font-size: 11px;
-  color: var(--on-dark-3);
-  font-family: var(--font-mono);
-  margin-bottom: 24px;
-}
-.plan-divider {
-  border: none;
-  border-top: 1px solid var(--rule-dark);
-  margin: 0 0 20px;
-}
-.plan-features {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-  margin-bottom: 24px;
-}
-.plan-features li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--on-dark-2);
-  line-height: 1.4;
-}
-.plan-features li .icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.plan-features li .icon.yes { background: rgba(34,197,94,.2); color: #22c55e; }
-.plan-features li .icon.no  { background: rgba(242,239,233,.06); color: var(--on-dark-3); }
-.plan-features li .val {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--accent);
-  background: rgba(124,92,255,.15);
-  padding: 1px 6px;
-  border-radius: 4px;
-  margin-left: auto;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.plan-cta {
-  display: block;
-  width: 100%;
-  padding: 12px 0;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  transition: all .15s;
-  border: 1px solid var(--rule-dark-2);
-  color: var(--on-dark-2);
-  background: transparent;
-  text-decoration: none;
-}
-.plan-cta:hover { background: rgba(242,239,233,.07); color: var(--on-dark); }
-.plan-cta.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-.plan-cta.primary:hover { background: #6a4ee0; border-color: #6a4ee0; }
+.ps { padding:64px 32px 0; max-width:1280px; margin:0 auto; }
+.pg { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--br); border:1px solid var(--br); }
+@media(max-width:1000px) { .pg { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:580px) { .pg { grid-template-columns:1fr; } }
 
-/* ── BYOK billing toggle ─────────────────────────────────────── */
-.byok-billing-wrap {
-  margin-bottom: 28px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.byok-billing-btn {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--rule-dark);
-  color: var(--on-dark-3);
-  cursor: pointer;
-  transition: all .15s;
-  background: transparent;
-}
-.byok-billing-btn.active {
-  background: rgba(124,92,255,.2);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.byok-billing-btn .save-badge {
-  display: inline-block;
-  background: rgba(34,197,94,.2);
-  color: #22c55e;
-  font-size: 9px;
-  padding: 0 5px;
-  border-radius: 3px;
-  margin-left: 4px;
-}
+/* ── Plan card ───────────────────────────────────────────────── */
+.pc { background:#fff; padding:28px 24px 24px; display:flex; flex-direction:column; position:relative; }
+.pc.ft { background:#111; color:#fff; }
+.pc.fr { background:var(--g); }
 
-/* ── Compare table ───────────────────────────────────────────── */
-.compare-wrap {
-  padding: 80px var(--pad-x);
-  overflow-x: auto;
-}
-.compare-wrap h2 {
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 600;
-  letter-spacing: -.03em;
-  margin-bottom: 40px;
-}
-.compare-table {
-  width: 100%;
-  max-width: 1100px;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-.compare-table th {
-  text-align: left;
-  padding: 12px 16px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: 1px solid var(--rule-strong);
-  white-space: nowrap;
-}
-.compare-table th.plan-col { text-align: center; color: var(--ink); }
-.compare-table th.plan-col.hl { color: var(--accent); }
-.compare-table td {
-  padding: 13px 16px;
-  border-bottom: 1px solid var(--rule);
-  color: var(--ink);
-  vertical-align: middle;
-}
-.compare-table td.center { text-align: center; }
-.compare-table td .tick { color: #22c55e; font-size: 15px; }
-.compare-table td .cross { color: var(--muted-2); font-size: 15px; }
-.compare-table td .val {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  background: rgba(124,92,255,.1);
-  color: var(--accent);
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-.compare-table tr:last-child td { border-bottom: none; }
-.compare-table .row-group td {
-  padding-top: 20px;
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: none;
-}
+/* Brand line (Ollama-style) */
+.pb { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); margin-bottom:5px; }
+.pc.ft .pb { color:rgba(255,255,255,.45); }
+
+/* Name, tag, desc */
+.pn { font-size:18px; font-weight:600; letter-spacing:-.01em; margin-bottom:2px; }
+.pt { font-size:12px; color:var(--mu); margin-bottom:20px; line-height:1.5; }
+.pc.ft .pt { color:rgba(255,255,255,.5); }
+
+/* Badge */
+.badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:3px 12px; border-radius:20px; white-space:nowrap; background:var(--ac); color:#fff; }
+
+/* Price */
+.pri { margin-bottom:4px; }
+.pi { font-size:clamp(36px,4vw,48px); font-weight:700; letter-spacing:-.04em; line-height:1; display:flex; align-items:baseline; gap:3px; }
+.pi sub { font-size:13px; font-weight:400; opacity:.6; }
+.pu { font-size:12px; color:var(--mu); margin-top:3px; margin-bottom:20px; }
+.pc.ft .pu { color:rgba(255,255,255,.4); }
+
+/* Buttons */
+.bts { display:flex; flex-direction:column; gap:7px; margin-bottom:22px; }
+.bi,.bu,.bf { display:block; width:100%; padding:10px 0; border-radius:8px; font-size:13px; font-weight:600; text-align:center; cursor:pointer; text-decoration:none; transition:all .15s; font-family:var(--font-sans); border:none; }
+.bi { background:#111; color:#fff; }
+.bi:hover { background:var(--ac); }
+.bu { background:transparent; color:#111; border:1px solid var(--br); }
+.bu:hover { border-color:var(--ac); color:var(--ac); }
+.bf { background:#111; color:#fff; }
+.bf:hover { background:var(--ac); }
+.pc.fr .bf { background:rgba(0,0,0,.09); color:var(--mu); }
+.pc.ft .bi { background:#fff; color:#111; }
+.pc.ft .bi:hover { background:var(--ac); color:#fff; }
+.pc.ft .bu { background:transparent; color:rgba(255,255,255,.65); border:1px solid rgba(255,255,255,.2); }
+.pc.ft .bu:hover { border-color:rgba(255,255,255,.6); color:#fff; }
+
+/* Divider + features */
+.pc hr { border:none; border-top:1px solid var(--br); margin:0 0 16px; }
+.pc.ft hr { border-color:rgba(255,255,255,.12); }
+.pc ul { list-style:none; display:flex; flex-direction:column; gap:9px; flex:1; }
+.pc ul li { display:flex; align-items:flex-start; gap:8px; font-size:12px; line-height:1.4; color:#111; }
+.pc.ft ul li { color:rgba(255,255,255,.8); }
+.iy,.in { width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; font-size:8px; }
+.iy { background:rgba(22,163,74,.15); color:var(--gr); }
+.pc.ft .iy { background:rgba(255,255,255,.1); color:#4ade80; }
+.in { background:rgba(0,0,0,.06); color:#ccc; }
+.pc.ft .in { background:rgba(255,255,255,.07); color:rgba(255,255,255,.3); }
+.dm { color:var(--mu); }
+.pc.ft .dm { color:rgba(255,255,255,.4); }
+.ch { font-family:var(--font-mono); font-size:10px; background:rgba(124,92,255,.1); color:var(--ac); padding:1px 5px; border-radius:4px; margin-left:auto; flex-shrink:0; white-space:nowrap; }
+.pc.ft .ch { background:rgba(255,255,255,.12); color:rgba(255,255,255,.8); }
+
+/* ── Team card — wide at bottom ──────────────────────────────── */
+.team-wrap { padding:0 32px 64px; max-width:1280px; margin:0 auto; }
+.tc { margin-top:1px; background:var(--g); border:1px solid var(--br); border-top:none; padding:32px 28px; display:grid; grid-template-columns:1.2fr 1fr 1fr auto; gap:32px; align-items:start; }
+@media(max-width:900px) { .tc { grid-template-columns:1fr 1fr; } }
+@media(max-width:580px) { .tc { grid-template-columns:1fr; gap:20px; } }
+.tc-brand { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); margin-bottom:4px; }
+.tc-name { font-size:20px; font-weight:600; letter-spacing:-.02em; margin-bottom:3px; display:flex; align-items:center; gap:10px; }
+.tc-soon { display:inline-flex; align-items:center; padding:3px 10px; background:#e5e5e5; border-radius:20px; font-size:10px; font-weight:600; color:var(--mu); letter-spacing:.04em; text-transform:uppercase; }
+.tc-desc { font-size:13px; color:var(--mu); line-height:1.6; max-width:34ch; margin-top:6px; }
+.tc-col h5 { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:10px; }
+.tc-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.tc-col ul li { font-size:13px; color:#111; display:flex; align-items:flex-start; gap:7px; line-height:1.4; }
+.tc-col ul li::before { content:"→"; color:var(--mu); flex-shrink:0; font-size:11px; margin-top:2px; }
+.tc-cta { align-self:start; display:inline-flex; align-items:center; gap:7px; padding:11px 22px; border:1px solid #111; border-radius:8px; font-size:13px; font-weight:600; color:#111; text-decoration:none; white-space:nowrap; transition:all .15s; background:transparent; cursor:pointer; font-family:var(--font-sans); }
+.tc-cta:hover { background:#111; color:#fff; }
+
+/* ── All included ────────────────────────────────────────────── */
+.ip { background:var(--g); border-top:1px solid var(--br); border-bottom:1px solid var(--br); padding:56px 48px; }
+.ip .inn { max-width:940px; margin:0 auto; }
+.ip .ey { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:10px; }
+.ip h2 { font-size:clamp(22px,3vw,30px); font-weight:600; letter-spacing:-.03em; margin-bottom:28px; }
+.ig { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
+.ii { background:#fff; border:1px solid var(--br); border-radius:10px; padding:16px; }
+.ii .ico { font-size:18px; margin-bottom:8px; }
+.ii .nm { font-size:13px; font-weight:600; }
+.ii .ds { font-size:11px; color:var(--mu); margin-top:3px; line-height:1.4; }
+
+/* ── Scales with plan ────────────────────────────────────────── */
+.ss { padding:60px 48px; max-width:940px; margin:0 auto; }
+.ss h2 { font-size:clamp(22px,3vw,30px); font-weight:600; letter-spacing:-.03em; margin-bottom:6px; }
+.ss .sub { font-size:13px; color:var(--mu); margin-bottom:28px; }
+.st { width:100%; border-collapse:collapse; font-size:13px; }
+.st th { text-align:left; padding:10px 14px; font-size:10px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--mu); border-bottom:2px solid var(--br); }
+.st th.c { text-align:center; } .st th.hl { color:var(--ac); }
+.st td { padding:11px 14px; border-bottom:1px solid var(--br); }
+.st td.c { text-align:center; }
+.st .chip { font-family:var(--font-mono); font-size:10px; background:rgba(124,92,255,.1); color:var(--ac); padding:2px 6px; border-radius:4px; }
+.st .tick { color:var(--gr); } .st .cross { color:#ddd; }
+.st .grp td { padding-top:16px; font-weight:700; font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:var(--mu); border-bottom:none; }
+.st tr:last-child td { border-bottom:none; }
 
 /* ── FAQ ─────────────────────────────────────────────────────── */
-.faq-wrap {
-  padding: 80px var(--pad-x);
-  border-top: 1px solid var(--rule);
-  max-width: 720px;
-  margin: 0 auto;
-}
-.faq-wrap h2 {
-  font-size: clamp(22px, 3vw, 32px);
-  font-weight: 600;
-  letter-spacing: -.03em;
-  margin-bottom: 40px;
-}
-.faq-item {
-  border-bottom: 1px solid var(--rule);
-  padding: 20px 0;
-}
-.faq-item summary {
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-}
-.faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::after { content: '+'; font-size: 20px; font-weight: 300; color: var(--muted-2); flex-shrink: 0; }
-.faq-item[open] summary::after { content: '−'; }
-.faq-item p {
-  margin-top: 12px;
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.7;
-}
+.fs { border-top:1px solid var(--br); padding:60px 48px; }
+.fs .inn { max-width:640px; margin:0 auto; }
+.fs h2 { font-size:clamp(22px,3vw,30px); font-weight:600; letter-spacing:-.03em; margin-bottom:6px; }
+.fs .fcat { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin:28px 0 4px; }
+details.fq { border-bottom:1px solid var(--br); }
+details.fq summary { font-size:14px; font-weight:500; cursor:pointer; list-style:none; padding:16px 0; display:flex; justify-content:space-between; gap:16px; }
+details.fq summary::-webkit-details-marker { display:none; }
+details.fq summary::after { content:'+'; font-size:18px; font-weight:300; color:#bbb; flex-shrink:0; }
+details.fq[open] summary::after { content:'−'; color:var(--ac); }
+details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:16px; }
 
-/* ── CTA strip ───────────────────────────────────────────────── */
-.cta-strip {
-  background: var(--dark);
-  padding: 80px var(--pad-x);
-  text-align: center;
-}
-.cta-strip h2 {
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 600;
-  letter-spacing: -.03em;
-  color: var(--on-dark);
-  margin-bottom: 16px;
-}
-.cta-strip p { color: var(--on-dark-2); margin-bottom: 32px; font-size: 16px; }
-.cta-strip .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.cta-strip .btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--accent); color: #fff;
-  padding: 14px 28px; border-radius: 10px;
-  font-size: 15px; font-weight: 600;
-  text-decoration: none; transition: background .15s;
-}
-.cta-strip .btn-primary:hover { background: #6a4ee0; }
-.cta-strip .btn-secondary {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--rule-dark-2); color: var(--on-dark-2);
-  padding: 14px 28px; border-radius: 10px;
-  font-size: 15px; font-weight: 500;
-  text-decoration: none; transition: all .15s;
-}
-.cta-strip .btn-secondary:hover { background: rgba(242,239,233,.06); color: var(--on-dark); }
+/* ── CTA ─────────────────────────────────────────────────────── */
+.cs { background:#111; color:#fff; padding:72px 48px; text-align:center; }
+.cs h2 { font-size:clamp(26px,4vw,44px); font-weight:600; letter-spacing:-.03em; margin-bottom:10px; }
+.cs p { color:rgba(255,255,255,.5); margin-bottom:24px; font-size:15px; }
+.cs .cr { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.cs .cp { display:inline-flex; align-items:center; gap:8px; background:var(--ac); color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:600; text-decoration:none; transition:background .15s; }
+.cs .cp:hover { background:#6a4ee0; }
+.cs .cx { display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.65); padding:12px 24px; border-radius:10px; font-size:14px; font-weight:500; text-decoration:none; transition:all .15s; }
+.cs .cx:hover { border-color:rgba(255,255,255,.5); color:#fff; }
 
-/* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .plans-grid { grid-template-columns: 1fr; }
-  .compare-table { font-size: 12px; }
-  .compare-table th, .compare-table td { padding: 10px 10px; }
-}
+/* ── Sign-in button in nav ───────────────────────────────────── */
+.sib { padding:8px 18px; border:1px solid #e5e5e5; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; background:transparent; color:#111; font-family:var(--font-sans); transition:all .15s; }
+.sib:hover { border-color:var(--ac); color:var(--ac); }
+
+/* ── Modals ──────────────────────────────────────────────────── */
+.mb { position:fixed; inset:0; background:rgba(0,0,0,.4); backdrop-filter:blur(6px); z-index:300; display:none; align-items:center; justify-content:center; }
+.mb.open { display:flex; }
+.mbx { background:#fff; border:1px solid #e5e5e5; border-radius:16px; width:360px; max-width:95vw; padding:32px 28px 24px; position:relative; }
+.mbx .mx { position:absolute; top:14px; right:16px; background:none; border:none; font-size:20px; cursor:pointer; color:#bbb; }
+.mbx h3 { font-size:20px; font-weight:600; letter-spacing:-.02em; margin-bottom:6px; }
+.mbx p { font-size:13px; color:var(--mu); margin-bottom:20px; line-height:1.55; }
+.mbx .dl { display:block; width:100%; padding:12px; background:#111; color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; text-align:center; cursor:pointer; text-decoration:none; transition:background .15s; font-family:var(--font-sans); }
+.mbx .dl:hover { background:var(--ac); }
+.mbx .sep { text-align:center; font-size:11px; color:#ccc; margin:12px 0; font-family:var(--font-mono); }
+.mbx .oa { display:block; width:100%; padding:10px; border:1px solid #e5e5e5; border-radius:10px; font-size:13px; font-weight:500; text-align:center; cursor:pointer; color:#111; background:none; font-family:var(--font-sans); transition:all .15s; }
+.mbx .oa:hover { border-color:var(--ac); color:var(--ac); }
+
+/* ── Affiliate popup ─────────────────────────────────────────── */
+.ap { position:fixed; bottom:20px; right:20px; z-index:400; max-width:300px; width:calc(100vw - 40px); background:#111; color:#fff; border-radius:14px; padding:20px 18px 16px; box-shadow:0 8px 36px rgba(0,0,0,.3); display:none; }
+.ap.show { display:block; animation:su .3s cubic-bezier(.16,1,.3,1); }
+@keyframes su { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.ap .ax { position:absolute; top:12px; right:14px; background:none; border:none; color:rgba(255,255,255,.4); font-size:16px; cursor:pointer; }
+.ap .at { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--ac); margin-bottom:7px; }
+.ap h4 { font-size:14px; font-weight:600; margin-bottom:5px; }
+.ap p { font-size:11px; color:rgba(255,255,255,.55); line-height:1.5; margin-bottom:12px; }
+.ap .oc { display:inline-flex; align-items:center; gap:5px; background:rgba(22,163,74,.15); color:#4ade80; font-size:10px; padding:3px 8px; border-radius:5px; margin-bottom:10px; font-family:var(--font-mono); }
+.ap .ab { display:block; width:100%; padding:9px; background:var(--ac); color:#fff; border:none; border-radius:9px; font-size:13px; font-weight:600; text-align:center; cursor:pointer; text-decoration:none; font-family:var(--font-sans); }
+.ap .ab:hover { background:#6a4ee0; }
+.ap .an { margin-top:7px; font-size:10px; color:rgba(255,255,255,.3); text-align:center; font-family:var(--font-mono); }
+
+@media(max-width:640px) { .ps,.team-wrap,.ip,.ss,.fs,.cs { padding-left:16px; padding-right:16px; } }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
-<!-- ── NAV (same as main site) ───────────────────────────────── -->
+<!-- ── NAV ───────────────────────────────────────────────────── -->
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="nav-mark" aria-label="adris.tech home">
@@ -406,523 +193,435 @@
         <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
         <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
       </svg>
-      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span>adris<span style="color:var(--muted-2);font-weight:400">.tech</span></span>
       <span class="dot"></span>
     </a>
     <ul class="nav-links">
       <li><a href="/#platform">Platform</a></li>
       <li><a href="/#modules">Modules</a></li>
-      <li><a href="/#audience">Who it's for</a></li>
-      <li><a href="/pricing" style="color:var(--ink);font-weight:600;">Pricing</a></li>
+      <li><a href="/pricing" style="font-weight:600">Pricing</a></li>
       <li><a href="/download">Download</a></li>
       <li><a href="/affiliates">Affiliates</a></li>
     </ul>
     <div class="nav-right">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
-        <span class="tt-track">
-          <span class="tt-thumb" aria-hidden="true"></span>
-          <span class="tt-l tt-paper">Paper</span>
-          <span class="tt-l tt-ink">Ink</span>
-        </span>
+      <button class="sib" onclick="openLogin()">Sign in</button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="tt-track"><span class="tt-thumb"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span>
       </button>
-      <a href="/download" class="btn">Download — free
-        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none">
-          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
+      <a href="/download" class="btn">Download &mdash; free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
       </a>
-      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
 <div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-inner">
     <ul>
-      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
-      <li><a href="/#modules"   onclick="closeMobileNav()">Modules</a></li>
-      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
-      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/#platform" onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="/#modules" onclick="closeMobileNav()">Modules</a></li>
+      <li><a href="/pricing" onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download" onclick="closeMobileNav()">Download</a></li>
       <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
     </ul>
-    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+    <a href="/download" class="btn mobile-nav-cta">Download &mdash; free</a>
   </div>
 </div>
 <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
 
 <!-- ── HERO ──────────────────────────────────────────────────── -->
-<section class="pricing-hero">
-  <p class="eyebrow">Pricing — Simple &amp; transparent</p>
-  <h1>Pay for what<br>you actually use</h1>
-  <p>Bring your own API key and pay just for the platform. Or let adris.tech handle the AI — no key needed.</p>
-
-  <!-- Market toggle -->
-  <div class="market-toggle" id="marketToggle" role="group" aria-label="Select market">
-    <button class="active" data-market="india" onclick="setMarket('india')">🇮🇳 India (₹)</button>
-    <button data-market="intl" onclick="setMarket('intl')">🌍 International ($)</button>
-  </div>
+<section class="ph">
+  <p class="ey">Pricing</p>
+  <h1>Simple.<br/>No surprises.</h1>
+  <p>Free to start. Upgrade when you need more AI power, automation, or devices.</p>
 </section>
 
 <!-- ── PLANS ─────────────────────────────────────────────────── -->
-<section class="plans-wrap">
-  <div style="max-width:1200px;margin:0 auto;">
+<section class="ps">
+  <div class="pg">
 
-    <!-- BYOK section -->
-    <p class="plans-section-label">BYOK / Local Model Plan — Platform access only · You bring the AI key</p>
-
-    <!-- Billing period switcher for BYOK -->
-    <div class="byok-billing-wrap" id="byokBilling">
-      <button class="byok-billing-btn active" data-period="monthly" onclick="setByokPeriod('monthly')">Monthly</button>
-      <button class="byok-billing-btn" data-period="3mo" onclick="setByokPeriod('3mo')">3 Months <span class="save-badge">10% off</span></button>
-      <button class="byok-billing-btn" data-period="6mo" onclick="setByokPeriod('6mo')">6 Months <span class="save-badge">15% off</span></button>
-      <button class="byok-billing-btn" data-period="1yr" onclick="setByokPeriod('1yr')">1 Year <span class="save-badge">Best value</span></button>
+    <!-- FREE -->
+    <div class="pc fr">
+      <div class="pb">adris.tech</div>
+      <div class="pn">Free</div>
+      <div class="pt">Get started with adris.tech using your own API key or a local model.</div>
+      <div class="pri">
+        <div class="pi">&#8377;0</div>
+        <div class="pu">$0 / month &middot; forever</div>
+      </div>
+      <div class="bts">
+        <a href="/download" class="bf">Download free &rarr;</a>
+      </div>
+      <hr/>
+      <ul>
+        <li><span class="iy">&#10003;</span>All 45+ Krew AI agents</li>
+        <li><span class="iy">&#10003;</span>Coder &middot; Studio &middot; Vault &middot; Models</li>
+        <li><span class="iy">&#10003;</span>Local models (Ollama, LM Studio)</li>
+        <li><span class="iy">&#10003;</span>Mesh &mdash; 3 devices</li>
+        <li><span class="in">&#10007;</span><span class="dm">Platform AI (bring own key)</span></li>
+        <li><span class="in">&#10007;</span><span class="dm">Cloud automations</span></li>
+        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team</span></li>
+      </ul>
     </div>
 
-    <div class="plans-grid" style="grid-template-columns: 1fr; max-width: 400px; margin-bottom: 56px;">
-      <div class="plan-card">
-        <div class="plan-name">BYOK / Local</div>
-        <div class="plan-desc">Use Gemini, OpenAI, Claude, or a local model with your own key. Pay only for platform access.</div>
-        <div class="plan-price" id="byokPrice">
-          <span id="byokPriceVal">₹500</span><sub id="byokPriceSub">/mo</sub>
-        </div>
-        <div class="plan-price-note" id="byokNote">&nbsp;</div>
-        <hr class="plan-divider" />
-        <ul class="plan-features">
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Full Krew · 43 AI agents
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Coder · Guard · Vault · Studio
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Gemini · OpenAI · Claude · Local
-          </li>
-          <li>
-            <span class="icon no"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            <span style="color:var(--on-dark-3)">No managed AI tokens</span>
-          </li>
-          <li>
-            <span class="icon no"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            <span style="color:var(--on-dark-3)">No automation runs</span>
-          </li>
-        </ul>
-        <a href="/download" class="plan-cta">Get started</a>
+    <!-- SOLO -->
+    <div class="pc">
+      <div class="pb">adris.tech</div>
+      <div class="pn">Solo</div>
+      <div class="pt">For freelancers, creators and students doing daily AI work.</div>
+      <div class="pri">
+        <div class="pi">&#8377;1,499<sub>/mo</sub></div>
+        <div class="pu">$15 / month</div>
       </div>
+      <div class="bts">
+        <button class="bi" onclick="payWithINR('solo')">Pay in &#8377; 1,499 &rarr;</button>
+        <button class="bu" onclick="payWithUSD()">Pay in $ 15 &rarr;</button>
+      </div>
+      <hr/>
+      <ul>
+        <li><span class="iy">&#10003;</span>Everything in Free</li>
+        <li><span class="iy">&#10003;</span>Standard AI included<span class="ch">~2,000 tasks/mo</span></li>
+        <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">500/mo</span></li>
+        <li><span class="iy">&#10003;</span>Mesh &mdash; 10 devices</li>
+        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team</span></li>
+      </ul>
     </div>
 
-    <!-- Managed plans -->
-    <p class="plans-section-label">Managed AI Plans — adris.tech provides the AI · No key needed</p>
-    <div class="plans-grid">
-
-      <!-- Starter -->
-      <div class="plan-card">
-        <div class="plan-name">Starter</div>
-        <div class="plan-desc">Individuals and small projects getting started with AI agents.</div>
-        <div class="plan-price india-price">₹1,499<sub>/mo</sub></div>
-        <div class="plan-price intl-price" style="display:none">$24<sub>/mo</sub></div>
-        <div class="plan-price-note india-price">Billed monthly · ~₹50/day</div>
-        <div class="plan-price-note intl-price" style="display:none">Billed monthly</div>
-        <hr class="plan-divider" />
-        <ul class="plan-features">
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Managed AI tokens
-            <span class="val">2M / mo</span>
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Cloud automation runs
-            <span class="val">1,000 / mo</span>
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Gemini 2.5 Flash
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Full Krew · 43 agents
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Coder · Guard · Vault
-          </li>
-        </ul>
-        <a href="/download" class="plan-cta">Get Starter</a>
+    <!-- BUILDER (featured) -->
+    <div class="pc ft">
+      <div class="badge">&#11088; Most popular</div>
+      <div class="pb" style="color:rgba(255,255,255,.45)">adris.tech</div>
+      <div class="pn">Builder</div>
+      <div class="pt">For agencies, founders and power users running real AI workflows.</div>
+      <div class="pri">
+        <div class="pi">&#8377;4,999<sub>/mo</sub></div>
+        <div class="pu">$49 / month</div>
       </div>
-
-      <!-- Pro (featured) -->
-      <div class="plan-card featured">
-        <div class="plan-badge">Most popular</div>
-        <div class="plan-name" style="color:var(--accent)">Pro</div>
-        <div class="plan-desc">Solopreneurs and growing teams who need more power and automation.</div>
-        <div class="plan-price india-price">₹3,999<sub>/mo</sub></div>
-        <div class="plan-price intl-price" style="display:none">$69<sub>/mo</sub></div>
-        <div class="plan-price-note india-price">Billed monthly · ~₹133/day</div>
-        <div class="plan-price-note intl-price" style="display:none">Billed monthly</div>
-        <hr class="plan-divider" />
-        <ul class="plan-features">
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Managed AI tokens
-            <span class="val">8M / mo</span>
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Cloud automation runs
-            <span class="val">5,000 / mo</span>
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Gemini 2.5 Flash + Claude
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Everything in Starter
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Studio · Mesh · Voice input
-          </li>
-        </ul>
-        <a href="/download" class="plan-cta primary">Get Pro</a>
+      <div class="bts">
+        <button class="bi" onclick="payWithINR('builder')">Pay in &#8377; 4,999 &rarr;</button>
+        <button class="bu" onclick="payWithUSD()">Pay in $ 49 &rarr;</button>
       </div>
+      <hr/>
+      <ul>
+        <li><span class="iy">&#10003;</span>Everything in Solo</li>
+        <li><span class="iy">&#10003;</span>Advanced AI included<span class="ch">~8,000 tasks/mo</span></li>
+        <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">5,000/mo</span></li>
+        <li><span class="iy">&#10003;</span>Mesh &mdash; 25 devices</li>
+        <li><span class="in">&#10007;</span><span class="dm">Guard &middot; Team</span></li>
+      </ul>
+    </div>
 
-      <!-- Business -->
-      <div class="plan-card">
-        <div class="plan-name">Business</div>
-        <div class="plan-desc">Agencies and established teams running at scale with heavy automation.</div>
-        <div class="plan-price india-price">₹9,999<sub>/mo</sub></div>
-        <div class="plan-price intl-price" style="display:none">$169<sub>/mo</sub></div>
-        <div class="plan-price-note india-price">Billed monthly</div>
-        <div class="plan-price-note intl-price" style="display:none">Billed monthly</div>
-        <hr class="plan-divider" />
-        <ul class="plan-features">
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Managed AI tokens
-            <span class="val">25M / mo</span>
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Cloud automation runs
-            <span class="val">20,000 / mo</span>
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Gemini 2.5 Pro + Claude Opus
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Everything in Pro
-          </li>
-          <li>
-            <span class="icon yes"><svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></span>
-            Priority support · SLA
-          </li>
-        </ul>
-        <a href="/download" class="plan-cta">Get Business</a>
+    <!-- BUSINESS -->
+    <div class="pc">
+      <div class="pb">adris.tech</div>
+      <div class="pn">Business</div>
+      <div class="pt">For teams running a full AI office with security and admin controls.</div>
+      <div class="pri">
+        <div class="pi">&#8377;19,999<sub>/mo</sub></div>
+        <div class="pu">$199 / month</div>
       </div>
+      <div class="bts">
+        <button class="bi" onclick="payWithINR('pro')">Pay in &#8377; 19,999 &rarr;</button>
+        <button class="bu" onclick="payWithUSD()">Pay in $ 199 &rarr;</button>
+      </div>
+      <hr/>
+      <ul>
+        <li><span class="iy">&#10003;</span>Everything in Builder</li>
+        <li><span class="iy">&#10003;</span>Priority Advanced AI<span class="ch">~30,000 tasks/mo</span></li>
+        <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">Unlimited*</span></li>
+        <li><span class="iy">&#10003;</span>Mesh &mdash; 50 devices</li>
+        <li><span class="iy">&#10003;</span>Guard (security scanner)</li>
+        <li><span class="iy">&#10003;</span>Team workspace + admin controls</li>
+        <li><span class="iy">&#10003;</span>Priority support + SLA</li>
+      </ul>
+    </div>
 
+  </div>
+  <p style="font-size:11px;color:var(--mu);margin-top:16px;font-family:var(--font-mono);padding:0 2px">* Unlimited runs on Business are subject to fair use. Task estimates are approximate &mdash; actual usage varies by complexity.</p>
+</section>
+
+<!-- ── TEAM card — wide horizontal below the 4 plans ─────────── -->
+<section class="team-wrap">
+  <div class="tc">
+    <div>
+      <div class="tc-brand">adris.tech</div>
+      <div class="tc-name">
+        Team
+        <span class="tc-soon">Coming soon</span>
+      </div>
+      <div class="tc-desc">Power your whole team with adris.tech. Shared AI budget, centralised billing, team analytics, and a dedicated success manager.</div>
+    </div>
+    <div class="tc-col">
+      <h5>Collaboration</h5>
+      <ul>
+        <li>Up to 10 seats included</li>
+        <li>Shared agent library</li>
+        <li>Team analytics &amp; audit logs</li>
+        <li>Centralised billing &amp; admin</li>
+      </ul>
+    </div>
+    <div class="tc-col">
+      <h5>Enterprise</h5>
+      <ul>
+        <li>Everything in Business</li>
+        <li>SSO (Single sign-on)</li>
+        <li>Custom AI policies</li>
+        <li>Dedicated success manager</li>
+      </ul>
+    </div>
+    <div>
+      <a href="mailto:hello@adris.tech?subject=Team plan enquiry" class="tc-cta">Contact us &rarr;</a>
     </div>
   </div>
 </section>
 
-<!-- ── COMPARE TABLE ──────────────────────────────────────────── -->
-<section class="compare-wrap">
-  <div style="max-width:1100px;margin:0 auto;">
-    <h2>Full feature comparison</h2>
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th style="width:35%">Feature</th>
-          <th class="plan-col" style="width:16%">BYOK / Local</th>
-          <th class="plan-col" style="width:16%">Starter</th>
-          <th class="plan-col hl" style="width:16%">Pro ⭐</th>
-          <th class="plan-col" style="width:16%">Business</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="row-group"><td colspan="5">AI &amp; Model Access</td></tr>
-        <tr>
-          <td>Managed AI tokens</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="val">2M / mo</span></td>
-          <td class="center"><span class="val">8M / mo</span></td>
-          <td class="center"><span class="val">25M / mo</span></td>
-        </tr>
-        <tr>
-          <td>AI model</td>
-          <td class="center" style="font-size:12px;color:var(--muted)">Your key</td>
-          <td class="center" style="font-size:12px">Gemini 2.5 Flash</td>
-          <td class="center" style="font-size:12px">Gemini + Claude</td>
-          <td class="center" style="font-size:12px">Gemini Pro + Claude Opus</td>
-        </tr>
-        <tr>
-          <td>BYOK / Local model support</td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
+<!-- ── ALL PLANS INCLUDE ──────────────────────────────────────── -->
+<section class="ip">
+  <div class="inn">
+    <p class="ey">// every plan, every tier</p>
+    <h2>Included in all plans</h2>
+    <div class="ig">
+      <div class="ii"><div class="ico">&#129302;</div><div class="nm">45+ AI Agents</div><div class="ds">Full Krew &mdash; content, code, finance, sales, support</div></div>
+      <div class="ii"><div class="ico">&#128187;</div><div class="nm">Coder</div><div class="ds">AI pair programmer with terminal and file editor</div></div>
+      <div class="ii"><div class="ico">&#127917;</div><div class="nm">Studio</div><div class="ds">Video scripts, banner generator, visual asset creator</div></div>
+      <div class="ii"><div class="ico">&#128274;</div><div class="nm">Vault</div><div class="ds">Private AI with DNS-level network protection</div></div>
+      <div class="ii"><div class="ico">&#128230;</div><div class="nm">Models</div><div class="ds">Pull and run any Ollama model directly in-app</div></div>
+      <div class="ii"><div class="ico">&#128273;</div><div class="nm">BYOK support</div><div class="ds">Use your own Gemini, OpenAI or Claude API key</div></div>
+    </div>
+  </div>
+</section>
 
-        <tr class="row-group"><td colspan="5">Automation</td></tr>
-        <tr>
-          <td>Cloud automation runs</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="val">1,000 / mo</span></td>
-          <td class="center"><span class="val">5,000 / mo</span></td>
-          <td class="center"><span class="val">20,000 / mo</span></td>
-        </tr>
-        <tr>
-          <td>Automation triggers (schedule, email, file)</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-
-        <tr class="row-group"><td colspan="5">Krew AI Agents</td></tr>
-        <tr>
-          <td>All 43 agents (Krew)</td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-        <tr>
-          <td>Boss agent (multi-agent routing)</td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-
-        <tr class="row-group"><td colspan="5">Modules</td></tr>
-        <tr>
-          <td>Coder (AI pair programmer)</td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-        <tr>
-          <td>Vault (private AI)</td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-        <tr>
-          <td>Guard (security scanner)</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-        <tr>
-          <td>Studio (video / banner generator)</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-        <tr>
-          <td>Mesh (device network)</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-        <tr>
-          <td>Voice to action</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-
-        <tr class="row-group"><td colspan="5">Support</td></tr>
-        <tr>
-          <td>Community support</td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-        <tr>
-          <td>Priority support + SLA</td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="cross">—</span></td>
-          <td class="center"><span class="tick">✓</span></td>
-        </tr>
-
-        <tr class="row-group"><td colspan="5">Price</td></tr>
-        <tr>
-          <td>India (₹/mo)</td>
-          <td class="center india-price">₹500</td>
-          <td class="center india-price">₹1,499</td>
-          <td class="center india-price" style="font-weight:600;color:var(--accent)">₹3,999</td>
-          <td class="center india-price">₹9,999</td>
-          <td class="center intl-price" style="display:none">—</td>
-          <td class="center intl-price" style="display:none">—</td>
-          <td class="center intl-price" style="display:none">—</td>
-          <td class="center intl-price" style="display:none">—</td>
-        </tr>
-        <tr>
-          <td>International ($/mo)</td>
-          <td class="center intl-price">$5</td>
-          <td class="center intl-price">$24</td>
-          <td class="center intl-price" style="font-weight:600;color:var(--accent)">$69</td>
-          <td class="center intl-price">$169</td>
-          <td class="center india-price" style="display:none">—</td>
-          <td class="center india-price" style="display:none">—</td>
-          <td class="center india-price" style="display:none">—</td>
-          <td class="center india-price" style="display:none">—</td>
-        </tr>
-      </tbody>
-    </table>
-    <p style="font-size:12px;color:var(--muted);margin-top:16px;">* Business plan includes 25M managed tokens/month. Heavy users may switch to BYOK for additional usage at cost.</p>
+<!-- ── WHAT SCALES ────────────────────────────────────────────── -->
+<section>
+  <div class="ss">
+    <h2>What scales with your plan</h2>
+    <p class="sub">Everything above is in every plan. Only these scale.</p>
+    <div style="overflow-x:auto">
+      <table class="st">
+        <thead>
+          <tr>
+            <th style="width:30%">Feature</th>
+            <th class="c">Free</th>
+            <th class="c">Solo</th>
+            <th class="c hl">Builder &#11088;</th>
+            <th class="c">Business</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Platform AI</td><td class="c"><span class="cross">&#8212;</span></td><td class="c">Standard</td><td class="c">Advanced</td><td class="c">Priority Advanced</td></tr>
+          <tr><td>AI tasks / month</td><td class="c"><span class="cross">&#8212;</span></td><td class="c"><span class="chip">~2,000</span></td><td class="c"><span class="chip">~8,000</span></td><td class="c"><span class="chip">~30,000</span></td></tr>
+          <tr><td>Cloud automation runs</td><td class="c"><span class="cross">&#8212;</span></td><td class="c"><span class="chip">500/mo</span></td><td class="c"><span class="chip">5,000/mo</span></td><td class="c"><span class="chip">Unlimited*</span></td></tr>
+          <tr><td>Mesh devices</td><td class="c"><span class="chip">3</span></td><td class="c"><span class="chip">10</span></td><td class="c"><span class="chip">25</span></td><td class="c"><span class="chip">50</span></td></tr>
+          <tr><td>Guard (security scanner)</td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
+          <tr><td>Team workspace</td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c">Coming soon</td></tr>
+          <tr><td>Priority support + SLA</td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
+          <tr class="grp"><td colspan="5">Price</td></tr>
+          <tr><td>India (&#8377;/month)</td><td class="c">&#8377;0</td><td class="c">&#8377;1,499</td><td class="c" style="font-weight:600;color:var(--ac)">&#8377;4,999</td><td class="c">&#8377;19,999</td></tr>
+          <tr><td>International ($/month)</td><td class="c">$0</td><td class="c">$15</td><td class="c" style="font-weight:600;color:var(--ac)">$49</td><td class="c">$199</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
 <!-- ── FAQ ────────────────────────────────────────────────────── -->
-<section style="background:var(--paper-2);">
-  <div class="faq-wrap">
+<section class="fs">
+  <div class="inn">
     <h2>Common questions</h2>
 
-    <details class="faq-item">
-      <summary>What's the difference between BYOK and managed plans?</summary>
-      <p>With BYOK (Bring Your Own Key), you connect your own Gemini, OpenAI, or Claude API key — you pay the AI provider directly and adris.tech charges only a small platform fee (₹500/mo or $5/mo). Managed plans mean adris.tech provides the AI — no key needed, tokens are included in the plan price.</p>
-    </details>
+    <p class="fcat">Platform AI</p>
+    <details class="fq"><summary>What is &ldquo;Standard AI&rdquo; vs &ldquo;Advanced AI&rdquo;?</summary><p>Standard AI handles everyday tasks well &mdash; captions, emails, quick research, short code. Advanced AI handles complex multi-step work with higher accuracy and larger context. Both are included with no API key needed on any paid plan.</p></details>
+    <details class="fq"><summary>Can I use my own API key on a paid plan?</summary><p>Yes &mdash; BYOK works on all plans. Connect your own Gemini, OpenAI or Claude key and use it alongside or instead of the included AI. BYOK usage never counts toward your task quota.</p></details>
+    <details class="fq"><summary>What counts as an AI task?</summary><p>Roughly one meaningful AI request &mdash; writing a caption, running research, doing a code review. Simple short requests use fewer resources; deep analysis of large documents uses more. Think of it as a guide, not a hard counter.</p></details>
 
-    <details class="faq-item">
-      <summary>What happens when I hit my monthly token limit?</summary>
-      <p>The app shows a friendly notice and switches you to BYOK mode automatically — you can continue working using your own API key with zero interruption. Your data and history stay intact. Upgrade anytime to get more managed tokens.</p>
-    </details>
+    <p class="fcat">Automation</p>
+    <details class="fq"><summary>What counts as an automation run?</summary><p>Each time a saved automation fires &mdash; triggered by a schedule, an email, or a file drop. Creating, editing or pausing automations uses no runs.</p></details>
+    <details class="fq"><summary>Do local automations count toward my quota?</summary><p>No. Automations that run entirely on your machine (local triggers, local actions, no cloud functions) don&rsquo;t consume cloud run credits.</p></details>
 
-    <details class="faq-item">
-      <summary>What counts as an "automation run"?</summary>
-      <p>Each time an automation you've saved runs — whether triggered by a schedule, incoming email, or file drop — that counts as one run. Creating and editing automations doesn't use runs; only live execution does.</p>
-    </details>
+    <p class="fcat">Mesh &amp; devices</p>
+    <details class="fq"><summary>What is Mesh?</summary><p>Mesh connects your devices (PC, laptop, phone) so they can share AI tasks and files over an encrypted tunnel &mdash; no cloud storage needed. Each plan includes a device limit for your Mesh network.</p></details>
 
-    <details class="faq-item">
-      <summary>Can I use a local model (Ollama, LM Studio) on any plan?</summary>
-      <p>Yes — local models work on every plan including BYOK. They don't consume managed tokens or automation run counts since everything stays on your machine.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Is there a free plan?</summary>
-      <p>Yes — the Explore tier gives you 100,000 managed tokens (lifetime, not monthly) to try the platform at no cost. It's available the moment you download adris.tech. No credit card required.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Do BYOK plans get discounts for longer commitments?</summary>
-      <p>Yes. Pay quarterly for 10% off, semi-annually for 15% off, or annually for the best rate. You can lock in at ₹450/mo (vs ₹500/mo) on the 3-month BYOK plan, all the way down to ₹267/mo on the annual plan.</p>
-    </details>
+    <p class="fcat">Payments &amp; billing</p>
+    <details class="fq"><summary>Can I pay in Indian Rupees?</summary><p>Yes. Every paid plan shows both &#8377; and $ prices with separate payment buttons. Indian payments go through Razorpay in INR; international payments are handled via email within 2 hours.</p></details>
+    <details class="fq"><summary>Is there a free plan?</summary><p>Yes. Download adris.tech and get the full platform &mdash; all modules included. Just bring your own API key or run local models. No credit card, no trial expiry.</p></details>
   </div>
 </section>
 
 <!-- ── CTA ────────────────────────────────────────────────────── -->
-<section class="cta-strip">
-  <h2>Start building today</h2>
-  <p>Download adris.tech free. No credit card. 100,000 tokens included.</p>
-  <div class="btn-group">
-    <a href="/download" class="btn-primary">
-      Download for Windows
-      <svg width="12" height="12" viewBox="0 0 10 10" fill="none">
-        <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-      </svg>
+<section class="cs">
+  <h2>Start free today</h2>
+  <p>All modules. No card required.</p>
+  <div class="cr">
+    <a href="/download" class="cp">Download for Windows
+      <svg width="11" height="11" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5"/></svg>
     </a>
-    <a href="/#modules" class="btn-secondary">Explore modules →</a>
+    <a href="/affiliates" class="cx">Become an affiliate &rarr;</a>
   </div>
 </section>
 
+<!-- ── SUCCESS MODAL ──────────────────────────────────────────── -->
+<div class="mb" id="successModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbx" style="text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">&#127881;</div>
+    <h3>Payment successful!</h3>
+    <p>You are now on the <strong id="successPlan"></strong> plan. Download adris.tech to get started.</p>
+    <a href="/download" class="dl" style="margin-top:4px">Download adris.tech &rarr;</a>
+  </div>
+</div>
+
+<!-- ── USD MODAL ──────────────────────────────────────────────── -->
+<div class="mb" id="usdModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbx">
+    <button class="mx" onclick="document.getElementById('usdModal').classList.remove('open')">&#215;</button>
+    <h3>International payment</h3>
+    <p>USD payments are processed via email. Tell us your plan and we will send a payment link within 2 hours.</p>
+    <a href="mailto:hello@adris.tech?subject=adris.tech plan payment" class="dl">Email us to pay in $ &rarr;</a>
+  </div>
+</div>
+
+<!-- ── LOGIN MODAL ────────────────────────────────────────────── -->
+<div class="mb" id="loginModal" onclick="if(event.target===this)closeLogin()">
+  <div class="mbx">
+    <button class="mx" onclick="closeLogin()">&#215;</button>
+    <h3>Sign in to adris.tech</h3>
+    <p>adris.tech is a Windows desktop app. Download it to create your account &mdash; payment happens inside the app after sign-up.</p>
+    <a href="/download" class="dl">Download &amp; get started &mdash; free</a>
+    <div class="sep">// already installed?</div>
+    <button class="oa" onclick="tryOpenApp()">Open adris.tech app &rarr;</button>
+  </div>
+</div>
+
+<!-- ── AFFILIATE POPUP ────────────────────────────────────────── -->
+<div class="ap" id="affPop">
+  <button class="ax" onclick="closeAffPop()">&#215;</button>
+  <div class="at">Referral invite</div>
+  <h4 id="affTitle">You&rsquo;ve been invited!</h4>
+  <p id="affBody">Download adris.tech and create your free account.</p>
+  <div class="oc" id="affOffer" style="display:none"><span id="affOfferTxt"></span></div>
+  <a href="/download" class="ab">Download &amp; claim &rarr;</a>
+  <div class="an">Free to start &middot; no credit card</div>
+</div>
+
 <script>
-// ── Market toggle ─────────────────────────────────────────────
-let currentMarket = 'india';
+const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+const PLAN_NAMES = { solo:'Solo', builder:'Builder', pro:'Business' };
 
-function setMarket(market) {
-  currentMarket = market;
-  document.querySelectorAll('[data-market]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.market === market);
+function openLogin()  { document.getElementById('loginModal').classList.add('open'); }
+function closeLogin() { document.getElementById('loginModal').classList.remove('open'); }
+function tryOpenApp() { window.location.href='adris://open'; setTimeout(()=>window.location.href='/download',1500); }
+
+async function signInWithGoogle(pendingPlan) {
+  if (pendingPlan) sessionStorage.setItem('pendingPlan', pendingPlan);
+  await _supa.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/pricing' }
   });
-  document.querySelectorAll('.india-price').forEach(el => {
-    el.style.display = market === 'india' ? '' : 'none';
-  });
-  document.querySelectorAll('.intl-price').forEach(el => {
-    el.style.display = market === 'intl' ? '' : 'none';
-  });
-  updateByokPrice();
 }
 
-// ── BYOK billing period ───────────────────────────────────────
-const BYOK_PRICES = {
-  india: {
-    monthly: { display: '₹500',   sub: '/mo',  note: '' },
-    '3mo':   { display: '₹1,350', sub: '/3 mo', note: '₹450/mo · 10% off monthly' },
-    '6mo':   { display: '₹2,125', sub: '/6 mo', note: '₹354/mo · 15% off monthly' },
-    '1yr':   { display: '₹3,200', sub: '/yr',   note: '₹267/mo · best value' },
-  },
-  intl: {
-    monthly: { display: '$5',     sub: '/mo',  note: '' },
-    '3mo':   { display: '$13.50', sub: '/3 mo', note: '$4.50/mo · 10% off' },
-    '6mo':   { display: '$21.25', sub: '/6 mo', note: '$3.54/mo · 15% off' },
-    '1yr':   { display: '$32',    sub: '/yr',   note: '$2.67/mo · best value' },
-  },
-};
-
-let currentPeriod = 'monthly';
-
-function setByokPeriod(period) {
-  currentPeriod = period;
-  document.querySelectorAll('[data-period]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.period === period);
-  });
-  updateByokPrice();
+async function payWithINR(planKey) {
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) {
+    openLogin();
+    const dlBtn = document.querySelector('#loginModal .dl');
+    dlBtn.textContent = 'Continue with Google to pay';
+    dlBtn.onclick = (e) => { e.preventDefault(); signInWithGoogle(planKey); };
+    return;
+  }
+  await startRazorpayPayment(planKey, session);
 }
 
-function updateByokPrice() {
-  const data = BYOK_PRICES[currentMarket][currentPeriod];
-  document.getElementById('byokPriceVal').textContent = data.display;
-  document.getElementById('byokPriceSub').textContent = data.sub;
-  document.getElementById('byokNote').textContent = data.note || ' ';
+function payWithUSD() {
+  document.getElementById('usdModal').classList.add('open');
 }
 
-// ── Theme toggle ──────────────────────────────────────────────
-(function() {
-  const saved = localStorage.getItem('theme') || 'paper';
-  document.documentElement.setAttribute('data-theme', saved);
-  const btn = document.getElementById('themeToggle');
-  if (btn) btn.setAttribute('data-active', saved);
-})();
+async function startRazorpayPayment(planKey, session) {
+  try {
+    const res = await fetch(SUPA_URL + '/functions/v1/razorpay-create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+      body: JSON.stringify({ plan: planKey }),
+    });
+    const order = await res.json();
+    if (!res.ok || order.error) { alert('Payment setup failed: ' + (order.error || 'Please try again.')); return; }
+
+    const rzp = new window.Razorpay({
+      key:         order.key_id,
+      order_id:    order.order_id,
+      amount:      order.amount,
+      currency:    order.currency,
+      name:        'adris.tech',
+      description: PLAN_NAMES[planKey] + ' Plan',
+      prefill:     { email: session.user.email, name: session.user.user_metadata?.full_name || '' },
+      theme:       { color: '#7C5CFF' },
+      handler: function() {
+        document.getElementById('successPlan').textContent = PLAN_NAMES[planKey] || planKey;
+        document.getElementById('successModal').classList.add('open');
+      },
+    });
+    rzp.open();
+  } catch (err) {
+    alert('Something went wrong: ' + err.message);
+  }
+}
+
+async function onLoad() {
+  const { data: { session } } = await _supa.auth.getSession();
+  if (session) {
+    const pending = sessionStorage.getItem('pendingPlan');
+    if (pending) { sessionStorage.removeItem('pendingPlan'); await startRazorpayPayment(pending, session); }
+  }
+}
+onLoad();
+
+function closeAffPop() { document.getElementById('affPop').classList.remove('show'); sessionStorage.setItem('aff_closed','1'); }
+
+async function initAffiliate() {
+  if (sessionStorage.getItem('aff_closed')) return;
+  const ref = new URLSearchParams(location.search).get('ref') || new URLSearchParams(location.search).get('r');
+  if (!ref) return;
+  localStorage.setItem('adris_ref', JSON.stringify({ code:ref, expires: Date.now()+30*24*60*60*1000 }));
+  try {
+    const res = await fetch(SUPA_URL+'/rest/v1/rpc/track_affiliate_visit', {
+      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPA_ANON},
+      body: JSON.stringify({ p_ref_code:ref, p_source_url:location.href }),
+    });
+    const d = await res.json();
+    if (!d) return;
+    document.getElementById('affTitle').textContent = 'You were invited by '+(d.first_name||'a friend')+'!';
+    document.getElementById('affBody').textContent  = d.offer_discount_pct > 0
+      ? (d.first_name||'They')+' shared adris.tech with you. Sign up to get '+d.offer_discount_pct+'% off.'
+      : 'Download adris.tech and create a free account.';
+    if (d.offer_discount_pct > 0 || d.offer_text) {
+      document.getElementById('affOfferTxt').textContent = d.offer_text || d.offer_discount_pct+'% off first month';
+      document.getElementById('affOffer').style.display  = 'inline-flex';
+    }
+    setTimeout(()=>document.getElementById('affPop').classList.add('show'), 800);
+  } catch {}
+}
 
 document.getElementById('themeToggle')?.addEventListener('click', function() {
-  const current = document.documentElement.getAttribute('data-theme') || 'paper';
-  const next = current === 'paper' ? 'ink' : 'paper';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-  this.setAttribute('data-active', next);
+  const n = (document.documentElement.getAttribute('data-theme')||'paper')==='paper'?'ink':'paper';
+  document.documentElement.setAttribute('data-theme', n);
+  localStorage.setItem('theme', n);
 });
 
-// ── Mobile nav ────────────────────────────────────────────────
 function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('mobileNavOverlay').classList.remove('open');
-  document.getElementById('navHam').classList.remove('open');
-  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
-  document.body.style.overflow = '';
+  ['mobileNav','mobileNavOverlay'].forEach(id=>document.getElementById(id)?.classList.remove('open'));
+  const ham = document.getElementById('navHam');
+  ham?.classList.remove('open'); ham?.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
 }
 document.getElementById('navHam')?.addEventListener('click', function() {
-  const open = this.classList.toggle('open');
-  document.getElementById('mobileNav').classList.toggle('open', open);
-  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
-  this.setAttribute('aria-expanded', open);
-  document.body.style.overflow = open ? 'hidden' : '';
+  const o=this.classList.toggle('open');
+  document.getElementById('mobileNav')?.classList.toggle('open',o);
+  document.getElementById('mobileNavOverlay')?.classList.toggle('open',o);
+  this.setAttribute('aria-expanded',o);
+  document.body.style.overflow=o?'hidden':'';
 });
+
+initAffiliate();
 </script>
 </body>
 </html>
