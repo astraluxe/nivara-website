@@ -162,7 +162,7 @@ section {
 }
 .nav-links {
   display: flex;
-  gap: 28px;
+  gap: 20px;
   justify-self: center;
 }
 .nav-links a {
@@ -176,7 +176,7 @@ section {
   justify-self: end;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 .nav-right .btn {
   display: flex;
@@ -1886,12 +1886,12 @@ body.tour-open { overflow: hidden; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0 14px;
+  padding: 0 12px;
   height: 32px;
-  margin-left: 20px;
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-2);
   border: 1px solid var(--rule-strong);
