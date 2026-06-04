@@ -11,6 +11,7 @@
     { "source": "/terms",               "destination": "/terms.html" },
     { "source": "/privacy",             "destination": "/privacy.html" },
     { "source": "/signin",              "destination": "/signin.html" },
+    { "source": "/join",                "destination": "/join.html" },
     { "source": "/affiliate-dashboard", "destination": "/affiliate-dashboard.html" },
     { "source": "/modules/krew",        "destination": "/modules/krew.html" },
     { "source": "/modules/krew-chat",   "destination": "/modules/krew-chat.html" },
