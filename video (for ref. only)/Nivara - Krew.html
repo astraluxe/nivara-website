@@ -1,0 +1,520 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Adris · Krew · Video</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#0a0a0a;font-family:'Inter Tight',system-ui,sans-serif;overflow:hidden}
+  #root{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root" data-screen-label="krew · t=0s"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+
+<script type="text/babel">
+const { Sprite, useTime, useTimeline, Easing, clamp, Stage } = window;
+
+// ─── shared tokens (match cards + main video) ──────────────────────────────
+const INK='#0c0b14', INK2='#3a3548', INK3='#7a7388';
+const PURPLE='#6d4cff', PURPLE2='#8a6cff', PURPLE_DEEP='#3a1fb8', PURPLE_SOFT='#efeaff';
+const PAPER='#ffffff', PAPER2='#faf8f5';
+const FONT='Inter Tight, system-ui, sans-serif';
+const MONO="'JetBrains Mono', ui-monospace, monospace";
+
+// ─── time-label updater ────────────────────────────────────────────────────
+function TimeLabel(){
+  const t = useTime();
+  React.useEffect(() => {
+    document.getElementById('root').setAttribute('data-screen-label', `krew · t=${t.toFixed(1)}s`);
+  }, [t]);
+  return null;
+}
+
+// ─── reusable subtitle ─────────────────────────────────────────────────────
+function Subtitle({ start, end, lines = [], small }){
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime, duration }) => {
+        const inT = clamp(localTime / 0.35, 0, 1);
+        const outT = clamp((localTime - (duration - 0.35)) / 0.35, 0, 1);
+        const op = Math.min(Easing.easeOutCubic(inT), 1 - Easing.easeInCubic(outT));
+        const ty = (1 - Easing.easeOutCubic(inT)) * 18 - outT * 10;
+        return (
+          <div style={{
+            position:'absolute', left:80, right:80, bottom:200,
+            textAlign:'center', opacity:op, transform:`translateY(${ty}px)`,
+            fontFamily:FONT, fontWeight:600, fontSize:small?56:68, lineHeight:1.12,
+            color:INK, letterSpacing:'-0.022em',
+          }}>
+            {lines.map((l,i) => (
+              <div key={i} style={{marginTop:i===0?0:8}} dangerouslySetInnerHTML={{__html:l}} />
+            ))}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ─── module badge top-left ─────────────────────────────────────────────────
+function ModuleBadge({ label }){
+  const { time, duration } = useTimeline();
+  const hide = time > duration - 3.5;
+  return (
+    <div style={{
+      position:'absolute', left:70, top:70,
+      display:'flex', alignItems:'center', gap:14,
+      opacity:hide?0:0.7, transition:'opacity 300ms',
+      fontFamily:MONO, fontSize:22, color:INK3,
+      letterSpacing:'0.14em', textTransform:'uppercase',
+    }}>
+      <img src="Adris-logo.png" alt="" style={{width:36,height:36,borderRadius:8}}/>
+      <span>Adris · {label}</span>
+    </div>
+  );
+}
+
+// ─── progress bar bottom ───────────────────────────────────────────────────
+function ProgressBar(){
+  const { time, duration } = useTimeline();
+  const p = clamp(time/duration, 0, 1);
+  return (
+    <div style={{position:'absolute', left:0, right:0, bottom:0, height:6, background:'rgba(12,11,20,0.06)'}}>
+      <div style={{width:`${p*100}%`, height:'100%', background:PURPLE, boxShadow:`0 0 14px ${PURPLE}`}}/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 1 (0 – 3.5s) — Monday inbox chaos
+// ════════════════════════════════════════════════════════════════════════
+function S1_Chaos(){
+  return (
+    <Sprite start={0} end={3.5}>
+      {({ localTime }) => {
+        // floating chips falling in: 47 emails / 3 calls / 9 tasks / 2 PRDs
+        const items = [
+          { txt:'47 emails',  x: 120, y: 480, d:0.0  },
+          { txt:'3 calls',    x: 660, y: 580, d:0.25 },
+          { txt:'9 tasks',    x: 200, y: 720, d:0.5  },
+          { txt:'2 PRDs',     x: 620, y: 820, d:0.75 },
+          { txt:'5 DMs',      x: 360, y: 960, d:1.0  },
+          { txt:'8 unreads',  x: 180, y:1080, d:1.25 },
+        ];
+        return (
+          <>
+            {items.map((it, i) => {
+              const lt = localTime - it.d;
+              if (lt < 0) return null;
+              const inT = Easing.easeOutBack(clamp(lt/0.5, 0, 1));
+              const op = clamp(lt/0.3, 0, 1);
+              return (
+                <div key={i} style={{
+                  position:'absolute', left:it.x, top:it.y,
+                  padding:'18px 26px', borderRadius:999,
+                  background:PURPLE_SOFT, border:`1px solid rgba(109,76,255,0.2)`,
+                  fontFamily:MONO, fontSize:28, color:PURPLE_DEEP, fontWeight:600,
+                  opacity:op, transform:`scale(${0.6 + inT*0.4})`,
+                }}>{it.txt}</div>
+              );
+            })}
+            <div style={{
+              position:'absolute', left:0, right:0, top:340,
+              textAlign:'center',
+              fontFamily:MONO, fontSize:28, color:INK3,
+              letterSpacing:'0.16em', textTransform:'uppercase',
+              opacity:clamp(localTime/0.3, 0, 1),
+            }}>MONDAY · 9:14 AM</div>
+          </>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 2 (3.5 – 7s) — Wish: "If only your team scaled instantly"
+// ════════════════════════════════════════════════════════════════════════
+function S2_Wish(){
+  return (
+    <Sprite start={3.5} end={7}>
+      {({ localTime }) => {
+        const op = clamp(localTime/0.4, 0, 1);
+        const drift = Math.sin(localTime*1.2) * 8;
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:op, transform:`translateY(${drift}px)`,
+          }}>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:120,
+              color:INK, letterSpacing:'-0.04em', lineHeight:1.0,
+              textAlign:'center',
+            }}>
+              You.<br/>
+              <span style={{color:PURPLE}}>× 43</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 3 (7 – 12s) — Chat with Arjun.Boss
+// ════════════════════════════════════════════════════════════════════════
+function S3_Arjun(){
+  return (
+    <Sprite start={7} end={12.5}>
+      {({ localTime }) => {
+        // User message (you) appears, then Arjun replies, then tasks
+        const showUser = localTime > 0.2;
+        const showThink = localTime > 1.2;
+        const showArjun = localTime > 1.9;
+        const showDelegations = localTime > 3.0;
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:760, transform:'translate(-50%,-50%)',
+            width:880, display:'flex', flexDirection:'column', gap:18,
+          }}>
+            {/* User msg */}
+            {showUser && (
+              <div style={{
+                alignSelf:'flex-end', maxWidth:680,
+                padding:'22px 28px', borderRadius:'22px 22px 6px 22px',
+                background:INK, color:'#fff',
+                fontSize:32, lineHeight:1.35,
+                opacity:clamp((localTime-0.2)/0.4, 0, 1),
+                transform:`translateY(${(1-clamp((localTime-0.2)/0.4,0,1))*12}px)`,
+              }}>Write me a launch announcement for our v2 release.</div>
+            )}
+            {/* Thinking dots */}
+            {showThink && !showArjun && (
+              <div style={{display:'flex', gap:10, marginLeft:8}}>
+                {[0,1,2].map(i => {
+                  const p = (Math.sin((localTime*4) - i*0.6) + 1)/2;
+                  return <div key={i} style={{width:14,height:14,borderRadius:7,background:PURPLE,opacity:0.3+p*0.7,transform:`scale(${0.7+p*0.5})`}}/>;
+                })}
+              </div>
+            )}
+            {/* Arjun msg */}
+            {showArjun && (
+              <div style={{
+                alignSelf:'flex-start', maxWidth:720,
+                padding:'22px 28px', borderRadius:'22px 22px 22px 6px',
+                background:PURPLE_SOFT, color:INK,
+                fontSize:30, lineHeight:1.35,
+                opacity:clamp((localTime-1.9)/0.4, 0, 1),
+                transform:`translateY(${(1-clamp((localTime-1.9)/0.4,0,1))*12}px)`,
+              }}>
+                <div style={{display:'flex', alignItems:'center', gap:12, marginBottom:10}}>
+                  <div style={{width:36,height:36,borderRadius:10,background:PURPLE,color:'#fff',display:'grid',placeItems:'center',fontWeight:700,fontSize:18}}>A</div>
+                  <div style={{fontFamily:MONO,fontSize:18,color:PURPLE_DEEP,letterSpacing:'0.08em',textTransform:'uppercase'}}>Arjun · Boss</div>
+                </div>
+                On it. I'll loop in Zara for copy and Vikram for the launch plan.
+              </div>
+            )}
+            {/* Delegations */}
+            {showDelegations && (
+              <div style={{display:'flex', flexDirection:'column', gap:12, marginLeft:12, marginTop:6}}>
+                {[
+                  {n:'Zara · Content',  c:'#ff7a59', d:0, txt:'Drafting 3 headline options…'},
+                  {n:'Vikram · Mktg',   c:'#3b7fff', d:0.4, txt:'Building 7-day launch plan…'},
+                  {n:'Krish · Sales',   c:'#1fb88b', d:0.8, txt:'Preparing customer DMs…'},
+                ].map((d, i) => {
+                  const lt = localTime - 3.0 - d.d;
+                  if (lt < 0) return null;
+                  const op = clamp(lt/0.35, 0, 1);
+                  return (
+                    <div key={i} style={{
+                      display:'flex', alignItems:'center', gap:14,
+                      padding:'14px 20px', background:PAPER2, borderRadius:14,
+                      border:`1px solid rgba(12,11,20,0.06)`,
+                      opacity:op, transform:`translateX(${(1-op)*-12}px)`,
+                    }}>
+                      <div style={{width:36,height:36,borderRadius:9,background:d.c,color:'#fff',display:'grid',placeItems:'center',fontWeight:700,fontSize:16}}>{d.n[0]}</div>
+                      <div style={{fontSize:24,color:INK,fontWeight:600}}>{d.n}</div>
+                      <div style={{flex:1,height:1,background:'rgba(12,11,20,0.08)'}}/>
+                      <div style={{fontFamily:MONO,fontSize:18,color:INK3}}>{d.txt}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 4 (12.5 – 17.5s) — The 43 grid
+// ════════════════════════════════════════════════════════════════════════
+const AGENTS = [
+  ['Arjun','Boss','#6d4cff'],['Zara','Content','#ff7a59'],['Dev','Content','#ff9871'],
+  ['Vikram','Mktg','#3b7fff'],['Neha','Mktg','#5a9bff'],['Krish','Sales','#1fb88b'],
+  ['Kabir','Sales','#3fc89f'],['Nia','Support','#a76800'],['Tara','Support','#c98c1f'],
+  ['Luna','Designer','#b81f1f'],['Nova','Designer','#d44545'],['Kunal','Data','#0e8762'],
+  ['Sana','Data','#2ea582'],['Neo','Eng','#000'],['Dex','Eng','#222'],
+  ['Ava','PM','#7a3fc3'],['Raj','PM','#9758d8'],['Mira','Ops','#4687ff'],
+  ['Ish','Ops','#69a0ff'],['Tia','Legal','#5a4a3a'],['Vish','Finance','#10a37f'],
+  ['Anya','HR','#c4488e'],['Rohan','Research','#6d4cff'],['Pari','Research','#8a6cff'],
+  ['Aarav','Brand','#ff5e3a'],['Diya','Brand','#ff8a6f'],['Yash','Growth','#0c1428'],
+  ['Maya','UX','#b81f1f'],['Aryan','iOS','#0a0a0a'],['Bina','Android','#3ddc84'],
+  ['Tej','DevOps','#326ce5'],['Riya','QA','#a76800'],['Karan','Sec','#1b1b1b'],
+  ['Lia','Voice','#ff4f00'],['Ravi','Video','#c4488e'],['Ria','Podcast','#7a3fc3'],
+  ['Om','Edit','#5a4a3a'],['Sam','Copy','#10a37f'],['Eva','SEO','#3b7fff'],
+  ['Rishi','PR','#ff7a59'],['Ina','Analyst','#1fb88b'],['Joy','Hire','#c98c1f'],
+  ['Avi','Intern','#7a7388'],
+];
+
+function S4_Grid(){
+  return (
+    <Sprite start={12.5} end={17.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime - (duration-0.4))/0.4, 0, 1);
+        // Each agent flashes in with stagger
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:840, transform:'translate(-50%,-50%)',
+            width:920, opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', textAlign:'center', marginBottom:36,
+              background:PURPLE_SOFT, padding:'12px 24px', borderRadius:999, width:'fit-content',
+              marginLeft:'auto', marginRight:'auto',
+              opacity:clamp(localTime/0.3,0,1),
+            }}>43 SPECIALISTS · ONE TEAM</div>
+
+            <div style={{
+              display:'grid', gridTemplateColumns:'repeat(6, 1fr)', gap:12,
+            }}>
+              {AGENTS.map(([n,r,c], i) => {
+                const stagger = i * 0.035;
+                const lt = localTime - 0.3 - stagger;
+                if (lt < 0) return <div key={i} style={{height:130, opacity:0}}/>;
+                const inT = Easing.easeOutBack(clamp(lt/0.4, 0, 1));
+                const op = clamp(lt/0.25, 0, 1);
+                return (
+                  <div key={i} style={{
+                    padding:'14px 8px', borderRadius:12,
+                    background:PAPER2, border:`1px solid rgba(12,11,20,0.06)`,
+                    display:'flex', flexDirection:'column', alignItems:'center', gap:6,
+                    opacity:op, transform:`scale(${0.5+inT*0.5})`,
+                  }}>
+                    <div style={{
+                      width:42,height:42,borderRadius:11,background:c,color:'#fff',
+                      display:'grid',placeItems:'center',fontWeight:700,fontSize:18,fontFamily:FONT,
+                    }}>{n[0]}</div>
+                    <div style={{fontSize:18,fontWeight:600,color:INK,lineHeight:1.0}}>{n}</div>
+                    <div style={{fontFamily:MONO,fontSize:11,color:INK3,letterSpacing:'0.06em',textTransform:'uppercase'}}>{r}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 5 (17.5 – 21.5s) — Integrations
+// ════════════════════════════════════════════════════════════════════════
+function S5_Integrations(){
+  const items = [
+    { name:'Gmail', c:'#ea4335' },
+    { name:'Notion', c:'#000000' },
+    { name:'Slack', c:'#4a154b' },
+    { name:'GitHub', c:'#181717' },
+    { name:'Linear', c:'#5e6ad2' },
+    { name:'Airtable', c:'#fcb400' },
+    { name:'Calendar', c:'#4285f4' },
+    { name:'Brave Search', c:'#fb542b' },
+  ];
+  return (
+    <Sprite start={17.5} end={21.8}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:360,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:40,
+              background:PURPLE_SOFT, padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>8 INTEGRATIONS · ZERO COPY-PASTE</div>
+
+            <div style={{display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:16, width:820}}>
+              {items.map((it, i) => {
+                const lt = localTime - 0.3 - i*0.12;
+                if (lt < 0) return null;
+                const inT = Easing.easeOutCubic(clamp(lt/0.4, 0, 1));
+                return (
+                  <div key={i} style={{
+                    display:'flex', alignItems:'center', gap:18,
+                    padding:'22px 26px', background:PAPER2, borderRadius:18,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    opacity:inT, transform:`translateX(${(1-inT)*-24}px)`,
+                  }}>
+                    <div style={{width:44,height:44,borderRadius:11,background:it.c,boxShadow:'0 4px 12px rgba(0,0,0,0.15)'}}/>
+                    <div style={{fontFamily:FONT, fontSize:30, fontWeight:600, color:INK}}>{it.name}</div>
+                    <div style={{marginLeft:'auto', fontFamily:MONO,fontSize:18,color:PURPLE_DEEP,letterSpacing:'0.08em'}}>● CONNECTED</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 6 (21.8 – 25s) — Privacy line
+// ════════════════════════════════════════════════════════════════════════
+function S6_Privacy(){
+  return (
+    <Sprite start={21.8} end={25}>
+      {({ localTime, duration }) => {
+        const op = clamp(localTime/0.4, 0, 1);
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:360,
+            opacity:op*exitOp,
+          }}>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:84,
+              color:INK, lineHeight:1.05, letterSpacing:'-0.03em', textAlign:'center',
+            }}>
+              Every chat.<br/>
+              Every memory.<br/>
+              <span style={{color:PURPLE}}>On your machine.</span>
+            </div>
+            <div style={{
+              marginTop:36, fontFamily:MONO, fontSize:24, color:INK3,
+              letterSpacing:'0.12em', textTransform:'uppercase',
+            }}>SQLITE · LOCAL · ZERO SYNC</div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 7 (25 – 28s) — CTA
+// ════════════════════════════════════════════════════════════════════════
+function S7_CTA(){
+  return (
+    <Sprite start={25} end={28.5}>
+      {({ localTime }) => {
+        const t = localTime;
+        const logoT = Easing.easeOutCubic(clamp(t/0.6, 0, 1));
+        const tagT = Easing.easeOutCubic(clamp((t-0.4)/0.6, 0, 1));
+        const linkT = Easing.easeOutCubic(clamp((t-0.9)/0.6, 0, 1));
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:240,
+          }}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:24,
+              opacity:clamp(t/0.3,0,1), transform:`translateY(${(1-logoT)*20}px)`,
+              marginBottom:44,
+            }}>
+              <img src="Adris-logo.png" alt="" style={{width:120,height:120,borderRadius:28,boxShadow:`0 16px 40px rgba(109,76,255,0.4)`}}/>
+              <div style={{fontFamily:FONT,fontWeight:800,fontSize:100,color:INK,letterSpacing:'-0.04em'}}>Krew</div>
+            </div>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:76,
+              color:INK, letterSpacing:'-0.03em', textAlign:'center', lineHeight:1.05,
+              opacity:clamp((t-0.4)/0.3,0,1), transform:`translateY(${(1-tagT)*20}px)`,
+              marginBottom:48,
+            }}>
+              Your <span style={{color:PURPLE}}>43-agent</span><br/>team. On your machine.
+            </div>
+            <div style={{
+              padding:'28px 52px', background:PURPLE, borderRadius:26,
+              fontFamily:FONT, fontWeight:700, fontSize:54, color:'#fff',
+              letterSpacing:'-0.02em', boxShadow:`0 22px 60px rgba(109,76,255,0.4)`,
+              display:'flex', alignItems:'center', gap:20,
+              opacity:clamp((t-0.9)/0.3,0,1), transform:`translateY(${(1-linkT)*20}px)`,
+            }}>
+              Adris.tech
+              <span style={{width:54,height:54,borderRadius:27,background:'#fff',color:PURPLE,display:'grid',placeItems:'center',fontWeight:800,fontSize:32}}>↗</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+function KrewStory(){
+  return (
+    <>
+      <div style={{
+        position:'absolute', inset:0, pointerEvents:'none',
+        background:`radial-gradient(60% 40% at 10% 0%, rgba(109,76,255,0.05), transparent 60%),
+                    radial-gradient(60% 40% at 100% 100%, rgba(109,76,255,0.06), transparent 65%)`,
+      }}/>
+      <ModuleBadge label="01 · KREW" />
+
+      <S1_Chaos />
+      <S2_Wish />
+      <S3_Arjun />
+      <S4_Grid />
+      <S5_Integrations />
+      <S6_Privacy />
+      <S7_CTA />
+
+      <Subtitle start={0.3}  end={3.3}  lines={["Monday morning.", "Everything wants your attention."]} />
+      <Subtitle start={3.7}  end={6.8}  lines={["If only there were", "43 of you."]} />
+      <Subtitle start={7.2}  end={12.3} lines={["Ask <span style='color:#6d4cff;font-weight:800'>Arjun.Boss</span>.", "He routes. He delegates."]} />
+      <Subtitle start={12.7} end={17.3} lines={["43 specialists.", "Each with a name."]} />
+      <Subtitle start={17.7} end={21.6} lines={["Gmail. Notion. Slack. GitHub.", "All wired in."]} />
+      <Subtitle start={22}   end={24.8} lines={["Conversations stay", "on your machine. Forever."]} />
+      <Subtitle start={25.2} end={28.3} lines={["Your AI team.", "Yours to keep."]} small />
+
+      <ProgressBar />
+    </>
+  );
+}
+
+function App(){
+  return (
+    <Stage width={1080} height={1920} duration={28.5} background="#ffffff" persistKey="Adris-krew">
+      <TimeLabel />
+      <KrewStory />
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

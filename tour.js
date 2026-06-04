@@ -13,7 +13,7 @@ const TOUR_STEPS = [
   {
     target: '[data-tour="modules"]',
     title: "Six products. One ecosystem.",
-    body: "Each card below is a module on the adris.tech platform. Krew (agents) is live today. The other five are shipping soon — every card shows its status.",
+    body: "Each card below is a module on the adris.tech platform. All six modules are live. Download the app to access everything.",
   },
   {
     target: '[data-tour="krew-card"]',

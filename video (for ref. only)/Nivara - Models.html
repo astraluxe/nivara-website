@@ -1,0 +1,488 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Adris · Models · Video</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#0a0a0a;font-family:'Inter Tight',system-ui,sans-serif;overflow:hidden}
+  #root{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root" data-screen-label="models · t=0s"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+
+<script type="text/babel">
+const { Sprite, useTime, useTimeline, Easing, clamp, Stage } = window;
+
+const INK='#0c0b14', INK2='#3a3548', INK3='#7a7388';
+const PURPLE='#6d4cff', PURPLE2='#8a6cff', PURPLE_DEEP='#3a1fb8', PURPLE_SOFT='#efeaff';
+const PAPER='#ffffff', PAPER2='#faf8f5';
+const FONT='Inter Tight, system-ui, sans-serif';
+const MONO="'JetBrains Mono', ui-monospace, monospace";
+
+function TimeLabel(){
+  const t = useTime();
+  React.useEffect(() => {
+    document.getElementById('root').setAttribute('data-screen-label', `models · t=${t.toFixed(1)}s`);
+  }, [t]);
+  return null;
+}
+
+function Subtitle({ start, end, lines = [], small }){
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime, duration }) => {
+        const inT = clamp(localTime/0.35, 0, 1);
+        const outT = clamp((localTime-(duration-0.35))/0.35, 0, 1);
+        const op = Math.min(Easing.easeOutCubic(inT), 1 - Easing.easeInCubic(outT));
+        const ty = (1-Easing.easeOutCubic(inT))*18 - outT*10;
+        return (
+          <div style={{
+            position:'absolute', left:80, right:80, bottom:200,
+            textAlign:'center', opacity:op, transform:`translateY(${ty}px)`,
+            fontFamily:FONT, fontWeight:600, fontSize:small?56:68, lineHeight:1.12,
+            color:INK, letterSpacing:'-0.022em',
+          }}>
+            {lines.map((l,i)=>(<div key={i} style={{marginTop:i===0?0:8}} dangerouslySetInnerHTML={{__html:l}}/>))}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function ModuleBadge({ label }){
+  const { time, duration } = useTimeline();
+  const hide = time > duration - 3.5;
+  return (
+    <div style={{
+      position:'absolute', left:70, top:70, display:'flex', alignItems:'center', gap:14,
+      opacity:hide?0:0.7, transition:'opacity 300ms',
+      fontFamily:MONO, fontSize:22, color:INK3,
+      letterSpacing:'0.14em', textTransform:'uppercase',
+    }}>
+      <img src="Adris-logo.png" alt="" style={{width:36,height:36,borderRadius:8}}/>
+      <span>Adris · {label}</span>
+    </div>
+  );
+}
+
+function ProgressBar(){
+  const { time, duration } = useTimeline();
+  const p = clamp(time/duration, 0, 1);
+  return (
+    <div style={{position:'absolute',left:0,right:0,bottom:0,height:6,background:'rgba(12,11,20,0.06)'}}>
+      <div style={{width:`${p*100}%`,height:'100%',background:PURPLE,boxShadow:`0 0 14px ${PURPLE}`}}/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 1 (0 – 3.5s) — Bills stacking up
+// ════════════════════════════════════════════════════════════════════════
+function S1_Bills(){
+  return (
+    <Sprite start={0} end={3.5}>
+      {({ localTime }) => {
+        const items = [
+          { svc:'OpenAI · API',     amt:'$87.40',  d:0 },
+          { svc:'Anthropic · API',  amt:'$54.12',  d:0.25 },
+          { svc:'GPU rental · cloud', amt:'$120.00', d:0.5 },
+          { svc:'OpenAI · API',     amt:'$112.55', d:0.75 },
+          { svc:'HuggingFace · Pro', amt:'$25.00',  d:1.0 },
+        ];
+        let runningTotal = 0;
+        const totals = items.map(i => (runningTotal += parseFloat(i.amt.slice(1))));
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:840, transform:'translate(-50%,-50%)',
+            width:880, display:'flex', flexDirection:'column', gap:10,
+          }}>
+            {items.map((it, i) => {
+              const lt = localTime - it.d;
+              if (lt < 0) return null;
+              const inT = Easing.easeOutCubic(clamp(lt/0.4,0,1));
+              return (
+                <div key={i} style={{
+                  display:'flex', justifyContent:'space-between', alignItems:'center',
+                  padding:'18px 26px', background:PAPER2, borderRadius:14,
+                  border:`1px solid rgba(12,11,20,0.06)`,
+                  opacity:clamp(lt/0.25,0,1), transform:`translateX(${(1-inT)*-30}px)`,
+                }}>
+                  <div style={{display:'flex',alignItems:'center',gap:14}}>
+                    <div style={{fontFamily:MONO,fontSize:18,color:INK3,letterSpacing:'0.06em',textTransform:'uppercase'}}>charge</div>
+                    <div style={{fontSize:28,color:INK,fontWeight:600}}>{it.svc}</div>
+                  </div>
+                  <div style={{fontFamily:MONO,fontSize:30,fontWeight:700,color:PURPLE_DEEP}}>−{it.amt}</div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 2 (3.5 – 8.5s) — Adris pull command
+// ════════════════════════════════════════════════════════════════════════
+function S2_Pull(){
+  return (
+    <Sprite start={3.5} end={9}>
+      {({ localTime }) => {
+        const cmd = 'Adris pull mistral-7b';
+        const chars = clamp(Math.floor(localTime*22), 0, cmd.length);
+        const typed = cmd.slice(0, chars);
+        const showCursor = Math.sin(localTime*6) > 0;
+        const showDownload = localTime > cmd.length/22 + 0.4;
+        const dlProgress = clamp((localTime - (cmd.length/22 + 0.4))/2.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:'50%',
+            transform:'translate(-50%,-50%) translateY(-80px)',
+            width:920,
+          }}>
+            <div style={{
+              background:INK, borderRadius:22, overflow:'hidden',
+              boxShadow:'0 30px 80px rgba(109,76,255,0.18)',
+              fontFamily:MONO, color:'#cfc7e3', fontSize:30, lineHeight:1.4,
+            }}>
+              <div style={{
+                padding:'18px 24px', borderBottom:'1px solid rgba(255,255,255,0.06)',
+                display:'flex', alignItems:'center', gap:10,
+              }}>
+                <span style={{width:14,height:14,borderRadius:7,background:'#2a2540'}}/>
+                <span style={{width:14,height:14,borderRadius:7,background:'#2a2540'}}/>
+                <span style={{width:14,height:14,borderRadius:7,background:'#2a2540'}}/>
+                <div style={{marginLeft:'auto', fontSize:18, color:'#7a7388'}}>~/ · Adris cli</div>
+              </div>
+              <div style={{padding:'32px 28px'}}>
+                <div>
+                  <span style={{color:PURPLE2}}>$</span> {typed}
+                  {chars < cmd.length && showCursor && <span style={{display:'inline-block',width:14,height:30,background:PURPLE2,verticalAlign:'middle'}}/>}
+                </div>
+                {showDownload && (
+                  <div style={{marginTop:24, opacity:clamp((localTime - (cmd.length/22 + 0.4))/0.3,0,1)}}>
+                    <div style={{color:'#a785ff', fontSize:22}}>→ resolving · mistralai/Mistral-7B-Instruct-v0.3</div>
+                    <div style={{color:'#7a7388', fontSize:22, marginTop:6}}>→ destination: ~/Adris-models/</div>
+                    <div style={{marginTop:18, color:'#e6dcff'}}>
+                      ▮ downloading · 4.1 GB
+                    </div>
+                    {/* progress bar */}
+                    <div style={{
+                      marginTop:14, height:18, borderRadius:9,
+                      background:'rgba(255,255,255,0.08)', overflow:'hidden',
+                    }}>
+                      <div style={{
+                        width:`${dlProgress*100}%`, height:'100%',
+                        background:`linear-gradient(90deg, ${PURPLE} 0%, ${PURPLE2} 100%)`,
+                        transition:'none',
+                        boxShadow:`0 0 14px ${PURPLE}`,
+                      }}/>
+                    </div>
+                    <div style={{marginTop:10, color:'#7a7388', fontSize:22, display:'flex', justifyContent:'space-between'}}>
+                      <span>{Math.round(dlProgress*100)}%</span>
+                      <span>{(dlProgress*4.1).toFixed(1)} / 4.1 GB</span>
+                      <span style={{color: dlProgress>0.98 ? '#3ddc84':'#7a7388'}}>
+                        {dlProgress>0.98 ? '✓ DONE · 100% LOCAL' : `eta ${Math.max(0, Math.ceil(8*(1-dlProgress)))}s`}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 3 (9 – 14s) — Model catalogue
+// ════════════════════════════════════════════════════════════════════════
+const MODELS = [
+  { n:'Mistral 7B',      sub:'Writing · chat · reasoning', sz:'4.1 GB', c:PURPLE },
+  { n:'Qwen 2.5 Coder',  sub:'React · Python · TS',        sz:'4.4 GB', c:'#0c0b14' },
+  { n:'Phi-4 Mini',      sub:'Low-RAM · 4GB devices',      sz:'2.4 GB', c:'#3b7fff' },
+  { n:'DeepSeek R1',     sub:'Reasoning · maths',          sz:'4.7 GB', c:'#1fb88b' },
+  { n:'Llama 3.2 3B',    sub:'Quick tasks · low-end',      sz:'1.9 GB', c:'#a76800' },
+];
+
+function S3_Catalogue(){
+  return (
+    <Sprite start={9} end={14}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:36, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>FILTERED TO YOUR RAM</div>
+
+            <div style={{display:'flex', flexDirection:'column', gap:12, width:880}}>
+              {MODELS.map((m, i) => {
+                const lt = localTime - 0.3 - i*0.16;
+                if (lt < 0) return <div key={i} style={{height:110, opacity:0}}/>;
+                const inT = Easing.easeOutCubic(clamp(lt/0.4,0,1));
+                return (
+                  <div key={i} style={{
+                    padding:'22px 26px', background:PAPER2, borderRadius:18,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    display:'grid', gridTemplateColumns:'auto 1fr auto', gap:20, alignItems:'center',
+                    opacity:clamp(lt/0.3,0,1), transform:`translateX(${(1-inT)*-30}px)`,
+                  }}>
+                    <div style={{
+                      width:52,height:52,borderRadius:13,background:m.c,
+                      display:'grid',placeItems:'center',color:'#fff',
+                      fontFamily:MONO,fontWeight:700,fontSize:18,
+                    }}>{m.n.slice(0,2).replace(' ','')}</div>
+                    <div>
+                      <div style={{fontFamily:FONT,fontWeight:700,fontSize:32,color:INK,letterSpacing:'-0.02em'}}>{m.n}</div>
+                      <div style={{fontFamily:MONO,fontSize:18,color:INK3,letterSpacing:'0.04em',marginTop:2}}>{m.sub}</div>
+                    </div>
+                    <div style={{fontFamily:MONO,fontSize:26,fontWeight:700,color:PURPLE_DEEP}}>{m.sz}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 4 (14 – 18s) — LoRA marketplace
+// ════════════════════════════════════════════════════════════════════════
+function S4_LoRA(){
+  const loras = [
+    { n:'Hindi Customer Support', sz:'120 MB', price:'FREE' },
+    { n:'Indian Legal',           sz:'280 MB', price:'$3.49' },
+    { n:'GST / CA',               sz:'240 MB', price:'$3.49' },
+    { n:'React / Next.js',        sz:'180 MB', price:'$2.29' },
+  ];
+  return (
+    <Sprite start={14} end={18}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:36, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>LORA MARKETPLACE · SPECIALISE</div>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:14, width:880}}>
+              {loras.map((l, i) => {
+                const lt = localTime - 0.3 - i*0.15;
+                if (lt < 0) return <div key={i} style={{height:140, opacity:0}}/>;
+                const inT = Easing.easeOutBack(clamp(lt/0.45, 0, 1));
+                return (
+                  <div key={i} style={{
+                    padding:'24px 26px', background:PAPER2, borderRadius:18,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    display:'flex', flexDirection:'column', gap:10,
+                    opacity:clamp(lt/0.3,0,1), transform:`scale(${0.8+inT*0.2})`,
+                  }}>
+                    <div style={{display:'flex', alignItems:'center', gap:10}}>
+                      <div style={{width:12,height:12,borderRadius:3,background:PURPLE,boxShadow:`0 0 10px ${PURPLE}`}}/>
+                      <div style={{fontFamily:MONO,fontSize:18,color:INK3,letterSpacing:'0.06em',textTransform:'uppercase'}}>{l.sz}</div>
+                    </div>
+                    <div style={{fontFamily:FONT,fontSize:30,color:INK,fontWeight:600,letterSpacing:'-0.015em'}}>{l.n}</div>
+                    <div style={{
+                      fontFamily:MONO, fontSize:22, fontWeight:700,
+                      color: l.price==='FREE' ? '#0e8762' : PURPLE_DEEP,
+                      marginTop:4, letterSpacing:'0.04em',
+                    }}>{l.price}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 5 (18 – 22.5s) — Mesh RAM pooling
+// ════════════════════════════════════════════════════════════════════════
+function S5_Mesh(){
+  return (
+    <Sprite start={18} end={22.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        // 3 devices connecting
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:36, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>MESH RAM POOLING</div>
+
+            <div style={{position:'relative', width:780, height:340, marginBottom:30}}>
+              <svg viewBox="0 0 780 340" style={{position:'absolute',inset:0,width:'100%',height:'100%'}}>
+                <line x1="160" y1="120" x2="390" y2="240" stroke={PURPLE} strokeWidth="3" strokeDasharray="6 8" opacity={clamp((localTime-0.8)/0.4,0,1)}/>
+                <line x1="390" y1="240" x2="620" y2="120" stroke={PURPLE} strokeWidth="3" strokeDasharray="6 8" opacity={clamp((localTime-1.0)/0.4,0,1)}/>
+                <line x1="160" y1="120" x2="620" y2="120" stroke={PURPLE} strokeWidth="3" strokeDasharray="6 8" opacity={clamp((localTime-1.2)/0.4,0,1)}/>
+              </svg>
+              {[
+                { x:80, y:50, ram:'8GB', d:0.2 },
+                { x:540, y:50, ram:'8GB', d:0.4 },
+                { x:310, y:180, ram:'8GB', d:0.6 },
+              ].map((d, i) => {
+                const lt = localTime - d.d;
+                if (lt < 0) return null;
+                const inT = Easing.easeOutBack(clamp(lt/0.45,0,1));
+                return (
+                  <div key={i} style={{
+                    position:'absolute', left:d.x, top:d.y, width:160, height:120,
+                    background:PAPER2, border:`1px solid rgba(12,11,20,0.08)`,
+                    borderRadius:18, display:'flex', flexDirection:'column',
+                    alignItems:'center', justifyContent:'center', gap:6,
+                    opacity:clamp(lt/0.3,0,1), transform:`scale(${0.7+inT*0.3})`,
+                  }}>
+                    <div style={{width:60,height:40,background:INK,borderRadius:6, boxShadow:`0 4px 10px rgba(0,0,0,0.15)`}}/>
+                    <div style={{fontFamily:MONO,fontSize:22,fontWeight:700,color:PURPLE_DEEP}}>{d.ram}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{
+              fontFamily:FONT, fontSize:60, fontWeight:800, color:INK,
+              letterSpacing:'-0.03em', textAlign:'center',
+              opacity:clamp((localTime-1.6)/0.4,0,1),
+            }}>
+              3 laptops = <span style={{color:PURPLE}}>24GB</span> usable
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 6 (22.5 – 26s) — CTA
+// ════════════════════════════════════════════════════════════════════════
+function S6_CTA(){
+  return (
+    <Sprite start={22.5} end={26}>
+      {({ localTime }) => {
+        const t = localTime;
+        const logoT = Easing.easeOutCubic(clamp(t/0.6,0,1));
+        const tagT = Easing.easeOutCubic(clamp((t-0.4)/0.6,0,1));
+        const linkT = Easing.easeOutCubic(clamp((t-0.9)/0.6,0,1));
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:240,
+          }}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:24,
+              opacity:clamp(t/0.3,0,1), transform:`translateY(${(1-logoT)*20}px)`,
+              marginBottom:44,
+            }}>
+              <img src="Adris-logo.png" alt="" style={{width:120,height:120,borderRadius:28,boxShadow:`0 16px 40px rgba(109,76,255,0.4)`}}/>
+              <div style={{fontFamily:FONT,fontWeight:800,fontSize:100,color:INK,letterSpacing:'-0.04em'}}>Models</div>
+            </div>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:76, color:INK,
+              letterSpacing:'-0.03em', textAlign:'center', lineHeight:1.05,
+              opacity:clamp((t-0.4)/0.3,0,1), transform:`translateY(${(1-tagT)*20}px)`,
+              marginBottom:48,
+            }}>
+              Run AI on<br/>your laptop. <span style={{color:PURPLE}}>Forever free.</span>
+            </div>
+            <div style={{
+              padding:'28px 52px', background:PURPLE, borderRadius:26,
+              fontFamily:FONT, fontWeight:700, fontSize:54, color:'#fff',
+              letterSpacing:'-0.02em', boxShadow:`0 22px 60px rgba(109,76,255,0.4)`,
+              display:'flex', alignItems:'center', gap:20,
+              opacity:clamp((t-0.9)/0.3,0,1), transform:`translateY(${(1-linkT)*20}px)`,
+            }}>
+              Adris.tech
+              <span style={{width:54,height:54,borderRadius:27,background:'#fff',color:PURPLE,display:'grid',placeItems:'center',fontWeight:800,fontSize:32}}>↗</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function ModelsStory(){
+  return (
+    <>
+      <div style={{
+        position:'absolute', inset:0, pointerEvents:'none',
+        background:`radial-gradient(60% 40% at 10% 0%, rgba(109,76,255,0.05), transparent 60%),
+                    radial-gradient(60% 40% at 100% 100%, rgba(109,76,255,0.06), transparent 65%)`,
+      }}/>
+      <ModuleBadge label="04 · MODELS" />
+
+      <S1_Bills />
+      <S2_Pull />
+      <S3_Catalogue />
+      <S4_LoRA />
+      <S5_Mesh />
+      <S6_CTA />
+
+      <Subtitle start={0.3}  end={3.3}  lines={["Another API bill.", "Another GPU rental."]} />
+      <Subtitle start={3.7}  end={8.8}  lines={["One command.", "Model runs on <span style='color:#6d4cff'>your machine.</span>"]} />
+      <Subtitle start={9.2}  end={13.8} lines={["Pick the right brain.", "Filtered to your RAM."]} />
+      <Subtitle start={14.2} end={17.8} lines={["Add a <span style='color:#6d4cff'>LoRA</span>", "to specialise it."]} />
+      <Subtitle start={18.2} end={22.3} lines={["Out of RAM?", "Pool with your other laptops."]} />
+      <Subtitle start={22.7} end={25.8} lines={["Download once.", "Run forever."]} small />
+
+      <ProgressBar />
+    </>
+  );
+}
+
+function App(){
+  return (
+    <Stage width={1080} height={1920} duration={26} background="#ffffff" persistKey="Adris-models">
+      <TimeLabel />
+      <ModelsStory />
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Adris · Vault · Video</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#0a0a0a;font-family:'Inter Tight',system-ui,sans-serif;overflow:hidden}
+  #root{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root" data-screen-label="vault · t=0s"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+
+<script type="text/babel">
+const { Sprite, useTime, useTimeline, Easing, clamp, Stage } = window;
+
+const INK='#0c0b14', INK2='#3a3548', INK3='#7a7388';
+const PURPLE='#6d4cff', PURPLE2='#8a6cff', PURPLE_DEEP='#3a1fb8', PURPLE_SOFT='#efeaff';
+const PAPER='#ffffff', PAPER2='#faf8f5';
+const FONT='Inter Tight, system-ui, sans-serif';
+const MONO="'JetBrains Mono', ui-monospace, monospace";
+
+function TimeLabel(){
+  const t = useTime();
+  React.useEffect(() => {
+    document.getElementById('root').setAttribute('data-screen-label', `vault · t=${t.toFixed(1)}s`);
+  }, [t]);
+  return null;
+}
+
+function Subtitle({ start, end, lines = [], small }){
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime, duration }) => {
+        const inT = clamp(localTime/0.35, 0, 1);
+        const outT = clamp((localTime-(duration-0.35))/0.35, 0, 1);
+        const op = Math.min(Easing.easeOutCubic(inT), 1 - Easing.easeInCubic(outT));
+        const ty = (1-Easing.easeOutCubic(inT))*18 - outT*10;
+        return (
+          <div style={{
+            position:'absolute', left:80, right:80, bottom:200,
+            textAlign:'center', opacity:op, transform:`translateY(${ty}px)`,
+            fontFamily:FONT, fontWeight:600, fontSize:small?56:68, lineHeight:1.12,
+            color:INK, letterSpacing:'-0.022em',
+          }}>
+            {lines.map((l,i)=>(<div key={i} style={{marginTop:i===0?0:8}} dangerouslySetInnerHTML={{__html:l}}/>))}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function ModuleBadge({ label }){
+  const { time, duration } = useTimeline();
+  const hide = time > duration - 3.5;
+  return (
+    <div style={{
+      position:'absolute', left:70, top:70, display:'flex', alignItems:'center', gap:14,
+      opacity:hide?0:0.7, transition:'opacity 300ms',
+      fontFamily:MONO, fontSize:22, color:INK3,
+      letterSpacing:'0.14em', textTransform:'uppercase',
+    }}>
+      <img src="Adris-logo.png" alt="" style={{width:36,height:36,borderRadius:8}}/>
+      <span>Adris · {label}</span>
+    </div>
+  );
+}
+
+function ProgressBar(){
+  const { time, duration } = useTimeline();
+  const p = clamp(time/duration, 0, 1);
+  return (
+    <div style={{position:'absolute',left:0,right:0,bottom:0,height:6,background:'rgba(12,11,20,0.06)'}}>
+      <div style={{width:`${p*100}%`,height:'100%',background:PURPLE,boxShadow:`0 0 14px ${PURPLE}`}}/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 1 (0 – 3.5s) — Ad noise & tracking
+// ════════════════════════════════════════════════════════════════════════
+function S1_Noise(){
+  return (
+    <Sprite start={0} end={3.5}>
+      {({ localTime }) => {
+        const ads = [
+          { txt:'SHOP NOW',         x:120, y:480, c:'#ff4f00', d:0 },
+          { txt:'TRACKING…',        x:600, y:540, c:'#666',    d:0.15 },
+          { txt:'YOU MAY LIKE',     x:200, y:680, c:'#3b7fff', d:0.3 },
+          { txt:'ACCEPT COOKIES',   x:560, y:760, c:'#000',    d:0.45 },
+          { txt:'BUY NOW · 60% OFF', x:140, y:880, c:'#b81f1f', d:0.6 },
+          { txt:'TARGETED AD',      x:580, y:980, c:'#a76800', d:0.75 },
+          { txt:'PIXEL FIRED',      x:240, y:1080, c:'#666',   d:0.9 },
+        ];
+        return (
+          <>
+            {ads.map((a, i) => {
+              const lt = localTime - a.d;
+              if (lt < 0) return null;
+              const inT = Easing.easeOutBack(clamp(lt/0.4, 0, 1));
+              const op = clamp(lt/0.25, 0, 1);
+              const wobble = Math.sin((localTime+i)*4) * 4;
+              return (
+                <div key={i} style={{
+                  position:'absolute', left:a.x, top:a.y,
+                  padding:'14px 22px', borderRadius:8,
+                  background:a.c, color:'#fff',
+                  fontFamily:MONO, fontSize:24, fontWeight:700,
+                  letterSpacing:'0.06em',
+                  opacity:op, transform:`scale(${0.7+inT*0.3}) translateY(${wobble}px) rotate(${(i%2?-1:1)*3}deg)`,
+                  boxShadow:'0 8px 24px rgba(0,0,0,0.2)',
+                }}>{a.txt}</div>
+              );
+            })}
+          </>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 2 (3.5 – 7s) — Toggle switch turns Vault on
+// ════════════════════════════════════════════════════════════════════════
+function S2_Toggle(){
+  return (
+    <Sprite start={3.5} end={7.5}>
+      {({ localTime }) => {
+        // Toggle animation: off → on at localTime 0.8
+        const isOn = localTime > 0.8;
+        const togglePos = Easing.easeOutCubic(clamp((localTime - 0.8)/0.4, 0, 1));
+        const flash = clamp((localTime - 1.0)/0.4, 0, 1) * (1 - clamp((localTime - 1.6)/0.6, 0, 1));
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:380,
+            gap:46,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:INK3, letterSpacing:'0.18em',
+              textTransform:'uppercase',
+              opacity:clamp(localTime/0.4,0,1),
+            }}>SYSTEM PROTECTION</div>
+
+            {/* toggle */}
+            <div style={{
+              position:'relative', width:280, height:140,
+              borderRadius:70,
+              background:isOn ? PURPLE : '#dcd9d2',
+              transition:'background 300ms',
+              boxShadow:isOn ? `0 0 60px rgba(109,76,255,0.4)` : 'inset 0 2px 8px rgba(0,0,0,0.1)',
+            }}>
+              <div style={{
+                position:'absolute', top:10, left:10 + togglePos*140, width:120, height:120,
+                borderRadius:'50%', background:'#fff',
+                boxShadow:'0 6px 20px rgba(0,0,0,0.18)',
+                display:'grid', placeItems:'center',
+                fontSize:54, color: isOn ? PURPLE : INK3,
+                transform:`scale(${1 + flash*0.05})`,
+              }}>{isOn ? '✓' : '○'}</div>
+              {/* ripple */}
+              {flash > 0 && (
+                <div style={{
+                  position:'absolute', left:'50%', top:'50%',
+                  transform:`translate(-50%, -50%) scale(${1 + flash*2})`,
+                  width:280, height:140, borderRadius:70,
+                  border:`3px solid ${PURPLE}`, opacity:1-flash, pointerEvents:'none',
+                }}/>
+              )}
+            </div>
+
+            <div style={{
+              fontFamily:FONT, fontSize:64, fontWeight:700, color:INK,
+              letterSpacing:'-0.025em', minHeight:80,
+            }}>
+              {isOn ? <span>Vault is <span style={{color:PURPLE}}>active.</span></span> : 'Vault is off.'}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 3 (7.5 – 12s) — Counter: threats blocked
+// ════════════════════════════════════════════════════════════════════════
+function S3_Counter(){
+  return (
+    <Sprite start={7.5} end={12.5}>
+      {({ localTime, duration }) => {
+        const t = clamp(localTime/2.4, 0, 1);
+        const counterT = Easing.easeOutCubic(t);
+        const value = Math.round(1247 * counterT);
+        const pulse = 1 + Math.sin(Math.max(0, localTime - 2.4)*4)*0.012;
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:26, color:INK3,
+              letterSpacing:'0.18em', textTransform:'uppercase',
+              marginBottom:24,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>THREATS BLOCKED · TODAY</div>
+            <div style={{
+              fontFamily:FONT, fontWeight:800, fontSize:340, color:PURPLE,
+              letterSpacing:'-0.05em', lineHeight:0.9,
+              transform:`scale(${pulse})`,
+              textShadow:`0 0 60px rgba(109,76,255,0.25)`,
+            }}>
+              {value.toLocaleString()}
+            </div>
+            <div style={{
+              display:'flex', gap:18, marginTop:36,
+              opacity:clamp((localTime-1.5)/0.5,0,1),
+            }}>
+              {['Ads','Trackers','Malware','Spyware'].map((tag, i) => (
+                <div key={i} style={{
+                  padding:'14px 22px', borderRadius:999,
+                  background:PURPLE_SOFT, color:PURPLE_DEEP,
+                  fontFamily:MONO, fontSize:22, fontWeight:600,
+                  letterSpacing:'0.04em',
+                }}>{tag}</div>
+              ))}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 4 (12.5 – 16.5s) — 5 modes
+// ════════════════════════════════════════════════════════════════════════
+function S4_Modes(){
+  const modes = [
+    { n:'Swift',  sub:'Default · privacy-first', d:0 },
+    { n:'Block',  sub:'Strongest ad blocking',  d:0.18 },
+    { n:'Guard',  sub:'Malware focused',         d:0.36 },
+    { n:'Core',   sub:'Maximum stability',       d:0.54 },
+    { n:'Family', sub:'Safe browsing',           d:0.72 },
+  ];
+  return (
+    <Sprite start={12.5} end={16.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:36, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>5 MODES · PICK YOUR LEVEL</div>
+            <div style={{display:'flex', flexDirection:'column', gap:12, width:760}}>
+              {modes.map((m, i) => {
+                const lt = localTime - m.d;
+                if (lt < 0) return <div key={i} style={{height:90, opacity:0}}/>;
+                const inT = Easing.easeOutBack(clamp(lt/0.45, 0, 1));
+                const active = i === 0;
+                return (
+                  <div key={i} style={{
+                    padding:'22px 28px', borderRadius:16,
+                    background: active ? PURPLE : PAPER2,
+                    border: active ? `1px solid ${PURPLE}` : `1px solid rgba(12,11,20,0.06)`,
+                    display:'flex', alignItems:'center', justifyContent:'space-between',
+                    opacity:clamp(lt/0.3,0,1), transform:`scale(${0.85+inT*0.15})`,
+                    boxShadow: active ? `0 12px 30px rgba(109,76,255,0.25)` : 'none',
+                  }}>
+                    <div>
+                      <div style={{fontFamily:FONT,fontWeight:700,fontSize:36, color: active?'#fff':INK, letterSpacing:'-0.02em'}}>{m.n}</div>
+                      <div style={{fontFamily:MONO,fontSize:18, color: active?'rgba(255,255,255,0.75)':INK3, letterSpacing:'0.04em', marginTop:2}}>{m.sub}</div>
+                    </div>
+                    {active && (
+                      <div style={{
+                        fontFamily:MONO, fontSize:16, color:'rgba(255,255,255,0.85)',
+                        padding:'8px 14px', borderRadius:8, background:'rgba(255,255,255,0.15)',
+                        letterSpacing:'0.06em',
+                      }}>● ACTIVE</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 5 (16.5 – 20.5s) — Privacy guarantees grid
+// ════════════════════════════════════════════════════════════════════════
+function S5_Guarantees(){
+  const items = [
+    ['DNS encrypted', 'ISPs see nothing'],
+    ['RAM-only', 'nothing written to disk'],
+    ['Zero logs', 'no browsing history'],
+    ['Always on', 'survives app close'],
+  ];
+  return (
+    <Sprite start={16.5} end={20.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:18, width:880}}>
+              {items.map(([t,s], i) => {
+                const lt = localTime - i*0.16 - 0.2;
+                if (lt < 0) return <div key={i} style={{height:160, opacity:0}}/>;
+                const inT = Easing.easeOutCubic(clamp(lt/0.45,0,1));
+                return (
+                  <div key={i} style={{
+                    padding:'30px 28px', background:PAPER2, borderRadius:22,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    opacity:inT, transform:`scale(${0.85+inT*0.15})`,
+                  }}>
+                    <div style={{
+                      width:14,height:14,borderRadius:4,background:PURPLE,
+                      marginBottom:14, boxShadow:`0 0 12px ${PURPLE}`,
+                    }}/>
+                    <div style={{fontFamily:FONT,fontWeight:700,fontSize:40, color:INK, letterSpacing:'-0.02em'}}>{t}</div>
+                    <div style={{fontFamily:MONO,fontSize:18, color:INK3, letterSpacing:'0.04em', marginTop:6}}>{s}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 6 (20.5 – 23.5s) — Free callout
+// ════════════════════════════════════════════════════════════════════════
+function S6_Free(){
+  return (
+    <Sprite start={20.5} end={23.5}>
+      {({ localTime, duration }) => {
+        const op = clamp(localTime/0.4,0,1);
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:380,
+            opacity:op*exitOp,
+          }}>
+            <div style={{
+              fontFamily:FONT, fontWeight:800, fontSize:200,
+              color:PURPLE, letterSpacing:'-0.05em', lineHeight:0.9,
+              textShadow:`0 0 60px rgba(109,76,255,0.25)`,
+            }}>FREE</div>
+            <div style={{
+              marginTop:18, fontFamily:FONT, fontWeight:600, fontSize:54, color:INK,
+              letterSpacing:'-0.02em', textAlign:'center', lineHeight:1.1,
+            }}>on every plan.<br/>forever.</div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 7 (23.5 – 27s) — CTA
+// ════════════════════════════════════════════════════════════════════════
+function S7_CTA(){
+  return (
+    <Sprite start={23.5} end={27}>
+      {({ localTime }) => {
+        const t = localTime;
+        const logoT = Easing.easeOutCubic(clamp(t/0.6,0,1));
+        const tagT = Easing.easeOutCubic(clamp((t-0.4)/0.6,0,1));
+        const linkT = Easing.easeOutCubic(clamp((t-0.9)/0.6,0,1));
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:240,
+          }}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:24,
+              opacity:clamp(t/0.3,0,1), transform:`translateY(${(1-logoT)*20}px)`,
+              marginBottom:44,
+            }}>
+              <img src="Adris-logo.png" alt="" style={{width:120,height:120,borderRadius:28,boxShadow:`0 16px 40px rgba(109,76,255,0.4)`}}/>
+              <div style={{fontFamily:FONT,fontWeight:800,fontSize:100,color:INK,letterSpacing:'-0.04em'}}>Vault</div>
+            </div>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:76, color:INK,
+              letterSpacing:'-0.03em', textAlign:'center', lineHeight:1.05,
+              opacity:clamp((t-0.4)/0.3,0,1), transform:`translateY(${(1-tagT)*20}px)`,
+              marginBottom:48,
+            }}>
+              ISPs see nothing.<br/><span style={{color:PURPLE}}>Ads disappear.</span>
+            </div>
+            <div style={{
+              padding:'28px 52px', background:PURPLE, borderRadius:26,
+              fontFamily:FONT, fontWeight:700, fontSize:54, color:'#fff',
+              letterSpacing:'-0.02em', boxShadow:`0 22px 60px rgba(109,76,255,0.4)`,
+              display:'flex', alignItems:'center', gap:20,
+              opacity:clamp((t-0.9)/0.3,0,1), transform:`translateY(${(1-linkT)*20}px)`,
+            }}>
+              Adris.tech
+              <span style={{width:54,height:54,borderRadius:27,background:'#fff',color:PURPLE,display:'grid',placeItems:'center',fontWeight:800,fontSize:32}}>↗</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function VaultStory(){
+  return (
+    <>
+      <div style={{
+        position:'absolute', inset:0, pointerEvents:'none',
+        background:`radial-gradient(60% 40% at 10% 0%, rgba(109,76,255,0.05), transparent 60%),
+                    radial-gradient(60% 40% at 100% 100%, rgba(109,76,255,0.06), transparent 65%)`,
+      }}/>
+      <ModuleBadge label="05 · VAULT" />
+
+      <S1_Noise />
+      <S2_Toggle />
+      <S3_Counter />
+      <S4_Modes />
+      <S5_Guarantees />
+      <S6_Free />
+      <S7_CTA />
+
+      <Subtitle start={0.3}  end={3.3}  lines={["Every site you open.", "Watching. Tracking."]} />
+      <Subtitle start={3.7}  end={7.3}  lines={["One toggle.", "System-wide protection."]} />
+      <Subtitle start={7.7}  end={12.3} lines={["Across every browser.", "Every app on your machine."]} />
+      <Subtitle start={12.7} end={16.3} lines={["Five modes.", "Pick your level."]} />
+      <Subtitle start={16.7} end={20.3} lines={["RAM-only. Zero logs.", "Always on."]} />
+      <Subtitle start={20.7} end={23.3} lines={["Free.", "On every plan."]} />
+      <Subtitle start={23.7} end={26.8} lines={["Vault.", "<span style='color:#6d4cff'>The shield, always up.</span>"]} small />
+
+      <ProgressBar />
+    </>
+  );
+}
+
+function App(){
+  return (
+    <Stage width={1080} height={1920} duration={27} background="#ffffff" persistKey="Adris-vault">
+      <TimeLabel />
+      <VaultStory />
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

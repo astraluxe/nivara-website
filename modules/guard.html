@@ -138,7 +138,7 @@
   /* Contract scanner mock */
   .scanner {
     border: 1px solid var(--rule-strong);
-    background: #F7F4ED;
+    background: var(--paper-2);
     padding: 24px;
   }
   .scanner .dropzone {
@@ -264,7 +264,7 @@
 
   /* Vuln briefing card */
   .vuln-card {
-    background: #F7F4ED;
+    background: var(--paper-2);
     border: 1px solid var(--rule-strong);
     padding: 24px;
   }
@@ -335,7 +335,7 @@
 
   /* Compliance checker */
   .compl {
-    background: #F7F4ED;
+    background: var(--paper-2);
     border: 1px solid var(--rule-strong);
     padding: 24px;
   }
@@ -414,7 +414,7 @@
     <ul class="nav-links">
       <li><a href="/#platform">Platform</a></li>
       <li><a href="/#modules">Modules</a></li>
-      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/pricing">Pricing</a></li>
       <li><a href="/download">Download</a></li>
     </ul>
     <div class="nav-right">
@@ -441,10 +441,10 @@
 <div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-inner">
     <ul>
-      <li><a href="../NIVARA.html#platform"  onclick="closeMobileNav()">Platform</a></li>
-      <li><a href="../NIVARA.html#modules"   onclick="closeMobileNav()">Modules</a></li>
-      <li><a href="../NIVARA.html#pricing"   onclick="closeMobileNav()">Pricing</a></li>
-      <li><a href="/download"                onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="/#modules"   onclick="closeMobileNav()">Modules</a></li>
+      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
     </ul>
     <a href="/download" class="btn mobile-nav-cta">Download — free</a>
   </div>
@@ -468,21 +468,6 @@ document.getElementById('navHam').addEventListener('click', function() {
 });
 </script>
 
-<!-- COMING SOON BANNER -->
-<section class="cs-banner">
-  <div class="wrap">
-    <div class="cs-banner-row">
-      <span class="cs-banner-tag">Preview</span>
-      <p class="cs-banner-text">
-        <strong>Guard</strong> is shipping soon. This page is a design preview of how the product will look — features below aren't live yet. Krew agents are <a href="krew.html" style="color: var(--accent); border-bottom: 1px solid currentColor;">already live today</a>.
-      </p>
-      <a href="/download" class="cs-banner-cta">
-        Download →
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
 
 <section class="crumb">
   <div class="wrap">
@@ -524,7 +509,7 @@ document.getElementById('navHam').addEventListener('click', function() {
   <div class="wrap">
     <div class="mhero-top">
       <div>
-        <div class="mhero-tag up"><span class="ind"></span>Pro tier · ships 2026 H2</div>
+        <div class="mhero-tag up"><span class="ind"></span>Available now · Pro plan</div>
         <h1>Your AI<br/>security team.<br/><span class="it">Always watching.</span></h1>
       </div>
     </div>
@@ -862,7 +847,7 @@ document.getElementById('navHam').addEventListener('click', function() {
 <section class="callout" data-screen-label="06 CTA">
   <div class="wrap">
     <h3>Stop guessing.<br/><span class="it">Start watching.</span></h3>
-    <p>Contract scanning available from day one. Full threat dashboard ships in 2026 H2.</p>
+    <p>Contract scanning, phishing defense, threat monitoring, and compliance tools — all available now.</p>
     <div class="btn-row">
       <a href="/download" class="btn">
         Download →
@@ -903,7 +888,7 @@ document.getElementById('navHam').addEventListener('click', function() {
         <ul>
           <li><a href="/#platform">About</a></li>
           <li><a href="/#audience">Who it's for</a></li>
-          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/pricing">Pricing</a></li>
         </ul>
       </div>
       <div>

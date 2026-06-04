@@ -1,0 +1,467 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Adris · Automation · Video</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#0a0a0a;font-family:'Inter Tight',system-ui,sans-serif;overflow:hidden}
+  #root{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root" data-screen-label="automation · t=0s"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+
+<script type="text/babel">
+const { Sprite, useTime, useTimeline, Easing, clamp, Stage } = window;
+
+const INK='#0c0b14', INK2='#3a3548', INK3='#7a7388';
+const PURPLE='#6d4cff', PURPLE2='#8a6cff', PURPLE_DEEP='#3a1fb8', PURPLE_SOFT='#efeaff';
+const PAPER='#ffffff', PAPER2='#faf8f5';
+const FONT='Inter Tight, system-ui, sans-serif';
+const MONO="'JetBrains Mono', ui-monospace, monospace";
+
+function TimeLabel(){
+  const t = useTime();
+  React.useEffect(() => {
+    document.getElementById('root').setAttribute('data-screen-label', `automation · t=${t.toFixed(1)}s`);
+  }, [t]);
+  return null;
+}
+
+function Subtitle({ start, end, lines = [], small }){
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime, duration }) => {
+        const inT = clamp(localTime/0.35, 0, 1);
+        const outT = clamp((localTime-(duration-0.35))/0.35, 0, 1);
+        const op = Math.min(Easing.easeOutCubic(inT), 1 - Easing.easeInCubic(outT));
+        const ty = (1-Easing.easeOutCubic(inT))*18 - outT*10;
+        return (
+          <div style={{
+            position:'absolute', left:80, right:80, bottom:200,
+            textAlign:'center', opacity:op, transform:`translateY(${ty}px)`,
+            fontFamily:FONT, fontWeight:600, fontSize:small?56:68, lineHeight:1.12,
+            color:INK, letterSpacing:'-0.022em',
+          }}>
+            {lines.map((l,i)=>(<div key={i} style={{marginTop:i===0?0:8}} dangerouslySetInnerHTML={{__html:l}}/>))}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function ModuleBadge({ label }){
+  const { time, duration } = useTimeline();
+  const hide = time > duration - 3.5;
+  return (
+    <div style={{
+      position:'absolute', left:70, top:70, display:'flex', alignItems:'center', gap:14,
+      opacity:hide?0:0.7, transition:'opacity 300ms',
+      fontFamily:MONO, fontSize:22, color:INK3,
+      letterSpacing:'0.14em', textTransform:'uppercase',
+    }}>
+      <img src="Adris-logo.png" alt="" style={{width:36,height:36,borderRadius:8}}/>
+      <span>Adris · {label}</span>
+    </div>
+  );
+}
+
+function ProgressBar(){
+  const { time, duration } = useTimeline();
+  const p = clamp(time/duration, 0, 1);
+  return (
+    <div style={{position:'absolute',left:0,right:0,bottom:0,height:6,background:'rgba(12,11,20,0.06)'}}>
+      <div style={{width:`${p*100}%`,height:'100%',background:PURPLE,boxShadow:`0 0 14px ${PURPLE}`}}/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 1 (0 – 3.5s) — Same email reply, every day
+// ════════════════════════════════════════════════════════════════════════
+function S1_Drudge(){
+  return (
+    <Sprite start={0} end={3.5}>
+      {({ localTime }) => {
+        // Stack of identical-looking email replies fading in
+        const items = Array.from({length:6}, (_, i) => i);
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:840, transform:'translate(-50%,-50%)',
+            width:880, display:'flex', flexDirection:'column', gap:10,
+          }}>
+            {items.map(i => {
+              const lt = localTime - i*0.18;
+              if (lt < 0) return null;
+              const op = clamp(lt/0.3, 0, 1);
+              const ty = (1-Easing.easeOutCubic(clamp(lt/0.4,0,1))) * 20;
+              return (
+                <div key={i} style={{
+                  padding:'22px 26px', background:PAPER2, borderRadius:14,
+                  border:`1px solid rgba(12,11,20,0.06)`,
+                  display:'flex', alignItems:'center', justifyContent:'space-between',
+                  opacity:op, transform:`translateY(${ty}px)`,
+                }}>
+                  <div style={{display:'flex',alignItems:'center',gap:18}}>
+                    <div style={{width:14,height:14,borderRadius:'50%',background:PURPLE}}/>
+                    <div style={{fontSize:26,color:INK,fontWeight:600}}>"Hi, thanks for reaching out…"</div>
+                  </div>
+                  <div style={{fontFamily:MONO,fontSize:20,color:INK3}}>{['9:14','10:02','11:38','13:21','14:55','16:07'][i]}</div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 2 (3.5 – 9s) — AI builder typing → flow appears
+// ════════════════════════════════════════════════════════════════════════
+function S2_AIBuilder(){
+  return (
+    <Sprite start={3.5} end={10}>
+      {({ localTime }) => {
+        const prompt = "When a lead emails me, research them and draft a personalised reply.";
+        // typewriter effect
+        const chars = clamp(Math.floor(localTime * 30), 0, prompt.length);
+        const typed = prompt.slice(0, chars);
+        const showCursor = Math.sin(localTime*6) > 0;
+        const showGenerating = localTime > prompt.length/30 + 0.3 && localTime < prompt.length/30 + 1.4;
+        const showFlow = localTime > prompt.length/30 + 1.4;
+        const exitOp = 1 - clamp((localTime - 5.6)/0.4, 0, 1);
+
+        // flow nodes
+        const flowStart = prompt.length/30 + 1.4;
+        const flowLocal = localTime - flowStart;
+
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:'50%',
+            transform:'translate(-50%,-50%) translateY(-80px)',
+            width:920, opacity:exitOp,
+          }}>
+            {/* prompt input */}
+            <div style={{
+              padding:'24px 28px', background:INK, borderRadius:18,
+              fontFamily:MONO, fontSize:26, color:'#cfc7e3', lineHeight:1.4,
+              border:`1px solid rgba(109,76,255,0.3)`,
+              boxShadow:`0 14px 40px rgba(109,76,255,0.18)`,
+              display:'flex', alignItems:'flex-start', gap:14,
+            }}>
+              <span style={{padding:'4px 10px',borderRadius:8,background:PURPLE,color:'#fff',fontSize:14,fontWeight:600,letterSpacing:'0.08em', marginTop:4}}>BUILD</span>
+              <div style={{flex:1}}>
+                {typed}
+                {chars < prompt.length && showCursor && <span style={{display:'inline-block',width:12,height:24,background:'#cfc7e3',verticalAlign:'middle'}}/>}
+              </div>
+            </div>
+
+            {showGenerating && (
+              <div style={{
+                marginTop:24, display:'flex', alignItems:'center', justifyContent:'center', gap:12,
+                fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.06em',
+              }}>
+                {[0,1,2].map(i => {
+                  const p = (Math.sin((localTime*5) - i*0.6) + 1)/2;
+                  return <div key={i} style={{width:12,height:12,borderRadius:6,background:PURPLE,opacity:0.3+p*0.7,transform:`scale(${0.6+p*0.5})`}}/>;
+                })}
+                <span style={{marginLeft:8}}>generating flow…</span>
+              </div>
+            )}
+
+            {showFlow && (
+              <div style={{
+                marginTop:32, padding:'30px 28px', background:PAPER2, borderRadius:22,
+                border:`1px solid rgba(12,11,20,0.06)`, position:'relative',
+                minHeight:400,
+              }}>
+                <svg viewBox="0 0 860 360" style={{position:'absolute',inset:24,width:'calc(100% - 48px)',height:'calc(100% - 48px)', pointerEvents:'none'}}>
+                  <defs>
+                    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                      <path d="M0,0 L10,5 L0,10 z" fill={PURPLE}/>
+                    </marker>
+                  </defs>
+                  <path d="M210 60 Q310 120 410 130" stroke={PURPLE} strokeWidth="3" fill="none" strokeDasharray="6 8" markerEnd="url(#arr)" style={{opacity:clamp((flowLocal-0.6)/0.4,0,1)}}/>
+                  <path d="M620 160 Q650 240 580 290" stroke={PURPLE} strokeWidth="3" fill="none" strokeDasharray="6 8" markerEnd="url(#arr)" style={{opacity:clamp((flowLocal-1.2)/0.4,0,1)}}/>
+                </svg>
+
+                {[
+                  { type:'trig', label:'New email', sub:'Gmail · trigger', c:'#1fb88b', bg:'#effaf5', x:0,   y:30,  d:0 },
+                  { type:'ai',   label:'Research sender', sub:'AI · enrich', c:PURPLE, bg:PURPLE_SOFT, x:220, y:100, d:0.4 },
+                  { type:'ai',   label:'Draft reply', sub:'AI · personalize', c:PURPLE, bg:PURPLE_SOFT, x:430, y:130, d:0.8 },
+                  { type:'out',  label:'Send & notify', sub:'Output', c:'#3b7fff', bg:'#eef4ff', x:240, y:260, d:1.6 },
+                ].map((n, i) => {
+                  const lt = flowLocal - n.d;
+                  if (lt < 0) return null;
+                  const inT = Easing.easeOutBack(clamp(lt/0.45, 0, 1));
+                  const op = clamp(lt/0.3, 0, 1);
+                  return (
+                    <div key={i} style={{
+                      position:'absolute', left:n.x+24, top:n.y+24, width:230,
+                      padding:'16px 18px', borderRadius:14,
+                      background:n.bg, border:`1.5px solid ${n.c}`,
+                      opacity:op, transform:`scale(${0.7+inT*0.3})`, transformOrigin:'left top',
+                    }}>
+                      <div style={{fontFamily:MONO, fontSize:13, color:n.c, letterSpacing:'0.1em', textTransform:'uppercase', fontWeight:600}}>
+                        {n.type==='trig'?'▸ TRIGGER':n.type==='ai'?'◆ AI ACTION':'● OUTPUT'}
+                      </div>
+                      <div style={{fontFamily:FONT, fontSize:22, color:INK, fontWeight:600, marginTop:4}}>{n.label}</div>
+                      <div style={{fontFamily:MONO, fontSize:14, color:INK3, marginTop:2}}>{n.sub}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 3 (10 – 15s) — 6 templates
+// ════════════════════════════════════════════════════════════════════════
+function S3_Templates(){
+  const templates = [
+    'Auto-reply to leads',
+    'Weekly client report',
+    'Invoice tracker',
+    'Support ticket router',
+    'Daily standup digest',
+    'File drop processor',
+  ];
+  return (
+    <Sprite start={10} end={15}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:36, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>6 TEMPLATES · PRE-BUILT</div>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:16, width:880}}>
+              {templates.map((t, i) => {
+                const lt = localTime - 0.3 - i*0.14;
+                if (lt < 0) return <div key={i} style={{height:120, opacity:0}}/>;
+                const inT = Easing.easeOutBack(clamp(lt/0.45, 0, 1));
+                return (
+                  <div key={i} style={{
+                    padding:'26px 28px', background:PAPER2, borderRadius:18,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    display:'flex', alignItems:'center', gap:16,
+                    opacity:clamp(lt/0.3,0,1), transform:`scale(${0.8+inT*0.2})`,
+                  }}>
+                    <div style={{
+                      width:16,height:16,borderRadius:4,background:PURPLE,
+                      boxShadow:`0 0 12px ${PURPLE}`,
+                    }}/>
+                    <div style={{fontFamily:FONT, fontSize:28, color:INK, fontWeight:600, letterSpacing:'-0.015em'}}>{t}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 4 (15 – 19s) — PC-on vs PC-off
+// ════════════════════════════════════════════════════════════════════════
+function S4_PcMode(){
+  return (
+    <Sprite start={15} end={19}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:36, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>RUNS WHEN IT NEEDS TO</div>
+            <div style={{display:'flex', gap:20, width:880}}>
+              {[
+                {title:'PC on', sub:'Runs locally · zero server cost', icon:'⏻', d:0.2},
+                {title:'PC off', sub:'Edge functions take over', icon:'☁', d:0.6},
+              ].map((m, i) => {
+                const lt = localTime - m.d;
+                if (lt < 0) return <div key={i} style={{flex:1, height:280, opacity:0}}/>;
+                const inT = Easing.easeOutCubic(clamp(lt/0.5, 0, 1));
+                return (
+                  <div key={i} style={{
+                    flex:1, padding:'40px 32px', background:PAPER2, borderRadius:24,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    opacity:inT, transform:`translateY(${(1-inT)*30}px)`,
+                  }}>
+                    <div style={{
+                      width:72,height:72,borderRadius:18,background:PURPLE,
+                      display:'grid',placeItems:'center', color:'#fff', fontSize:38,
+                      marginBottom:24,
+                      boxShadow:`0 12px 30px rgba(109,76,255,0.3)`,
+                    }}>{m.icon}</div>
+                    <div style={{fontFamily:FONT,fontWeight:800,fontSize:50,color:INK,letterSpacing:'-0.03em'}}>{m.title}</div>
+                    <div style={{fontFamily:MONO,fontSize:20,color:INK3,letterSpacing:'0.04em', marginTop:8, lineHeight:1.4}}>{m.sub}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 5 (19 – 22.5s) — Boss agent integration callout
+// ════════════════════════════════════════════════════════════════════════
+function S5_Arjun(){
+  return (
+    <Sprite start={19} end={22.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:360,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              padding:'30px 36px', background:INK, color:'#fff', borderRadius:22,
+              fontFamily:MONO, fontSize:28, lineHeight:1.4, maxWidth:840,
+              opacity:clamp(localTime/0.4,0,1),
+              transform:`translateY(${(1-clamp(localTime/0.4,0,1))*20}px)`,
+            }}>
+              <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:14,color:'#a785ff'}}>
+                <span style={{padding:'4px 12px',borderRadius:8,background:PURPLE,color:'#fff',fontWeight:600,fontSize:14,letterSpacing:'0.08em'}}>ARJUN</span>
+                <span style={{fontSize:18,letterSpacing:'0.08em',textTransform:'uppercase'}}>BOSS · KREW</span>
+              </div>
+              "Just say <span style={{color:PURPLE2}}>'set up an automation that replies to support emails'</span> and I'll build the whole flow for you."
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 6 (22.5 – 26s) — CTA
+// ════════════════════════════════════════════════════════════════════════
+function S6_CTA(){
+  return (
+    <Sprite start={22.5} end={26}>
+      {({ localTime }) => {
+        const t = localTime;
+        const logoT = Easing.easeOutCubic(clamp(t/0.6,0,1));
+        const tagT = Easing.easeOutCubic(clamp((t-0.4)/0.6,0,1));
+        const linkT = Easing.easeOutCubic(clamp((t-0.9)/0.6,0,1));
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:240,
+          }}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:24,
+              opacity:clamp(t/0.3,0,1), transform:`translateY(${(1-logoT)*20}px)`,
+              marginBottom:44,
+            }}>
+              <img src="Adris-logo.png" alt="" style={{width:120,height:120,borderRadius:28,boxShadow:`0 16px 40px rgba(109,76,255,0.4)`}}/>
+              <div style={{fontFamily:FONT,fontWeight:800,fontSize:90,color:INK,letterSpacing:'-0.04em'}}>Automation</div>
+            </div>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:74, color:INK,
+              letterSpacing:'-0.03em', textAlign:'center', lineHeight:1.05,
+              opacity:clamp((t-0.4)/0.3,0,1), transform:`translateY(${(1-tagT)*20}px)`,
+              marginBottom:48,
+            }}>
+              Workflows that run<br/><span style={{color:PURPLE}}>while you sleep.</span>
+            </div>
+            <div style={{
+              padding:'28px 52px', background:PURPLE, borderRadius:26,
+              fontFamily:FONT, fontWeight:700, fontSize:54, color:'#fff',
+              letterSpacing:'-0.02em', boxShadow:`0 22px 60px rgba(109,76,255,0.4)`,
+              display:'flex', alignItems:'center', gap:20,
+              opacity:clamp((t-0.9)/0.3,0,1), transform:`translateY(${(1-linkT)*20}px)`,
+            }}>
+              Adris.tech
+              <span style={{width:54,height:54,borderRadius:27,background:'#fff',color:PURPLE,display:'grid',placeItems:'center',fontWeight:800,fontSize:32}}>↗</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function AutomationStory(){
+  return (
+    <>
+      <div style={{
+        position:'absolute', inset:0, pointerEvents:'none',
+        background:`radial-gradient(60% 40% at 10% 0%, rgba(109,76,255,0.05), transparent 60%),
+                    radial-gradient(60% 40% at 100% 100%, rgba(109,76,255,0.06), transparent 65%)`,
+      }}/>
+      <ModuleBadge label="03 · AUTOMATION" />
+
+      <S1_Drudge />
+      <S2_AIBuilder />
+      <S3_Templates />
+      <S4_PcMode />
+      <S5_Arjun />
+      <S6_CTA />
+
+      <Subtitle start={0.3}  end={3.3}  lines={["Same reply.", "Twenty times a day."]} />
+      <Subtitle start={3.7}  end={9.7}  lines={["Type what you want.", "Watch the flow build itself."]} />
+      <Subtitle start={10.2} end={14.8} lines={["Or start from one", "of <span style='color:#6d4cff;font-weight:800'>6 templates.</span>"]} />
+      <Subtitle start={15.2} end={18.8} lines={["Runs on your machine.", "Or in the cloud when it's off."]} />
+      <Subtitle start={19.2} end={22.3} lines={["Or just <span style='color:#6d4cff'>ask Arjun</span>.", "He'll build it for you."]} />
+      <Subtitle start={22.7} end={25.8} lines={["Automation.", "<span style='color:#6d4cff'>Zapier, local.</span>"]} small />
+
+      <ProgressBar />
+    </>
+  );
+}
+
+function App(){
+  return (
+    <Stage width={1080} height={1920} duration={26} background="#ffffff" persistKey="Adris-automation">
+      <TimeLabel />
+      <AutomationStory />
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

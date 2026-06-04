@@ -1,0 +1,696 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Adris · Mesh RAM · Video</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#0a0a0a;font-family:'Inter Tight',system-ui,sans-serif;overflow:hidden}
+  #root{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root" data-screen-label="mesh · t=0s"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+
+<script type="text/babel">
+const { Sprite, useTime, useTimeline, Easing, clamp, Stage } = window;
+
+const INK='#0c0b14', INK2='#3a3548', INK3='#7a7388';
+const PURPLE='#6d4cff', PURPLE2='#8a6cff', PURPLE_DEEP='#3a1fb8', PURPLE_SOFT='#efeaff';
+const PAPER='#ffffff', PAPER2='#faf8f5';
+const FONT='Inter Tight, system-ui, sans-serif';
+const MONO="'JetBrains Mono', ui-monospace, monospace";
+
+function TimeLabel(){
+  const t = useTime();
+  React.useEffect(() => {
+    document.getElementById('root').setAttribute('data-screen-label', `mesh · t=${t.toFixed(1)}s`);
+  }, [t]);
+  return null;
+}
+
+function Subtitle({ start, end, lines = [], small }){
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime, duration }) => {
+        const inT = clamp(localTime/0.35, 0, 1);
+        const outT = clamp((localTime-(duration-0.35))/0.35, 0, 1);
+        const op = Math.min(Easing.easeOutCubic(inT), 1 - Easing.easeInCubic(outT));
+        const ty = (1-Easing.easeOutCubic(inT))*18 - outT*10;
+        return (
+          <div style={{
+            position:'absolute', left:80, right:80, bottom:200,
+            textAlign:'center', opacity:op, transform:`translateY(${ty}px)`,
+            fontFamily:FONT, fontWeight:600, fontSize:small?54:64, lineHeight:1.14,
+            color:INK, letterSpacing:'-0.022em',
+          }}>
+            {lines.map((l,i)=>(<div key={i} style={{marginTop:i===0?0:8}} dangerouslySetInnerHTML={{__html:l}}/>))}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function ModuleBadge({ label }){
+  const { time, duration } = useTimeline();
+  const hide = time > duration - 3.5;
+  return (
+    <div style={{
+      position:'absolute', left:70, top:70, display:'flex', alignItems:'center', gap:14,
+      opacity:hide?0:0.7, transition:'opacity 300ms',
+      fontFamily:MONO, fontSize:22, color:INK3,
+      letterSpacing:'0.14em', textTransform:'uppercase',
+    }}>
+      <img src="Adris-logo.png" alt="" style={{width:36,height:36,borderRadius:8}}/>
+      <span>Adris · {label}</span>
+    </div>
+  );
+}
+
+function ProgressBar(){
+  const { time, duration } = useTimeline();
+  const p = clamp(time/duration, 0, 1);
+  return (
+    <div style={{position:'absolute',left:0,right:0,bottom:0,height:6,background:'rgba(12,11,20,0.06)'}}>
+      <div style={{width:`${p*100}%`,height:'100%',background:PURPLE,boxShadow:`0 0 14px ${PURPLE}`}}/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 1 (0 – 4s) — 100 people in the office
+// ════════════════════════════════════════════════════════════════════════
+function S1_Office(){
+  return (
+    <Sprite start={0} end={4}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        const dots = [];
+        for (let r=0; r<10; r++) for (let c=0; c<10; c++) dots.push([r,c]);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:26, color:INK3, letterSpacing:'0.18em',
+              textTransform:'uppercase', marginBottom:30,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>YOUR OFFICE · MONDAY 9 AM</div>
+
+            <div style={{
+              display:'grid', gridTemplateColumns:'repeat(10, 60px)',
+              gap:14, padding:20,
+            }}>
+              {dots.map(([r,c], i) => {
+                const stagger = (r+c) * 0.02;
+                const lt = localTime - 0.4 - stagger;
+                if (lt < 0) return <div key={i} style={{width:60,height:60,opacity:0}}/>;
+                const inT = Easing.easeOutBack(clamp(lt/0.35, 0, 1));
+                return (
+                  <div key={i} style={{
+                    width:60,height:60,borderRadius:14,background:PURPLE_SOFT,
+                    border:`1px solid rgba(109,76,255,0.2)`,
+                    display:'grid',placeItems:'center',
+                    fontFamily:FONT,fontWeight:700,fontSize:22,color:PURPLE_DEEP,
+                    transform:`scale(${0.6+inT*0.4})`,
+                    opacity:clamp(lt/0.2,0,1),
+                  }}>{(i+1).toString().padStart(2,'0').slice(-2)}</div>
+                );
+              })}
+            </div>
+
+            <div style={{
+              marginTop:30, fontFamily:FONT, fontWeight:800, fontSize:90,
+              color:INK, letterSpacing:'-0.04em',
+              opacity:clamp((localTime-2.0)/0.4,0,1),
+              display:'flex', alignItems:'baseline', gap:18,
+            }}>
+              <span style={{color:PURPLE}}>100</span>
+              <span style={{fontSize:48, fontWeight:600, color:INK2}}>people · all using AI</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 2 (4 – 9s) — Multiplying cost
+// $20 × 100 = $2,000/mo · $24,000/yr
+// ════════════════════════════════════════════════════════════════════════
+function S2_Multiply(){
+  return (
+    <Sprite start={4} end={9.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        // counter from 0 to 2000 over ~2s
+        const counter = Math.round(Easing.easeOutCubic(clamp(localTime/2.0, 0, 1)) * 2000);
+        const showAnnual = localTime > 2.6;
+        const annual = Math.round(Easing.easeOutCubic(clamp((localTime-2.6)/1.4, 0, 1)) * 24000);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:INK3, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:18,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>THE MATH</div>
+
+            <div style={{
+              display:'flex', alignItems:'baseline', gap:24,
+              fontFamily:FONT, fontWeight:700, color:INK,
+              opacity:clamp(localTime/0.4,0,1),
+              marginBottom:24,
+            }}>
+              <span style={{fontSize:80, letterSpacing:'-0.04em'}}>$20</span>
+              <span style={{fontSize:42, color:INK3}}>× 100 people =</span>
+            </div>
+
+            <div style={{
+              fontFamily:FONT, fontWeight:800, fontSize:220, color:PURPLE,
+              letterSpacing:'-0.05em', lineHeight:0.95,
+              textShadow:`0 0 60px rgba(109,76,255,0.2)`,
+            }}>
+              ${counter.toLocaleString()}
+            </div>
+            <div style={{
+              fontFamily:MONO, fontSize:30, color:INK3,
+              letterSpacing:'0.1em', textTransform:'uppercase', marginTop:8,
+            }}>per month</div>
+
+            {showAnnual && (
+              <div style={{
+                marginTop:36, padding:'20px 36px',
+                background:INK, borderRadius:16,
+                fontFamily:FONT, fontWeight:700, fontSize:58, color:'#fff',
+                letterSpacing:'-0.03em',
+                opacity:clamp((localTime-2.6)/0.4,0,1),
+                transform:`translateY(${(1-clamp((localTime-2.6)/0.5,0,1))*20}px)`,
+                display:'flex',alignItems:'baseline',gap:18,
+              }}>
+                <span style={{fontFamily:MONO, fontSize:24, color:'#a785ff', letterSpacing:'0.1em'}}>YEAR ONE</span>
+                <span style={{color:PURPLE2}}>${annual.toLocaleString()}</span>
+              </div>
+            )}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 3 (9.5 – 14s) — DeepSeek R1/V3 · 671B params · 404 GB
+// ════════════════════════════════════════════════════════════════════════
+function S3_BigModel(){
+  return (
+    <Sprite start={9.5} end={14.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:26, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>THE MODELS YOU ACTUALLY WANT</div>
+
+            <div style={{
+              display:'flex', flexDirection:'column', gap:14, width:880,
+            }}>
+              {[
+                { n:'DeepSeek R1',     p:'671B params', sz:'404 GB', d:0.2 },
+                { n:'DeepSeek V3',     p:'671B params', sz:'404 GB', d:0.5 },
+                { n:'Llama 3.1 · 405B', p:'405B params', sz:'243 GB', d:0.8 },
+                { n:'Mixtral 8x22B',   p:'176B params', sz:'87 GB',   d:1.1 },
+              ].map((m, i) => {
+                const lt = localTime - m.d;
+                if (lt < 0) return <div key={i} style={{height:130, opacity:0}}/>;
+                const inT = Easing.easeOutCubic(clamp(lt/0.5, 0, 1));
+                return (
+                  <div key={i} style={{
+                    padding:'22px 28px', background:PAPER2, borderRadius:18,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    display:'grid', gridTemplateColumns:'1fr auto', gap:20, alignItems:'center',
+                    opacity:clamp(lt/0.3,0,1), transform:`translateX(${(1-inT)*-30}px)`,
+                  }}>
+                    <div>
+                      <div style={{fontFamily:FONT, fontWeight:700, fontSize:42, color:INK, letterSpacing:'-0.025em'}}>{m.n}</div>
+                      <div style={{fontFamily:MONO, fontSize:20, color:INK3, letterSpacing:'0.06em', textTransform:'uppercase', marginTop:4}}>{m.p}</div>
+                    </div>
+                    <div style={{
+                      fontFamily:MONO, fontWeight:700, fontSize:38, color:PURPLE,
+                      padding:'12px 22px', borderRadius:12, background:PURPLE_SOFT,
+                      letterSpacing:'0.02em',
+                    }}>{m.sz}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{
+              marginTop:36, fontFamily:FONT, fontWeight:600, fontSize:44, color:INK,
+              letterSpacing:'-0.02em', textAlign:'center', lineHeight:1.1,
+              opacity:clamp((localTime-1.6)/0.4,0,1),
+            }}>
+              No single laptop can run them.
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 4 (14.5 – 19s) — Cloud server cost: rented forever
+// ════════════════════════════════════════════════════════════════════════
+function S4_Cloud(){
+  return (
+    <Sprite start={14.5} end={19}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        const hourly = Math.round(Easing.easeOutCubic(clamp(localTime/1.0, 0, 1)) * 12.30 * 100) / 100;
+        const monthly = Math.round(Easing.easeOutCubic(clamp((localTime-1.2)/1.0, 0, 1)) * 8900);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:INK3, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:30,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>OR · RENT GPU SERVERS</div>
+
+            {/* server rack visual */}
+            <div style={{
+              display:'flex', gap:14, marginBottom:36,
+            }}>
+              {[0,1,2].map(i => {
+                const lt = localTime - i*0.15;
+                if (lt < 0) return null;
+                const inT = Easing.easeOutCubic(clamp(lt/0.4,0,1));
+                return (
+                  <div key={i} style={{
+                    width:120, height:200, borderRadius:14,
+                    background:INK,
+                    display:'flex', flexDirection:'column', justifyContent:'space-around',
+                    padding:18, opacity:clamp(lt/0.3,0,1),
+                    transform:`translateY(${(1-inT)*20}px)`,
+                    boxShadow:`0 18px 40px rgba(0,0,0,0.2)`,
+                  }}>
+                    {[0,1,2,3,4].map(j => (
+                      <div key={j} style={{
+                        height:14, borderRadius:4,
+                        background: Math.sin(localTime*4 + i + j) > 0 ? PURPLE2 : '#2a2540',
+                      }}/>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{
+              display:'flex', alignItems:'baseline', gap:22,
+              fontFamily:FONT, fontWeight:800, color:INK,
+              opacity:clamp(localTime/0.4,0,1),
+            }}>
+              <span style={{fontSize:120, color:'#b81f1f', letterSpacing:'-0.05em'}}>${monthly.toLocaleString()}</span>
+              <span style={{fontSize:36, color:INK3, fontWeight:600}}>/mo</span>
+            </div>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:INK3,
+              letterSpacing:'0.1em', textTransform:'uppercase', marginTop:8,
+            }}>RUNS WHILE YOU PAY · STOPS WHEN YOU DON'T</div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 5 (19 – 23s) — The mesh idea visualised
+// 100 laptops × 16GB → 1600GB pooled
+// ════════════════════════════════════════════════════════════════════════
+function S5_Mesh(){
+  return (
+    <Sprite start={19} end={23.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        // Show laptops gridded, then arrows pointing to center pool
+        const totalRAM = Math.round(Easing.easeOutCubic(clamp((localTime-0.8)/1.8, 0, 1)) * 1600);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:24, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>MESH · POOL YOUR OFFICE'S RAM</div>
+
+            {/* laptop grid */}
+            <div style={{
+              display:'grid', gridTemplateColumns:'repeat(10, 70px)', gap:8, marginBottom:30,
+            }}>
+              {Array.from({length:100}, (_, i) => {
+                const r = Math.floor(i/10), c = i%10;
+                const lt = localTime - (r+c)*0.018;
+                if (lt < 0) return <div key={i} style={{width:70,height:48,opacity:0}}/>;
+                const inT = Easing.easeOutBack(clamp(lt/0.35,0,1));
+                const flow = Math.sin(localTime*3 + i*0.2) > 0.6 ? PURPLE : PURPLE_SOFT;
+                return (
+                  <div key={i} style={{
+                    width:70, height:48, borderRadius:6,
+                    background:flow,
+                    border:`1px solid rgba(109,76,255,0.25)`,
+                    opacity:clamp(lt/0.2,0,1), transform:`scale(${0.6+inT*0.4})`,
+                    display:'grid', placeItems:'center',
+                    fontFamily:MONO, fontSize:11, fontWeight:600, color:flow===PURPLE?'#fff':PURPLE_DEEP,
+                    letterSpacing:'0.04em',
+                  }}>16GB</div>
+                );
+              })}
+            </div>
+
+            {/* big total */}
+            <div style={{
+              padding:'20px 36px', borderRadius:18,
+              background:`linear-gradient(135deg, ${PURPLE} 0%, ${PURPLE_DEEP} 100%)`,
+              boxShadow:`0 18px 50px rgba(109,76,255,0.4)`,
+              display:'flex', alignItems:'baseline', gap:18,
+              fontFamily:FONT, fontWeight:800, color:'#fff',
+              opacity:clamp((localTime-0.6)/0.4,0,1),
+            }}>
+              <span style={{fontSize:24, fontFamily:MONO, color:'rgba(255,255,255,0.7)', letterSpacing:'0.1em'}}>TOTAL</span>
+              <span style={{fontSize:120, letterSpacing:'-0.04em'}}>{totalRAM.toLocaleString()}</span>
+              <span style={{fontSize:46, color:'rgba(255,255,255,0.85)'}}>GB</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 6 (23.5 – 28.5s) — 1600 GB vs 404 GB needed → 4× headroom
+// ════════════════════════════════════════════════════════════════════════
+function S6_Headroom(){
+  return (
+    <Sprite start={23.5} end={28.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        const need = clamp(localTime/1.2, 0, 1);
+        const have = clamp((localTime-0.4)/1.6, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:36, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>RAM AVAILABLE · VS · NEEDED</div>
+
+            {/* bars */}
+            <div style={{width:880, display:'flex', flexDirection:'column', gap:28}}>
+              {/* HAVE bar */}
+              <div>
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline', marginBottom:10}}>
+                  <div style={{fontFamily:FONT, fontWeight:700, fontSize:34, color:INK}}>You have</div>
+                  <div style={{fontFamily:MONO, fontWeight:700, fontSize:34, color:PURPLE_DEEP}}>1,600 GB</div>
+                </div>
+                <div style={{height:54, background:PURPLE_SOFT, borderRadius:14, overflow:'hidden'}}>
+                  <div style={{
+                    height:'100%', width:`${have*100}%`,
+                    background:`linear-gradient(90deg, ${PURPLE} 0%, ${PURPLE2} 100%)`,
+                    boxShadow:`0 0 18px ${PURPLE}`, transition:'none',
+                  }}/>
+                </div>
+              </div>
+              {/* NEED bar */}
+              <div>
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline', marginBottom:10}}>
+                  <div style={{fontFamily:FONT, fontWeight:700, fontSize:34, color:INK}}>DeepSeek R1 needs</div>
+                  <div style={{fontFamily:MONO, fontWeight:700, fontSize:34, color:INK2}}>404 GB</div>
+                </div>
+                <div style={{height:54, background:PAPER2, border:`1px solid rgba(12,11,20,0.08)`, borderRadius:14, overflow:'hidden'}}>
+                  <div style={{
+                    height:'100%', width:`${(404/1600)*100*need}%`,
+                    background:INK, transition:'none',
+                  }}/>
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              marginTop:48, padding:'18px 34px',
+              borderRadius:999, background:INK, color:'#fff',
+              fontFamily:FONT, fontWeight:700, fontSize:48,
+              letterSpacing:'-0.02em',
+              opacity:clamp((localTime-2.0)/0.4,0,1),
+              transform:`scale(${0.85 + clamp((localTime-2.0)/0.5,0,1)*0.15})`,
+            }}>
+              <span style={{color:PURPLE2}}>4×</span> the headroom
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 7 (28.5 – 34s) — The cost comparison: $24,000 vs $0
+// ════════════════════════════════════════════════════════════════════════
+function S7_Compare(){
+  return (
+    <Sprite start={28.5} end={34}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+            opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:INK3, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:38,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>YEAR ONE · 100 PEOPLE</div>
+
+            <div style={{display:'flex', gap:18, width:920, alignItems:'stretch'}}>
+              {/* Old way */}
+              <div style={{
+                flex:1, padding:'34px 28px',
+                background:PAPER2, borderRadius:22,
+                border:`1px solid rgba(12,11,20,0.08)`,
+                display:'flex', flexDirection:'column', gap:10,
+                opacity:clamp(localTime/0.4,0,1),
+                transform:`translateX(${(1-clamp(localTime/0.4,0,1))*-20}px)`,
+                position:'relative', overflow:'hidden',
+              }}>
+                <div style={{fontFamily:MONO, fontSize:18, color:INK3, letterSpacing:'0.1em', textTransform:'uppercase'}}>SaaS PER-SEAT</div>
+                <div style={{fontFamily:FONT, fontWeight:800, fontSize:96, color:'#b81f1f', letterSpacing:'-0.04em', lineHeight:1.0}}>$24,000</div>
+                <div style={{fontFamily:MONO, fontSize:18, color:INK3}}>Claude × 100 × 12mo</div>
+                <div style={{fontFamily:MONO, fontSize:16, color:INK3, marginTop:8}}>+ GPU rentals when needed</div>
+                {/* strike across */}
+                <div style={{
+                  position:'absolute', left:30, right:30, top:'42%',
+                  height:4, background:'#b81f1f',
+                  transform:`scaleX(${clamp((localTime-1.4)/0.5, 0, 1)})`,
+                  transformOrigin:'left',
+                }}/>
+              </div>
+
+              {/* Arrow */}
+              <div style={{
+                display:'grid', placeItems:'center',
+                opacity:clamp((localTime-0.8)/0.4,0,1),
+                transform:`scale(${0.6 + clamp((localTime-0.8)/0.5,0,1)*0.4})`,
+              }}>
+                <div style={{
+                  width:60, height:60, borderRadius:'50%',
+                  background:PURPLE, color:'#fff',
+                  display:'grid', placeItems:'center',
+                  fontSize:30, fontWeight:800,
+                  boxShadow:`0 10px 30px rgba(109,76,255,0.4)`,
+                }}>→</div>
+              </div>
+
+              {/* Mesh way */}
+              <div style={{
+                flex:1, padding:'34px 28px',
+                background:`linear-gradient(160deg, ${PURPLE} 0%, ${PURPLE_DEEP} 100%)`,
+                borderRadius:22, color:'#fff',
+                boxShadow:`0 22px 60px rgba(109,76,255,0.3)`,
+                display:'flex', flexDirection:'column', gap:10,
+                opacity:clamp((localTime-1.0)/0.4,0,1),
+                transform:`translateX(${(1-clamp((localTime-1.0)/0.4,0,1))*20}px)`,
+              }}>
+                <div style={{fontFamily:MONO, fontSize:18, color:'rgba(255,255,255,0.7)', letterSpacing:'0.1em', textTransform:'uppercase'}}>Adris MESH</div>
+                <div style={{fontFamily:FONT, fontWeight:800, fontSize:124, letterSpacing:'-0.04em', lineHeight:1.0}}>$0</div>
+                <div style={{fontFamily:MONO, fontSize:18, color:'rgba(255,255,255,0.85)'}}>download once · run forever</div>
+                <div style={{fontFamily:MONO, fontSize:16, color:'rgba(255,255,255,0.75)', marginTop:8}}>WiFi · local · zero API calls</div>
+              </div>
+            </div>
+
+            {/* savings callout */}
+            <div style={{
+              marginTop:36,
+              fontFamily:FONT, fontWeight:700, fontSize:50, color:INK,
+              letterSpacing:'-0.025em', textAlign:'center', lineHeight:1.1,
+              opacity:clamp((localTime-2.4)/0.4,0,1),
+            }}>
+              Save <span style={{color:PURPLE}}>$24,000</span> · year one.<br/>
+              <span style={{fontSize:30, fontWeight:500, color:INK3, fontFamily:MONO, letterSpacing:'0.04em'}}>compounds every year after</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 8 (34 – 38s) — CTA
+// ════════════════════════════════════════════════════════════════════════
+function S8_CTA(){
+  return (
+    <Sprite start={34} end={38.5}>
+      {({ localTime }) => {
+        const t = localTime;
+        const logoT = Easing.easeOutCubic(clamp(t/0.6,0,1));
+        const tagT = Easing.easeOutCubic(clamp((t-0.4)/0.6,0,1));
+        const linkT = Easing.easeOutCubic(clamp((t-0.9)/0.6,0,1));
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:240,
+          }}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:24,
+              opacity:clamp(t/0.3,0,1), transform:`translateY(${(1-logoT)*20}px)`,
+              marginBottom:44,
+            }}>
+              <img src="Adris-logo.png" alt="" style={{width:120,height:120,borderRadius:28,boxShadow:`0 16px 40px rgba(109,76,255,0.4)`}}/>
+              <div style={{fontFamily:FONT,fontWeight:800,fontSize:90,color:INK,letterSpacing:'-0.04em'}}>Mesh</div>
+            </div>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:74, color:INK,
+              letterSpacing:'-0.03em', textAlign:'center', lineHeight:1.05,
+              opacity:clamp((t-0.4)/0.3,0,1), transform:`translateY(${(1-tagT)*20}px)`,
+              marginBottom:36,
+            }}>
+              Your office's<br/><span style={{color:PURPLE}}>own datacenter.</span>
+            </div>
+            <div style={{
+              display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center',
+              width:900, marginBottom:36,
+              opacity:clamp((t-0.7)/0.4,0,1),
+            }}>
+              {['1,600 GB pooled','671B-param models','$0 ongoing','100% local'].map((p, i) => (
+                <div key={i} style={{
+                  padding:'14px 22px', borderRadius:999,
+                  background:PURPLE_SOFT, color:PURPLE_DEEP,
+                  fontFamily:MONO, fontSize:22, fontWeight:600,
+                  border:`1px solid rgba(109,76,255,0.2)`,
+                  letterSpacing:'0.02em',
+                }}>{p}</div>
+              ))}
+            </div>
+            <div style={{
+              padding:'28px 52px', background:PURPLE, borderRadius:26,
+              fontFamily:FONT, fontWeight:700, fontSize:54, color:'#fff',
+              letterSpacing:'-0.02em', boxShadow:`0 22px 60px rgba(109,76,255,0.4)`,
+              display:'flex', alignItems:'center', gap:20,
+              opacity:clamp((t-0.9)/0.3,0,1), transform:`translateY(${(1-linkT)*20}px)`,
+            }}>
+              Adris.tech
+              <span style={{width:54,height:54,borderRadius:27,background:'#fff',color:PURPLE,display:'grid',placeItems:'center',fontWeight:800,fontSize:32}}>↗</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function MeshStory(){
+  return (
+    <>
+      <div style={{
+        position:'absolute', inset:0, pointerEvents:'none',
+        background:`radial-gradient(60% 40% at 10% 0%, rgba(109,76,255,0.05), transparent 60%),
+                    radial-gradient(60% 40% at 100% 100%, rgba(109,76,255,0.06), transparent 65%)`,
+      }}/>
+      <ModuleBadge label="MESH RAM" />
+
+      <S1_Office />
+      <S2_Multiply />
+      <S3_BigModel />
+      <S4_Cloud />
+      <S5_Mesh />
+      <S6_Headroom />
+      <S7_Compare />
+      <S8_CTA />
+
+      <Subtitle start={0.3}  end={3.8}  lines={["Your office.", "100 people. All using AI."]} />
+      <Subtitle start={4.2}  end={9.3}  lines={["$20 per seat.", "<span style='color:#6d4cff;font-weight:800'>$24,000 a year.</span>"]} />
+      <Subtitle start={9.7}  end={14.3} lines={["For real intelligence,", "you need bigger models."]} />
+      <Subtitle start={14.7} end={18.8} lines={["GPU servers?", "<span style='color:#b81f1f'>$8,900/mo.</span> Forever."]} />
+      <Subtitle start={19.2} end={23.3} lines={["Or pool what you", "<span style='color:#6d4cff'>already own.</span>"]} />
+      <Subtitle start={23.7} end={28.3} lines={["1,600 GB pooled.", "4× what DeepSeek needs."]} />
+      <Subtitle start={28.7} end={33.8} lines={["Cancel the subscriptions.", "<span style='color:#6d4cff;font-weight:800'>Run it yourselves.</span>"]} />
+      <Subtitle start={34.2} end={38.3} lines={["Mesh.", "Your office. Your AI."]} small />
+
+      <ProgressBar />
+    </>
+  );
+}
+
+function App(){
+  return (
+    <Stage width={1080} height={1920} duration={38.5} background="#ffffff" persistKey="Adris-mesh">
+      <TimeLabel />
+      <MeshStory />
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

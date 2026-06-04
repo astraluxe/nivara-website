@@ -1,0 +1,478 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Adris · Coder · Video</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#0a0a0a;font-family:'Inter Tight',system-ui,sans-serif;overflow:hidden}
+  #root{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="root" data-screen-label="coder · t=0s"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+
+<script type="text/babel">
+const { Sprite, useTime, useTimeline, Easing, clamp, Stage } = window;
+
+const INK='#0c0b14', INK2='#3a3548', INK3='#7a7388';
+const PURPLE='#6d4cff', PURPLE2='#8a6cff', PURPLE_DEEP='#3a1fb8', PURPLE_SOFT='#efeaff';
+const PAPER='#ffffff', PAPER2='#faf8f5';
+const FONT='Inter Tight, system-ui, sans-serif';
+const MONO="'JetBrains Mono', ui-monospace, monospace";
+
+function TimeLabel(){
+  const t = useTime();
+  React.useEffect(() => {
+    document.getElementById('root').setAttribute('data-screen-label', `coder · t=${t.toFixed(1)}s`);
+  }, [t]);
+  return null;
+}
+
+function Subtitle({ start, end, lines = [], small }){
+  return (
+    <Sprite start={start} end={end}>
+      {({ localTime, duration }) => {
+        const inT = clamp(localTime/0.35, 0, 1);
+        const outT = clamp((localTime - (duration-0.35))/0.35, 0, 1);
+        const op = Math.min(Easing.easeOutCubic(inT), 1 - Easing.easeInCubic(outT));
+        const ty = (1-Easing.easeOutCubic(inT))*18 - outT*10;
+        return (
+          <div style={{
+            position:'absolute', left:80, right:80, bottom:200,
+            textAlign:'center', opacity:op, transform:`translateY(${ty}px)`,
+            fontFamily:FONT, fontWeight:600, fontSize:small?56:68, lineHeight:1.12,
+            color:INK, letterSpacing:'-0.022em',
+          }}>
+            {lines.map((l,i)=>(<div key={i} style={{marginTop:i===0?0:8}} dangerouslySetInnerHTML={{__html:l}}/>))}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function ModuleBadge({ label }){
+  const { time, duration } = useTimeline();
+  const hide = time > duration - 3.5;
+  return (
+    <div style={{
+      position:'absolute', left:70, top:70, display:'flex', alignItems:'center', gap:14,
+      opacity:hide?0:0.7, transition:'opacity 300ms',
+      fontFamily:MONO, fontSize:22, color:INK3,
+      letterSpacing:'0.14em', textTransform:'uppercase',
+    }}>
+      <img src="Adris-logo.png" alt="" style={{width:36,height:36,borderRadius:8}}/>
+      <span>Adris · {label}</span>
+    </div>
+  );
+}
+
+function ProgressBar(){
+  const { time, duration } = useTimeline();
+  const p = clamp(time/duration, 0, 1);
+  return (
+    <div style={{position:'absolute',left:0,right:0,bottom:0,height:6,background:'rgba(12,11,20,0.06)'}}>
+      <div style={{width:`${p*100}%`,height:'100%',background:PURPLE,boxShadow:`0 0 14px ${PURPLE}`}}/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 1 (0 – 3.5s) — Late night, tests failing
+// ════════════════════════════════════════════════════════════════════════
+function S1_Late(){
+  return (
+    <Sprite start={0} end={3.5}>
+      {({ localTime }) => {
+        const op = clamp(localTime/0.5, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex',
+            alignItems:'center', justifyContent:'center', paddingBottom:340,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:32, color:INK2, letterSpacing:'0.06em',
+              textAlign:'center', opacity:op,
+            }}>
+              <div style={{fontSize:120, color:INK, fontWeight:600, lineHeight:1.0, marginBottom:18}}>23:47</div>
+              <div style={{color:INK3, letterSpacing:'0.2em', fontSize:24, textTransform:'uppercase'}}>BUILD #47 · FAILING</div>
+              <div style={{marginTop:50, color:'#b81f1f', fontSize:28, fontWeight:600}}>
+                <span style={{background:'#fde7e7', padding:'8px 18px', borderRadius:8, letterSpacing:'0.04em'}}>
+                  ✕ 6 tests failed
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 2 (3.5 – 9s) — Terminal with AI fix
+// ════════════════════════════════════════════════════════════════════════
+function S2_Terminal(){
+  return (
+    <Sprite start={3.5} end={9.5}>
+      {({ localTime }) => {
+        const show1 = localTime > 0.2;
+        const show2 = localTime > 1.0;
+        const show3 = localTime > 1.8;
+        const showAI = localTime > 2.5;
+        const showResult = localTime > 4.8;
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:840, transform:'translate(-50%,-50%)',
+            width:920,
+          }}>
+            <div style={{
+              background:INK, borderRadius:22, overflow:'hidden',
+              boxShadow:'0 30px 80px rgba(109,76,255,0.18)',
+              fontFamily:MONO, color:'#cfc7e3', fontSize:24, lineHeight:1.55,
+            }}>
+              <div style={{
+                padding:'18px 24px', borderBottom:'1px solid rgba(255,255,255,0.06)',
+                display:'flex', alignItems:'center', gap:10,
+              }}>
+                <span style={{width:14,height:14,borderRadius:7,background:'#2a2540'}}/>
+                <span style={{width:14,height:14,borderRadius:7,background:'#2a2540'}}/>
+                <span style={{width:14,height:14,borderRadius:7,background:'#2a2540'}}/>
+                <div style={{marginLeft:'auto', fontSize:18, color:'#7a7388', letterSpacing:'0.06em'}}>~/project · coder</div>
+              </div>
+              <div style={{padding:'28px 28px 32px'}}>
+                {show1 && <div style={{opacity:clamp((localTime-0.2)/0.3,0,1)}}><span style={{color:PURPLE2}}>$</span> npm test</div>}
+                {show2 && <div style={{opacity:clamp((localTime-1.0)/0.3,0,1), color:'#ff7a7a'}}>FAIL · race condition in <span style={{color:'#fff'}}>queue.ts:34</span></div>}
+                {show3 && <div style={{opacity:clamp((localTime-1.8)/0.3,0,1), color:'#7a7388'}}>// what now…</div>}
+                {showAI && (
+                  <div style={{
+                    marginTop:18, padding:'20px 22px', borderRadius:14,
+                    background:'rgba(109,76,255,0.16)', border:`1px solid rgba(109,76,255,0.32)`,
+                    color:'#e6dcff', opacity:clamp((localTime-2.5)/0.4,0,1),
+                  }}>
+                    <div style={{display:'flex', alignItems:'center', gap:12, marginBottom:14}}>
+                      <span style={{padding:'4px 10px',borderRadius:8,background:PURPLE,color:'#fff',fontSize:14,fontWeight:600,letterSpacing:'0.08em'}}>AI</span>
+                      <span style={{fontSize:18,color:'#a785ff'}}>using current file + last 20 lines as context</span>
+                    </div>
+                    <div>Looks like <span style={{color:'#a785ff'}}>flush()</span> resolves before workers drain. Wrap in a <span style={{color:'#a785ff'}}>Promise.all()</span> over <span style={{color:'#a785ff'}}>worker.done</span>?</div>
+                    <div style={{marginTop:18, display:'flex', gap:12}}>
+                      <span style={{padding:'10px 18px',borderRadius:10,background:PURPLE,color:'#fff',fontSize:18,fontWeight:600}}>↩ Insert at cursor</span>
+                      <span style={{padding:'10px 18px',borderRadius:10,background:'rgba(255,255,255,0.08)',color:'#cfc7e3',fontSize:18}}>▷ Run in terminal</span>
+                    </div>
+                  </div>
+                )}
+                {showResult && (
+                  <div style={{marginTop:18, opacity:clamp((localTime-4.8)/0.3,0,1), color:'#3ddc84'}}>
+                    ✓ all 47 tests passing
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 3 (9.5 – 14s) — 9 providers
+// ════════════════════════════════════════════════════════════════════════
+const PROVIDERS = [
+  ['Gemini', '#4285f4'],
+  ['Claude', '#cc785c'],
+  ['OpenAI', '#10a37f'],
+  ['Groq', '#f55036'],
+  ['Mistral', '#fa520f'],
+  ['DeepSeek', '#536af6'],
+  ['Perplexity', '#20808d'],
+  ['Together.ai', '#0f6fff'],
+  ['Custom · OpenAI-compatible', '#6d4cff'],
+];
+
+function S3_Providers(){
+  return (
+    <Sprite start={9.5} end={14.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:340, opacity:exitOp,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:40, background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+              opacity:clamp(localTime/0.3,0,1),
+            }}>BRING YOUR OWN KEY · 9 PROVIDERS</div>
+
+            <div style={{display:'flex', flexWrap:'wrap', gap:14, width:880, justifyContent:'center'}}>
+              {PROVIDERS.map(([n,c], i) => {
+                const lt = localTime - 0.3 - i*0.08;
+                if (lt < 0) return null;
+                const inT = Easing.easeOutBack(clamp(lt/0.45, 0, 1));
+                const op = clamp(lt/0.3,0,1);
+                return (
+                  <div key={i} style={{
+                    display:'flex', alignItems:'center', gap:14,
+                    padding:'18px 26px', background:PAPER2, borderRadius:999,
+                    border:`1px solid rgba(12,11,20,0.08)`,
+                    opacity:op, transform:`scale(${0.7+inT*0.3})`,
+                  }}>
+                    <div style={{width:24,height:24,borderRadius:6,background:c}}/>
+                    <div style={{fontFamily:FONT, fontSize:30, fontWeight:600, color:INK}}>{n}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 4 (14.5 – 19s) — Three modes: Local / BYOK / Adris
+// ════════════════════════════════════════════════════════════════════════
+function S4_Modes(){
+  const modes = [
+    { name:'Local',  sub:'Ollama · zero cost',     cost:'$0',  d:0 },
+    { name:'BYOK',   sub:'Your API key · no markup', cost:'~$0', d:0.5 },
+    { name:'Adris', sub:'Cloud · all-in-one',     cost:'tokens', d:1.0 },
+  ];
+  return (
+    <Sprite start={14.5} end={19.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', left:'50%', top:'50%',
+            transform:'translate(-50%,-50%) translateY(-100px)',
+            width:920, opacity:exitOp,
+            display:'flex', flexDirection:'column', gap:20,
+          }}>
+            <div style={{
+              fontFamily:MONO, fontSize:24, color:PURPLE_DEEP, letterSpacing:'0.16em',
+              textTransform:'uppercase', marginBottom:12,
+              opacity:clamp(localTime/0.3,0,1),
+              alignSelf:'flex-start', background:PURPLE_SOFT,
+              padding:'12px 24px', borderRadius:999,
+            }}>THREE WAYS TO POWER IT</div>
+
+            {modes.map((m, i) => {
+              const lt = localTime - m.d - 0.3;
+              if (lt < 0) return <div key={i} style={{height:140, opacity:0}}/>;
+              const inT = Easing.easeOutCubic(clamp(lt/0.5, 0, 1));
+              return (
+                <div key={i} style={{
+                  padding:'28px 32px', background:PAPER2, borderRadius:22,
+                  border:`1px solid rgba(12,11,20,0.06)`,
+                  display:'flex', alignItems:'center', gap:24,
+                  opacity:inT, transform:`translateX(${(1-inT)*-40}px)`,
+                }}>
+                  <div style={{
+                    width:80,height:80,borderRadius:20,background:PURPLE_SOFT,
+                    display:'grid',placeItems:'center',
+                    fontFamily:FONT, fontWeight:800, fontSize:38, color:PURPLE_DEEP,
+                  }}>{i+1}</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontFamily:FONT, fontWeight:700, fontSize:46, color:INK, letterSpacing:'-0.02em'}}>{m.name}</div>
+                    <div style={{fontFamily:MONO, fontSize:22, color:INK3, letterSpacing:'0.04em', marginTop:4}}>{m.sub}</div>
+                  </div>
+                  <div style={{
+                    fontFamily:MONO, fontSize:34, fontWeight:700, color:PURPLE,
+                    padding:'10px 20px', background:'#fff', borderRadius:14,
+                  }}>{m.cost}</div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 5 (19.5 – 23s) — Privacy
+// ════════════════════════════════════════════════════════════════════════
+function S5_Privacy(){
+  return (
+    <Sprite start={19.5} end={23}>
+      {({ localTime, duration }) => {
+        const op = clamp(localTime/0.4, 0, 1);
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:360,
+            opacity:op*exitOp,
+          }}>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:84, color:INK,
+              lineHeight:1.05, letterSpacing:'-0.03em', textAlign:'center',
+            }}>
+              Your code.<br/>
+              Your keys.<br/>
+              <span style={{color:PURPLE}}>Your machine.</span>
+            </div>
+            <div style={{
+              marginTop:36, fontFamily:MONO, fontSize:24, color:INK3,
+              letterSpacing:'0.12em', textTransform:'uppercase',
+            }}>Adris NEVER SEES EITHER</div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 6 (23 – 26.5s) — Speed callout
+// ════════════════════════════════════════════════════════════════════════
+function S6_Speed(){
+  return (
+    <Sprite start={23} end={26.5}>
+      {({ localTime, duration }) => {
+        const exitOp = 1 - clamp((localTime-(duration-0.4))/0.4, 0, 1);
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:360,
+            opacity:exitOp,
+          }}>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:20, width:880}}>
+              {[
+                ['Real terminal', 'xterm.js · PTY'],
+                ['Real editor', 'Monaco (VS Code)'],
+                ['File tree', 'open any project'],
+                ['Drag panels', 'sizes persist'],
+              ].map(([t,s],i) => {
+                const lt = localTime - i*0.18;
+                if (lt < 0) return <div key={i} style={{height:160, opacity:0}}/>;
+                const inT = Easing.easeOutCubic(clamp(lt/0.45, 0, 1));
+                return (
+                  <div key={i} style={{
+                    padding:'30px 28px', background:PAPER2, borderRadius:22,
+                    border:`1px solid rgba(12,11,20,0.06)`,
+                    opacity:inT, transform:`scale(${0.85+inT*0.15})`,
+                  }}>
+                    <div style={{width:16,height:16,borderRadius:4,background:PURPLE,marginBottom:14,boxShadow:`0 0 12px ${PURPLE}`}}/>
+                    <div style={{fontFamily:FONT,fontWeight:700,fontSize:38,color:INK,letterSpacing:'-0.02em'}}>{t}</div>
+                    <div style={{fontFamily:MONO,fontSize:20,color:INK3,letterSpacing:'0.04em',marginTop:6}}>{s}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// SCENE 7 (26.5 – 30s) — CTA
+// ════════════════════════════════════════════════════════════════════════
+function S7_CTA(){
+  return (
+    <Sprite start={26.5} end={30}>
+      {({ localTime }) => {
+        const t = localTime;
+        const logoT = Easing.easeOutCubic(clamp(t/0.6,0,1));
+        const tagT = Easing.easeOutCubic(clamp((t-0.4)/0.6,0,1));
+        const linkT = Easing.easeOutCubic(clamp((t-0.9)/0.6,0,1));
+        return (
+          <div style={{
+            position:'absolute', inset:0, display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center', paddingBottom:240,
+          }}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:24,
+              opacity:clamp(t/0.3,0,1), transform:`translateY(${(1-logoT)*20}px)`,
+              marginBottom:44,
+            }}>
+              <img src="Adris-logo.png" alt="" style={{width:120,height:120,borderRadius:28,boxShadow:`0 16px 40px rgba(109,76,255,0.4)`}}/>
+              <div style={{fontFamily:FONT,fontWeight:800,fontSize:100,color:INK,letterSpacing:'-0.04em'}}>Coder</div>
+            </div>
+            <div style={{
+              fontFamily:FONT, fontWeight:700, fontSize:76, color:INK,
+              letterSpacing:'-0.03em', textAlign:'center', lineHeight:1.05,
+              opacity:clamp((t-0.4)/0.3,0,1), transform:`translateY(${(1-tagT)*20}px)`,
+              marginBottom:48,
+            }}>
+              A terminal that<br/><span style={{color:PURPLE}}>codes with you.</span>
+            </div>
+            <div style={{
+              padding:'28px 52px', background:PURPLE, borderRadius:26,
+              fontFamily:FONT, fontWeight:700, fontSize:54, color:'#fff',
+              letterSpacing:'-0.02em', boxShadow:`0 22px 60px rgba(109,76,255,0.4)`,
+              display:'flex', alignItems:'center', gap:20,
+              opacity:clamp((t-0.9)/0.3,0,1), transform:`translateY(${(1-linkT)*20}px)`,
+            }}>
+              Adris.tech
+              <span style={{width:54,height:54,borderRadius:27,background:'#fff',color:PURPLE,display:'grid',placeItems:'center',fontWeight:800,fontSize:32}}>↗</span>
+            </div>
+          </div>
+        );
+      }}
+    </Sprite>
+  );
+}
+
+function CoderStory(){
+  return (
+    <>
+      <div style={{
+        position:'absolute', inset:0, pointerEvents:'none',
+        background:`radial-gradient(60% 40% at 10% 0%, rgba(109,76,255,0.05), transparent 60%),
+                    radial-gradient(60% 40% at 100% 100%, rgba(109,76,255,0.06), transparent 65%)`,
+      }}/>
+      <ModuleBadge label="02 · CODER" />
+
+      <S1_Late />
+      <S2_Terminal />
+      <S3_Providers />
+      <S4_Modes />
+      <S5_Privacy />
+      <S6_Speed />
+      <S7_CTA />
+
+      <Subtitle start={0.3}  end={3.3}  lines={["It's 11:47 PM.", "Tests are still red."]} />
+      <Subtitle start={3.7}  end={9.3}  lines={["Help is one keystroke away.", "Right in your terminal."]} />
+      <Subtitle start={9.8}  end={14.3} lines={["Pick any model.", "<span style='color:#6d4cff;font-weight:800'>9 providers supported.</span>"]} />
+      <Subtitle start={14.8} end={19.3} lines={["Local. Your key.", "Or Adris cloud."]} />
+      <Subtitle start={19.7} end={22.8} lines={["Your code never leaves", "your machine."]} />
+      <Subtitle start={23.2} end={26.3} lines={["Real terminal.", "Real editor. Real fast."]} />
+      <Subtitle start={26.7} end={29.8} lines={["Coder.", "<span style='color:#6d4cff'>Cursor in your terminal.</span>"]} small />
+
+      <ProgressBar />
+    </>
+  );
+}
+
+function App(){
+  return (
+    <Stage width={1080} height={1920} duration={30} background="#ffffff" persistKey="Adris-coder">
+      <TimeLabel />
+      <CoderStory />
+    </Stage>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
