@@ -313,11 +313,21 @@ async function showAccount(session) {
   }
 }
 
+// Handle implicit flow: #access_token=... lands here from Supabase
 (async () => {
-  const { data: { session } } = await _supa.auth.getSession();
-  if (session) {
-    showAccount(session);
+  const hash = window.location.hash;
+  if (hash.includes('access_token=')) {
+    const p = new URLSearchParams(hash.slice(1));
+    const at = p.get('access_token');
+    const rt = p.get('refresh_token') || '';
+    if (at) {
+      history.replaceState(null, '', window.location.pathname);
+      const { data, error } = await _supa.auth.setSession({ access_token: at, refresh_token: rt });
+      if (data?.session) { showAccount(data.session); return; }
+    }
   }
+  const { data: { session } } = await _supa.auth.getSession();
+  if (session) showAccount(session);
 })();
 
 _supa.auth.onAuthStateChange((_event, session) => {
