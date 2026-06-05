@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Affiliate Terms & Conditions — adris.tech</title>
+<meta name="description" content="Affiliate programme terms and conditions for adris.tech. Read before applying." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="module-pages.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+<style>
+  .legal-wrap { max-width: 780px; margin: 0 auto; }
+  .legal-wrap h2 { font-size: clamp(18px,2vw,22px); font-weight:600; letter-spacing:-0.02em; margin:48px 0 12px; color:var(--ink); }
+  .legal-wrap h3 { font-size:16px; font-weight:600; margin:28px 0 8px; color:var(--ink); }
+  .legal-wrap p  { font-size:15px; line-height:1.75; color:var(--muted); margin-bottom:14px; }
+  .legal-wrap ul { margin:0 0 14px 20px; }
+  .legal-wrap ul li { font-size:15px; line-height:1.75; color:var(--muted); margin-bottom:6px; }
+  .legal-wrap a  { color:var(--accent); border-bottom:1px solid currentColor; }
+  .legal-meta { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; color:var(--muted-2); margin-bottom:40px; }
+  .legal-intro { font-size:clamp(16px,1.5vw,19px); line-height:1.7; color:var(--muted); margin-bottom:0; border-bottom:1px solid var(--rule); padding-bottom:32px; }
+  .callout-warn {
+    background: rgba(239,68,68,.07); border: 1px solid rgba(239,68,68,.25);
+    border-left: 4px solid #ef4444;
+    padding: 18px 22px; margin: 24px 0; border-radius: 4px;
+  }
+  .callout-warn p { color: var(--ink); margin: 0; font-size: 14px; line-height: 1.65; }
+  .callout-warn strong { color: #dc2626; }
+  .toc { background: var(--paper-2); border: 1px solid var(--rule-strong); padding: 24px 28px; margin-bottom: 40px; border-radius: 4px; }
+  .toc h4 { font-size: 12px; font-family: var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .toc ol { margin: 0; padding-left: 18px; }
+  .toc ol li { font-size: 14px; line-height: 1.7; color: var(--muted); }
+  .toc ol li a { color: var(--accent); border-bottom: none; }
+  .toc ol li a:hover { border-bottom: 1px solid currentColor; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#platform">Platform</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/download">Download</a></li>
+      <li><a href="/affiliates" style="color:var(--accent)">Affiliates</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="/download" class="btn">Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="/#platform" onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="/pricing"   onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"  onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+</script>
+
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="/"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Home</a>
+      <span class="sep">/</span>
+      <a href="/affiliates">Affiliate programme</a>
+      <span class="sep">/</span>
+      <span class="here">Terms &amp; Conditions</span>
+    </div>
+  </div>
+</section>
+
+<section class="mhero" style="padding-bottom:clamp(48px,5vw,72px);">
+  <div class="wrap">
+    <div class="mhero-top">
+      <div>
+        <div class="mono" style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;">// Affiliate Programme · Legal</div>
+        <h1>Affiliate Terms<br/>&amp; <span class="it">Conditions</span></h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 0 clamp(72px,8vw,120px);">
+  <div class="wrap">
+    <div class="legal-wrap">
+      <p class="legal-meta">Last updated: 5 June 2026 · Effective immediately · adris.tech, Bengaluru, India</p>
+      <p class="legal-intro">These Affiliate Terms &amp; Conditions ("Affiliate Terms") govern your participation in the adris.tech Affiliate Programme ("Programme"). By submitting an application or participating in the Programme, you agree to be bound by these Affiliate Terms in addition to our <a href="/terms">General Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
+
+      <div class="toc">
+        <h4>// Table of contents</h4>
+        <ol>
+          <li><a href="#s1">Definitions</a></li>
+          <li><a href="#s2">Eligibility</a></li>
+          <li><a href="#s3">Application &amp; Approval</a></li>
+          <li><a href="#s4">Your Affiliate Link</a></li>
+          <li><a href="#s5">Commission Structure</a></li>
+          <li><a href="#s6">Payment Terms &amp; Bank Details</a></li>
+          <li><a href="#s7">Payment Details — Critical Requirements</a></li>
+          <li><a href="#s8">Tier System</a></li>
+          <li><a href="#s9">Prohibited Conduct</a></li>
+          <li><a href="#s10">Intellectual Property</a></li>
+          <li><a href="#s11">Representations &amp; Warranties</a></li>
+          <li><a href="#s12">Termination</a></li>
+          <li><a href="#s13">Limitation of Liability</a></li>
+          <li><a href="#s14">Modifications</a></li>
+          <li><a href="#s15">Governing Law</a></li>
+          <li><a href="#s16">Contact</a></li>
+        </ol>
+      </div>
+
+      <h2 id="s1">1. Definitions</h2>
+      <p>In these Affiliate Terms, the following words have these meanings unless the context otherwise requires:</p>
+      <ul>
+        <li><strong>"adris.tech"</strong> means the company operating adris.tech and the Adris desktop application, based in Bengaluru, India.</li>
+        <li><strong>"Affiliate"</strong> means an individual or entity accepted into the Programme by adris.tech.</li>
+        <li><strong>"Referral Link"</strong> means the unique tracking URL assigned to you on acceptance (e.g. <code style="font-family:var(--font-mono);font-size:13px">adris.tech/?ref=yourcode</code>).</li>
+        <li><strong>"Referred User"</strong> means a user who clicks your Referral Link and subsequently creates an adris.tech account within your attribution window.</li>
+        <li><strong>"Active Paying Referral"</strong> means a Referred User holding an active paid plan (Solo, Builder, Business, or Custom) in a given calendar month.</li>
+        <li><strong>"Commission"</strong> means the percentage of net payment amounts earned by you for Active Paying Referrals.</li>
+        <li><strong>"Net Payment Amount"</strong> means the gross amount paid by a Referred User minus payment gateway fees (typically 1.5–2.5% charged by Razorpay).</li>
+        <li><strong>"Payment Details"</strong> means a valid Indian bank account (account name, account number, IFSC code) or a valid UPI ID registered in your affiliate dashboard.</li>
+        <li><strong>"Dashboard"</strong> means the affiliate portal at <code style="font-family:var(--font-mono);font-size:13px">adris.tech/affiliate-dashboard</code>.</li>
+      </ul>
+
+      <h2 id="s2">2. Eligibility</h2>
+      <p>To be eligible for the Programme:</p>
+      <ul>
+        <li>You must be at least 18 years of age.</li>
+        <li>You must be an Indian resident or have a valid Indian bank account or UPI ID capable of receiving INR payments.</li>
+        <li>You must not be an employee, contractor, or immediate family member of an employee of adris.tech.</li>
+        <li>You must have a legitimate platform (website, social media channel, newsletter, community, or similar) through which you will promote adris.tech.</li>
+        <li>You must not have been previously removed from the Programme for violating these terms.</li>
+      </ul>
+
+      <h2 id="s3">3. Application &amp; Approval</h2>
+      <p>Applications are submitted through the form at <a href="/affiliates">adris.tech/affiliates</a>. By submitting your application, you confirm that all information provided is accurate and complete.</p>
+      <ul>
+        <li>adris.tech will review applications within <strong>24 hours</strong> on business days.</li>
+        <li>Approval is at the sole discretion of adris.tech. We may reject applications without giving reasons.</li>
+        <li>Upon approval, you will receive an email confirmation containing your unique Referral Link and Dashboard access instructions.</li>
+        <li>Approval as an Affiliate does not create an employment, partnership, agency, or joint venture relationship between you and adris.tech.</li>
+      </ul>
+
+      <h2 id="s4">4. Your Affiliate Link</h2>
+      <ul>
+        <li>You will receive one unique Referral Link. You may share this link across multiple channels but may not create or use any other tracking URL for the Programme.</li>
+        <li>Do not alter, obscure, or mask the Referral Link in any way that prevents accurate tracking.</li>
+        <li>adris.tech reserves the right to regenerate your Referral Link at any time; you will be notified of any such change.</li>
+        <li>You must not self-refer — using your own Referral Link to create your own adris.tech account or purchase a paid plan will result in immediate termination from the Programme.</li>
+      </ul>
+
+      <h2 id="s5">5. Commission Structure</h2>
+      <p>You earn Commission for each calendar month in which you have Active Paying Referrals. Commission is calculated as follows:</p>
+      <ul>
+        <li><strong>Starter tier (1–10 active referrals):</strong> 10% of Net Payment Amount per Active Paying Referral.</li>
+        <li><strong>Builder tier (11–30 active referrals):</strong> 13% of Net Payment Amount per Active Paying Referral.</li>
+        <li><strong>Partner tier (31–99 active referrals):</strong> 16% of Net Payment Amount per Active Paying Referral.</li>
+        <li><strong>Elite tier (100+ active referrals):</strong> 20% of Net Payment Amount per Active Paying Referral.</li>
+      </ul>
+      <p>Tier upgrades and downgrades happen automatically at the start of each calendar month based on the number of Active Paying Referrals in the previous month. Commission for a given month is calculated at the tier applicable at the beginning of that month.</p>
+      <p>Commission is earned on recurring monthly plan payments only. One-time purchases, add-ons, and refunded transactions do not generate Commission. If a Referred User cancels their plan, Commission ceases the month following cancellation.</p>
+
+      <h2 id="s6">6. Payment Terms</h2>
+      <ul>
+        <li>Commissions are calculated and paid on or around the <strong>7th of each calendar month</strong> for the preceding month's earnings.</li>
+        <li>The minimum payout threshold is <strong>₹500</strong>. Balances below ₹500 roll over to the following month until the threshold is met.</li>
+        <li>Payments are made via <strong>UPI</strong> for amounts under ₹50,000 per transaction, and via <strong>NEFT/IMPS bank transfer</strong> for amounts equal to or exceeding ₹50,000.</li>
+        <li>adris.tech will deduct applicable Tax Deducted at Source (TDS) under Section 194H of the Income Tax Act, 1961, or any other applicable provision, as required by law. A TDS certificate will be provided.</li>
+        <li>You are solely responsible for declaring and paying any income tax or GST applicable to your Commission income.</li>
+        <li>adris.tech is not responsible for failed payments arising from incorrect or outdated Payment Details provided by you.</li>
+      </ul>
+
+      <h2 id="s7">7. Payment Details — Critical Requirements</h2>
+      <div class="callout-warn">
+        <p><strong>IMPORTANT — Please read this section carefully before applying.</strong><br/><br/>
+        Commission earned in any calendar month will only be paid if valid, verified Payment Details (bank account or UPI ID) are registered and active in your affiliate Dashboard <strong>on or before the last day of that calendar month</strong>.<br/><br/>
+        <strong>Commission for any month in which no valid Payment Details are on file is permanently forfeited.</strong> It will not be carried forward, held in reserve, or paid at any future date — regardless of the amount, regardless of how soon after you submit your Payment Details, and regardless of the reason for the delay. This applies from your very first month of acceptance.<br/><br/>
+        For example: if you are accepted on 1 July and begin referring users immediately, but you do not submit your Payment Details until 5 August, you will not receive Commission for any earnings generated in July. Those earnings are forfeited in their entirety. This is a final and non-negotiable policy.</p>
+      </div>
+      <p>To avoid forfeiture:</p>
+      <ul>
+        <li>Submit your Payment Details in the Dashboard <strong>within 7 days of receiving your acceptance email</strong>.</li>
+        <li>Keep your Payment Details current. Notify adris.tech at <a href="mailto:hello@adris.tech">hello@adris.tech</a> if your bank account or UPI ID changes.</li>
+        <li>Verify your Payment Details are saved correctly — you will see a confirmation in the Dashboard.</li>
+      </ul>
+      <p>adris.tech will display a prominent warning in the Dashboard reminding you to submit Payment Details. Failure to act on this warning does not exempt you from this policy.</p>
+
+      <h2 id="s8">8. Tier System &amp; Attribution</h2>
+      <ul>
+        <li>Attribution windows: 30 days (Starter), 90 days (Builder), 120 days (Partner), lifetime (Elite). If a visitor clicks your link and signs up within the applicable window, they are attributed to you.</li>
+        <li>Tiers auto-upgrade and auto-downgrade at the start of each month based on Active Paying Referral count from the prior month.</li>
+        <li>Only paid plan subscriptions count toward your active referral count. Free-plan users are tracked in your Dashboard but do not generate Commission or count toward tier thresholds.</li>
+        <li>If a Referred User cancels and later re-subscribes using your Referral Link within the attribution window, they may count again from the date of re-subscription.</li>
+      </ul>
+
+      <h2 id="s9">9. Prohibited Conduct</h2>
+      <p>The following are strictly prohibited and may result in immediate termination and forfeiture of all pending Commission:</p>
+      <ul>
+        <li><strong>Self-referral:</strong> Using your own Referral Link to create accounts or purchase plans for yourself, family members, or entities you control.</li>
+        <li><strong>Cookie stuffing:</strong> Any technique that places your affiliate cookie on users' devices without their knowledge or consent.</li>
+        <li><strong>Misleading advertising:</strong> Making false, exaggerated, or unverifiable claims about adris.tech, its features, pricing, or performance. You must represent the product accurately.</li>
+        <li><strong>Brand bidding:</strong> Bidding on "adris.tech", "adris", or variations thereof as keywords in paid search advertising without prior written consent from adris.tech.</li>
+        <li><strong>Spam:</strong> Sending unsolicited emails, messages, or social media promotions. All promotional activity must comply with applicable anti-spam laws (CAN-SPAM, GDPR where applicable, etc.).</li>
+        <li><strong>Incentivised clicks:</strong> Offering cash, gifts, or other incentives to users in exchange for clicking your Referral Link or signing up for adris.tech.</li>
+        <li><strong>Coupon/cashback sites without approval:</strong> Listing your Referral Link on cashback, deal, or coupon aggregator websites without prior written consent.</li>
+        <li><strong>Trademark misuse:</strong> Using adris.tech's name, logo, or trademarks in a way not expressly permitted by these terms or separately approved in writing.</li>
+        <li><strong>Disclosure violations:</strong> Failing to clearly and conspicuously disclose your affiliate relationship in all promotional content, as required by applicable Indian advertising guidelines (ASCI guidelines) and any other applicable law.</li>
+        <li><strong>Fraud or manipulation:</strong> Artificially inflating clicks, sign-ups, or usage metrics by any means, including bot traffic, click farms, or incentivised device installations.</li>
+      </ul>
+
+      <h2 id="s10">10. Intellectual Property &amp; Brand Usage</h2>
+      <p>adris.tech grants you a limited, non-exclusive, non-transferable, revocable licence to use adris.tech's name, logo, and approved marketing materials solely for the purpose of promoting the Programme in accordance with these Affiliate Terms.</p>
+      <ul>
+        <li>You may not alter, distort, or create derivative works from adris.tech's brand assets without prior written approval.</li>
+        <li>You may not imply that you are endorsed, sponsored, or affiliated with adris.tech beyond your Affiliate status.</li>
+        <li>adris.tech may revoke this licence at any time without notice if you breach these terms.</li>
+        <li>All intellectual property in adris.tech's products, brand, and materials remains the exclusive property of adris.tech.</li>
+      </ul>
+
+      <h2 id="s11">11. Representations &amp; Warranties</h2>
+      <p>By participating in the Programme you represent and warrant that:</p>
+      <ul>
+        <li>You have the legal right and authority to enter into these Affiliate Terms.</li>
+        <li>All information provided in your application is truthful and accurate.</li>
+        <li>Your promotional activities comply with all applicable laws and regulations, including Indian consumer protection laws, IT Act provisions, ASCI advertising guidelines, and income tax laws.</li>
+        <li>Your promotional channels do not contain content that is illegal, defamatory, obscene, discriminatory, or otherwise harmful.</li>
+        <li>You will maintain appropriate disclosure of your affiliate relationship in all promotional content.</li>
+      </ul>
+
+      <h2 id="s12">12. Termination</h2>
+      <p>Either party may terminate participation in the Programme at any time:</p>
+      <ul>
+        <li><strong>By you:</strong> Email <a href="mailto:hello@adris.tech">hello@adris.tech</a> with subject "Affiliate — Terminate". Your link will be deactivated within 48 hours. Any unpaid Commission above the ₹500 threshold that has been validly earned will be paid on the next payout date.</li>
+        <li><strong>By adris.tech for convenience:</strong> 14 days' written notice. Validly earned, unpaid Commission above ₹500 will be paid on the next payout date.</li>
+        <li><strong>By adris.tech for breach:</strong> Immediately and without notice for any violation of these Affiliate Terms, including prohibited conduct. Pending Commission may be forfeited if the breach involved fraud, self-referral, or manipulation of the Programme.</li>
+      </ul>
+      <p>On termination: your Referral Link is deactivated, your Dashboard access is revoked, and no further Commission accrues. Referred Users acquired before termination no longer count toward Commission after termination.</p>
+
+      <h2 id="s13">13. Limitation of Liability</h2>
+      <p>adris.tech shall not be liable to you for any indirect, incidental, special, consequential, or punitive damages in connection with the Programme, including loss of expected Commission, loss of referrals, or business interruption. Our maximum liability to you in connection with the Programme shall not exceed the total Commission earned by you in the three calendar months preceding the event giving rise to liability.</p>
+      <p>adris.tech does not guarantee any particular level of traffic, conversions, or earnings from the Programme. Estimates in our earnings calculator are illustrative only and not a representation of expected earnings.</p>
+
+      <h2 id="s14">14. Modifications</h2>
+      <p>adris.tech may update these Affiliate Terms at any time. Material changes (including to Commission rates, tier thresholds, or payment terms) will be communicated by email at least <strong>14 days</strong> before they take effect. Minor changes (including clarifications) may take effect immediately. Your continued participation in the Programme after the effective date of changes constitutes acceptance of the updated terms.</p>
+      <p>If you object to any changes, your remedy is to terminate your participation in the Programme as described in Section 12.</p>
+
+      <h2 id="s15">15. Governing Law &amp; Dispute Resolution</h2>
+      <p>These Affiliate Terms are governed by the laws of India. Any dispute arising from or relating to these terms shall first be subject to good-faith negotiation between the parties. If unresolved within 30 days, disputes shall be subject to the exclusive jurisdiction of the courts of Bengaluru, Karnataka, India.</p>
+      <p>For informal resolution before legal action, email <a href="mailto:hello@adris.tech">hello@adris.tech</a> with subject "Affiliate — Dispute". We commit to responding within 7 business days.</p>
+
+      <h2 id="s16">16. Contact</h2>
+      <ul>
+        <li>Email: <a href="mailto:hello@adris.tech">hello@adris.tech</a></li>
+        <li>Subject: "Affiliate Terms" or "Affiliate Programme"</li>
+        <li>Address: Bengaluru, Karnataka, India</li>
+      </ul>
+      <p style="margin-top:32px;padding-top:24px;border-top:1px solid var(--rule);">By applying to or participating in the adris.tech Affiliate Programme, you acknowledge that you have read, understood, and agree to be bound by these Affiliate Terms &amp; Conditions in their entirety.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="/">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Affiliate</h3>
+        <ul>
+          <li><a href="/affiliates">Programme overview</a></li>
+          <li><a href="/affiliates#apply">Apply now</a></li>
+          <li><a href="/affiliate-terms" style="color:var(--accent);">Affiliate Terms</a></li>
+          <li><a href="/affiliate-dashboard">Affiliate dashboard</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/affiliate-terms">Affiliate Terms</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="mailto:hello@adris.tech">hello@adris.tech</a></li>
+          <li><a href="/partner">Partner with us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+</body>
+</html>

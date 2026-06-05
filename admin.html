@@ -222,6 +222,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
     <div class="tabs">
       <button class="tab active" onclick="switchTab('overview')">Overview</button>
       <button class="tab" onclick="switchTab('users')">Users</button>
+      <button class="tab" onclick="switchTab('affiliates')">Affiliates</button>
       <button class="tab" onclick="switchTab('announcements')">Announcements</button>
       <button class="tab" onclick="switchTab('feedback')">Feedback</button>
       <button class="tab" onclick="switchTab('revenue')">Revenue</button>
@@ -360,6 +361,72 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <div id="feedbackList"></div>
     </div>
 
+    <!-- AFFILIATES TAB -->
+    <div id="tab-affiliates" class="tab-panel">
+
+      <div class="stats-grid" style="margin-bottom:20px">
+        <div class="stat-card">
+          <div class="stat-label">Pending applications</div>
+          <div class="stat-value" id="aff-statPending">—</div>
+          <div class="stat-sub">awaiting review</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Accepted affiliates</div>
+          <div class="stat-value" id="aff-statAccepted">—</div>
+          <div class="stat-sub">active in programme</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Missing bank details</div>
+          <div class="stat-value" id="aff-statNoBankDetails" style="color:var(--yellow)">—</div>
+          <div class="stat-sub">will not be paid</div>
+        </div>
+      </div>
+
+      <div class="sec">Pending applications — review &amp; action</div>
+      <div class="tbl-wrap" id="aff-pendingWrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Website / Social</th><th>Audience</th><th>Reach</th><th>Applied</th><th>Terms</th><th>Actions</th></tr></thead>
+          <tbody id="aff-pendingBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sec">Accepted affiliates</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Ref code</th><th>Bank / UPI details</th><th>Accepted</th><th>Actions</th></tr></thead>
+          <tbody id="aff-acceptedBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sec">Rejected applications</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Applied</th><th>Reason</th></tr></thead>
+          <tbody id="aff-rejectedBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sec">Terms &amp; Conditions — review</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px">
+        <a href="/terms" target="_blank" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--text);transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Platform Terms</div>
+          <div style="font-size:13px;font-weight:600">Terms of Service →</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">adris.tech/terms</div>
+        </a>
+        <a href="/privacy" target="_blank" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--text);transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Privacy</div>
+          <div style="font-size:13px;font-weight:600">Privacy Policy →</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">adris.tech/privacy</div>
+        </a>
+        <a href="/affiliate-terms" target="_blank" style="background:var(--surface);border:1px solid rgba(124,92,255,.3);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--text);transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(124,92,255,.3)'">
+          <div style="font-size:9px;color:var(--accent);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Affiliate Terms ★</div>
+          <div style="font-size:13px;font-weight:600">Affiliate T&amp;C →</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">adris.tech/affiliate-terms</div>
+        </a>
+      </div>
+
+    </div>
+
     <!-- REVENUE TAB -->
     <div id="tab-revenue" class="tab-panel">
       <div class="stats-grid" style="margin-bottom:20px">
@@ -454,12 +521,13 @@ function checkPin() {
 
 // ── Tabs ─────────────────────────────────────────────────────────────────────
 function switchTab(name) {
+  const tabs = ['overview','users','affiliates','announcements','feedback','revenue'];
   document.querySelectorAll('.tab').forEach((t,i) => {
-    const tabs = ['overview','users','announcements','feedback','revenue'];
     t.classList.toggle('active', tabs[i]===name);
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
+  if (name === 'affiliates') loadAffiliates();
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
@@ -629,6 +697,161 @@ async function refreshAnnouncements() {
     .select('id,title,body,type,cta_label,cta_url,active,created_at,expires_at')
     .order('created_at', { ascending: false });
   if (data) renderAnnouncements(data);
+}
+
+// ── Affiliate management ─────────────────────────────────────────────────────
+let _affLoaded = false;
+async function loadAffiliates() {
+  if (_affLoaded) return; _affLoaded = true;
+  const { data, error } = await _supa
+    .from('affiliate_applications')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) { console.error('aff load:', error); return; }
+  renderAffiliates(data || []);
+}
+
+function renderAffiliates(rows) {
+  const pending  = rows.filter(r => !r.status || r.status === 'pending');
+  const accepted = rows.filter(r => r.status === 'accepted');
+  const rejected = rows.filter(r => r.status === 'rejected');
+  const noBankDetails = accepted.filter(r => !r.upi_id && !r.bank_account_number);
+
+  document.getElementById('aff-statPending').textContent  = pending.length;
+  document.getElementById('aff-statAccepted').textContent = accepted.length;
+  document.getElementById('aff-statNoBankDetails').textContent = noBankDetails.length;
+
+  // Pending
+  document.getElementById('aff-pendingBody').innerHTML = pending.map(r => `
+    <tr id="aff-row-${r.id}">
+      <td style="font-size:12px;font-weight:500">${r.first_name||''} ${r.last_name||''}</td>
+      <td class="mono" style="font-size:11px">${r.email||'—'}</td>
+      <td style="font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><a href="${r.website_url||'#'}" target="_blank" style="color:var(--accent)">${r.website_url||'—'}</a></td>
+      <td style="font-size:11px;color:var(--muted)">${r.audience_type||'—'}</td>
+      <td style="font-size:11px;color:var(--muted)">${r.audience_reach||'—'}</td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(r.created_at)}</td>
+      <td><span style="font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:4px;${r.terms_accepted?'background:rgba(34,197,94,.12);color:#4ade80':'background:rgba(239,68,68,.12);color:#f87171'}">${r.terms_accepted?'✓ agreed':'—'}</span></td>
+      <td style="display:flex;gap:6px;white-space:nowrap">
+        <button class="act-btn toggle-on" onclick="acceptAffiliate('${r.id}','${r.email}','${r.first_name||''}')">Accept</button>
+        <button class="act-btn del" onclick="rejectAffiliate('${r.id}','${r.email}','${r.first_name||''}')">Reject</button>
+        <button class="act-btn" onclick="viewPromotion('${r.id}','${JSON.stringify(r.promotion_plan||'').replace(/'/g,'&#39;')}')">View plan</button>
+      </td>
+    </tr>`).join('') || `<tr><td colspan="8" class="empty">No pending applications</td></tr>`;
+
+  // Accepted
+  document.getElementById('aff-acceptedBody').innerHTML = accepted.map(r => {
+    const hasBank = r.upi_id || r.bank_account_number;
+    const bankStr = r.upi_id ? `UPI: ${r.upi_id}` : (r.bank_account_number ? `A/c: ···${String(r.bank_account_number).slice(-4)} · IFSC: ${r.bank_ifsc||'?'}` : '');
+    return `<tr>
+      <td style="font-size:12px;font-weight:500">${r.first_name||''} ${r.last_name||''}</td>
+      <td class="mono" style="font-size:11px">${r.email||'—'}</td>
+      <td class="mono" style="font-size:11px;color:var(--accent)">${r.ref_code||'—'}</td>
+      <td style="font-size:11px;${hasBank?'color:var(--green)':'color:var(--yellow);font-weight:600'}">${hasBank ? bankStr : '⚠ No payment details — will not be paid'}</td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(r.accepted_at||r.created_at)}</td>
+      <td>
+        <button class="act-btn del" onclick="revokeAffiliate('${r.id}','${r.email}')">Revoke</button>
+      </td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="6" class="empty">No accepted affiliates yet</td></tr>`;
+
+  // Rejected
+  document.getElementById('aff-rejectedBody').innerHTML = rejected.map(r => `
+    <tr>
+      <td style="font-size:12px">${r.first_name||''} ${r.last_name||''}</td>
+      <td class="mono" style="font-size:11px">${r.email||'—'}</td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(r.created_at)}</td>
+      <td style="font-size:11px;color:var(--muted)">${r.rejected_reason||'—'}</td>
+    </tr>`).join('') || `<tr><td colspan="4" class="empty">No rejected applications</td></tr>`;
+}
+
+function viewPromotion(id, plan) {
+  alert('Promotion plan:\n\n' + plan);
+}
+
+async function acceptAffiliate(id, email, firstName) {
+  if (!confirm(`Accept ${firstName} (${email}) as an affiliate?\n\nThis will:\n• Update their status to accepted\n• Open a pre-filled acceptance email for you to send`)) return;
+
+  const refCode = 'REF' + Math.random().toString(36).slice(2,8).toUpperCase();
+  const { error } = await _supa.from('affiliate_applications').update({
+    status: 'accepted',
+    ref_code: refCode,
+    accepted_at: new Date().toISOString(),
+  }).eq('id', id);
+
+  if (error) { alert('Error: ' + error.message); return; }
+
+  // Open pre-filled mailto
+  const subject = encodeURIComponent('Welcome to the adris.tech Affiliate Programme!');
+  const body = encodeURIComponent(
+`Hi ${firstName},
+
+Great news — your application to the adris.tech Affiliate Programme has been approved!
+
+Your unique referral link is:
+https://adris.tech/?ref=${refCode}
+
+To get started:
+
+1. Visit your affiliate dashboard at: https://adris.tech/affiliate-dashboard
+2. IMPORTANT: Submit your bank account or UPI payment details in the dashboard within 7 days. Commission earned in months where no payment details are on file is permanently forfeited and cannot be claimed later.
+3. Start sharing your link and track your earnings in real time.
+
+How commissions work:
+• 10–20% of every payment your referrals make, recurring monthly
+• Paid on the 7th of each month for the previous month's earnings
+• Minimum payout: ₹500
+
+Your current tier: Starter (10%) — auto-upgrades as your active referrals grow.
+
+Read the full affiliate terms at: https://adris.tech/affiliate-terms
+
+Welcome to the team!
+
+Amogh Misra
+adris.tech
+hello@adris.tech`);
+
+  window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+  _affLoaded = false; loadAffiliates();
+}
+
+async function rejectAffiliate(id, email, firstName) {
+  const reason = prompt(`Rejection reason for ${firstName} (${email}):\n\nThis will be saved internally. You may also send an email to notify them.`, 'Does not meet current programme criteria');
+  if (reason === null) return;
+
+  const { error } = await _supa.from('affiliate_applications').update({
+    status: 'rejected',
+    rejected_reason: reason,
+  }).eq('id', id);
+
+  if (error) { alert('Error: ' + error.message); return; }
+
+  const subject = encodeURIComponent('adris.tech Affiliate Programme — Application update');
+  const body = encodeURIComponent(
+`Hi ${firstName},
+
+Thank you for applying to the adris.tech Affiliate Programme.
+
+After reviewing your application, we are unable to approve it at this time. This is not a reflection of the quality of your work — it simply means your current audience profile or promotional approach is not the right fit for our programme right now.
+
+You are welcome to reapply in the future.
+
+Amogh Misra
+adris.tech
+hello@adris.tech`);
+
+  if (confirm('Open rejection email?')) window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+  _affLoaded = false; loadAffiliates();
+}
+
+async function revokeAffiliate(id, email) {
+  if (!confirm(`Revoke affiliate status for ${email}?\n\nThis will mark them as rejected and deactivate their referral link.`)) return;
+  const { error } = await _supa.from('affiliate_applications').update({
+    status: 'rejected',
+    rejected_reason: 'Revoked by admin',
+  }).eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  _affLoaded = false; loadAffiliates();
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────

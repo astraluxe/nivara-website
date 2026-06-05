@@ -201,6 +201,54 @@ tr:last-child td { border-bottom:none; }
 .payout-line b { color:var(--ink); font-weight:500; }
 .payout-line .acc { color:var(--accent); font-weight:500; }
 
+/* ── BANK DETAILS BANNER ── */
+.bank-warn {
+  background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25);
+  border-left: 4px solid #ef4444;
+  margin: 0 0 28px; padding: 18px 24px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.bank-warn .bw-ico { font-size: 22px; flex-shrink: 0; line-height: 1; }
+.bank-warn .bw-body h4 { font-size: 14px; font-weight: 600; color: #dc2626; margin-bottom: 5px; }
+.bank-warn .bw-body p { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0; }
+.bank-warn .bw-body p strong { color: var(--ink); }
+.bank-warn .bw-btn {
+  margin-top: 12px; display: inline-block;
+  padding: 9px 18px; background: #dc2626; color: #fff;
+  font-size: 13px; font-weight: 500; cursor: pointer; border: none;
+  transition: background .15s; font-family: var(--font-sans);
+}
+.bank-warn .bw-btn:hover { background: #b91c1c; }
+
+/* ── BANK DETAILS FORM ── */
+.bank-form-section {
+  background: var(--paper); border: 1px solid var(--rule-strong);
+  padding: 28px; margin-bottom: 32px; display: none;
+}
+.bank-form-section.open { display: block; }
+.bank-form-section h3 { font-size:16px; font-weight:600; letter-spacing:-.01em; margin-bottom:4px; }
+.bank-form-section .bfs-sub { font-size:13px; color:var(--muted); margin-bottom:24px; }
+.bfs-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:640px) { .bfs-grid { grid-template-columns:1fr; } }
+.bfs-row { display:flex; flex-direction:column; gap:6px; }
+.bfs-row.full { grid-column:1/-1; }
+.bfs-row label { font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+.bfs-row input {
+  background:var(--paper); border:1px solid var(--rule-strong);
+  padding:11px 14px; font-size:14px; color:var(--ink); width:100%;
+  transition:border-color .2s;
+}
+.bfs-row input:focus { outline:none; border-color:var(--accent); }
+.bfs-or { text-align:center; grid-column:1/-1; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:12px; }
+.bfs-or::before,.bfs-or::after { content:""; flex:1; height:1px; background:var(--rule); }
+.bfs-submit {
+  padding:12px 24px; background:var(--ink); color:var(--paper);
+  border:1px solid var(--ink); font-size:14px; font-weight:500;
+  cursor:pointer; transition:all .2s; margin-top:20px; font-family:var(--font-sans);
+}
+.bfs-submit:hover { background:var(--accent); border-color:var(--accent); }
+.bfs-msg { font-size:13px; margin-top:10px; }
+
 /* ── LOGIN GATE ── */
 .gate {
   min-height: 100vh;
@@ -319,6 +367,50 @@ tr:last-child td { border-bottom:none; }
     <!-- CONTENT -->
     <div class="dash-content">
 
+      <!-- BANK DETAILS WARNING (shown if no payment details on file) -->
+      <div class="bank-warn" id="bankWarn" style="display:none">
+        <div class="bw-ico">⚠️</div>
+        <div class="bw-body">
+          <h4>Payment details required — action needed</h4>
+          <p>You have not yet submitted your bank account or UPI payment details. <strong>Commission earned in any month where no payment details are on file is permanently forfeited</strong> and cannot be claimed later — this is non-negotiable per our <a href="/affiliate-terms#s7" target="_blank" style="color:var(--accent)">Affiliate Terms (Section 7)</a>.<br/><br/>Submit your details now to ensure you get paid for your referrals.</p>
+          <button class="bw-btn" onclick="toggleBankForm()">Add payment details now →</button>
+        </div>
+      </div>
+
+      <!-- BANK DETAILS FORM -->
+      <div class="bank-form-section" id="bankFormSection">
+        <h3>Payment details</h3>
+        <p class="bfs-sub">Add your UPI ID <em>or</em> bank account details below. Both are optional — you only need one. Details are saved securely and used only for monthly commission payouts.</p>
+        <div class="bfs-grid">
+          <div class="bfs-row full">
+            <label>UPI ID (preferred for amounts under ₹50,000)</label>
+            <input type="text" id="bfsUpi" placeholder="yourname@upi  or  mobile@paytm" />
+          </div>
+          <div class="bfs-or">or bank account</div>
+          <div class="bfs-row">
+            <label>Account holder name <span style="color:var(--accent)">*</span></label>
+            <input type="text" id="bfsAccName" placeholder="As per bank records" />
+          </div>
+          <div class="bfs-row">
+            <label>Account number <span style="color:var(--accent)">*</span></label>
+            <input type="text" id="bfsAccNum" placeholder="e.g. 0012345678901" />
+          </div>
+          <div class="bfs-row">
+            <label>IFSC code <span style="color:var(--accent)">*</span></label>
+            <input type="text" id="bfsIfsc" placeholder="e.g. SBIN0001234" />
+          </div>
+          <div class="bfs-row">
+            <label>Bank name</label>
+            <input type="text" id="bfsBankName" placeholder="e.g. State Bank of India" />
+          </div>
+        </div>
+        <div>
+          <button class="bfs-submit" onclick="saveBankDetails()">Save payment details</button>
+          <button onclick="toggleBankForm()" style="margin-left:12px;background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;font-family:var(--font-sans)">Cancel</button>
+          <div class="bfs-msg" id="bfsMsg"></div>
+        </div>
+      </div>
+
       <!-- STAT ROW -->
       <div class="stat-row">
         <div class="stat-cell acc">
@@ -390,7 +482,7 @@ tr:last-child td { border-bottom:none; }
             <div class="payout-line"><span>Minimum threshold</span><b>₹500</b></div>
             <div class="payout-line"><span>Payout method</span><b id="plMethod">UPI (not set)</b></div>
             <div style="margin-top:20px;">
-              <a href="#" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid currentColor;">Add UPI / bank details →</a>
+              <button onclick="toggleBankForm()" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid currentColor;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;padding:0;">Update payment details →</button>
             </div>
           </div>
         </div>
@@ -456,10 +548,12 @@ async function signOut() {
 }
 
 async function loadAffiliate() {
-  // Fetch affiliate row for this user
-  const rows = await supaFetch('/rest/v1/affiliates?select=*&limit=1', {
-    headers: { 'Accept': 'application/json' }
-  });
+  const email = currentSession?.user?.email;
+  if (!email) return null;
+  const rows = await supaFetch(
+    `/rest/v1/affiliate_applications?email=eq.${encodeURIComponent(email)}&status=eq.accepted&select=*&limit=1`,
+    { headers: { 'Accept': 'application/json' } }
+  );
   if (!rows || rows.length === 0) return null;
   return rows[0];
 }
@@ -503,24 +597,42 @@ function showDash() {
 }
 
 function populateDash(aff, commissions) {
-  const rate = tierRate(aff.tier);
-  const unpaidRs = Math.round(aff.unpaid_paise / 100);
-  const totalRs  = Math.round(aff.total_earned_paise / 100);
+  // Map affiliate_applications fields to dashboard
+  const tier = aff.tier || 'starter';
+  const rate = tierRate(tier);
+  const unpaidRs = Math.round((aff.unpaid_paise || 0) / 100);
+  const totalRs  = Math.round((aff.total_earned_paise || 0) / 100);
+  const hasBank  = !!(aff.upi_id || aff.bank_account_number);
 
-  document.getElementById('greetName').textContent   = aff.first_name;
-  document.getElementById('refCode').textContent     = aff.ref_code;
+  document.getElementById('greetName').textContent   = aff.first_name || 'Affiliate';
+  document.getElementById('refCode').textContent     = aff.ref_code || '—';
   document.getElementById('statUnpaid').textContent  = inr(unpaidRs);
-  document.getElementById('statActive').textContent  = aff.active_referrals;
+  document.getElementById('statActive').textContent  = aff.active_referrals || 0;
   document.getElementById('statTotal').textContent   = inr(totalRs);
   document.getElementById('statRate').innerHTML      = rate + '<span style="font-size:0.5em;opacity:0.6;">%</span>';
-  document.getElementById('statTierName').textContent = aff.tier.charAt(0).toUpperCase() + aff.tier.slice(1) + ' tier';
-  document.getElementById('sideTier').textContent   = tierLabel(aff.tier);
+  document.getElementById('statTierName').textContent = tier.charAt(0).toUpperCase() + tier.slice(1) + ' tier';
+  document.getElementById('sideTier').textContent   = tierLabel(tier);
   document.getElementById('payoutAmt').textContent  = inr(unpaidRs);
   document.getElementById('payoutDate').textContent = 'Due ' + nextPayoutDate();
   document.getElementById('payoutFinal').textContent = nextPayoutDate();
   document.getElementById('plRate').textContent     = rate + '%';
-  document.getElementById('plActive').textContent   = aff.active_referrals;
-  document.getElementById('refCount').textContent   = aff.active_referrals + ' active';
+  document.getElementById('plActive').textContent   = aff.active_referrals || 0;
+  document.getElementById('refCount').textContent   = (aff.active_referrals || 0) + ' active';
+
+  const methodEl = document.getElementById('plMethod');
+  if (aff.upi_id) methodEl.textContent = 'UPI: ' + aff.upi_id;
+  else if (aff.bank_account_number) methodEl.textContent = 'Bank A/c ···' + String(aff.bank_account_number).slice(-4);
+  else methodEl.innerHTML = '<span style="color:#dc2626;font-weight:600">⚠ Not set — add now</span>';
+
+  // Show bank details warning if not set
+  document.getElementById('bankWarn').style.display = hasBank ? 'none' : 'flex';
+
+  // Prefill bank form if data exists
+  if (aff.upi_id) document.getElementById('bfsUpi').value = aff.upi_id;
+  if (aff.bank_account_name) document.getElementById('bfsAccName').value = aff.bank_account_name;
+  if (aff.bank_account_number) document.getElementById('bfsAccNum').value = aff.bank_account_number;
+  if (aff.bank_ifsc) document.getElementById('bfsIfsc').value = aff.bank_ifsc;
+  if (aff.bank_name) document.getElementById('bfsBankName').value = aff.bank_name;
 
   if (commissions && commissions.length > 0) {
     const tbody = document.getElementById('commTableBody');
@@ -533,6 +645,67 @@ function populateDash(aff, commissions) {
         <td><span class="badge ${c.status === 'paid' ? 'paid' : 'pending'}">${c.status}</span></td>
       </tr>
     `).join('');
+  }
+}
+
+function toggleBankForm() {
+  const s = document.getElementById('bankFormSection');
+  s.classList.toggle('open');
+  if (s.classList.contains('open')) s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function saveBankDetails() {
+  const upi     = document.getElementById('bfsUpi').value.trim();
+  const accName = document.getElementById('bfsAccName').value.trim();
+  const accNum  = document.getElementById('bfsAccNum').value.trim();
+  const ifsc    = document.getElementById('bfsIfsc').value.trim().toUpperCase();
+  const bank    = document.getElementById('bfsBankName').value.trim();
+  const msg     = document.getElementById('bfsMsg');
+
+  if (!upi && !accNum) {
+    msg.textContent = 'Please enter a UPI ID or bank account number.';
+    msg.style.color = '#dc2626';
+    return;
+  }
+  if (accNum && !accName) {
+    msg.textContent = 'Account holder name is required for bank transfers.';
+    msg.style.color = '#dc2626';
+    return;
+  }
+  if (accNum && !ifsc) {
+    msg.textContent = 'IFSC code is required for bank transfers.';
+    msg.style.color = '#dc2626';
+    return;
+  }
+
+  msg.textContent = 'Saving…'; msg.style.color = 'var(--muted)';
+
+  const updates = {
+    upi_id:              upi || null,
+    bank_account_name:   accName || null,
+    bank_account_number: accNum || null,
+    bank_ifsc:           ifsc || null,
+    bank_name:           bank || null,
+    bank_details_submitted_at: new Date().toISOString(),
+  };
+
+  try {
+    await supaFetch(
+      `/rest/v1/affiliate_applications?id=eq.${affiliateData.id}`,
+      { method: 'PATCH', body: JSON.stringify(updates), headers: { 'Prefer': 'return=minimal' } }
+    );
+    msg.textContent = '✓ Payment details saved successfully.';
+    msg.style.color = '#16a34a';
+    affiliateData = { ...affiliateData, ...updates };
+    document.getElementById('bankWarn').style.display = 'none';
+    setTimeout(() => { document.getElementById('bankFormSection').classList.remove('open'); }, 2000);
+
+    const methodEl = document.getElementById('plMethod');
+    if (upi) methodEl.textContent = 'UPI: ' + upi;
+    else if (accNum) methodEl.textContent = 'Bank A/c ···' + accNum.slice(-4);
+  } catch (ex) {
+    msg.textContent = 'Error: ' + ex.message;
+    msg.style.color = '#dc2626';
   }
 }
 
