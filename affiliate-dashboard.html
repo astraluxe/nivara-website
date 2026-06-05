@@ -297,21 +297,20 @@ tr:last-child td { border-bottom:none; }
   <div class="gate-box">
     <div class="gtag">// Affiliate Portal</div>
     <h2>Sign <span class="it">in</span></h2>
-    <p class="gsub">Use the email you applied with. Only approved affiliates can access this dashboard.</p>
+    <p class="gsub">Use the email you applied with. We'll send you a one-click sign-in link — no password needed.</p>
     <form id="loginForm">
       <div class="gate-field">
         <label>Email <span style="color:var(--accent)">*</span></label>
         <input type="email" id="gEmail" placeholder="rahul@gmail.com" required />
       </div>
-      <div class="gate-field">
-        <label>Password <span style="color:var(--accent)">*</span></label>
-        <input type="password" id="gPass" placeholder="••••••••" required />
-      </div>
-      <button class="gate-submit" type="submit" id="loginBtn">Sign in to dashboard</button>
+      <button class="gate-submit" type="submit" id="loginBtn">Send sign-in link</button>
       <p class="gate-err" id="gateErr"></p>
     </form>
-    <p class="gate-note">Not an affiliate yet? <a href="affiliates.html#apply">Apply here →</a><br/>
-    Forgot password? <a href="#" id="forgotLink">Reset via email</a></p>
+    <p id="magicSent" style="display:none;font-size:13px;color:#16a34a;margin-top:14px;line-height:1.6">
+      ✓ Check your inbox — click the link in the email to open your dashboard.<br/>
+      <span style="color:#6b6b6b;font-size:12px">Didn't get it? Check spam, or try again.</span>
+    </p>
+    <p class="gate-note">Not an affiliate yet? <a href="/affiliates#apply">Apply here →</a></p>
   </div>
 </div>
 
@@ -529,12 +528,11 @@ async function supaFetch(path, opts = {}) {
   return res.status === 204 ? null : res.json();
 }
 
-async function signIn(email, password) {
-  const data = await supaFetch('/auth/v1/token?grant_type=password', {
+async function sendMagicLink(email) {
+  await supaFetch('/auth/v1/magiclink', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, options: { redirectTo: window.location.origin + '/affiliate-dashboard' } }),
   });
-  return data;
 }
 
 async function signOut() {
@@ -550,22 +548,49 @@ async function signOut() {
 async function loadAffiliate() {
   const email = currentSession?.user?.email;
   if (!email) return null;
+
+  // Check they're an accepted affiliate
   const rows = await supaFetch(
     `/rest/v1/affiliate_applications?email=eq.${encodeURIComponent(email)}&status=eq.accepted&select=*&limit=1`,
     { headers: { 'Accept': 'application/json' } }
   );
   if (!rows || rows.length === 0) return null;
-  return rows[0];
+
+  // Also look up affiliates table to get the correct ID for clicks/commissions
+  const affRows = await supaFetch(
+    `/rest/v1/affiliates?email=eq.${encodeURIComponent(email)}&select=*&limit=1`,
+    { headers: { 'Accept': 'application/json' } }
+  ).catch(() => null);
+
+  const aff = affRows && affRows[0];
+  return {
+    ...rows[0],
+    _affiliates_id: aff ? aff.id : null,
+    tier: aff ? aff.tier : 'starter',
+    total_earned_paise: aff ? aff.total_earned_paise : 0,
+    unpaid_paise: aff ? aff.unpaid_paise : 0,
+  };
+}
+
+// After first login set user_id in affiliates so RLS works for clicks/commissions
+async function linkAffiliateUser() {
+  if (!currentSession?.user?.id || !currentSession?.user?.email) return;
+  await supaFetch(
+    `/rest/v1/affiliates?email=eq.${encodeURIComponent(currentSession.user.email)}`,
+    { method: 'PATCH', body: JSON.stringify({ user_id: currentSession.user.id }), headers: { 'Prefer': 'return=minimal' } }
+  ).catch(() => {});
 }
 
 async function loadClicks() {
   if (!affiliateData) return [];
-  return supaFetch(`/rest/v1/affiliate_clicks?affiliate_id=eq.${affiliateData.id}&select=*&order=created_at.desc&limit=50`).catch(() => []);
+  const id = affiliateData._affiliates_id || affiliateData.id;
+  return supaFetch(`/rest/v1/affiliate_clicks?affiliate_id=eq.${id}&select=*&order=created_at.desc&limit=50`).catch(() => []);
 }
 
 async function loadCommissions() {
   if (!affiliateData) return [];
-  return supaFetch(`/rest/v1/affiliate_commissions?affiliate_id=eq.${affiliateData.id}&select=*&order=period_month.desc&limit=12`).catch(() => []);
+  const id = affiliateData._affiliates_id || affiliateData.id;
+  return supaFetch(`/rest/v1/affiliate_commissions?affiliate_id=eq.${id}&select=*&order=period_month.desc&limit=12`).catch(() => []);
 }
 
 // ── UI helpers ──
@@ -739,56 +764,73 @@ async function tryRestoreSession() {
   } catch { localStorage.removeItem('aff_session'); return false; }
 }
 
-// ── Login form ──
+// ── Login form — sends magic link ──
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = document.getElementById('loginBtn');
   const err = document.getElementById('gateErr');
   btn.disabled = true;
-  btn.textContent = 'Signing in…';
+  btn.textContent = 'Sending…';
   err.style.display = 'none';
   try {
-    const session = await signIn(
-      document.getElementById('gEmail').value.trim(),
-      document.getElementById('gPass').value
-    );
-    currentSession = session;
-    localStorage.setItem('aff_session', JSON.stringify(session));
-    const aff = await loadAffiliate();
-    if (!aff) {
-      err.textContent = 'Your application is pending review or has not been approved yet.';
-      err.style.display = 'block';
-      currentSession = null;
-      localStorage.removeItem('aff_session');
-      return;
-    }
-    affiliateData = aff;
-    const comms = await loadCommissions();
-    populateDash(aff, comms);
-    showDash();
+    await sendMagicLink(document.getElementById('gEmail').value.trim());
+    document.getElementById('magicSent').style.display = 'block';
+    document.getElementById('loginForm').style.display = 'none';
   } catch (ex) {
-    err.textContent = ex.message || 'Sign-in failed. Check your email and password.';
+    err.textContent = ex.message || 'Could not send link. Try again.';
     err.style.display = 'block';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Sign in to dashboard';
+    btn.textContent = 'Send sign-in link';
   }
 });
 
 document.getElementById('logoutBtn').addEventListener('click', signOut);
 
-document.getElementById('forgotLink').addEventListener('click', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('gEmail').value.trim();
-  if (!email) { alert('Enter your email address first.'); return; }
+// ── Handle magic-link callback (#access_token= in URL hash) ──
+async function handleMagicLinkCallback() {
+  const hash = window.location.hash;
+  if (!hash.includes('access_token=')) return false;
+  const p = new URLSearchParams(hash.slice(1));
+  const at = p.get('access_token');
+  const rt = p.get('refresh_token') || '';
+  const expiresAt = parseInt(p.get('expires_at') || '0') || Math.floor(Date.now() / 1000) + 3600;
+  if (!at) return false;
+  history.replaceState(null, '', window.location.pathname);
   try {
-    await supaFetch('/auth/v1/recover', { method:'POST', body:JSON.stringify({ email }) });
-    alert('Password reset email sent — check your inbox.');
-  } catch (ex) { alert('Error: ' + ex.message); }
-});
+    const payload = JSON.parse(atob(at.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    const session = {
+      access_token: at, refresh_token: rt,
+      token_type: 'bearer', expires_at: expiresAt,
+      user: { id: payload.sub, email: payload.email, user_metadata: payload.user_metadata || {} }
+    };
+    currentSession = session;
+    localStorage.setItem('aff_session', JSON.stringify(session));
+    const aff = await loadAffiliate();
+    if (!aff) {
+      document.getElementById('gateErr').textContent = 'Your application is pending review or has not been approved yet.';
+      document.getElementById('gateErr').style.display = 'block';
+      currentSession = null;
+      localStorage.removeItem('aff_session');
+      showGate();
+      return true;
+    }
+    affiliateData = aff;
+    await linkAffiliateUser();
+    const comms = await loadCommissions();
+    populateDash(aff, comms);
+    showDash();
+    return true;
+  } catch (e) {
+    console.error('Magic link callback error', e);
+    return false;
+  }
+}
 
 // ── Boot ──
-tryRestoreSession().then(restored => { if (!restored) showGate(); });
+handleMagicLinkCallback().then(handled => {
+  if (!handled) tryRestoreSession().then(restored => { if (!restored) showGate(); });
+});
 </script>
 </body>
 </html>

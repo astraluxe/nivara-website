@@ -780,6 +780,21 @@ async function acceptAffiliate(id, email, firstName) {
 
   if (error) { alert('Error: ' + error.message); return; }
 
+  // Create affiliates table row so click tracking and RLS work
+  const appRow = (_data?.affiliates || []).find(a => a.id === id) || {};
+  await _supa.from('affiliates').upsert({
+    application_id: id,
+    email: email,
+    first_name: firstName,
+    last_name: appRow.last_name || '',
+    ref_code: refCode,
+    tier: 'starter',
+    active_referrals: 0,
+    total_earned_paise: 0,
+    unpaid_paise: 0,
+    status: 'active',
+  }, { onConflict: 'application_id' });
+
   // Open pre-filled mailto
   const subject = encodeURIComponent('Welcome to the adris.tech Affiliate Programme!');
   const body = encodeURIComponent(
