@@ -291,8 +291,16 @@ async function showAccount(session) {
   document.getElementById('userEmail').textContent = email;
   document.getElementById('emailVal').textContent  = email;
 
-  // Fetch plan from users table
-  const { data } = await _supa.from('users').select('plan, subscription_status, admin_level').eq('id', session.user.id).single();
+  // Fetch plan using the access_token directly (bypasses session state timing issues)
+  let data = null;
+  try {
+    const resp = await fetch(SUPA_URL + '/rest/v1/users?id=eq.' + encodeURIComponent(session.user.id) + '&select=plan,subscription_status,admin_level&limit=1', {
+      headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + session.access_token }
+    });
+    const rows = await resp.json();
+    data = rows && rows[0];
+  } catch (_) {}
+
   const planKey    = data?.plan ?? 'explore';
   const planLabel  = PLAN_LABELS[planKey] ?? planKey;
   const planStatus = data?.subscription_status ?? 'active';
