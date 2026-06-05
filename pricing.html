@@ -226,7 +226,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <li><a href="/affiliates">Affiliates</a></li>
     </ul>
     <div class="nav-right">
-      <a href="/signin" style="padding:7px 14px;border:1px solid #e5e5e5;border-radius:8px;font-size:12px;font-weight:500;color:#111;text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='#7C5CFF';this.style.color='#7C5CFF'" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#111'">Sign in</a>
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid #e5e5e5;border-radius:8px;font-size:12px;font-weight:500;color:#111;text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='#7C5CFF';this.style.color='#7C5CFF'" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#111'">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <span class="tt-track"><span class="tt-thumb"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span>
       </button>
@@ -705,6 +705,14 @@ document.getElementById('navHam')?.addEventListener('click', function() {
 });
 
 initAffiliate();
+</script>
+<script>
+(function(){
+  var _nb=window.supabase.createClient('https://xkkqcqsacgdrfwbwdqsp.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc');
+  function _nu(s){var el=document.getElementById('navSignIn');if(!el||!s)return;var m=s.user.user_metadata||{};var av=m.avatar_url||m.picture;var nm=m.full_name||m.name||s.user.email;el.removeAttribute('onmouseover');el.removeAttribute('onmouseout');if(av){el.style.cssText='padding:2px;border:2px solid #e5e5e5;border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';el.innerHTML='<img src="'+av+'" alt="'+nm+'" title="'+nm+'" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';}else{el.style.cssText='width:30px;height:30px;border:2px solid #e5e5e5;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:#111;';el.textContent=(nm||'U').charAt(0).toUpperCase();}}
+  _nb.auth.getSession().then(function(r){_nu(r.data.session);});
+  _nb.auth.onAuthStateChange(function(_,s){_nu(s);});
+})();
 </script>
 </body>
 </html>

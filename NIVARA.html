@@ -1463,11 +1463,14 @@ document.getElementById('navHam').addEventListener('click', function() {
     var meta = session.user.user_metadata || {};
     var avatar = meta.avatar_url || meta.picture;
     var name = meta.full_name || meta.name || session.user.email;
+    el.removeAttribute('onmouseover');
+    el.removeAttribute('onmouseout');
     if (avatar) {
-      el.removeAttribute('onmouseover');
-      el.removeAttribute('onmouseout');
       el.style.cssText = 'padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';
       el.innerHTML = '<img src="' + avatar + '" alt="' + name + '" title="' + name + '" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';
+    } else {
+      el.style.cssText = 'width:30px;height:30px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';
+      el.textContent = (name || 'U').charAt(0).toUpperCase();
     }
   }
   sb.auth.getSession().then(function (r) { updateNav(r.data.session); });
