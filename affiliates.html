@@ -1541,11 +1541,12 @@ document.getElementById('navHam').addEventListener('click', function() {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => {
         const r = el.getBoundingClientRect();
-        let top = r.bottom + 12 + window.scrollY;
-        let left = Math.max(16, Math.min(r.left + window.scrollX, window.innerWidth - 340));
-        if (top + 200 > window.scrollY + window.innerHeight) top = r.top + window.scrollY - 200;
+        let top = r.bottom + 12;
+        let left = Math.max(16, Math.min(r.left, window.innerWidth - 340));
+        if (top + 220 > window.innerHeight) top = Math.max(12, r.top - 220);
         box.style.top = top + 'px';
         box.style.left = left + 'px';
+        box.style.transform = '';
       }, 400);
     } else {
       box.style.top = '80px'; box.style.left = '50%'; box.style.transform = 'translateX(-50%)';
