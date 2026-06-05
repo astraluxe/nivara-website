@@ -338,7 +338,39 @@ async function showAccount(session) {
 }
 
 (async () => {
-  const hash = window.location.hash;
+  const hash     = window.location.hash;
+  const urlParams = new URLSearchParams(window.location.search);
+  const pkceCode  = urlParams.get('code');
+  const oauthErr  = urlParams.get('error_description') || urlParams.get('error');
+
+  // Surface any OAuth error Supabase returned in the URL
+  if (oauthErr) {
+    history.replaceState(null, '', window.location.pathname);
+    document.getElementById('statusMsg').className = 'status-msg err';
+    document.getElementById('statusMsg').textContent = 'Sign-in error: ' + decodeURIComponent(oauthErr);
+    return;
+  }
+
+  // PKCE flow: Supabase v2 default — returns ?code= after Google OAuth
+  if (pkceCode) {
+    history.replaceState(null, '', window.location.pathname);
+    document.getElementById('statusMsg').textContent = 'Completing sign-in…';
+    try {
+      const { data, error } = await _supa.auth.exchangeCodeForSession(pkceCode);
+      if (data?.session) {
+        // exchangeCodeForSession already stores session in Supabase's format
+        document.getElementById('statusMsg').textContent = '';
+        showAccount(data.session);
+      } else {
+        document.getElementById('statusMsg').className = 'status-msg err';
+        document.getElementById('statusMsg').textContent = 'Sign-in failed: ' + (error?.message || 'Unknown error');
+      }
+    } catch (e) {
+      document.getElementById('statusMsg').className = 'status-msg err';
+      document.getElementById('statusMsg').textContent = 'Sign-in error: ' + e.message;
+    }
+    return;
+  }
 
   // Implicit flow: Supabase returned #access_token= in the URL hash
   if (hash.includes('access_token=')) {
