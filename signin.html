@@ -313,19 +313,49 @@ async function showAccount(session) {
   }
 }
 
-// Handle implicit flow: #access_token=... lands here from Supabase
 (async () => {
   const hash = window.location.hash;
+
+  // Implicit flow: Supabase returned #access_token= in the URL hash
   if (hash.includes('access_token=')) {
     const p = new URLSearchParams(hash.slice(1));
     const at = p.get('access_token');
     const rt = p.get('refresh_token') || '';
+    const expiresAt = parseInt(p.get('expires_at') || '0') || Math.floor(Date.now() / 1000) + 3600;
+
     if (at) {
       history.replaceState(null, '', window.location.pathname);
-      const { data, error } = await _supa.auth.setSession({ access_token: at, refresh_token: rt });
-      if (data?.session) { showAccount(data.session); return; }
+      try {
+        // Decode JWT payload locally — no network call needed
+        const payload = JSON.parse(atob(at.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+        const session = {
+          access_token: at, refresh_token: rt,
+          token_type: 'bearer', expires_at: expiresAt,
+          user: {
+            id: payload.sub,
+            email: payload.email,
+            user_metadata: payload.user_metadata || {},
+            app_metadata: payload.app_metadata || {},
+            role: payload.role, aud: payload.aud
+          }
+        };
+
+        // Write session to localStorage in Supabase's format so all pages see it
+        try { localStorage.setItem('sb-xkkqcqsacgdrfwbwdqsp-auth-token', JSON.stringify(session)); } catch (_) {}
+
+        showAccount(session);
+
+        // Register with Supabase client in background for token refresh
+        _supa.auth.setSession({ access_token: at, refresh_token: rt }).catch(() => {});
+        return;
+      } catch (e) {
+        document.getElementById('statusMsg').className = 'status-msg err';
+        document.getElementById('statusMsg').textContent = 'Sign-in error: ' + e.message;
+      }
     }
   }
+
+  // Normal flow: check if already signed in
   const { data: { session } } = await _supa.auth.getSession();
   if (session) showAccount(session);
 })();

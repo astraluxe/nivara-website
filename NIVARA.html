@@ -1473,6 +1473,11 @@ document.getElementById('navHam').addEventListener('click', function() {
       el.textContent = (name || 'U').charAt(0).toUpperCase();
     }
   }
+  // Try localStorage first (works when session was saved via implicit flow)
+  try {
+    var stored = localStorage.getItem('sb-xkkqcqsacgdrfwbwdqsp-auth-token');
+    if (stored) { var sess = JSON.parse(stored); if (sess && sess.user) updateNav(sess); }
+  } catch (_) {}
   sb.auth.getSession().then(function (r) { updateNav(r.data.session); });
   sb.auth.onAuthStateChange(function (_e, s) { updateNav(s); });
 })();
