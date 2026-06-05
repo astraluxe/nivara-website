@@ -1448,6 +1448,11 @@ document.getElementById('navHam').addEventListener('click', function() {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (function () {
+  // If OAuth tokens land here instead of /signin, forward them there
+  if (window.location.hash.indexOf('access_token=') > -1 || window.location.search.indexOf('code=') > -1) {
+    window.location.replace('/signin' + window.location.search + window.location.hash);
+    return;
+  }
   var sb = window.supabase.createClient(
     'https://xkkqcqsacgdrfwbwdqsp.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc'

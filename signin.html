@@ -292,7 +292,7 @@ async function showAccount(session) {
   document.getElementById('emailVal').textContent  = email;
 
   // Fetch plan from users table
-  const { data } = await _supa.from('users').select('plan, subscription_status').eq('id', session.user.id).single();
+  const { data } = await _supa.from('users').select('plan, subscription_status, admin_level').eq('id', session.user.id).single();
   const planKey    = data?.plan ?? 'explore';
   const planLabel  = PLAN_LABELS[planKey] ?? planKey;
   const planStatus = data?.subscription_status ?? 'active';
@@ -300,6 +300,17 @@ async function showAccount(session) {
   document.getElementById('planBadge').textContent  = planLabel;
   document.getElementById('planName').textContent   = planLabel;
   document.getElementById('planStatus').textContent = planStatus.charAt(0).toUpperCase() + planStatus.slice(1);
+
+  // Show admin link for head admins
+  if (data?.admin_level === 'head') {
+    const adminLink = document.createElement('a');
+    adminLink.href = '/admin';
+    adminLink.className = 'app-btn';
+    adminLink.style.cssText = 'text-align:center;justify-content:center;background:#7C5CFF;border-color:#7C5CFF;';
+    adminLink.textContent = 'Head dashboard →';
+    const signOutBtn = document.querySelector('#signedIn button[onclick="signOut()"]');
+    signOutBtn.parentNode.insertBefore(adminLink, signOutBtn);
+  }
 }
 
 (async () => {
