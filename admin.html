@@ -12,6 +12,7 @@
 :root {
   --bg:      #0d0d0f;
   --surface: #16161a;
+  --surface2:#1e1e24;
   --border:  #2a2a30;
   --text:    #e8e8ed;
   --muted:   #6b6b78;
@@ -24,212 +25,363 @@
 }
 body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100dvh; }
 
-/* States */
-#loading, #denied { display:flex; align-items:center; justify-content:center; min-height:100dvh; flex-direction:column; gap:12px; }
-#loading p, #denied p { color: var(--muted); font-size: 14px; }
-#denied h2 { font-size: 20px; color: var(--red); }
-#denied a { color: var(--accent); font-size: 13px; text-decoration: none; }
-#dashboard { display: none; }
+#loading, #denied, #pin-gate { display:flex; align-items:center; justify-content:center; min-height:100dvh; flex-direction:column; gap:12px; }
+#loading p { color:var(--muted); font-size:14px; }
+#denied h2 { font-size:20px; color:var(--red); }
+#denied p  { color:var(--muted); font-size:13px; max-width:340px; text-align:center; }
+#denied a  { color:var(--accent); font-size:13px; text-decoration:none; margin-top:4px; }
+#dashboard { display:none; }
+
+/* PIN gate */
+.pin-box {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:16px; padding:36px 32px; text-align:center; width:340px;
+}
+.pin-box h2 { font-size:17px; font-weight:600; margin-bottom:6px; }
+.pin-box p  { color:var(--muted); font-size:12px; margin-bottom:24px; }
+.pin-input {
+  width:100%; text-align:center; font-family:var(--mono); font-size:28px;
+  letter-spacing:.3em; background:var(--surface2); border:1px solid var(--border);
+  border-radius:10px; padding:14px; color:var(--text); outline:none;
+  transition:border-color .15s;
+}
+.pin-input:focus { border-color:var(--accent); }
+.pin-error { color:var(--red); font-size:12px; font-family:var(--mono); margin-top:10px; min-height:18px; }
+.pin-btn {
+  margin-top:16px; width:100%; padding:12px; background:var(--accent);
+  border:none; border-radius:10px; color:#fff; font-size:14px; font-weight:600;
+  font-family:var(--sans); cursor:pointer; transition:background .15s;
+}
+.pin-btn:hover { background:#6a4de8; }
 
 /* Header */
 .adm-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 28px; border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; background: var(--bg); z-index: 10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 28px; border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:var(--bg); z-index:10;
 }
-.adm-logo { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; }
-.adm-logo span { color: var(--muted); font-weight: 400; }
+.adm-logo { display:flex; align-items:center; gap:10px; font-size:15px; font-weight:600; }
+.adm-logo span { color:var(--muted); font-weight:400; }
 .adm-badge {
-  font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase;
-  background: rgba(124,92,255,.15); color: var(--accent); border: 1px solid rgba(124,92,255,.3);
-  padding: 3px 8px; border-radius: 20px;
+  font-family:var(--mono); font-size:9px; letter-spacing:.08em; text-transform:uppercase;
+  background:rgba(124,92,255,.15); color:var(--accent); border:1px solid rgba(124,92,255,.3);
+  padding:3px 8px; border-radius:20px;
 }
+.adm-user { font-size:12px; color:var(--muted); font-family:var(--mono); }
 .adm-signout {
-  font-size: 12px; color: var(--muted); background: none; border: 1px solid var(--border);
-  padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: var(--sans);
-  transition: border-color .15s, color .15s;
+  font-size:12px; color:var(--muted); background:none; border:1px solid var(--border);
+  padding:6px 14px; border-radius:8px; cursor:pointer; font-family:var(--sans);
+  transition:border-color .15s, color .15s;
 }
-.adm-signout:hover { border-color: var(--red); color: var(--red); }
+.adm-signout:hover { border-color:var(--red); color:var(--red); }
 
 /* Main */
-.adm-main { padding: 28px; max-width: 1200px; margin: 0 auto; }
+.adm-main { padding:24px 28px; max-width:1280px; margin:0 auto; }
+
+/* Tabs */
+.tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:24px; }
+.tab {
+  padding:8px 16px; font-size:13px; font-weight:500; color:var(--muted);
+  background:none; border:none; cursor:pointer; border-bottom:2px solid transparent;
+  font-family:var(--sans); transition:color .15s; margin-bottom:-1px;
+}
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
 
 /* Stats */
-.stats-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px; margin-bottom: 28px;
-}
-.stat-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 18px 20px;
-}
-.stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-family: var(--mono); margin-bottom: 8px; }
-.stat-value { font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
-.stat-sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:24px; }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 18px; }
+.stat-label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-family:var(--mono); margin-bottom:6px; }
+.stat-value { font-size:26px; font-weight:700; letter-spacing:-.02em; }
+.stat-sub   { font-size:10px; color:var(--muted); margin-top:3px; }
 
-/* Plan pills */
-.plan-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-.plan-chip {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 20px; padding: 5px 12px; font-size: 12px;
-}
-.plan-chip .pname { color: var(--muted); font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
-.plan-chip .pcount { font-weight: 600; color: var(--text); }
-
-/* Section */
-.section-title {
-  font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em;
-  font-family: var(--mono); margin-bottom: 12px; margin-top: 28px;
-}
+/* Section label */
+.sec { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-family:var(--mono); margin:20px 0 10px; }
 
 /* Table */
-.tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th {
-  text-align: left; padding: 10px 14px; color: var(--muted); font-size: 10px;
-  text-transform: uppercase; letter-spacing: .08em; font-family: var(--mono);
-  font-weight: 500; border-bottom: 1px solid var(--border); white-space: nowrap;
-}
-td { padding: 11px 14px; border-bottom: 1px solid rgba(42,42,48,.6); vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(124,92,255,.04); }
-.td-email { font-family: var(--mono); font-size: 12px; color: var(--text); }
-.td-plan {
-  font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
-  padding: 2px 8px; border-radius: 6px; font-weight: 600; display: inline-block;
-}
-.plan-free     { background: rgba(107,107,120,.15); color: var(--muted); }
-.plan-solo     { background: rgba(124,92,255,.15);  color: #a78bfa; }
-.plan-builder  { background: rgba(34,197,94,.12);   color: #4ade80; }
-.plan-business { background: rgba(245,158,11,.12);  color: #fbbf24; }
-.plan-custom   { background: rgba(239,68,68,.12);   color: #f87171; }
-.td-status { font-size: 11px; }
-.status-active { color: var(--green); }
-.status-free   { color: var(--muted); }
-.status-grace  { color: var(--yellow); }
-.status-locked { color: var(--red); }
-.td-date { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-.td-admin { font-family: var(--mono); font-size: 10px; color: var(--accent); }
+.tbl-wrap { border:1px solid var(--border); border-radius:12px; overflow-x:auto; margin-bottom:28px; }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+th { text-align:left; padding:9px 12px; color:var(--muted); font-size:9px; text-transform:uppercase; letter-spacing:.08em; font-family:var(--mono); font-weight:500; border-bottom:1px solid var(--border); white-space:nowrap; }
+td { padding:10px 12px; border-bottom:1px solid rgba(42,42,48,.5); vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(124,92,255,.03); }
+.mono { font-family:var(--mono); }
+.td-plan { font-family:var(--mono); font-size:9px; text-transform:uppercase; letter-spacing:.06em; padding:2px 7px; border-radius:5px; font-weight:600; display:inline-block; }
+.plan-free     { background:rgba(107,107,120,.15); color:var(--muted); }
+.plan-solo     { background:rgba(124,92,255,.15);  color:#a78bfa; }
+.plan-builder  { background:rgba(34,197,94,.12);   color:#4ade80; }
+.plan-business { background:rgba(245,158,11,.12);  color:#fbbf24; }
+.plan-custom   { background:rgba(239,68,68,.12);   color:#f87171; }
+.status-active { color:var(--green); }
+.status-free   { color:var(--muted); }
+.status-grace  { color:var(--yellow); }
+.status-locked { color:var(--red); }
 
-/* Revenue */
-.rev-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 14px; border-bottom: 1px solid rgba(42,42,48,.6); font-size: 13px;
-}
-.rev-label { color: var(--muted); font-size: 11px; }
-.rev-amount { font-weight: 600; font-family: var(--mono); color: var(--green); }
-.rev-status { font-size: 10px; font-family: var(--mono); }
+/* Plan pills */
+.plan-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.plan-chip { display:flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:4px 12px; font-size:12px; }
+.plan-chip .pn { color:var(--muted); font-family:var(--mono); font-size:9px; text-transform:uppercase; }
+.plan-chip .pc { font-weight:600; }
 
-.spinner {
-  width: 32px; height: 32px; border: 2px solid var(--border);
-  border-top-color: var(--accent); border-radius: 50%;
-  animation: spin .7s linear infinite;
+/* Announcement form */
+.ann-form { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:20px; }
+.ann-form h3 { font-size:13px; font-weight:600; margin-bottom:16px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.form-row.single { grid-template-columns:1fr; }
+.form-group { display:flex; flex-direction:column; gap:5px; }
+.form-group label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-family:var(--mono); }
+.form-group input, .form-group textarea, .form-group select {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:8px 10px; color:var(--text); font-size:12px; font-family:var(--sans);
+  outline:none; transition:border-color .15s;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--accent); }
+.form-group textarea { resize:vertical; min-height:70px; }
+.form-group select option { background:var(--surface2); }
+.ann-submit { padding:9px 20px; background:var(--accent); border:none; border-radius:8px; color:#fff; font-size:12px; font-weight:600; font-family:var(--sans); cursor:pointer; transition:background .15s; }
+.ann-submit:hover { background:#6a4de8; }
+.ann-msg { font-size:11px; font-family:var(--mono); margin-left:12px; }
+
+/* Ann type badge */
+.type-info    { background:rgba(124,92,255,.15); color:#a78bfa; }
+.type-warning { background:rgba(245,158,11,.12); color:#fbbf24; }
+.type-success { background:rgba(34,197,94,.12);  color:#4ade80; }
+.type-promo   { background:rgba(239,68,68,.12);  color:#f87171; }
+.ann-type-badge { font-family:var(--mono); font-size:9px; text-transform:uppercase; letter-spacing:.06em; padding:2px 7px; border-radius:5px; font-weight:600; display:inline-block; }
+
+/* Action buttons */
+.act-btn { font-size:10px; font-family:var(--mono); padding:3px 8px; border-radius:5px; border:1px solid var(--border); background:none; color:var(--muted); cursor:pointer; transition:all .15s; }
+.act-btn:hover        { border-color:var(--accent); color:var(--accent); }
+.act-btn.del:hover    { border-color:var(--red); color:var(--red); }
+.act-btn.toggle-on    { border-color:var(--green); color:var(--green); }
+.act-btn.toggle-off   { border-color:var(--muted); color:var(--muted); }
+
+/* Feedback */
+.fb-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-bottom:8px; }
+.fb-meta { font-family:var(--mono); font-size:9px; color:var(--muted); margin-bottom:6px; }
+.fb-body { font-size:12px; color:var(--text); line-height:1.6; }
+
+.spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.empty { text-align:center; color:var(--muted); padding:32px; font-size:12px; }
 </style>
 </head>
 <body>
 
-<div id="loading">
-  <div class="spinner"></div>
-  <p>Verifying access…</p>
-</div>
+<!-- Loading -->
+<div id="loading"><div class="spinner"></div><p>Verifying access…</p></div>
 
+<!-- Access denied -->
 <div id="denied" style="display:none">
-  <svg viewBox="0 0 26 24" fill="none" width="40" height="36" style="margin-bottom:8px">
+  <svg viewBox="0 0 26 24" fill="none" width="36" height="32" style="margin-bottom:6px">
     <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="#ef4444"/>
     <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="#ef4444" opacity="0.5"/>
   </svg>
   <h2>Access Denied</h2>
   <p id="deniedMsg">This page is restricted to head admins only.</p>
-  <a href="/signin" style="margin-top:8px">← Back to sign in</a>
+  <a href="/signin">← Sign in with a different account</a>
 </div>
 
+<!-- PIN gate -->
+<div id="pin-gate" style="display:none">
+  <div class="pin-box">
+    <svg viewBox="0 0 26 24" fill="none" width="32" height="29" style="margin-bottom:12px">
+      <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="#7C5CFF"/>
+      <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="#7C5CFF" opacity="0.5"/>
+    </svg>
+    <h2>Admin PIN required</h2>
+    <p>Enter your 4-digit access PIN to continue.</p>
+    <input type="password" id="pinInput" class="pin-input" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="••••" autocomplete="off" onkeydown="if(event.key==='Enter')checkPin()" />
+    <div class="pin-error" id="pinError"></div>
+    <button class="pin-btn" onclick="checkPin()">Unlock dashboard</button>
+  </div>
+</div>
+
+<!-- Dashboard -->
 <div id="dashboard">
   <header class="adm-header">
     <div class="adm-logo">
-      <svg viewBox="0 0 26 24" fill="none" width="24" height="22">
+      <svg viewBox="0 0 26 24" fill="none" width="22" height="20">
         <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="#7C5CFF"/>
         <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="#7C5CFF" opacity="0.5"/>
       </svg>
       adris.tech <span>/ admin</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
-      <span class="adm-badge">head</span>
-      <span id="adminEmail" style="font-size:12px;color:var(--muted);font-family:var(--mono)"></span>
+      <span class="adm-badge">HEAD</span>
+      <span class="adm-user" id="adminEmail"></span>
       <button class="adm-signout" onclick="signOut()">Sign out</button>
     </div>
   </header>
 
   <main class="adm-main">
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Total users</div>
-        <div class="stat-value" id="statTotal">—</div>
-        <div class="stat-sub">all time</div>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('overview')">Overview</button>
+      <button class="tab" onclick="switchTab('users')">Users</button>
+      <button class="tab" onclick="switchTab('announcements')">Announcements</button>
+      <button class="tab" onclick="switchTab('feedback')">Feedback</button>
+      <button class="tab" onclick="switchTab('revenue')">Revenue</button>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total users</div>
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-sub">all time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Paid</div>
+          <div class="stat-value" id="statPaid">—</div>
+          <div class="stat-sub">active subscriptions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">New this month</div>
+          <div class="stat-value" id="statNew">—</div>
+          <div class="stat-sub">signups</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tokens (month)</div>
+          <div class="stat-value" id="statTokens">—</div>
+          <div class="stat-sub">across all users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Revenue (month)</div>
+          <div class="stat-value" id="statRevenue">—</div>
+          <div class="stat-sub">from purchases</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active announcements</div>
+          <div class="stat-value" id="statAnn">—</div>
+          <div class="stat-sub">shown in app</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Paid users</div>
-        <div class="stat-value" id="statPaid">—</div>
-        <div class="stat-sub">active subscriptions</div>
+
+      <div class="sec">Plan breakdown</div>
+      <div class="plan-chips" id="planChips"></div>
+
+      <div class="sec">Recent signups</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Email</th><th>Plan</th><th>Status</th><th>Joined</th></tr></thead>
+          <tbody id="recentUsers"></tbody>
+        </table>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Tokens this month</div>
-        <div class="stat-value" id="statTokens">—</div>
-        <div class="stat-sub" id="statTokensSub">across all users</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Revenue this month</div>
-        <div class="stat-value" id="statRevenue">—</div>
-        <div class="stat-sub">from purchases</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">New this month</div>
-        <div class="stat-value" id="statNew">—</div>
-        <div class="stat-sub">signups</div>
+
+      <div class="sec">Top token users (all time)</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Email</th><th>Total tokens</th><th>Plan</th></tr></thead>
+          <tbody id="topTokens"></tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Plan breakdown -->
-    <div class="section-title">Plan breakdown</div>
-    <div class="plan-chips" id="planChips"></div>
-
-    <!-- Users table -->
-    <div class="section-title">All users</div>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Plan</th>
-            <th>Status</th>
-            <th>Admin</th>
-            <th>Tokens (month)</th>
-            <th>Joined</th>
-          </tr>
-        </thead>
-        <tbody id="usersBody"></tbody>
-      </table>
+    <!-- USERS TAB -->
+    <div id="tab-users" class="tab-panel">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Email</th><th>Plan</th><th>Status</th><th>Admin</th><th>Tokens (month)</th><th>Tokens (all time)</th><th>Joined</th></tr></thead>
+          <tbody id="allUsers"></tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- Recent purchases -->
-    <div class="section-title">Recent purchases</div>
-    <div class="tbl-wrap" style="margin-bottom:48px">
-      <table>
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>Plan / Addon</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody id="purchasesBody"></tbody>
-      </table>
+    <!-- ANNOUNCEMENTS TAB -->
+    <div id="tab-announcements" class="tab-panel">
+      <div class="ann-form">
+        <h3>Create announcement</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="ann-title" placeholder="e.g. New feature: Voice input" />
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select id="ann-type">
+              <option value="info">Info</option>
+              <option value="success">Success</option>
+              <option value="warning">Warning</option>
+              <option value="promo">Promo</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="form-group">
+            <label>Body</label>
+            <textarea id="ann-body" placeholder="Announcement text shown to users…"></textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>CTA label (optional)</label>
+            <input type="text" id="ann-cta-label" placeholder="e.g. Learn more" />
+          </div>
+          <div class="form-group">
+            <label>CTA URL (optional)</label>
+            <input type="text" id="ann-cta-url" placeholder="https://adris.tech/…" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expires at (optional)</label>
+            <input type="datetime-local" id="ann-expires" />
+          </div>
+          <div class="form-group">
+            <label>Active</label>
+            <select id="ann-active">
+              <option value="true">Yes — show immediately</option>
+              <option value="false">No — save as draft</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;margin-top:4px">
+          <button class="ann-submit" onclick="createAnnouncement()">Post announcement</button>
+          <span class="ann-msg" id="annMsg"></span>
+        </div>
+      </div>
+
+      <div class="sec">All announcements</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Title</th><th>Type</th><th>Body</th><th>Active</th><th>Expires</th><th>Created</th><th>Actions</th></tr></thead>
+          <tbody id="annTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FEEDBACK TAB -->
+    <div id="tab-feedback" class="tab-panel">
+      <div id="feedbackList"></div>
+    </div>
+
+    <!-- REVENUE TAB -->
+    <div id="tab-revenue" class="tab-panel">
+      <div class="stats-grid" style="margin-bottom:20px">
+        <div class="stat-card">
+          <div class="stat-label">Revenue this month</div>
+          <div class="stat-value" id="revMonth">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Revenue all time</div>
+          <div class="stat-value" id="revAll">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total purchases</div>
+          <div class="stat-value" id="revCount">—</div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Email / User</th><th>Plan / Addon</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="purchasesBody"></tbody>
+        </table>
+      </div>
     </div>
 
   </main>
@@ -239,117 +391,269 @@ tr:hover td { background: rgba(124,92,255,.04); }
 const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
 const FN_URL    = SUPA_URL + '/functions/v1/admin-data';
+const CORRECT_PIN = '2406';
 
 const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+let _session = null;
+let _data    = null;
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
 function fmtNum(n) {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
-  if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K';
+  if (!n) return '0';
+  if (n >= 1_000_000) return (n/1_000_000).toFixed(1)+'M';
+  if (n >= 1_000)     return (n/1_000).toFixed(1)+'K';
   return String(n);
 }
 function fmtDate(iso) {
-  return new Date(iso).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 }
-function planClass(p) {
-  const m = { free:'plan-free', solo:'plan-solo', builder:'plan-builder', business:'plan-business', custom:'plan-custom' };
-  return m[p] || 'plan-free';
+function fmtDateTime(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
 }
-function statusClass(s) {
-  const m = { active:'status-active', free:'status-free', grace:'status-grace', locked:'status-locked' };
-  return m[s] || 'status-free';
+function planCls(p) {
+  return ({free:'plan-free',solo:'plan-solo',builder:'plan-builder',business:'plan-business',custom:'plan-custom'})[p]||'plan-free';
+}
+function statusCls(s) {
+  return ({active:'status-active',free:'status-free',grace:'status-grace',locked:'status-locked'})[s]||'status-free';
+}
+function annTypeCls(t) {
+  return ({info:'type-info',warning:'type-warning',success:'type-success',promo:'type-promo'})[t]||'type-info';
 }
 
+// ── Auth ─────────────────────────────────────────────────────────────────────
+function show(id) {
+  ['loading','denied','pin-gate','dashboard'].forEach(x => {
+    document.getElementById(x).style.display = x===id ? (id==='dashboard'?'block':'flex') : 'none';
+  });
+}
+function deny(msg) {
+  document.getElementById('deniedMsg').textContent = msg;
+  show('denied');
+}
 async function signOut() {
   await _supa.auth.signOut();
+  sessionStorage.removeItem('adm-pin-ok');
   location.href = '/signin';
 }
 
-function deny(msg) {
-  document.getElementById('loading').style.display   = 'none';
-  document.getElementById('denied').style.display    = 'flex';
-  document.getElementById('deniedMsg').textContent   = msg;
+// ── PIN gate ─────────────────────────────────────────────────────────────────
+function checkPin() {
+  const val = document.getElementById('pinInput').value.trim();
+  if (val === CORRECT_PIN) {
+    sessionStorage.setItem('adm-pin-ok','1');
+    document.getElementById('pinError').textContent = '';
+    renderDashboard();
+  } else {
+    document.getElementById('pinError').textContent = 'Incorrect PIN. Try again.';
+    document.getElementById('pinInput').value = '';
+    document.getElementById('pinInput').focus();
+  }
 }
 
-function renderDashboard(session, data) {
-  document.getElementById('loading').style.display   = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  document.getElementById('adminEmail').textContent  = session.user.email;
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const tabs = ['overview','users','announcements','feedback','revenue'];
+    t.classList.toggle('active', tabs[i]===name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
 
-  const { users, tokens, purchases, month_start } = data;
-  const monthStart = new Date(month_start);
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  show('dashboard');
+  document.getElementById('adminEmail').textContent = _session.user.email;
+  const { users, tokens, all_time_tokens, purchases, announcements, feedback, month_start } = _data;
+  const ms = new Date(month_start);
+
+  // Token maps
+  const monthTk = {};
+  tokens.forEach(r => { monthTk[r.user_id] = (monthTk[r.user_id]||0) + (r.tokens_consumed||0); });
+  const allTk = {};
+  all_time_tokens.forEach(r => { allTk[r.user_id] = (allTk[r.user_id]||0) + (r.tokens_consumed||0); });
+
+  // Email map
+  const emailMap = {};
+  users.forEach(u => { emailMap[u.id] = u.email; });
 
   // Stats
-  const paid    = users.filter(u => u.subscription_status === 'active').length;
-  const newThis = users.filter(u => new Date(u.created_at) >= monthStart).length;
-  const totalTk = tokens.reduce((s, r) => s + (r.tokens_consumed || 0), 0);
-  const revenue = purchases
-    .filter(p => p.status === 'captured' || p.status === 'paid')
-    .filter(p => new Date(p.created_at) >= monthStart)
-    .reduce((s, p) => s + (p.amount_inr || 0), 0);
+  const paid    = users.filter(u=>u.subscription_status==='active').length;
+  const newThis = users.filter(u=>new Date(u.created_at)>=ms).length;
+  const totalTk = tokens.reduce((s,r)=>s+(r.tokens_consumed||0),0);
+  const monthRev = purchases
+    .filter(p=>(p.status==='captured'||p.status==='paid')&&new Date(p.created_at)>=ms)
+    .reduce((s,p)=>s+(p.amount_inr||0),0);
+  const allRev = purchases
+    .filter(p=>p.status==='captured'||p.status==='paid')
+    .reduce((s,p)=>s+(p.amount_inr||0),0);
+  const activeAnn = announcements.filter(a=>a.active).length;
 
-  document.getElementById('statTotal').textContent   = users.length;
-  document.getElementById('statPaid').textContent    = paid;
-  document.getElementById('statTokens').textContent  = fmtNum(totalTk);
-  document.getElementById('statRevenue').textContent = revenue > 0 ? '₹' + (revenue/100).toLocaleString('en-IN') : '₹0';
-  document.getElementById('statNew').textContent     = newThis;
+  document.getElementById('statTotal').textContent  = users.length;
+  document.getElementById('statPaid').textContent   = paid;
+  document.getElementById('statNew').textContent    = newThis;
+  document.getElementById('statTokens').textContent = fmtNum(totalTk);
+  document.getElementById('statRevenue').textContent= monthRev>0 ? '₹'+(monthRev/100).toLocaleString('en-IN') : '₹0';
+  document.getElementById('statAnn').textContent    = activeAnn;
+
+  // Revenue tab stats
+  document.getElementById('revMonth').textContent   = monthRev>0 ? '₹'+(monthRev/100).toLocaleString('en-IN') : '₹0';
+  document.getElementById('revAll').textContent     = allRev>0   ? '₹'+(allRev/100).toLocaleString('en-IN')   : '₹0';
+  document.getElementById('revCount').textContent   = purchases.length;
 
   // Plan breakdown
   const planCounts = {};
-  users.forEach(u => { planCounts[u.plan] = (planCounts[u.plan] || 0) + 1; });
-  const chips = Object.entries(planCounts)
-    .sort((a, b) => b[1] - a[1])
-    .map(([plan, count]) =>
-      `<div class="plan-chip"><span class="pname">${plan}</span><span class="pcount">${count}</span></div>`
-    ).join('');
-  document.getElementById('planChips').innerHTML = chips;
+  users.forEach(u=>{ planCounts[u.plan]=(planCounts[u.plan]||0)+1; });
+  document.getElementById('planChips').innerHTML = Object.entries(planCounts)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([plan,count])=>`<div class="plan-chip"><span class="pn">${plan}</span><span class="pc">${count}</span></div>`)
+    .join('');
 
-  // Token usage per user map
-  const tokenMap = {};
-  tokens.forEach(r => { tokenMap[r.user_id] = (tokenMap[r.user_id] || 0) + (r.tokens_consumed || 0); });
-
-  // Users table
-  const usersHtml = users.map(u => `
+  // Recent signups (last 10)
+  document.getElementById('recentUsers').innerHTML = users.slice(0,10).map(u=>`
     <tr>
-      <td class="td-email">${u.email}</td>
-      <td><span class="td-plan ${planClass(u.plan)}">${u.plan}</span></td>
-      <td class="td-status"><span class="${statusClass(u.subscription_status)}">${u.subscription_status || 'free'}</span></td>
-      <td class="td-admin">${u.admin_level || '—'}</td>
-      <td class="td-date">${fmtNum(tokenMap[u.id] || 0)}</td>
-      <td class="td-date">${fmtDate(u.created_at)}</td>
-    </tr>
-  `).join('');
-  document.getElementById('usersBody').innerHTML = usersHtml || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No users yet</td></tr>';
+      <td class="mono" style="font-size:11px">${u.email}</td>
+      <td><span class="td-plan ${planCls(u.plan)}">${u.plan}</span></td>
+      <td class="mono" style="font-size:10px"><span class="${statusCls(u.subscription_status)}">${u.subscription_status||'free'}</span></td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(u.created_at)}</td>
+    </tr>`).join('') || `<tr><td colspan="4" class="empty">No users yet</td></tr>`;
 
-  // Purchases table
-  const purchHtml = purchases.map(p => `
+  // Top token users
+  const topUsers = [...users].sort((a,b)=>(allTk[b.id]||0)-(allTk[a.id]||0)).slice(0,10);
+  document.getElementById('topTokens').innerHTML = topUsers.map(u=>`
     <tr>
-      <td class="td-date">${p.user_id?.slice(0,8)}…</td>
-      <td class="td-email">${p.addon_label || p.addon_type || '—'}</td>
-      <td class="td-date" style="color:var(--green)">₹${((p.amount_inr||0)/100).toLocaleString('en-IN')}</td>
-      <td class="td-status"><span class="${p.status === 'captured' || p.status === 'paid' ? 'status-active' : 'status-free'}">${p.status || '—'}</span></td>
-      <td class="td-date">${fmtDate(p.created_at)}</td>
-    </tr>
-  `).join('');
-  document.getElementById('purchasesBody').innerHTML = purchHtml || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No purchases yet</td></tr>';
+      <td class="mono" style="font-size:11px">${u.email}</td>
+      <td class="mono" style="font-size:11px;color:var(--accent)">${fmtNum(allTk[u.id]||0)}</td>
+      <td><span class="td-plan ${planCls(u.plan)}">${u.plan}</span></td>
+    </tr>`).join('') || `<tr><td colspan="3" class="empty">No data</td></tr>`;
+
+  // All users table
+  document.getElementById('allUsers').innerHTML = users.map(u=>`
+    <tr>
+      <td class="mono" style="font-size:11px">${u.email}</td>
+      <td><span class="td-plan ${planCls(u.plan)}">${u.plan}</span></td>
+      <td class="mono" style="font-size:10px"><span class="${statusCls(u.subscription_status)}">${u.subscription_status||'free'}</span></td>
+      <td class="mono" style="font-size:10px;color:var(--accent)">${u.admin_level||'—'}</td>
+      <td class="mono" style="font-size:10px">${fmtNum(monthTk[u.id]||0)}</td>
+      <td class="mono" style="font-size:10px">${fmtNum(allTk[u.id]||0)}</td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(u.created_at)}</td>
+    </tr>`).join('') || `<tr><td colspan="7" class="empty">No users</td></tr>`;
+
+  // Announcements
+  renderAnnouncements(announcements);
+
+  // Feedback
+  document.getElementById('feedbackList').innerHTML = feedback.length
+    ? feedback.map(f=>`
+        <div class="fb-card">
+          <div class="fb-meta">${emailMap[f.user_id]||f.user_id?.slice(0,8)||'anon'} · ${fmtDateTime(f.created_at)}</div>
+          <div class="fb-body">${f.message||'(no message)'}</div>
+        </div>`).join('')
+    : '<div class="empty">No feedback yet</div>';
+
+  // Purchases
+  document.getElementById('purchasesBody').innerHTML = purchases.map(p=>`
+    <tr>
+      <td class="mono" style="font-size:11px">${emailMap[p.user_id]||p.user_id?.slice(0,8)||'—'}</td>
+      <td class="mono" style="font-size:11px">${p.addon_label||p.addon_type||'—'}</td>
+      <td class="mono" style="font-size:11px;color:var(--green)">₹${((p.amount_inr||0)/100).toLocaleString('en-IN')}</td>
+      <td class="mono" style="font-size:10px"><span class="${p.status==='captured'||p.status==='paid'?'status-active':'status-free'}">${p.status||'—'}</span></td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDateTime(p.created_at)}</td>
+    </tr>`).join('') || `<tr><td colspan="5" class="empty">No purchases yet</td></tr>`;
 }
 
+function renderAnnouncements(anns) {
+  document.getElementById('annTable').innerHTML = anns.map(a=>`
+    <tr id="ann-row-${a.id}">
+      <td style="font-size:12px;max-width:180px">${a.title}</td>
+      <td><span class="ann-type-badge ${annTypeCls(a.type)}">${a.type}</span></td>
+      <td style="font-size:11px;color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.body||'—'}</td>
+      <td><span class="${a.active?'status-active':'status-free'}" style="font-size:11px;font-family:var(--mono)">${a.active?'active':'draft'}</span></td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(a.expires_at)}</td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(a.created_at)}</td>
+      <td style="display:flex;gap:6px;align-items:center">
+        <button class="act-btn ${a.active?'toggle-on':'toggle-off'}" onclick="toggleAnn('${a.id}',${a.active})">${a.active?'Deactivate':'Activate'}</button>
+        <button class="act-btn del" onclick="deleteAnn('${a.id}')">Delete</button>
+      </td>
+    </tr>`).join('') || `<tr><td colspan="7" class="empty">No announcements yet</td></tr>`;
+}
+
+// ── Announcement CRUD ─────────────────────────────────────────────────────────
+async function createAnnouncement() {
+  const title    = document.getElementById('ann-title').value.trim();
+  const body     = document.getElementById('ann-body').value.trim();
+  const type     = document.getElementById('ann-type').value;
+  const ctaLabel = document.getElementById('ann-cta-label').value.trim();
+  const ctaUrl   = document.getElementById('ann-cta-url').value.trim();
+  const expires  = document.getElementById('ann-expires').value;
+  const active   = document.getElementById('ann-active').value === 'true';
+  const msg      = document.getElementById('annMsg');
+
+  if (!title || !body) { msg.textContent = 'Title and body required.'; msg.style.color='var(--red)'; return; }
+
+  msg.textContent = 'Saving…'; msg.style.color = 'var(--muted)';
+
+  const { error } = await _supa.from('announcements').insert({
+    title, body, type,
+    cta_label: ctaLabel || null,
+    cta_url:   ctaUrl   || null,
+    expires_at: expires  || null,
+    active,
+  });
+
+  if (error) {
+    msg.textContent = 'Error: ' + error.message; msg.style.color = 'var(--red)';
+  } else {
+    msg.textContent = 'Posted ✓'; msg.style.color = 'var(--green)';
+    ['ann-title','ann-body','ann-cta-label','ann-cta-url','ann-expires'].forEach(id=>{ document.getElementById(id).value=''; });
+    setTimeout(()=>{ msg.textContent=''; }, 3000);
+    await refreshAnnouncements();
+  }
+}
+
+async function toggleAnn(id, currentlyActive) {
+  const { error } = await _supa.from('announcements').update({ active: !currentlyActive }).eq('id', id);
+  if (!error) await refreshAnnouncements();
+}
+
+async function deleteAnn(id) {
+  if (!confirm('Delete this announcement?')) return;
+  const { error } = await _supa.from('announcements').delete().eq('id', id);
+  if (!error) await refreshAnnouncements();
+}
+
+async function refreshAnnouncements() {
+  const { data } = await _supa.from('announcements')
+    .select('id,title,body,type,cta_label,cta_url,active,created_at,expires_at')
+    .order('created_at', { ascending: false });
+  if (data) renderAnnouncements(data);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
 (async () => {
   const { data: { session } } = await _supa.auth.getSession();
-  if (!session) {
-    window.location.href = '/signin?next=/admin';
-    return;
-  }
+  if (!session) { window.location.href = '/signin?next=/admin'; return; }
+  _session = session;
 
   const resp = await fetch(FN_URL, {
     headers: { 'Authorization': 'Bearer ' + session.access_token }
   });
 
   if (resp.status === 401) { deny('Session expired. Please sign in again.'); return; }
-  if (resp.status === 403) { deny('This page is for head admins only. Signed in as: ' + session.user.email); return; }
-  if (!resp.ok) { deny('Failed to load admin data (' + resp.status + ').'); return; }
+  if (resp.status === 403) { deny('Head admin access only. Signed in as: ' + session.user.email); return; }
+  if (!resp.ok)            { deny('Failed to load admin data (' + resp.status + ').'); return; }
 
-  const data = await resp.json();
-  renderDashboard(session, data);
+  _data = await resp.json();
+
+  // Check PIN
+  if (sessionStorage.getItem('adm-pin-ok') === '1') {
+    renderDashboard();
+  } else {
+    show('pin-gate');
+    setTimeout(() => document.getElementById('pinInput').focus(), 100);
+  }
 })();
 </script>
 </body>
