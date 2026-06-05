@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — adris.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:      #0d0d0f;
+  --surface: #16161a;
+  --border:  #2a2a30;
+  --text:    #e8e8ed;
+  --muted:   #6b6b78;
+  --accent:  #7C5CFF;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --yellow:  #f59e0b;
+  --mono:    'JetBrains Mono', monospace;
+  --sans:    'Space Grotesk', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100dvh; }
+
+/* States */
+#loading, #denied { display:flex; align-items:center; justify-content:center; min-height:100dvh; flex-direction:column; gap:12px; }
+#loading p, #denied p { color: var(--muted); font-size: 14px; }
+#denied h2 { font-size: 20px; color: var(--red); }
+#denied a { color: var(--accent); font-size: 13px; text-decoration: none; }
+#dashboard { display: none; }
+
+/* Header */
+.adm-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg); z-index: 10;
+}
+.adm-logo { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; }
+.adm-logo span { color: var(--muted); font-weight: 400; }
+.adm-badge {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase;
+  background: rgba(124,92,255,.15); color: var(--accent); border: 1px solid rgba(124,92,255,.3);
+  padding: 3px 8px; border-radius: 20px;
+}
+.adm-signout {
+  font-size: 12px; color: var(--muted); background: none; border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: var(--sans);
+  transition: border-color .15s, color .15s;
+}
+.adm-signout:hover { border-color: var(--red); color: var(--red); }
+
+/* Main */
+.adm-main { padding: 28px; max-width: 1200px; margin: 0 auto; }
+
+/* Stats */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px; margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 20px;
+}
+.stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-family: var(--mono); margin-bottom: 8px; }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
+.stat-sub   { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* Plan pills */
+.plan-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.plan-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 5px 12px; font-size: 12px;
+}
+.plan-chip .pname { color: var(--muted); font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
+.plan-chip .pcount { font-weight: 600; color: var(--text); }
+
+/* Section */
+.section-title {
+  font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em;
+  font-family: var(--mono); margin-bottom: 12px; margin-top: 28px;
+}
+
+/* Table */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left; padding: 10px 14px; color: var(--muted); font-size: 10px;
+  text-transform: uppercase; letter-spacing: .08em; font-family: var(--mono);
+  font-weight: 500; border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+td { padding: 11px 14px; border-bottom: 1px solid rgba(42,42,48,.6); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(124,92,255,.04); }
+.td-email { font-family: var(--mono); font-size: 12px; color: var(--text); }
+.td-plan {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+  padding: 2px 8px; border-radius: 6px; font-weight: 600; display: inline-block;
+}
+.plan-free     { background: rgba(107,107,120,.15); color: var(--muted); }
+.plan-solo     { background: rgba(124,92,255,.15);  color: #a78bfa; }
+.plan-builder  { background: rgba(34,197,94,.12);   color: #4ade80; }
+.plan-business { background: rgba(245,158,11,.12);  color: #fbbf24; }
+.plan-custom   { background: rgba(239,68,68,.12);   color: #f87171; }
+.td-status { font-size: 11px; }
+.status-active { color: var(--green); }
+.status-free   { color: var(--muted); }
+.status-grace  { color: var(--yellow); }
+.status-locked { color: var(--red); }
+.td-date { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.td-admin { font-family: var(--mono); font-size: 10px; color: var(--accent); }
+
+/* Revenue */
+.rev-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-bottom: 1px solid rgba(42,42,48,.6); font-size: 13px;
+}
+.rev-label { color: var(--muted); font-size: 11px; }
+.rev-amount { font-weight: 600; font-family: var(--mono); color: var(--green); }
+.rev-status { font-size: 10px; font-family: var(--mono); }
+
+.spinner {
+  width: 32px; height: 32px; border: 2px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Verifying access…</p>
+</div>
+
+<div id="denied" style="display:none">
+  <svg viewBox="0 0 26 24" fill="none" width="40" height="36" style="margin-bottom:8px">
+    <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="#ef4444"/>
+    <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="#ef4444" opacity="0.5"/>
+  </svg>
+  <h2>Access Denied</h2>
+  <p id="deniedMsg">This page is restricted to head admins only.</p>
+  <a href="/signin" style="margin-top:8px">← Back to sign in</a>
+</div>
+
+<div id="dashboard">
+  <header class="adm-header">
+    <div class="adm-logo">
+      <svg viewBox="0 0 26 24" fill="none" width="24" height="22">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="#7C5CFF"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="#7C5CFF" opacity="0.5"/>
+      </svg>
+      adris.tech <span>/ admin</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="adm-badge">head</span>
+      <span id="adminEmail" style="font-size:12px;color:var(--muted);font-family:var(--mono)"></span>
+      <button class="adm-signout" onclick="signOut()">Sign out</button>
+    </div>
+  </header>
+
+  <main class="adm-main">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total users</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">all time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Paid users</div>
+        <div class="stat-value" id="statPaid">—</div>
+        <div class="stat-sub">active subscriptions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tokens this month</div>
+        <div class="stat-value" id="statTokens">—</div>
+        <div class="stat-sub" id="statTokensSub">across all users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Revenue this month</div>
+        <div class="stat-value" id="statRevenue">—</div>
+        <div class="stat-sub">from purchases</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">New this month</div>
+        <div class="stat-value" id="statNew">—</div>
+        <div class="stat-sub">signups</div>
+      </div>
+    </div>
+
+    <!-- Plan breakdown -->
+    <div class="section-title">Plan breakdown</div>
+    <div class="plan-chips" id="planChips"></div>
+
+    <!-- Users table -->
+    <div class="section-title">All users</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Plan</th>
+            <th>Status</th>
+            <th>Admin</th>
+            <th>Tokens (month)</th>
+            <th>Joined</th>
+          </tr>
+        </thead>
+        <tbody id="usersBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Recent purchases -->
+    <div class="section-title">Recent purchases</div>
+    <div class="tbl-wrap" style="margin-bottom:48px">
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Plan / Addon</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="purchasesBody"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+const FN_URL    = SUPA_URL + '/functions/v1/admin-data';
+
+const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+
+function fmtNum(n) {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K';
+  return String(n);
+}
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+}
+function planClass(p) {
+  const m = { free:'plan-free', solo:'plan-solo', builder:'plan-builder', business:'plan-business', custom:'plan-custom' };
+  return m[p] || 'plan-free';
+}
+function statusClass(s) {
+  const m = { active:'status-active', free:'status-free', grace:'status-grace', locked:'status-locked' };
+  return m[s] || 'status-free';
+}
+
+async function signOut() {
+  await _supa.auth.signOut();
+  location.href = '/signin';
+}
+
+function deny(msg) {
+  document.getElementById('loading').style.display   = 'none';
+  document.getElementById('denied').style.display    = 'flex';
+  document.getElementById('deniedMsg').textContent   = msg;
+}
+
+function renderDashboard(session, data) {
+  document.getElementById('loading').style.display   = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('adminEmail').textContent  = session.user.email;
+
+  const { users, tokens, purchases, month_start } = data;
+  const monthStart = new Date(month_start);
+
+  // Stats
+  const paid    = users.filter(u => u.subscription_status === 'active').length;
+  const newThis = users.filter(u => new Date(u.created_at) >= monthStart).length;
+  const totalTk = tokens.reduce((s, r) => s + (r.tokens_consumed || 0), 0);
+  const revenue = purchases
+    .filter(p => p.status === 'captured' || p.status === 'paid')
+    .filter(p => new Date(p.created_at) >= monthStart)
+    .reduce((s, p) => s + (p.amount_inr || 0), 0);
+
+  document.getElementById('statTotal').textContent   = users.length;
+  document.getElementById('statPaid').textContent    = paid;
+  document.getElementById('statTokens').textContent  = fmtNum(totalTk);
+  document.getElementById('statRevenue').textContent = revenue > 0 ? '₹' + (revenue/100).toLocaleString('en-IN') : '₹0';
+  document.getElementById('statNew').textContent     = newThis;
+
+  // Plan breakdown
+  const planCounts = {};
+  users.forEach(u => { planCounts[u.plan] = (planCounts[u.plan] || 0) + 1; });
+  const chips = Object.entries(planCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([plan, count]) =>
+      `<div class="plan-chip"><span class="pname">${plan}</span><span class="pcount">${count}</span></div>`
+    ).join('');
+  document.getElementById('planChips').innerHTML = chips;
+
+  // Token usage per user map
+  const tokenMap = {};
+  tokens.forEach(r => { tokenMap[r.user_id] = (tokenMap[r.user_id] || 0) + (r.tokens_consumed || 0); });
+
+  // Users table
+  const usersHtml = users.map(u => `
+    <tr>
+      <td class="td-email">${u.email}</td>
+      <td><span class="td-plan ${planClass(u.plan)}">${u.plan}</span></td>
+      <td class="td-status"><span class="${statusClass(u.subscription_status)}">${u.subscription_status || 'free'}</span></td>
+      <td class="td-admin">${u.admin_level || '—'}</td>
+      <td class="td-date">${fmtNum(tokenMap[u.id] || 0)}</td>
+      <td class="td-date">${fmtDate(u.created_at)}</td>
+    </tr>
+  `).join('');
+  document.getElementById('usersBody').innerHTML = usersHtml || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No users yet</td></tr>';
+
+  // Purchases table
+  const purchHtml = purchases.map(p => `
+    <tr>
+      <td class="td-date">${p.user_id?.slice(0,8)}…</td>
+      <td class="td-email">${p.addon_label || p.addon_type || '—'}</td>
+      <td class="td-date" style="color:var(--green)">₹${((p.amount_inr||0)/100).toLocaleString('en-IN')}</td>
+      <td class="td-status"><span class="${p.status === 'captured' || p.status === 'paid' ? 'status-active' : 'status-free'}">${p.status || '—'}</span></td>
+      <td class="td-date">${fmtDate(p.created_at)}</td>
+    </tr>
+  `).join('');
+  document.getElementById('purchasesBody').innerHTML = purchHtml || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No purchases yet</td></tr>';
+}
+
+(async () => {
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) {
+    window.location.href = '/signin?next=/admin';
+    return;
+  }
+
+  const resp = await fetch(FN_URL, {
+    headers: { 'Authorization': 'Bearer ' + session.access_token }
+  });
+
+  if (resp.status === 401) { deny('Session expired. Please sign in again.'); return; }
+  if (resp.status === 403) { deny('This page is for head admins only. Signed in as: ' + session.user.email); return; }
+  if (!resp.ok) { deny('Failed to load admin data (' + resp.status + ').'); return; }
+
+  const data = await resp.json();
+  renderDashboard(session, data);
+})();
+</script>
+</body>
+</html>
