@@ -350,26 +350,29 @@ async function showAccount(session) {
     if (at) {
       history.replaceState(null, '', window.location.pathname);
       try {
-        // Let Supabase store the session in its own format (handles auto-refresh on next load)
-        const { data, error } = await _supa.auth.setSession({ access_token: at, refresh_token: rt });
-        if (data?.session) {
-          showAccount(data.session);
-          return;
-        }
-        // Fallback: decode JWT locally if setSession failed (e.g. network error)
-        if (error) {
-          const payload = JSON.parse(atob(at.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-          showAccount({
-            access_token: at, refresh_token: rt,
-            token_type: 'bearer', expires_at: expiresAt,
-            user: {
-              id: payload.sub, email: payload.email,
-              user_metadata: payload.user_metadata || {},
-              app_metadata: payload.app_metadata || {},
-              role: payload.role, aud: payload.aud
-            }
-          });
-        }
+        // Decode JWT locally — immediate, no network needed
+        const payload = JSON.parse(atob(at.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+        const session = {
+          access_token: at, refresh_token: rt,
+          token_type: 'bearer',
+          expires_in: expiresAt - Math.floor(Date.now() / 1000),
+          expires_at: expiresAt,
+          user: {
+            id: payload.sub, email: payload.email,
+            user_metadata: payload.user_metadata || {},
+            app_metadata: payload.app_metadata || {},
+            role: payload.role, aud: payload.aud
+          }
+        };
+
+        // Write to localStorage immediately so /admin can read it even if setSession() is slow
+        try { localStorage.setItem('sb-xkkqcqsacgdrfwbwdqsp-auth-token', JSON.stringify(session)); } catch (_) {}
+
+        showAccount(session);
+
+        // Upgrade localStorage to Supabase's format in background (enables auto-refresh)
+        // If this succeeds it overwrites our entry with the proper format; if it fails our entry still works
+        _supa.auth.setSession({ access_token: at, refresh_token: rt }).catch(() => {});
         return;
       } catch (e) {
         document.getElementById('statusMsg').className = 'status-msg err';
