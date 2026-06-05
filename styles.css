@@ -1968,6 +1968,29 @@ body.tour-open { overflow: hidden; }
   .tour-tooltip { width: calc(100vw - 32px); left: 16px !important; }
   .nav-tour-btn { display: none; }
 }
+/* ── Breadcrumb / back button (shared across all pages) ── */
+.crumb { padding: 20px 0 0; }
+.crumb-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.crumb-row a {
+  color: var(--muted);
+  transition: color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.crumb-row a:hover { color: var(--ink); }
+.crumb-row .sep { color: var(--muted-2); }
+.crumb-row .here { color: var(--ink); }
+
 .reveal {
   opacity: 0;
   transform: translateY(20px);
