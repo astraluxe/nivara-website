@@ -364,16 +364,21 @@ tr:hover td { background:rgba(124,92,255,.03); }
     <!-- AFFILIATES TAB -->
     <div id="tab-affiliates" class="tab-panel">
 
-      <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stats-grid" style="margin-bottom:20px;grid-template-columns:repeat(4,1fr)">
         <div class="stat-card">
           <div class="stat-label">Pending applications</div>
           <div class="stat-value" id="aff-statPending">—</div>
           <div class="stat-sub">awaiting review</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Accepted affiliates</div>
+          <div class="stat-label">Active affiliates</div>
           <div class="stat-value" id="aff-statAccepted">—</div>
-          <div class="stat-sub">active in programme</div>
+          <div class="stat-sub">in programme</div>
+        </div>
+        <div class="stat-card" style="border-color:rgba(245,158,11,.3)">
+          <div class="stat-label">Total unpaid</div>
+          <div class="stat-value" id="aff-statUnpaid" style="color:var(--yellow)">—</div>
+          <div class="stat-sub">owed to affiliates</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Missing bank details</div>
@@ -390,11 +395,19 @@ tr:hover td { background:rgba(124,92,255,.03); }
         </table>
       </div>
 
-      <div class="sec">Accepted affiliates</div>
+      <div class="sec">Active affiliates — earnings &amp; payouts</div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Ref code</th><th>Bank / UPI details</th><th>Accepted</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Name</th><th>Email</th><th>Ref code</th><th>Tier</th><th>Active refs</th><th>This month</th><th>Total earned</th><th>Unpaid</th><th>Payment details</th><th>Actions</th></tr></thead>
           <tbody id="aff-acceptedBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sec">Payout history</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Affiliate</th><th>Period</th><th>Amount</th><th>Method</th><th>UTR / Ref</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="aff-payoutsBody"></tbody>
         </table>
       </div>
 
@@ -713,15 +726,31 @@ async function loadAffiliates() {
 
 function renderAffiliates(rows) {
   const pending  = rows.filter(r => !r.status || r.status === 'pending');
-  const accepted = rows.filter(r => r.status === 'accepted');
   const rejected = rows.filter(r => r.status === 'rejected');
-  const noBankDetails = accepted.filter(r => !r.upi_id && !r.bank_account_number);
 
-  document.getElementById('aff-statPending').textContent  = pending.length;
-  document.getElementById('aff-statAccepted').textContent = accepted.length;
-  document.getElementById('aff-statNoBankDetails').textContent = noBankDetails.length;
+  // Active affiliates come from _data.affiliates (richer earnings data)
+  const affiliatesData      = (_data?.affiliates || []).filter(a => a.status === 'active');
+  const commissions         = _data?.affiliate_commissions || [];
+  const payouts             = _data?.affiliate_payouts     || [];
+  const currentMonth        = new Date().toISOString().slice(0, 7);
 
-  // Pending
+  // Monthly earnings per affiliate (current month, accrued only)
+  const monthlyEarnings = {};
+  commissions.forEach(c => {
+    if (c.period_month === currentMonth && c.status === 'accrued') {
+      monthlyEarnings[c.affiliate_id] = (monthlyEarnings[c.affiliate_id] || 0) + (c.commission_paise || 0);
+    }
+  });
+
+  const totalUnpaid    = affiliatesData.reduce((s, a) => s + (a.unpaid_paise || 0), 0);
+  const noBankCount    = affiliatesData.filter(a => !a.upi_id && !a.bank_account_number).length;
+
+  document.getElementById('aff-statPending').textContent      = pending.length;
+  document.getElementById('aff-statAccepted').textContent     = affiliatesData.length;
+  document.getElementById('aff-statUnpaid').textContent       = totalUnpaid > 0 ? '₹' + (totalUnpaid / 100).toLocaleString('en-IN') : '₹0';
+  document.getElementById('aff-statNoBankDetails').textContent = noBankCount;
+
+  // Pending applications
   document.getElementById('aff-pendingBody').innerHTML = pending.map(r => `
     <tr id="aff-row-${r.id}">
       <td style="font-size:12px;font-weight:500">${r.first_name||''} ${r.last_name||''}</td>
@@ -732,27 +761,52 @@ function renderAffiliates(rows) {
       <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(r.created_at)}</td>
       <td><span style="font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:4px;${r.terms_accepted?'background:rgba(34,197,94,.12);color:#4ade80':'background:rgba(239,68,68,.12);color:#f87171'}">${r.terms_accepted?'✓ agreed':'—'}</span></td>
       <td style="display:flex;gap:6px;white-space:nowrap">
-        <button class="act-btn toggle-on" onclick="acceptAffiliate('${r.id}','${r.email}','${r.first_name||''}')">Accept</button>
-        <button class="act-btn del" onclick="rejectAffiliate('${r.id}','${r.email}','${r.first_name||''}')">Reject</button>
-        <button class="act-btn" onclick="viewPromotion('${r.id}','${JSON.stringify(r.promotion_plan||'').replace(/'/g,'&#39;')}')">View plan</button>
+        <button class="act-btn toggle-on" onclick="acceptAffiliate('${r.id}','${r.email}','${(r.first_name||'').replace(/'/g,"\\'")}','${(r.last_name||'').replace(/'/g,"\\'")}')">Accept</button>
+        <button class="act-btn del" onclick="rejectAffiliate('${r.id}','${r.email}','${(r.first_name||'').replace(/'/g,"\\'")}')">Reject</button>
+        <button class="act-btn" onclick="viewPromotion('${r.promotion_plan||''}')">View plan</button>
       </td>
     </tr>`).join('') || `<tr><td colspan="8" class="empty">No pending applications</td></tr>`;
 
-  // Accepted
-  document.getElementById('aff-acceptedBody').innerHTML = accepted.map(r => {
-    const hasBank = r.upi_id || r.bank_account_number;
-    const bankStr = r.upi_id ? `UPI: ${r.upi_id}` : (r.bank_account_number ? `A/c: ···${String(r.bank_account_number).slice(-4)} · IFSC: ${r.bank_ifsc||'?'}` : '');
+  // Active affiliates with full earnings breakdown
+  const tierColor = { starter:'#a78bfa', builder:'#4ade80', partner:'#fbbf24', elite:'#f87171' };
+  document.getElementById('aff-acceptedBody').innerHTML = affiliatesData.map(a => {
+    const hasBank  = a.upi_id || a.bank_account_number;
+    const bankStr  = a.upi_id
+      ? `UPI: ${a.upi_id}`
+      : (a.bank_account_number ? `A/c ···${String(a.bank_account_number).slice(-4)} · ${a.bank_ifsc||'?'}` : '');
+    const thisMonth = monthlyEarnings[a.id] || 0;
+    const unpaid    = a.unpaid_paise || 0;
+    const canPay    = unpaid >= 50000 && hasBank; // ₹500 minimum
     return `<tr>
-      <td style="font-size:12px;font-weight:500">${r.first_name||''} ${r.last_name||''}</td>
-      <td class="mono" style="font-size:11px">${r.email||'—'}</td>
-      <td class="mono" style="font-size:11px;color:var(--accent)">${r.ref_code||'—'}</td>
-      <td style="font-size:11px;${hasBank?'color:var(--green)':'color:var(--yellow);font-weight:600'}">${hasBank ? bankStr : '⚠ No payment details — will not be paid'}</td>
-      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(r.accepted_at||r.created_at)}</td>
-      <td>
-        <button class="act-btn del" onclick="revokeAffiliate('${r.id}','${r.email}')">Revoke</button>
+      <td style="font-size:12px;font-weight:500">${a.first_name||''} ${a.last_name||''}</td>
+      <td class="mono" style="font-size:11px">${a.email||'—'}</td>
+      <td class="mono" style="font-size:11px;color:var(--accent)">${a.ref_code||'—'}</td>
+      <td><span style="font-size:9px;font-family:var(--mono);text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(124,92,255,.12);color:${tierColor[a.tier]||'#a78bfa'}">${a.tier||'starter'}</span></td>
+      <td class="mono" style="font-size:11px;text-align:center">${a.active_referrals||0}</td>
+      <td class="mono" style="font-size:11px;color:${thisMonth>0?'var(--green)':'var(--muted)'}">${thisMonth>0?'₹'+(thisMonth/100).toLocaleString('en-IN'):'—'}</td>
+      <td class="mono" style="font-size:11px;color:var(--accent)">${(a.total_earned_paise||0)>0?'₹'+((a.total_earned_paise)/100).toLocaleString('en-IN'):'—'}</td>
+      <td class="mono" style="font-size:11px;font-weight:${unpaid>0?'700':'400'};color:${unpaid>=50000?'var(--yellow)':unpaid>0?'var(--muted)':'var(--muted)'}">${unpaid>0?'₹'+(unpaid/100).toLocaleString('en-IN'):'—'}</td>
+      <td style="font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;${hasBank?'color:var(--green)':'color:var(--yellow);font-weight:600'}">${hasBank?bankStr:'⚠ No details'}</td>
+      <td style="display:flex;gap:6px;white-space:nowrap">
+        ${canPay?`<button class="act-btn toggle-on" onclick="recordPayout('${a.id}','${a.email}',${unpaid})">Pay ₹${(unpaid/100).toLocaleString('en-IN')}</button>`:''}
+        <button class="act-btn del" onclick="revokeAffiliateById('${a.id}','${a.email}')">Revoke</button>
       </td>
     </tr>`;
-  }).join('') || `<tr><td colspan="6" class="empty">No accepted affiliates yet</td></tr>`;
+  }).join('') || `<tr><td colspan="10" class="empty">No active affiliates yet</td></tr>`;
+
+  // Payout history
+  document.getElementById('aff-payoutsBody').innerHTML = payouts.map(p => {
+    const aff = affiliatesData.find(a => a.id === p.affiliate_id);
+    return `<tr>
+      <td class="mono" style="font-size:11px">${aff?.email||p.affiliate_id?.slice(0,8)||'—'}</td>
+      <td class="mono" style="font-size:11px">${p.period_month||'—'}</td>
+      <td class="mono" style="font-size:11px;color:var(--green)">${p.amount_paise>0?'₹'+(p.amount_paise/100).toLocaleString('en-IN'):'—'}</td>
+      <td class="mono" style="font-size:10px;text-transform:uppercase">${p.method||'—'}</td>
+      <td class="mono" style="font-size:10px">${p.utr||'—'}</td>
+      <td><span class="${p.status==='paid'?'status-active':'status-grace'}" style="font-size:11px;font-family:var(--mono)">${p.status||'—'}</span></td>
+      <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(p.created_at)}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="7" class="empty">No payouts recorded yet</td></tr>`;
 
   // Rejected
   document.getElementById('aff-rejectedBody').innerHTML = rejected.map(r => `
@@ -764,11 +818,42 @@ function renderAffiliates(rows) {
     </tr>`).join('') || `<tr><td colspan="4" class="empty">No rejected applications</td></tr>`;
 }
 
-function viewPromotion(id, plan) {
-  alert('Promotion plan:\n\n' + plan);
+function viewPromotion(plan) {
+  alert('Promotion plan:\n\n' + (plan || '(not specified)'));
 }
 
-async function acceptAffiliate(id, email, firstName) {
+async function recordPayout(affiliateId, email, unpaidPaise) {
+  const method = prompt(`Record payout for ${email}\n\nPayment method — type one: upi / neft / imps`);
+  if (!method || !['upi','neft','imps'].includes(method.trim().toLowerCase())) {
+    alert('Invalid method. Enter: upi, neft, or imps'); return;
+  }
+  const utr = prompt('UTR / transaction reference number:');
+  if (!utr?.trim()) return;
+
+  const periodMonth = new Date().toISOString().slice(0, 7);
+  const { error: payErr } = await _supa.from('affiliate_payouts').insert({
+    affiliate_id: affiliateId,
+    period_month: periodMonth,
+    amount_paise: unpaidPaise,
+    method: method.trim().toLowerCase(),
+    utr: utr.trim(),
+    status: 'paid',
+  });
+  if (payErr) { alert('Error recording payout: ' + payErr.message); return; }
+
+  await _supa.from('affiliates').update({ unpaid_paise: 0 }).eq('id', affiliateId);
+  await _supa.from('affiliate_commissions').update({ status: 'paid' })
+    .eq('affiliate_id', affiliateId).eq('status', 'accrued');
+
+  alert(`✓ Payout of ₹${(unpaidPaise/100).toLocaleString('en-IN')} recorded for ${email}\nUTR: ${utr.trim()}`);
+  _affLoaded = false;
+  // Reload affiliate data from edge function then re-render
+  const resp = await fetch(FN_URL, { headers: { 'Authorization': 'Bearer ' + _session.access_token } });
+  if (resp.ok) { _data = await resp.json(); }
+  loadAffiliates();
+}
+
+async function acceptAffiliate(id, email, firstName, lastName) {
   if (!confirm(`Accept ${firstName} (${email}) as an affiliate?\n\nThis will:\n• Update their status to accepted\n• Open a pre-filled acceptance email for you to send`)) return;
 
   const refCode = 'REF' + Math.random().toString(36).slice(2,8).toUpperCase();
@@ -777,16 +862,13 @@ async function acceptAffiliate(id, email, firstName) {
     ref_code: refCode,
     accepted_at: new Date().toISOString(),
   }).eq('id', id);
-
   if (error) { alert('Error: ' + error.message); return; }
 
-  // Create affiliates table row so click tracking and RLS work
-  const appRow = (_data?.affiliates || []).find(a => a.id === id) || {};
   await _supa.from('affiliates').upsert({
     application_id: id,
-    email: email,
+    email,
     first_name: firstName,
-    last_name: appRow.last_name || '',
+    last_name: lastName || '',
     ref_code: refCode,
     tier: 'starter',
     active_referrals: 0,
@@ -795,7 +877,6 @@ async function acceptAffiliate(id, email, firstName) {
     status: 'active',
   }, { onConflict: 'application_id' });
 
-  // Open pre-filled mailto
   const subject = encodeURIComponent('Welcome to the adris.tech Affiliate Programme!');
   const body = encodeURIComponent(
 `Hi ${firstName},
@@ -827,18 +908,20 @@ adris.tech
 hello@adris.tech`);
 
   window.open(`mailto:${email}?subject=${subject}&body=${body}`);
-  _affLoaded = false; loadAffiliates();
+  _affLoaded = false;
+  const resp = await fetch(FN_URL, { headers: { 'Authorization': 'Bearer ' + _session.access_token } });
+  if (resp.ok) { _data = await resp.json(); }
+  loadAffiliates();
 }
 
 async function rejectAffiliate(id, email, firstName) {
-  const reason = prompt(`Rejection reason for ${firstName} (${email}):\n\nThis will be saved internally. You may also send an email to notify them.`, 'Does not meet current programme criteria');
+  const reason = prompt(`Rejection reason for ${firstName} (${email}):`, 'Does not meet current programme criteria');
   if (reason === null) return;
 
   const { error } = await _supa.from('affiliate_applications').update({
     status: 'rejected',
     rejected_reason: reason,
   }).eq('id', id);
-
   if (error) { alert('Error: ' + error.message); return; }
 
   const subject = encodeURIComponent('adris.tech Affiliate Programme — Application update');
@@ -859,13 +942,19 @@ hello@adris.tech`);
   _affLoaded = false; loadAffiliates();
 }
 
-async function revokeAffiliate(id, email) {
-  if (!confirm(`Revoke affiliate status for ${email}?\n\nThis will mark them as rejected and deactivate their referral link.`)) return;
-  const { error } = await _supa.from('affiliate_applications').update({
-    status: 'rejected',
-    rejected_reason: 'Revoked by admin',
-  }).eq('id', id);
+async function revokeAffiliateById(id, email) {
+  if (!confirm(`Revoke affiliate status for ${email}?\n\nThis will deactivate their referral link.`)) return;
+  const { error } = await _supa.from('affiliates').update({ status: 'terminated' }).eq('id', id);
   if (error) { alert('Error: ' + error.message); return; }
+  _affLoaded = false;
+  const resp = await fetch(FN_URL, { headers: { 'Authorization': 'Bearer ' + _session.access_token } });
+  if (resp.ok) { _data = await resp.json(); }
+  loadAffiliates();
+}
+
+async function revokeAffiliate(id, email) {
+  if (!confirm(`Revoke affiliate status for ${email}?`)) return;
+  await _supa.from('affiliate_applications').update({ status: 'rejected', rejected_reason: 'Revoked by admin' }).eq('id', id);
   _affLoaded = false; loadAffiliates();
 }
 
