@@ -508,9 +508,11 @@ tr:last-child td { border-bottom:none; }
   </main>
 </div><!-- /dash-shell -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 
 let currentSession = null;
 let affiliateData  = null;
@@ -746,13 +748,46 @@ function copyRef() {
   });
 }
 
-// ── Restore session ──
+// ── Restore session — uses Supabase client so token refresh happens automatically ──
 async function tryRestoreSession() {
-  const saved = localStorage.getItem('aff_session');
-  if (!saved) return false;
   try {
+    // 1. Try Supabase client first (handles refresh_token rotation automatically)
+    const { data: { session } } = await _supa.auth.getSession();
+    if (session) {
+      currentSession = session;
+      localStorage.setItem('aff_session', JSON.stringify(session));
+      const aff = await loadAffiliate();
+      if (!aff) { showGate(); return false; }
+      affiliateData = aff;
+      const comms = await loadCommissions();
+      populateDash(aff, comms);
+      showDash();
+      return true;
+    }
+
+    // 2. Fall back to manually stored aff_session (for sessions before Supabase client was added)
+    const saved = localStorage.getItem('aff_session');
+    if (!saved) return false;
     const s = JSON.parse(saved);
-    if (Date.now() > s.expires_at * 1000) { localStorage.removeItem('aff_session'); return false; }
+    // If expired, try refreshing via Supabase client using stored refresh_token
+    if (Date.now() > s.expires_at * 1000) {
+      if (s.refresh_token) {
+        const { data: refreshed } = await _supa.auth.refreshSession({ refresh_token: s.refresh_token });
+        if (refreshed?.session) {
+          currentSession = refreshed.session;
+          localStorage.setItem('aff_session', JSON.stringify(refreshed.session));
+          const aff = await loadAffiliate();
+          if (!aff) { showGate(); return false; }
+          affiliateData = aff;
+          const comms = await loadCommissions();
+          populateDash(aff, comms);
+          showDash();
+          return true;
+        }
+      }
+      localStorage.removeItem('aff_session');
+      return false;
+    }
     currentSession = s;
     const aff = await loadAffiliate();
     if (!aff) { showGate(); return false; }
@@ -806,6 +841,8 @@ async function handleMagicLinkCallback() {
     };
     currentSession = session;
     localStorage.setItem('aff_session', JSON.stringify(session));
+    // Register with Supabase client so it can handle token refresh on future visits
+    _supa.auth.setSession({ access_token: at, refresh_token: rt }).catch(() => {});
     const aff = await loadAffiliate();
     if (!aff) {
       document.getElementById('gateErr').textContent = 'Your application is pending review or has not been approved yet.';

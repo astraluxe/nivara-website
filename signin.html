@@ -291,15 +291,28 @@ async function showAccount(session) {
   document.getElementById('userEmail').textContent = email;
   document.getElementById('emailVal').textContent  = email;
 
-  // Fetch plan using the access_token directly (bypasses session state timing issues)
+  // Fetch plan — try direct Bearer fetch first, fall back to Supabase client
   let data = null;
   try {
     const resp = await fetch(SUPA_URL + '/rest/v1/users?id=eq.' + encodeURIComponent(session.user.id) + '&select=plan,subscription_status,admin_level&limit=1', {
       headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + session.access_token }
     });
-    const rows = await resp.json();
-    data = rows && rows[0];
+    if (resp.ok) {
+      const rows = await resp.json();
+      if (Array.isArray(rows)) data = rows[0] || null;
+    }
   } catch (_) {}
+
+  // Fallback: Supabase client handles token refresh automatically
+  if (!data) {
+    try {
+      const { data: rows } = await _supa.from('users')
+        .select('plan,subscription_status,admin_level')
+        .eq('id', session.user.id)
+        .limit(1);
+      data = rows && rows[0];
+    } catch (_) {}
+  }
 
   const planKey    = data?.plan ?? 'explore';
   const planLabel  = PLAN_LABELS[planKey] ?? planKey;
@@ -309,15 +322,18 @@ async function showAccount(session) {
   document.getElementById('planName').textContent   = planLabel;
   document.getElementById('planStatus').textContent = planStatus.charAt(0).toUpperCase() + planStatus.slice(1);
 
-  // Show admin link for head admins
-  if (data?.admin_level === 'head') {
-    const adminLink = document.createElement('a');
-    adminLink.href = '/admin';
-    adminLink.className = 'app-btn';
-    adminLink.style.cssText = 'text-align:center;justify-content:center;background:#7C5CFF;border-color:#7C5CFF;';
-    adminLink.textContent = 'Head dashboard →';
-    const signOutBtn = document.querySelector('#signedIn button[onclick="signOut()"]');
-    signOutBtn.parentNode.insertBefore(adminLink, signOutBtn);
+  // Show head dashboard button — DB check OR email fallback; guard against duplicate insertion
+  if (!document.getElementById('headDashBtn')) {
+    if (data?.admin_level === 'head' || email === 'amoghm2005@gmail.com') {
+      const adminLink = document.createElement('a');
+      adminLink.id = 'headDashBtn';
+      adminLink.href = '/admin';
+      adminLink.className = 'app-btn';
+      adminLink.style.cssText = 'text-align:center;justify-content:center;background:#7C5CFF;border-color:#7C5CFF;';
+      adminLink.textContent = 'Head dashboard →';
+      const signOutBtn = document.querySelector('#signedIn button[onclick="signOut()"]');
+      signOutBtn.parentNode.insertBefore(adminLink, signOutBtn);
+    }
   }
 }
 
