@@ -67,11 +67,7 @@
       <li><a href="/affiliates">Affiliates</a></li>
     </ul>
     <div class="nav-right">
-      <button class="nav-tour-btn" data-action="tour" title="Take a tour">
-        <span class="pulse"></span>
-        Show me around
-      </button>
-      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme" data-tour="theme">
         <span class="tt-track">
           <span class="tt-thumb" aria-hidden="true"></span>
@@ -1447,6 +1443,30 @@ document.getElementById('navHam').addEventListener('click', function() {
     });
   })
   .catch(function () {});
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function () {
+  var sb = window.supabase.createClient(
+    'https://xkkqcqsacgdrfwbwdqsp.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc'
+  );
+  function updateNav(session) {
+    var el = document.getElementById('navSignIn');
+    if (!el || !session) return;
+    var meta = session.user.user_metadata || {};
+    var avatar = meta.avatar_url || meta.picture;
+    var name = meta.full_name || meta.name || session.user.email;
+    if (avatar) {
+      el.removeAttribute('onmouseover');
+      el.removeAttribute('onmouseout');
+      el.style.cssText = 'padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';
+      el.innerHTML = '<img src="' + avatar + '" alt="' + name + '" title="' + name + '" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';
+    }
+  }
+  sb.auth.getSession().then(function (r) { updateNav(r.data.session); });
+  sb.auth.onAuthStateChange(function (_e, s) { updateNav(s); });
 })();
 </script>
 </body>
