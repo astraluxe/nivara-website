@@ -129,7 +129,7 @@ section {
 }
 .nav-inner {
   display: grid;
-  grid-template-columns: 0.7fr auto 1.3fr;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   height: 64px;
 }
