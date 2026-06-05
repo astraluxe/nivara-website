@@ -265,7 +265,7 @@ const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
 const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
 
-const PLAN_LABELS = { free:'Free', solo:'Solo', builder:'Builder', business:'Business', custom:'Enterprise' };
+const PLAN_LABELS = { explore:'Free', free:'Free', solo:'Solo', builder:'Builder', business:'Business', custom:'Enterprise' };
 
 async function signInWithGoogle() {
   document.getElementById('googleBtn').disabled = true;
