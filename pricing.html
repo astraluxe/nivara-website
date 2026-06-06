@@ -26,9 +26,13 @@ html,body { background:#fff!important; color:#111!important; }
 
 /* ── Plans grid ──────────────────────────────────────────────── */
 .ps { padding:64px 32px 0; max-width:1280px; margin:0 auto; }
-.pg { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--br); border:1px solid var(--br); }
-@media(max-width:1000px) { .pg { grid-template-columns:repeat(2,1fr); } }
+.pg { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--br); border:1px solid var(--br); }
+@media(max-width:900px) { .pg { grid-template-columns:repeat(2,1fr); } }
 @media(max-width:580px) { .pg { grid-template-columns:1fr; } }
+
+/* ── Plan illustration ───────────────────────────────────────── */
+.plan-pic { width:calc(100% + 48px); margin:-28px -24px 18px; height:150px; overflow:hidden; }
+.plan-pic img { width:100%; height:100%; object-fit:cover; object-position:center 18%; }
 
 /* ── Plan card ───────────────────────────────────────────────── */
 .pc { background:#fff; padding:28px 24px 24px; display:flex; flex-direction:column; position:relative; }
@@ -87,9 +91,17 @@ html,body { background:#fff!important; color:#111!important; }
 
 /* ── Team card — wide at bottom ──────────────────────────────── */
 .team-wrap { padding:0 32px 64px; max-width:1280px; margin:0 auto; }
-.tc { margin-top:1px; background:var(--g); border:1px solid var(--br); border-top:none; padding:32px 28px; display:grid; grid-template-columns:1.2fr 1fr 1fr auto; gap:32px; align-items:start; }
-@media(max-width:900px) { .tc { grid-template-columns:1fr 1fr; } }
-@media(max-width:580px) { .tc { grid-template-columns:1fr; gap:20px; } }
+.tc { margin-top:24px; background:var(--g); border:1px solid var(--br); display:grid; grid-template-columns:220px 1fr 1fr auto; align-items:start; overflow:hidden; }
+.tc-left { padding:24px; border-right:1px solid var(--br); }
+.tc-pic { width:100%; height:145px; object-fit:cover; object-position:center 20%; border-radius:6px; display:block; margin-bottom:14px; }
+.tc-col { padding:24px 20px; border-right:1px solid var(--br); }
+.tc-cta-wrap { padding:24px; display:flex; flex-direction:column; gap:8px; align-self:start; min-width:156px; }
+.tc-cta-wrap .bi { width:100%; background:#111; color:#fff; padding:11px 0; border-radius:8px; font-size:13px; font-weight:600; border:none; cursor:pointer; font-family:var(--font-sans); }
+.tc-cta-wrap .bi:hover { background:#333; }
+.tc-cta-wrap .bu { width:100%; background:transparent; color:#111; border:1px solid var(--br); padding:10px 0; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--font-sans); transition:all .15s; }
+.tc-cta-wrap .bu:hover { border-color:var(--ac); color:var(--ac); }
+@media(max-width:900px) { .tc { grid-template-columns:1fr 1fr; } .tc-left,.tc-col { border-right:none; border-bottom:1px solid var(--br); } }
+@media(max-width:580px) { .tc { grid-template-columns:1fr; } }
 .tc-brand { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); margin-bottom:4px; }
 .tc-name { font-size:20px; font-weight:600; letter-spacing:-.02em; margin-bottom:3px; display:flex; align-items:center; gap:10px; }
 .tc-soon { display:inline-flex; align-items:center; padding:3px 10px; background:#e5e5e5; border-radius:20px; font-size:10px; font-weight:600; color:var(--mu); letter-spacing:.04em; text-transform:uppercase; }
@@ -285,6 +297,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <div class="bts">
         <a href="/download" class="bf">Download free &rarr;</a>
       </div>
+      <div class="plan-pic"><img src="/images/plan-free.png" alt="Free plan"/></div>
       <hr/>
       <ul>
         <li><span class="iy">&#10003;</span>Platform AI included<span class="ch">50 tasks · lifetime</span></li>
@@ -310,6 +323,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <button class="bi" onclick="payWithINR('solo')">Pay in &#8377; 1,499 &rarr;</button>
         <button class="bu" onclick="payWithUSD()">Pay in $ 15 &rarr;</button>
       </div>
+      <div class="plan-pic"><img src="/images/plan-solo.png" alt="Solo plan"/></div>
       <hr/>
       <ul>
         <li><span class="iy">&#10003;</span>Everything in Free</li>
@@ -334,6 +348,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <button class="bi" onclick="payWithINR('builder')">Pay in &#8377; 4,999 &rarr;</button>
         <button class="bu" onclick="payWithUSD()">Pay in $ 49 &rarr;</button>
       </div>
+      <div class="plan-pic"><img src="/images/plan-builder.png" alt="Builder plan"/></div>
       <hr/>
       <ul>
         <li><span class="iy">&#10003;</span>Everything in Solo</li>
@@ -344,35 +359,51 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       </ul>
     </div>
 
-    <!-- TEAM -->
-    <div class="pc">
-      <div class="pb">adris.tech</div>
-      <div class="pn">Team</div>
-      <div class="pt">For teams running a full AI office with security, collaboration, and admin controls.</div>
-      <div class="pri">
-        <div class="pi">&#8377;19,999<sub>/mo</sub></div>
-        <div class="pu">$199 / month</div>
-      </div>
-      <div class="bts">
-        <button class="bi" onclick="payWithINR('pro')">Pay in &#8377; 19,999 &rarr;</button>
-        <button class="bu" onclick="payWithUSD()">Pay in $ 199 &rarr;</button>
-      </div>
-      <hr/>
-      <ul>
-        <li><span class="iy">&#10003;</span>Everything in Builder</li>
-        <li><span class="iy">&#10003;</span>Priority Advanced AI<span class="ch">~30,000 tasks/mo</span></li>
-        <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">Unlimited*</span></li>
-        <li><span class="iy">&#10003;</span>Mesh &mdash; 50 devices</li>
-        <li><span class="iy">&#10003;</span>Guard (security scanner)</li>
-        <li><span class="iy">&#10003;</span>Team workspace + admin controls</li>
-        <li><span class="iy">&#10003;</span>Centralised billing + SSO</li>
-        <li><span class="iy">&#10003;</span>Priority support + SLA</li>
-      </ul>
-    </div>
-
   </div>
   <p style="font-size:11px;color:var(--mu);margin-top:16px;font-family:var(--font-mono);padding:0 2px">* Unlimited runs on Business are subject to fair use. Task estimates are approximate &mdash; actual usage varies by complexity.</p>
 </section>
+
+<!-- ── TEAM WIDE CARD ─────────────────────────────────────────── -->
+<div class="team-wrap">
+  <div class="tc">
+    <!-- left: image + info -->
+    <div class="tc-left">
+      <img class="tc-pic" src="/images/plan-team.png" alt="Team plan"/>
+      <div class="tc-brand">adris.tech</div>
+      <div class="tc-name">Team</div>
+      <div class="tc-desc">For teams running a full AI office with security, collaboration, and admin controls.</div>
+      <div class="pri" style="margin-top:14px;">
+        <div class="pi">&#8377;19,999<sub>/mo</sub></div>
+        <div class="pu">$199 / month</div>
+      </div>
+    </div>
+    <!-- col 1: collaboration -->
+    <div class="tc-col">
+      <h5>Collaboration</h5>
+      <ul>
+        <li>Everything in Builder</li>
+        <li>Team workspace + admin controls</li>
+        <li>Centralised billing + SSO</li>
+        <li>Priority support + SLA</li>
+      </ul>
+    </div>
+    <!-- col 2: AI & power -->
+    <div class="tc-col">
+      <h5>AI &amp; Power</h5>
+      <ul>
+        <li>Priority Advanced AI<span class="ch" style="margin-left:6px">~30,000 tasks/mo</span></li>
+        <li>Cloud automations<span class="ch" style="margin-left:6px">Unlimited*</span></li>
+        <li>Guard (security scanner)</li>
+        <li>Mesh &mdash; 50 devices</li>
+      </ul>
+    </div>
+    <!-- buy buttons -->
+    <div class="tc-cta-wrap">
+      <button class="bi" onclick="payWithINR('pro')">Pay &#8377;19,999 &rarr;</button>
+      <button class="bu" onclick="payWithUSD()">Pay $199 &rarr;</button>
+    </div>
+  </div>
+</div>
 
 
 <!-- ── ALL PLANS INCLUDE ──────────────────────────────────────── -->
