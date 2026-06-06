@@ -31,7 +31,7 @@ html,body { background:#fff!important; color:#111!important; }
 @media(max-width:580px) { .pg { grid-template-columns:1fr; } }
 
 /* ── Plan illustration ───────────────────────────────────────── */
-.plan-pic { width:100%; height:120px; margin-bottom:16px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:8px; background:transparent; }
+.plan-pic { width:100%; height:180px; margin-bottom:18px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:10px; background:transparent; }
 .plan-pic img { max-width:100%; max-height:100%; width:auto; height:100%; object-fit:contain; display:block; }
 
 /* ── Plan card ───────────────────────────────────────────────── */
@@ -89,29 +89,33 @@ html,body { background:#fff!important; color:#111!important; }
 .ch { font-family:var(--font-mono); font-size:10px; background:rgba(124,92,255,.1); color:var(--ac); padding:1px 5px; border-radius:4px; margin-left:auto; flex-shrink:0; white-space:nowrap; }
 .pc.ft .ch { background:rgba(255,255,255,.12); color:rgba(255,255,255,.8); }
 
-/* ── Team card — wide at bottom ──────────────────────────────── */
+/* ── Team card — dark wide card ──────────────────────────────── */
 .team-wrap { padding:0 32px 64px; max-width:1280px; margin:0 auto; }
-.tc { margin-top:24px; background:var(--g); border:1px solid var(--br); display:grid; grid-template-columns:220px 1fr 1fr auto; align-items:start; overflow:hidden; }
-.tc-left { padding:24px; border-right:1px solid var(--br); }
-.tc-pic { width:100%; height:145px; object-fit:cover; object-position:center 20%; border-radius:6px; display:block; margin-bottom:14px; }
-.tc-col { padding:24px 20px; border-right:1px solid var(--br); }
-.tc-cta-wrap { padding:24px; display:flex; flex-direction:column; gap:8px; align-self:start; min-width:156px; }
-.tc-cta-wrap .bi { width:100%; background:#111; color:#fff; padding:11px 0; border-radius:8px; font-size:13px; font-weight:600; border:none; cursor:pointer; font-family:var(--font-sans); }
-.tc-cta-wrap .bi:hover { background:#333; }
-.tc-cta-wrap .bu { width:100%; background:transparent; color:#111; border:1px solid var(--br); padding:10px 0; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--font-sans); transition:all .15s; }
-.tc-cta-wrap .bu:hover { border-color:var(--ac); color:var(--ac); }
-@media(max-width:900px) { .tc { grid-template-columns:1fr 1fr; } .tc-left,.tc-col { border-right:none; border-bottom:1px solid var(--br); } }
-@media(max-width:580px) { .tc { grid-template-columns:1fr; } }
-.tc-brand { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--mu); margin-bottom:4px; }
-.tc-name { font-size:20px; font-weight:600; letter-spacing:-.02em; margin-bottom:3px; display:flex; align-items:center; gap:10px; }
-.tc-soon { display:inline-flex; align-items:center; padding:3px 10px; background:#e5e5e5; border-radius:20px; font-size:10px; font-weight:600; color:var(--mu); letter-spacing:.04em; text-transform:uppercase; }
-.tc-desc { font-size:13px; color:var(--mu); line-height:1.6; max-width:34ch; margin-top:6px; }
-.tc-col h5 { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:10px; }
-.tc-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
-.tc-col ul li { font-size:13px; color:#111; display:flex; align-items:flex-start; gap:7px; line-height:1.4; }
-.tc-col ul li::before { content:"→"; color:var(--mu); flex-shrink:0; font-size:11px; margin-top:2px; }
-.tc-cta { align-self:start; display:inline-flex; align-items:center; gap:7px; padding:11px 22px; border:1px solid #111; border-radius:8px; font-size:13px; font-weight:600; color:#111; text-decoration:none; white-space:nowrap; transition:all .15s; background:transparent; cursor:pointer; font-family:var(--font-sans); }
-.tc-cta:hover { background:#111; color:#fff; }
+.tc { margin-top:24px; background:#111; border:1px solid rgba(255,255,255,.08); border-radius:12px; display:grid; grid-template-columns:250px 1fr 210px; overflow:hidden; }
+.tc-left { padding:28px 24px; border-right:1px solid rgba(255,255,255,.07); }
+.tc-pic { width:100%; height:170px; object-fit:cover; object-position:center 20%; border-radius:8px; display:block; margin-bottom:18px; }
+.tc-brand { font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:4px; }
+.tc-name { font-size:22px; font-weight:700; letter-spacing:-.03em; color:#fff; margin-bottom:6px; }
+.tc-desc { font-size:12px; color:rgba(255,255,255,.45); line-height:1.6; margin-bottom:18px; }
+.tc-pi { font-size:30px; font-weight:700; letter-spacing:-.04em; color:#fff; display:flex; align-items:baseline; gap:3px; }
+.tc-pi sub { font-size:13px; font-weight:400; opacity:.45; }
+.tc-pu { font-size:12px; color:rgba(255,255,255,.35); margin-top:3px; }
+.tc-mid { padding:28px; display:grid; grid-template-columns:1fr 1fr; gap:28px; align-content:start; border-right:1px solid rgba(255,255,255,.07); }
+.tc-col h5 { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:12px; }
+.tc-col ul { list-style:none; display:flex; flex-direction:column; gap:9px; }
+.tc-col ul li { font-size:12.5px; color:rgba(255,255,255,.75); display:flex; align-items:flex-start; gap:7px; line-height:1.4; }
+.tc-col ul li::before { content:"→"; color:rgba(255,255,255,.25); flex-shrink:0; font-size:11px; margin-top:2px; }
+.tc .ch { background:rgba(255,255,255,.1); color:rgba(255,255,255,.65); }
+.tc-right { padding:28px 24px; display:flex; flex-direction:column; gap:10px; }
+.tc-right-lbl { font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-bottom:2px; }
+.tc-right-sub { font-size:11.5px; color:rgba(255,255,255,.45); line-height:1.6; margin-bottom:6px; }
+.tc-btn-p { width:100%; background:#fff; color:#111; padding:12px 0; border-radius:8px; font-size:13px; font-weight:700; border:none; cursor:pointer; font-family:var(--font-sans); transition:all .15s; }
+.tc-btn-p:hover { background:var(--ac); color:#fff; }
+.tc-btn-s { width:100%; background:transparent; color:rgba(255,255,255,.65); border:1px solid rgba(255,255,255,.18); padding:11px 0; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--font-sans); transition:all .15s; }
+.tc-btn-s:hover { border-color:rgba(255,255,255,.5); color:#fff; }
+.tc-badge { display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:5px 12px; background:rgba(124,92,255,.18); border:1px solid rgba(124,92,255,.3); border-radius:20px; font-size:10px; font-weight:600; color:var(--ac); font-family:var(--font-mono); letter-spacing:.04em; margin-top:4px; }
+@media(max-width:960px) { .tc { grid-template-columns:1fr 1fr; } .tc-left { border-right:none; border-bottom:1px solid rgba(255,255,255,.07); } .tc-mid { border-right:none; border-bottom:1px solid rgba(255,255,255,.07); } .tc-right { grid-column:1/-1; } }
+@media(max-width:580px) { .tc { grid-template-columns:1fr; } .tc-mid { grid-template-columns:1fr; gap:20px; } }
 
 /* ── All included ────────────────────────────────────────────── */
 .ip { background:var(--g); border-top:1px solid var(--br); border-bottom:1px solid var(--br); padding:56px 48px; }
@@ -366,41 +370,43 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 <!-- ── TEAM WIDE CARD ─────────────────────────────────────────── -->
 <div class="team-wrap">
   <div class="tc">
-    <!-- left: image + info -->
+    <!-- left: image + plan info -->
     <div class="tc-left">
       <img class="tc-pic" src="/images/plan-team.png" alt="Team plan"/>
       <div class="tc-brand">adris.tech</div>
       <div class="tc-name">Team</div>
-      <div class="tc-desc">For teams running a full AI office with security, collaboration, and admin controls.</div>
-      <div class="pri" style="margin-top:14px;">
-        <div class="pi">&#8377;19,999<sub>/mo</sub></div>
-        <div class="pu">$199 / month</div>
+      <div class="tc-desc">For teams running a full AI office — security, collaboration, and admin controls built in.</div>
+      <div class="tc-pi">&#8377;19,999<sub>/mo</sub></div>
+      <div class="tc-pu">$199 / month</div>
+    </div>
+    <!-- middle: 2-col feature grid -->
+    <div class="tc-mid">
+      <div class="tc-col">
+        <h5>Collaboration</h5>
+        <ul>
+          <li>Everything in Builder</li>
+          <li>Team workspace + admin controls</li>
+          <li>Centralised billing + SSO</li>
+          <li>Priority support + SLA</li>
+        </ul>
+      </div>
+      <div class="tc-col">
+        <h5>AI &amp; Power</h5>
+        <ul>
+          <li>Priority Advanced AI <span class="ch">~30,000 tasks/mo</span></li>
+          <li>Cloud automations <span class="ch">Unlimited*</span></li>
+          <li>Guard (security scanner)</li>
+          <li>Mesh &mdash; 50 devices</li>
+        </ul>
       </div>
     </div>
-    <!-- col 1: collaboration -->
-    <div class="tc-col">
-      <h5>Collaboration</h5>
-      <ul>
-        <li>Everything in Builder</li>
-        <li>Team workspace + admin controls</li>
-        <li>Centralised billing + SSO</li>
-        <li>Priority support + SLA</li>
-      </ul>
-    </div>
-    <!-- col 2: AI & power -->
-    <div class="tc-col">
-      <h5>AI &amp; Power</h5>
-      <ul>
-        <li>Priority Advanced AI<span class="ch" style="margin-left:6px">~30,000 tasks/mo</span></li>
-        <li>Cloud automations<span class="ch" style="margin-left:6px">Unlimited*</span></li>
-        <li>Guard (security scanner)</li>
-        <li>Mesh &mdash; 50 devices</li>
-      </ul>
-    </div>
-    <!-- buy buttons -->
-    <div class="tc-cta-wrap">
-      <button class="bi" onclick="payWithINR('pro')">Pay &#8377;19,999 &rarr;</button>
-      <button class="bu" onclick="payWithUSD()">Pay $199 &rarr;</button>
+    <!-- right: buy buttons -->
+    <div class="tc-right">
+      <div class="tc-right-lbl">Get started</div>
+      <div class="tc-right-sub">Choose your currency and activate your Team plan today.</div>
+      <button class="tc-btn-p" onclick="payWithINR('pro')">Pay &#8377;19,999 &rarr;</button>
+      <button class="tc-btn-s" onclick="payWithUSD()">Pay $199 &rarr;</button>
+      <div class="tc-badge">&#11088; Most complete</div>
     </div>
   </div>
 </div>
