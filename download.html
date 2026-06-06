@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Download adris.tech — India's AI desktop app</title>
-<meta name="description" content="Download adris.tech desktop — six AI modules in one ~10 MB installer. Free to start. Runs entirely on your machine." />
+<meta name="description" content="Download adris.tech desktop — six AI modules in one ~22 MB installer. Free to start. Runs entirely on your machine." />
 
 <!-- Open Graph / Twitter -->
 <meta property="og:type"        content="website" />
@@ -474,27 +474,28 @@
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  background: rgba(109,76,255,.05);
-  border: 1px solid rgba(109,76,255,.18);
+  background: rgba(220,38,38,.06);
+  border: 1.5px solid rgba(220,38,38,.35);
   border-radius: 10px;
-  padding: 16px 20px;
+  padding: 18px 20px;
   text-align: left;
   max-width: 560px;
-  margin: 16px auto 0;
+  margin: 20px auto 0;
 }
 .dl-notice-icon {
-  width: 20px;
-  height: 20px;
-  color: var(--accent);
+  width: 22px;
+  height: 22px;
+  color: #dc2626;
   flex-shrink: 0;
   margin-top: 1px;
 }
 .dl-notice strong {
   display: block;
   font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 5px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
 }
 .dl-notice p {
   font-size: 12px;
@@ -507,18 +508,19 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 10px;
   flex-wrap: wrap;
 }
 .dl-notice-step {
   font-family: var(--font-mono);
   font-size: 10px;
-  background: rgba(109,76,255,.1);
-  color: var(--accent);
-  border: 1px solid rgba(109,76,255,.25);
+  background: rgba(220,38,38,.08);
+  color: #dc2626;
+  border: 1px solid rgba(220,38,38,.3);
   border-radius: 4px;
   padding: 3px 9px;
   letter-spacing: .04em;
+  font-weight: 600;
 }
 .dl-notice-arrow {
   font-size: 11px;
@@ -695,7 +697,7 @@ document.getElementById('navHam').addEventListener('click', function() {
           adris.tech for Windows
           <span class="dl-card-beta">Beta</span>
         </div>
-        <div class="dl-card-sub">All 6 modules · Mesh · Voice · ~1.5 GB · one installer</div>
+        <div class="dl-card-sub">All 6 modules · Mesh · Voice · ~22 MB · one installer</div>
       </div>
       <button class="dl-btn-primary" id="completeDlBtn" onclick="handleDownload()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -727,20 +729,18 @@ document.getElementById('navHam').addEventListener('click', function() {
   <!-- SmartScreen notice -->
   <div class="dl-notice">
     <svg class="dl-notice-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
     </svg>
     <div>
-      <strong>Windows will show a security warning — this is expected</strong>
-      <p>Because we are an independent publisher not yet commercially code-signed, Microsoft SmartScreen displays a warning. <b>This is safe to proceed.</b> Simply click through as shown:</p>
+      <strong>⚠ Windows may show a SmartScreen security warning — here's what to do</strong>
+      <p>Because adris.tech is currently in <b>Windows Beta</b> and not yet commercially code-signed, Microsoft SmartScreen flags the installer as "unrecognized." <b>This is completely safe.</b> Click through in 2 steps:</p>
       <div class="dl-notice-steps">
-        <span class="dl-notice-step">Open installer</span>
+        <span class="dl-notice-step">Click "More info"</span>
         <span class="dl-notice-arrow">→</span>
-        <span class="dl-notice-step">More info</span>
-        <span class="dl-notice-arrow">→</span>
-        <span class="dl-notice-step">Run anyway</span>
+        <span class="dl-notice-step">Click "Run anyway"</span>
       </div>
-      <p style="margin-top:8px;">Code signing certificates cost ~₹16,500/year — we'll add one as soon as revenue allows. Linux users face no such restriction, which is why Linux is our next priority.</p>
+      <p style="margin-top:10px;">We are in the process of getting our publisher certificate. This warning will disappear once we're certified. You can verify the download URL is from <b>github.com/astraluxe/nivara-desktop</b> — the official release source.</p>
     </div>
   </div>
 
