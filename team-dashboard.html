@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Team Dashboard — adris.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+html,body{background:#f5f5f5!important;color:#111!important;min-height:100%}
+.nav{background:#fff!important;border-bottom:1px solid #e5e5e5!important}
+.db-wrap{max-width:860px;margin:0 auto;padding:32px 20px 60px}
+.db-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.db-name{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.db-plan-badge{padding:4px 10px;background:rgba(124,92,255,.1);color:#7C5CFF;border-radius:20px;font-size:12px;font-weight:600;border:1px solid rgba(124,92,255,.2)}
+.db-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:18px 20px}
+.stat-val{font-size:26px;font-weight:700;letter-spacing:-.02em;font-family:var(--font-mono)}
+.stat-lbl{font-size:12px;color:#6b6b6b;margin-top:2px}
+/* Tabs */
+.tabs{display:flex;gap:2px;background:#e5e5e5;border-radius:10px;padding:3px;margin-bottom:20px}
+.tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:500;border-radius:8px;cursor:pointer;transition:background .15s,color .15s;border:none;background:none;color:#6b6b6b;font-family:var(--font-sans)}
+.tab.active{background:#fff;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+/* Members */
+.member-list{background:#fff;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden}
+.member-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid #f0f0f0}
+.member-row:last-child{border-bottom:none}
+.member-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+.member-info{flex:1;min-width:0}
+.member-email{font-size:13px;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.member-sub{font-size:11px;color:#6b6b6b;margin-top:1px}
+.badge{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-admin{background:rgba(124,92,255,.1);color:#7C5CFF}
+.badge-member{background:#f5f5f5;color:#6b6b6b}
+.badge-active{background:rgba(22,163,74,.1);color:#16a34a}
+.badge-pending{background:rgba(234,179,8,.1);color:#ca8a04}
+.member-actions{display:flex;gap:8px;flex-shrink:0}
+.act-btn{padding:5px 12px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid #e5e5e5;background:#fafafa;color:#111;transition:border-color .15s,color .15s;font-family:var(--font-sans)}
+.act-btn:hover{border-color:#7C5CFF;color:#7C5CFF}
+.act-btn.danger:hover{border-color:#ef4444;color:#ef4444}
+.act-btn.copied{border-color:#16a34a;color:#16a34a}
+/* Invite section */
+.invite-section{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:20px;margin-top:16px}
+.invite-section h3{font-size:14px;font-weight:600;margin-bottom:12px}
+.invite-row{display:flex;gap:8px}
+.invite-row input{flex:1;padding:9px 12px;border:1px solid #e5e5e5;border-radius:9px;font-size:13px;font-family:var(--font-sans);outline:none;transition:border-color .15s}
+.invite-row input:focus{border-color:#7C5CFF}
+.invite-row button{padding:9px 16px;background:#7C5CFF;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:var(--font-sans);transition:opacity .15s}
+.invite-row button:hover{opacity:.85}
+.inv-result{font-size:12px;margin-top:8px;min-height:18px}
+.inv-result.ok{color:#16a34a}.inv-result.err{color:#dc2626}
+/* Usage */
+.usage-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;margin-bottom:8px}
+.usage-header{padding:14px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0}
+.usage-meta{flex:1}
+.usage-name{font-size:13px;font-weight:500}
+.usage-tasks{font-size:11px;color:#6b6b6b;margin-top:2px}
+.usage-bar-wrap{padding:14px 20px 16px}
+.usage-bar-track{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden}
+.usage-bar-fill{height:100%;border-radius:3px;transition:width .5s}
+.usage-nums{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#6b6b6b;font-family:var(--font-mono)}
+/* Settings */
+.settings-section{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:24px;margin-bottom:12px}
+.settings-section h3{font-size:14px;font-weight:600;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
+.danger-zone{background:#fff;border:1px solid #fee2e2;border-radius:12px;padding:24px}
+.danger-zone h3{font-size:14px;font-weight:600;color:#dc2626;margin-bottom:4px}
+.danger-zone p{font-size:13px;color:#6b6b6b;margin-bottom:16px}
+.danger-btn{padding:9px 18px;background:#fff;color:#dc2626;border:1px solid #dc2626;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:var(--font-sans)}
+.danger-btn:hover{background:#fef2f2}
+.save-btn{padding:9px 18px;background:#111;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:var(--font-sans)}
+.save-btn:hover{background:#7C5CFF}
+.empty{text-align:center;padding:40px 20px;color:#6b6b6b;font-size:13px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:#999;font-weight:400">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <div class="nav-right">
+      <span id="navUser" style="font-size:13px;color:#6b6b6b"></span>
+      <button onclick="signOut()" style="padding:6px 14px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;font-size:12px;cursor:pointer;color:#111;font-family:var(--font-sans)">Sign out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Loading -->
+<div id="loadingState" style="text-align:center;padding:80px 20px;color:#6b6b6b;font-size:14px">Loading dashboard…</div>
+
+<!-- Main dashboard -->
+<div class="db-wrap" id="dashboard" style="display:none">
+
+  <div class="db-head">
+    <div>
+      <div class="db-name" id="dbTeamName">—</div>
+      <div style="font-size:13px;color:#6b6b6b;margin-top:2px" id="dbAdminEmail"></div>
+    </div>
+    <span class="db-plan-badge">Team Plan</span>
+  </div>
+
+  <div class="db-stats">
+    <div class="stat-card">
+      <div class="stat-val" id="statActive">—</div>
+      <div class="stat-lbl">Active members</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statPending">—</div>
+      <div class="stat-lbl">Pending invites</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statSeats">—</div>
+      <div class="stat-lbl">Seats (max 10)</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-members" onclick="switchTab('members')">Members</button>
+    <button class="tab" id="tab-usage" onclick="switchTab('usage')">Usage</button>
+    <button class="tab" id="tab-settings" onclick="switchTab('settings')">Settings</button>
+  </div>
+
+  <!-- Members tab -->
+  <div id="tab-members-panel">
+    <div class="member-list" id="memberList"></div>
+
+    <div class="invite-section" id="inviteSection" style="display:none">
+      <h3>Invite a new member</h3>
+      <div class="invite-row">
+        <input type="email" id="inviteEmail" placeholder="member@company.com" />
+        <button onclick="sendInvite()">Send invite</button>
+      </div>
+      <div class="inv-result" id="invResult"></div>
+    </div>
+  </div>
+
+  <!-- Usage tab -->
+  <div id="tab-usage-panel" style="display:none">
+    <div id="usageList"></div>
+  </div>
+
+  <!-- Settings tab -->
+  <div id="tab-settings-panel" style="display:none">
+    <div class="settings-section">
+      <h3>Workspace settings</h3>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;margin-bottom:6px">Workspace name</label>
+        <input type="text" id="settingName" style="width:100%;padding:10px 14px;border:1px solid #e5e5e5;border-radius:10px;font-size:14px;font-family:var(--font-sans);outline:none;box-sizing:border-box" />
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;margin-bottom:6px">Plan</label>
+        <p style="font-size:13px;color:#6b6b6b">Team Plan · 10 seats · ₹19,999/mo</p>
+      </div>
+      <button class="save-btn" onclick="saveName()">Save changes</button>
+      <span id="saveMsg" style="font-size:12px;color:#16a34a;margin-left:12px"></span>
+    </div>
+
+    <div class="danger-zone">
+      <h3>Danger zone</h3>
+      <p>Deleting the workspace removes all members and cannot be undone. Their plans revert to Free.</p>
+      <button class="danger-btn" onclick="deleteWorkspace()">Delete workspace</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+
+let _session = null;
+let _team = null;
+let _members = [];
+
+const AVATARS = ['#7C5CFF','#10B981','#F59E0B','#EF4444','#3B82F6','#EC4899','#8B5CF6','#14B8A6','#F97316','#6366F1'];
+
+function initials(email) {
+  return email ? email.substring(0, 2).toUpperCase() : '??';
+}
+function avatarColor(email) {
+  let h = 0;
+  for (let i = 0; i < email.length; i++) h = email.charCodeAt(i) + ((h << 5) - h);
+  return AVATARS[Math.abs(h) % AVATARS.length];
+}
+
+async function init() {
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) { window.location.href = '/signin?next=/team-dashboard'; return; }
+  _session = session;
+  document.getElementById('navUser').textContent = session.user.email || '';
+
+  const { data: team } = await _supa.from('teams').select('*').eq('owner_id', session.user.id).maybeSingle();
+  if (!team) { window.location.href = '/team'; return; }
+  _team = team;
+
+  await loadMembers();
+  renderDashboard();
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+}
+
+async function loadMembers() {
+  const { data } = await _supa.from('team_members').select('*').eq('team_id', _team.id).order('invited_at');
+  _members = data || [];
+}
+
+function renderDashboard() {
+  document.getElementById('dbTeamName').textContent = _team.name;
+  document.getElementById('dbAdminEmail').textContent = _session.user.email;
+  document.getElementById('settingName').value = _team.name;
+
+  const active = _members.filter(m => m.status === 'active').length;
+  const pending = _members.filter(m => m.status === 'pending').length;
+
+  document.getElementById('statActive').textContent = active;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statSeats').textContent = `${active + pending} / ${_team.max_seats}`;
+
+  renderMembers();
+  renderUsage();
+
+  const canInvite = (active + pending) < _team.max_seats;
+  document.getElementById('inviteSection').style.display = canInvite ? 'block' : 'none';
+}
+
+function renderMembers() {
+  const list = document.getElementById('memberList');
+  if (!_members.length) {
+    list.innerHTML = '<div class="empty">No members yet. Invite your team below.</div>';
+    return;
+  }
+  list.innerHTML = _members.map(m => {
+    const color = avatarColor(m.email);
+    const isAdmin = m.role === 'admin';
+    const isActive = m.status === 'active';
+    const joinedDate = m.joined_at ? new Date(m.joined_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : null;
+    const invitedDate = m.invited_at ? new Date(m.invited_at).toLocaleDateString('en-IN', { day:'numeric', month:'short' }) : null;
+
+    let actions = '';
+    if (isAdmin) {
+      actions = '<span style="font-size:11px;color:#6b6b6b">Workspace admin</span>';
+    } else if (isActive) {
+      actions = `<button class="act-btn danger" onclick="removeMember('${m.id}','${m.email}')">Remove</button>`;
+    } else {
+      // pending — show copy invite + resend
+      const token = m.invite_token || '';
+      const url = token ? `https://adris.tech/join?token=${encodeURIComponent(token)}` : '';
+      actions = url
+        ? `<button class="act-btn" id="copy-${m.id}" onclick="copyInvite(this,'${url}')">Copy invite</button>
+           <button class="act-btn danger" onclick="removeMember('${m.id}','${m.email}')">Revoke</button>`
+        : `<button class="act-btn danger" onclick="removeMember('${m.id}','${m.email}')">Revoke</button>`;
+    }
+
+    return `
+      <div class="member-row">
+        <div class="member-avatar" style="background:${color}20;color:${color}">${initials(m.email)}</div>
+        <div class="member-info">
+          <div class="member-email">${m.email}</div>
+          <div class="member-sub">
+            ${isActive ? (joinedDate ? `Joined ${joinedDate}` : 'Active') : (invitedDate ? `Invited ${invitedDate}` : 'Pending')}
+          </div>
+        </div>
+        <span class="badge badge-${m.role}">${m.role}</span>
+        <span class="badge badge-${m.status}">${m.status}</span>
+        <div class="member-actions">${actions}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderUsage() {
+  const list = document.getElementById('usageList');
+  const active = _members.filter(m => m.status === 'active');
+  if (!active.length) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:#6b6b6b;font-size:13px">No active members yet.</div>';
+    return;
+  }
+  const monthlyLimit = 2000000;
+  list.innerHTML = active.map(m => {
+    const color = avatarColor(m.email);
+    return `
+      <div class="usage-card">
+        <div class="usage-header">
+          <div class="member-avatar" style="background:${color}20;color:${color}">${initials(m.email)}</div>
+          <div class="usage-meta">
+            <div class="usage-name">${m.email}</div>
+            <div class="usage-tasks">Detailed usage visible in the adris.tech desktop app</div>
+          </div>
+          <span class="badge badge-active">active</span>
+        </div>
+        <div class="usage-bar-wrap">
+          <div class="usage-bar-track">
+            <div class="usage-bar-fill" style="width:0%;background:${color}"></div>
+          </div>
+          <div class="usage-nums"><span>—</span><span>${(monthlyLimit/1000000).toFixed(0)}M tokens / mo</span></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function sendInvite() {
+  const email = document.getElementById('inviteEmail').value.trim().toLowerCase();
+  const res_el = document.getElementById('invResult');
+  if (!email) return;
+
+  const alreadyIn = _members.find(m => m.email === email);
+  if (alreadyIn) { res_el.className = 'inv-result err'; res_el.textContent = 'This email is already in the team.'; return; }
+
+  res_el.className = 'inv-result'; res_el.textContent = 'Sending…';
+
+  try {
+    const res = await fetch(`${SUPA_URL}/functions/v1/team-invite`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_session.access_token}` },
+      body: JSON.stringify({ emails: [email], team_id: _team.id })
+    });
+    const d = await res.json();
+    if (!res.ok || d.error) {
+      res_el.className = 'inv-result err'; res_el.textContent = d.error || 'Failed to send invite.';
+    } else {
+      const inv = d.results?.[0];
+      if (inv?.ok) {
+        res_el.className = 'inv-result ok';
+        res_el.textContent = `Invite link for ${email}: `;
+        const link = document.createElement('a');
+        link.href = inv.url; link.textContent = 'Copy'; link.style.cssText = 'color:#7C5CFF';
+        link.onclick = e => { e.preventDefault(); navigator.clipboard.writeText(inv.url); link.textContent = 'Copied!'; };
+        res_el.appendChild(link);
+        document.getElementById('inviteEmail').value = '';
+        await loadMembers();
+        renderDashboard();
+      } else {
+        res_el.className = 'inv-result err'; res_el.textContent = inv?.error || 'Failed.';
+      }
+    }
+  } catch (e) {
+    res_el.className = 'inv-result err'; res_el.textContent = 'Network error.';
+  }
+}
+
+async function removeMember(memberId, email) {
+  if (!confirm(`Remove ${email} from the workspace?`)) return;
+  const { error } = await _supa.from('team_members').delete().eq('id', memberId);
+  if (!error) { await loadMembers(); renderDashboard(); }
+  else alert('Could not remove member: ' + error.message);
+}
+
+function copyInvite(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy invite'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+async function saveName() {
+  const name = document.getElementById('settingName').value.trim();
+  if (!name) return;
+  const { error } = await _supa.from('teams').update({ name }).eq('id', _team.id);
+  if (!error) {
+    _team.name = name;
+    document.getElementById('dbTeamName').textContent = name;
+    const msg = document.getElementById('saveMsg');
+    msg.textContent = 'Saved!';
+    setTimeout(() => msg.textContent = '', 2000);
+  } else {
+    alert('Could not save: ' + error.message);
+  }
+}
+
+async function deleteWorkspace() {
+  if (!confirm('Delete the workspace? This removes all members and cannot be undone.')) return;
+  if (!confirm('Are you sure? All team members lose access.')) return;
+  const { error } = await _supa.from('teams').delete().eq('id', _team.id);
+  if (!error) window.location.href = '/pricing';
+  else alert('Could not delete workspace: ' + error.message);
+}
+
+function switchTab(name) {
+  ['members','usage','settings'].forEach(t => {
+    document.getElementById(`tab-${t}`).classList.toggle('active', t === name);
+    document.getElementById(`tab-${t}-panel`).style.display = t === name ? 'block' : 'none';
+  });
+}
+
+async function signOut() {
+  await _supa.auth.signOut();
+  window.location.href = '/';
+}
+
+init();
+</script>
+</body>
+</html>

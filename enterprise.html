@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Enterprise — adris.tech</title>
+<meta name="description" content="Need more than 10 seats? Contact us for an enterprise plan tailored to your team." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+html,body{background:#fff!important;color:#111!important;height:100%}
+.nav{background:#fff!important;border-bottom:1px solid #e5e5e5!important}
+.ew{min-height:calc(100dvh - 64px);display:flex;align-items:flex-start;justify-content:center;padding:60px 20px 80px;gap:60px;flex-wrap:wrap}
+.e-left{max-width:380px;flex:1}
+.e-left h1{font-size:32px;font-weight:700;letter-spacing:-.03em;line-height:1.2;margin-bottom:16px}
+.e-left p{font-size:14px;color:#6b6b6b;line-height:1.7;margin-bottom:24px}
+.e-feature{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+.e-dot{width:8px;height:8px;background:#7C5CFF;border-radius:50%;margin-top:5px;flex-shrink:0}
+.e-feature-text{font-size:13px;color:#111;line-height:1.6}
+.e-note{font-size:12px;color:#9a9a9a;margin-top:24px;padding-top:20px;border-top:1px solid #f0f0f0}
+.e-right{width:100%;max-width:460px;flex:1}
+.ecard{background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:32px}
+.ecard h2{font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
+.ecard .sub{font-size:13px;color:#6b6b6b;margin-bottom:28px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:600;color:#111;margin-bottom:6px;letter-spacing:.02em;text-transform:uppercase}
+.field input,.field select,.field textarea{width:100%;padding:10px 14px;border:1px solid #e5e5e5;border-radius:10px;font-size:14px;font-family:var(--font-sans);color:#111;background:#fafafa;outline:none;transition:border-color .15s,background .15s;box-sizing:border-box}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#7C5CFF;background:#fff}
+.field input::placeholder,.field textarea::placeholder{color:#9a9a9a}
+.field textarea{resize:vertical;min-height:100px;line-height:1.6}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.submit-btn{width:100%;padding:13px;background:#7C5CFF;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;margin-top:8px;font-family:var(--font-sans)}
+.submit-btn:hover{opacity:.85}
+.submit-btn:disabled{opacity:.5;cursor:default}
+.err{font-size:13px;color:#dc2626;margin-top:10px;display:none}
+/* Success */
+.success-wrap{text-align:center;padding:40px 20px}
+.success-icon{width:60px;height:60px;background:rgba(22,163,74,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.success-wrap h2{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.success-wrap p{font-size:14px;color:#6b6b6b;line-height:1.6;max-width:300px;margin:0 auto 24px}
+.back-link{color:#7C5CFF;font-size:13px;text-decoration:none}
+.back-link:hover{text-decoration:underline}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:#999;font-weight:400">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <div class="nav-right">
+      <a href="/pricing" class="nav-link">Pricing</a>
+      <a href="/download" class="btn">Download
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="ew">
+  <div class="e-left">
+    <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid rgba(124,92,255,.2);border-radius:20px;background:rgba(124,92,255,.05);font-size:12px;font-weight:600;color:#7C5CFF;margin-bottom:24px">Enterprise plan</div>
+    <h1>Built for larger teams &amp; orgs</h1>
+    <p>Need more than 10 seats, custom quotas, or dedicated support? We'll put together a plan that fits exactly what your team needs.</p>
+
+    <div class="e-feature">
+      <div class="e-dot"></div>
+      <div class="e-feature-text"><strong>Unlimited seats</strong> — no cap on team size</div>
+    </div>
+    <div class="e-feature">
+      <div class="e-dot"></div>
+      <div class="e-feature-text"><strong>Custom token quotas</strong> — set per seat or org-wide</div>
+    </div>
+    <div class="e-feature">
+      <div class="e-dot"></div>
+      <div class="e-feature-text"><strong>Priority support</strong> — direct line to our team</div>
+    </div>
+    <div class="e-feature">
+      <div class="e-dot"></div>
+      <div class="e-feature-text"><strong>Centralized billing</strong> — single invoice for the whole org</div>
+    </div>
+    <div class="e-feature">
+      <div class="e-dot"></div>
+      <div class="e-feature-text"><strong>SLA &amp; onboarding</strong> — we help your team get set up</div>
+    </div>
+    <div class="e-feature">
+      <div class="e-dot"></div>
+      <div class="e-feature-text"><strong>Custom integrations</strong> — Mesh, Krew, or Vault tailored to your stack</div>
+    </div>
+
+    <div class="e-note">
+      We respond within <strong>7 business days</strong>. Complex requirements may take longer — we'll keep you updated every step.
+    </div>
+  </div>
+
+  <div class="e-right">
+    <div class="ecard">
+
+      <!-- Form state -->
+      <div id="formState">
+        <h2>Tell us about your team</h2>
+        <p class="sub">We'll review your requirements and get back with a custom quote.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Your name</label>
+            <input type="text" id="contactName" placeholder="First Last" />
+          </div>
+          <div class="field">
+            <label>Work email</label>
+            <input type="email" id="contactEmail" placeholder="you@company.com" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Company name</label>
+            <input type="text" id="companyName" placeholder="Acme Corp" />
+          </div>
+          <div class="field">
+            <label>Company size</label>
+            <select id="companySize">
+              <option value="">Select…</option>
+              <option value="11-50">11 – 50 people</option>
+              <option value="51-200">51 – 200 people</option>
+              <option value="201-1000">201 – 1,000 people</option>
+              <option value="1000+">1,000+ people</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Seats needed</label>
+          <input type="number" id="seatsNeeded" placeholder="e.g. 25" min="11" />
+        </div>
+
+        <div class="field">
+          <label>Requirements</label>
+          <textarea id="requirements" placeholder="Describe what you need — seat count, token limits, integrations, onboarding help, etc."></textarea>
+        </div>
+
+        <div class="err" id="errMsg"></div>
+        <button class="submit-btn" id="submitBtn" onclick="submitForm()">Submit request →</button>
+        <p style="font-size:12px;color:#9a9a9a;text-align:center;margin-top:12px">No commitment required. We'll respond within 7 business days.</p>
+      </div>
+
+      <!-- Success state -->
+      <div id="successState" style="display:none" class="success-wrap">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M5 12l4 4 10-10" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2>Request sent!</h2>
+        <p>We've received your enterprise inquiry and will respond to <strong id="successEmail"></strong> within 7 business days.</p>
+        <a href="/" class="back-link">← Back to adris.tech</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+
+function showErr(msg) {
+  const el = document.getElementById('errMsg');
+  el.textContent = msg; el.style.display = 'block';
+}
+function clearErr() { document.getElementById('errMsg').style.display = 'none'; }
+
+async function submitForm() {
+  clearErr();
+  const contactName  = document.getElementById('contactName').value.trim();
+  const contactEmail = document.getElementById('contactEmail').value.trim().toLowerCase();
+  const companyName  = document.getElementById('companyName').value.trim();
+  const companySize  = document.getElementById('companySize').value;
+  const seatsRaw     = document.getElementById('seatsNeeded').value.trim();
+  const requirements = document.getElementById('requirements').value.trim();
+
+  if (!contactName)  { showErr('Please enter your name.'); return; }
+  if (!contactEmail || !contactEmail.includes('@')) { showErr('Please enter a valid email address.'); return; }
+  if (!companyName)  { showErr('Please enter your company name.'); return; }
+  if (!requirements) { showErr('Please describe your requirements so we can put together the right plan.'); return; }
+
+  const seatsNeeded = seatsRaw ? parseInt(seatsRaw, 10) : null;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  const { error } = await _supa.from('enterprise_requests').insert({
+    contact_name:  contactName,
+    contact_email: contactEmail,
+    company_name:  companyName,
+    company_size:  companySize || null,
+    seats_needed:  seatsNeeded,
+    requirements,
+  });
+
+  if (error) {
+    showErr('Could not submit: ' + error.message);
+    btn.disabled = false; btn.textContent = 'Submit request →';
+    return;
+  }
+
+  document.getElementById('successEmail').textContent = contactEmail;
+  document.getElementById('formState').style.display = 'none';
+  document.getElementById('successState').style.display = 'block';
+}
+
+// Pre-fill if URL has seats param
+const urlSeats = new URLSearchParams(location.search).get('seats');
+if (urlSeats) document.getElementById('seatsNeeded').value = urlSeats;
+</script>
+</body>
+</html>

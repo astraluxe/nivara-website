@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create Workspace — adris.tech</title>
+<meta name="description" content="Set up your team workspace on adris.tech." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+html,body{background:#fff!important;color:#111!important;height:100%}
+.nav{background:#fff!important;border-bottom:1px solid #e5e5e5!important}
+.tw{min-height:calc(100dvh - 64px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.tbox{width:100%;max-width:520px}
+.tbox-head{text-align:center;margin-bottom:32px}
+.tbox-icon{width:52px;height:52px;background:#7C5CFF;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.tbox-head h1{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.tbox-head p{font-size:13px;color:#6b6b6b;line-height:1.6}
+.tcard{background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:32px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12px;font-weight:600;color:#111;margin-bottom:6px;letter-spacing:.02em;text-transform:uppercase}
+.field input,.field select{width:100%;padding:10px 14px;border:1px solid #e5e5e5;border-radius:10px;font-size:14px;font-family:var(--font-sans);color:#111;background:#fafafa;outline:none;transition:border-color .15s,background .15s;box-sizing:border-box}
+.field input:focus,.field select:focus{border-color:#7C5CFF;background:#fff}
+.field input::placeholder{color:#9a9a9a}
+.seats-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.seats-label{font-size:12px;font-weight:600;color:#111;letter-spacing:.02em;text-transform:uppercase}
+.seats-count{font-size:12px;font-weight:600;color:#7C5CFF;font-family:var(--font-mono)}
+.seat-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.seat-row input{flex:1}
+.seat-remove{width:32px;height:32px;border:1px solid #e5e5e5;border-radius:8px;background:#fafafa;color:#6b6b6b;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:border-color .15s,color .15s;font-family:var(--font-sans)}
+.seat-remove:hover{border-color:#ef4444;color:#ef4444}
+.add-seat{display:flex;align-items:center;gap:6px;background:none;border:1px dashed #e5e5e5;border-radius:10px;padding:9px 14px;width:100%;cursor:pointer;font-size:13px;color:#6b6b6b;transition:border-color .15s,color .15s;font-family:var(--font-sans)}
+.add-seat:hover{border-color:#7C5CFF;color:#7C5CFF}
+.enterprise-note{font-size:12px;color:#6b6b6b;margin-top:8px;padding:10px 14px;border:1px solid #e5e5e5;border-radius:8px;background:#fafafa;display:none}
+.enterprise-note a{color:#7C5CFF;text-decoration:none}
+.submit-btn{width:100%;padding:13px;background:#7C5CFF;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;margin-top:8px;font-family:var(--font-sans)}
+.submit-btn:hover{opacity:.85}
+.submit-btn:disabled{opacity:.5;cursor:default}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 20px;border:1px solid #e5e5e5;border-radius:10px;background:#fff;font-size:14px;font-weight:500;color:#111;cursor:pointer;transition:border-color .15s,background .15s;font-family:var(--font-sans)}
+.google-btn:hover{border-color:#7C5CFF;background:#fafafa}
+.err{font-size:13px;color:#dc2626;margin-top:10px;display:none}
+/* Success */
+.inv-list{margin-top:24px;display:flex;flex-direction:column;gap:8px}
+.inv-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid #e5e5e5;border-radius:10px;background:#fafafa}
+.inv-email{flex:1;font-size:13px;color:#111;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.inv-copy{padding:5px 12px;border:1px solid #e5e5e5;border-radius:7px;background:#fff;font-size:12px;font-weight:500;cursor:pointer;color:#111;transition:border-color .15s;font-family:var(--font-sans);flex-shrink:0}
+.inv-copy:hover{border-color:#7C5CFF;color:#7C5CFF}
+.inv-copy.copied{border-color:#16a34a;color:#16a34a}
+.go-dash{display:block;width:100%;padding:12px;background:#111;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;text-align:center;text-decoration:none;margin-top:20px;transition:background .15s;font-family:var(--font-sans);cursor:pointer}
+.go-dash:hover{background:#7C5CFF}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:#999;font-weight:400">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <div class="nav-right">
+      <a href="/pricing" class="nav-link">Pricing</a>
+      <a href="/download" class="btn">Download
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="tw">
+  <div class="tbox">
+
+    <!-- Loading -->
+    <div id="loadingState" style="text-align:center;color:#6b6b6b;font-size:14px">Checking session…</div>
+
+    <!-- Not signed in -->
+    <div id="authState" style="display:none">
+      <div class="tbox-head">
+        <div class="tbox-icon">
+          <svg viewBox="0 0 26 24" fill="none" width="26" height="24">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="white"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="white"/>
+          </svg>
+        </div>
+        <h1>Create your workspace</h1>
+        <p>Sign in to set up your team on adris.tech.<br/>Team plan · up to 10 seats · ₹19,999/mo</p>
+      </div>
+      <div class="tcard" style="text-align:center">
+        <button class="google-btn" onclick="signIn()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+            <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332Z" fill="#FBBC05"/>
+            <path d="M9 3.583c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.167 6.656 3.583 9 3.583Z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+        <p style="font-size:12px;color:#9a9a9a;margin-top:16px">Already have a workspace? <a href="/team-dashboard" style="color:#7C5CFF;text-decoration:none">Go to dashboard →</a></p>
+      </div>
+    </div>
+
+    <!-- Workspace form -->
+    <div id="formState" style="display:none">
+      <div class="tbox-head">
+        <div class="tbox-icon">
+          <svg viewBox="0 0 26 24" fill="none" width="26" height="24">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="white"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="white"/>
+          </svg>
+        </div>
+        <h1>Set up workspace</h1>
+        <p>You're the admin. Invite your team members below.</p>
+      </div>
+      <div class="tcard">
+        <div class="field">
+          <label>Workspace name</label>
+          <input type="text" id="teamName" placeholder="e.g. Acme Corp" maxlength="80" />
+        </div>
+
+        <div style="margin-bottom:18px">
+          <div class="seats-bar">
+            <span class="seats-label">Team members</span>
+            <span class="seats-count"><span id="seatUsed">1</span>/10 seats</span>
+          </div>
+          <p style="font-size:12px;color:#6b6b6b;margin-bottom:12px">1 seat is reserved for you (admin). Add up to 9 members — they'll receive an invite link.</p>
+          <div id="seatRows"></div>
+          <button class="add-seat" id="addSeatBtn" onclick="addSeat()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Add member
+          </button>
+          <div class="enterprise-note" id="enterpriseNote">
+            Need more than 10 seats? <a href="/enterprise">Contact us for an Enterprise plan →</a>
+          </div>
+        </div>
+
+        <div class="err" id="errMsg"></div>
+        <button class="submit-btn" id="submitBtn" onclick="createWorkspace()">Create workspace &amp; send invites →</button>
+        <p style="font-size:12px;color:#9a9a9a;text-align:center;margin-top:12px">Invite links are valid for 7 days. You can resend from the dashboard.</p>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div id="successState" style="display:none">
+      <div class="tbox-head">
+        <div class="tbox-icon" style="background:#16a34a">
+          <svg viewBox="0 0 20 20" fill="none" width="20" height="20"><path d="M4 10l4 4 8-8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h1 id="successTitle">Workspace created!</h1>
+        <p id="successDesc">Share the invite links below with your team members.</p>
+      </div>
+      <div class="tcard">
+        <p style="font-size:13px;color:#6b6b6b;margin-bottom:4px">Invite links (valid 7 days):</p>
+        <div class="inv-list" id="inviteList"></div>
+        <a href="/team-dashboard" class="go-dash">Go to team dashboard →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa3Fjc2FjZ2RyZndie2RxcCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQ2Nzk1NTM2LCJleHAiOjIwNjIzNzE1MzZ9.3v-YbIhFoWpM5f0OxKOd_bFi0a8fV0iW6m5HS6G6oOc';
+const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
+
+let _session = null;
+
+function show(id) {
+  ['loadingState','authState','formState','successState'].forEach(s =>
+    document.getElementById(s).style.display = s === id ? (id === 'formState' ? 'block' : 'block') : 'none'
+  );
+}
+
+async function init() {
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) { show('authState'); return; }
+  _session = session;
+  const { data: existing } = await _supa.from('teams').select('id').eq('owner_id', session.user.id).maybeSingle();
+  if (existing) { window.location.href = '/team-dashboard'; return; }
+  show('formState');
+}
+
+async function signIn() {
+  await _supa.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + '/team' }
+  });
+}
+
+_supa.auth.onAuthStateChange((_ev, session) => {
+  if (session && !_session) { _session = session; init(); }
+});
+
+// Seat management
+let seatCount = 0;
+
+function addSeat() {
+  if (seatCount >= 9) return;
+  seatCount++;
+  const row = document.createElement('div');
+  row.className = 'seat-row';
+  row.id = `seat-${seatCount}`;
+  row.innerHTML = `
+    <input type="email" placeholder="member@company.com" />
+    <button class="seat-remove" onclick="removeSeat(${seatCount})" title="Remove">×</button>
+  `;
+  document.getElementById('seatRows').appendChild(row);
+  updateSeatUI();
+}
+
+function removeSeat(n) {
+  const el = document.getElementById(`seat-${n}`);
+  if (el) { el.remove(); seatCount = document.querySelectorAll('.seat-row').length; updateSeatUI(); }
+}
+
+function updateSeatUI() {
+  const used = document.querySelectorAll('.seat-row').length + 1;
+  document.getElementById('seatUsed').textContent = used;
+  document.getElementById('addSeatBtn').disabled = used >= 10;
+  document.getElementById('enterpriseNote').style.display = used >= 10 ? 'block' : 'none';
+}
+
+function getEmails() {
+  return Array.from(document.querySelectorAll('.seat-row input'))
+    .map(i => i.value.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+async function createWorkspace() {
+  const teamName = document.getElementById('teamName').value.trim();
+  const errEl = document.getElementById('errMsg');
+  errEl.style.display = 'none';
+
+  if (!teamName) { showErr('Please enter a workspace name.'); return; }
+
+  const emails = getEmails();
+  if (emails.length === 0) {
+    if (!confirm('No members added — create workspace without inviting anyone?')) return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating workspace…';
+
+  try {
+    const res = await fetch(`${SUPA_URL}/functions/v1/team-create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_session.access_token}`
+      },
+      body: JSON.stringify({ team_name: teamName, emails })
+    });
+    const d = await res.json();
+    if (!res.ok || !d.ok) {
+      if (res.status === 409) { window.location.href = '/team-dashboard'; return; }
+      showErr(d.error || 'Something went wrong. Try again.');
+      btn.disabled = false;
+      btn.textContent = 'Create workspace & send invites →';
+      return;
+    }
+    showSuccess(d);
+  } catch (e) {
+    showErr('Network error: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = 'Create workspace & send invites →';
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('errMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function showSuccess(d) {
+  document.getElementById('successTitle').textContent = `"${d.team_name}" is live!`;
+  if (d.invites?.length) {
+    document.getElementById('successDesc').textContent = 'Share these invite links with your team. Links expire in 7 days.';
+    const list = document.getElementById('inviteList');
+    list.innerHTML = '';
+    d.invites.forEach(inv => {
+      const row = document.createElement('div');
+      row.className = 'inv-row';
+      row.innerHTML = `
+        <span class="inv-email">${inv.email}</span>
+        ${inv.ok
+          ? `<button class="inv-copy" onclick="copyLink(this,'${inv.url}')">Copy link</button>`
+          : `<span style="font-size:12px;color:#dc2626">Failed</span>`
+        }
+      `;
+      list.appendChild(row);
+    });
+  } else {
+    document.getElementById('successDesc').textContent = 'Workspace created. Add members from your dashboard.';
+    document.getElementById('inviteList').innerHTML = '<p style="font-size:13px;color:#6b6b6b">No invites sent.</p>';
+  }
+  show('successState');
+}
+
+function copyLink(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy link'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
