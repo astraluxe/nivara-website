@@ -74,6 +74,7 @@ html,body{background:#f5f5f5!important;color:#111!important;min-height:100%}
 .empty{text-align:center;padding:40px 20px;color:#6b6b6b;font-size:13px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -99,6 +100,18 @@ html,body{background:#f5f5f5!important;color:#111!important;min-height:100%}
 
 <!-- Main dashboard -->
 <div class="db-wrap" id="dashboard" style="display:none">
+
+  <!-- Payment banner — shown if subscription_status is not 'active' -->
+  <div id="payBanner" style="display:none;background:#111;border-radius:12px;padding:18px 22px;margin-bottom:20px;display:none;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px">⚡ Activate your Team plan</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5)">Workspace created — complete payment to unlock all features for your team.</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0">
+      <button onclick="payINR()" style="padding:9px 18px;background:#7C5CFF;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans)">Pay ₹19,999 →</button>
+      <button onclick="payUSD()" style="padding:9px 16px;background:transparent;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);border-radius:9px;font-size:13px;cursor:pointer;font-family:var(--font-sans)">Pay $199</button>
+    </div>
+  </div>
 
   <div class="db-head">
     <div>
@@ -202,6 +215,13 @@ async function init() {
   const { data: team } = await _supa.from('teams').select('*').eq('owner_id', session.user.id).maybeSingle();
   if (!team) { window.location.href = '/team'; return; }
   _team = team;
+
+  // Check if subscription is active; show payment banner if not
+  const { data: userRow } = await _supa.from('users').select('subscription_status').eq('id', session.user.id).maybeSingle();
+  if (userRow && userRow.subscription_status !== 'active') {
+    const banner = document.getElementById('payBanner');
+    banner.style.display = 'flex';
+  }
 
   await loadMembers();
   renderDashboard();
@@ -392,6 +412,42 @@ function switchTab(name) {
     document.getElementById(`tab-${t}`).classList.toggle('active', t === name);
     document.getElementById(`tab-${t}-panel`).style.display = t === name ? 'block' : 'none';
   });
+}
+
+async function payINR() {
+  try {
+    const res = await fetch(`${SUPA_URL}/functions/v1/razorpay-create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_session.access_token}` },
+      body: JSON.stringify({ plan: 'pro' })
+    });
+    const order = await res.json();
+    if (!res.ok || order.error) { alert('Payment setup failed: ' + (order.error || 'Please try again.')); return; }
+
+    const rzp = new window.Razorpay({
+      key:         order.key_id,
+      order_id:    order.order_id,
+      amount:      order.amount,
+      currency:    order.currency,
+      name:        'adris.tech',
+      image:       'https://adris.tech/icon.png',
+      description: 'Team Plan',
+      prefill:     { email: _session.user.email || '', name: _session.user.user_metadata?.full_name || '' },
+      theme:       { color: '#7C5CFF' },
+      method:      { upi: true, card: true, netbanking: true, wallet: true, emi: false },
+      handler: function() {
+        document.getElementById('payBanner').style.display = 'none';
+        alert('Payment successful! Your Team plan is now active.');
+      },
+    });
+    rzp.open();
+  } catch (err) {
+    alert('Something went wrong: ' + err.message);
+  }
+}
+
+function payUSD() {
+  window.open('mailto:hello@adris.tech?subject=adris.tech Team plan — USD payment ($199)');
 }
 
 async function signOut() {

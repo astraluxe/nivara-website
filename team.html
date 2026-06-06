@@ -41,17 +41,40 @@ html,body{background:#fff!important;color:#111!important;height:100%}
 .google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 20px;border:1px solid #e5e5e5;border-radius:10px;background:#fff;font-size:14px;font-weight:500;color:#111;cursor:pointer;transition:border-color .15s,background .15s;font-family:var(--font-sans)}
 .google-btn:hover{border-color:#7C5CFF;background:#fafafa}
 .err{font-size:13px;color:#dc2626;margin-top:10px;display:none}
-/* Success */
-.inv-list{margin-top:24px;display:flex;flex-direction:column;gap:8px}
+/* Invite rows */
+.inv-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
 .inv-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid #e5e5e5;border-radius:10px;background:#fafafa}
 .inv-email{flex:1;font-size:13px;color:#111;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .inv-copy{padding:5px 12px;border:1px solid #e5e5e5;border-radius:7px;background:#fff;font-size:12px;font-weight:500;cursor:pointer;color:#111;transition:border-color .15s;font-family:var(--font-sans);flex-shrink:0}
 .inv-copy:hover{border-color:#7C5CFF;color:#7C5CFF}
 .inv-copy.copied{border-color:#16a34a;color:#16a34a}
-.go-dash{display:block;width:100%;padding:12px;background:#111;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;text-align:center;text-decoration:none;margin-top:20px;transition:background .15s;font-family:var(--font-sans);cursor:pointer}
-.go-dash:hover{background:#7C5CFF}
+/* Payment box */
+.pay-box{margin-top:24px;background:#111;border-radius:14px;padding:24px}
+.pay-box-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px}
+.pay-box-title{font-size:17px;font-weight:700;color:#fff;margin-bottom:4px}
+.pay-box-sub{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:20px;line-height:1.5}
+.pay-btn-inr{width:100%;padding:13px;background:#7C5CFF;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:var(--font-sans);transition:opacity .15s}
+.pay-btn-inr:hover{opacity:.85}
+.pay-btn-usd{width:100%;padding:12px;background:transparent;color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.18);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);transition:border-color .15s,color .15s}
+.pay-btn-usd:hover{border-color:rgba(255,255,255,.5);color:#fff}
+.pay-done{text-align:center;padding:16px 0 4px}
+.pay-done-icon{font-size:32px;margin-bottom:8px}
+.pay-done-text{font-size:14px;font-weight:600;color:#16a34a;margin-bottom:4px}
+.pay-done-sub{font-size:12px;color:rgba(255,255,255,.45)}
+.go-dash{display:block;width:100%;padding:12px;background:#fff;color:#111;border:none;border-radius:10px;font-size:14px;font-weight:600;text-align:center;text-decoration:none;margin-top:16px;transition:background .15s,color .15s;font-family:var(--font-sans);cursor:pointer}
+.go-dash:hover{background:#7C5CFF;color:#fff}
+/* USD modal */
+.mb{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s}
+.mb.open{opacity:1;pointer-events:all}
+.mbx{background:#fff;border-radius:16px;padding:32px;max-width:380px;width:90%;position:relative}
+.mx{position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b6b6b;line-height:1}
+.mbx h3{font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.mbx p{font-size:13px;color:#6b6b6b;line-height:1.6;margin-bottom:20px}
+.mbx a{display:block;padding:12px;background:#7C5CFF;color:#fff;border-radius:10px;font-size:14px;font-weight:600;text-align:center;text-decoration:none;transition:opacity .15s}
+.mbx a:hover{opacity:.85}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
@@ -155,15 +178,47 @@ html,body{background:#fff!important;color:#111!important;height:100%}
           <svg viewBox="0 0 20 20" fill="none" width="20" height="20"><path d="M4 10l4 4 8-8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <h1 id="successTitle">Workspace created!</h1>
-        <p id="successDesc">Share the invite links below with your team members.</p>
+        <p id="successDesc">Now activate your plan and share invite links below.</p>
       </div>
       <div class="tcard">
-        <p style="font-size:13px;color:#6b6b6b;margin-bottom:4px">Invite links (valid 7 days):</p>
+
+        <!-- Invite links -->
+        <p style="font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6b6b6b;margin-bottom:0">Invite links (valid 7 days)</p>
         <div class="inv-list" id="inviteList"></div>
-        <a href="/team-dashboard" class="go-dash">Go to team dashboard →</a>
+
+        <!-- Payment section -->
+        <div class="pay-box" id="payBox">
+          <div class="pay-box-label">// step 2 — activate plan</div>
+          <div class="pay-box-title">Pay ₹19,999 / month</div>
+          <div class="pay-box-sub">Your workspace is created. Complete payment to unlock all Team features and activate your members' access.</div>
+          <button class="pay-btn-inr" onclick="payINR()">Pay ₹19,999 with Razorpay →</button>
+          <button class="pay-btn-usd" onclick="payUSD()">Pay in USD ($199) →</button>
+        </div>
+
+        <!-- After payment success -->
+        <div id="payDone" style="display:none" class="pay-box">
+          <div class="pay-done">
+            <div class="pay-done-icon">🎉</div>
+            <div class="pay-done-text">Payment successful!</div>
+            <div class="pay-done-sub">Team plan is now active for your workspace.</div>
+          </div>
+          <a href="/team-dashboard" class="go-dash">Go to team dashboard →</a>
+        </div>
+
+        <p style="font-size:11px;color:#9a9a9a;text-align:center;margin-top:14px">Payments secured by Razorpay · Cancel anytime from dashboard</p>
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- USD modal -->
+<div class="mb" id="usdModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbx">
+    <button class="mx" onclick="document.getElementById('usdModal').classList.remove('open')">&#215;</button>
+    <h3>International payment</h3>
+    <p>USD payments are processed via email. Email us your workspace name and we'll send a payment link within 2 hours.</p>
+    <a href="mailto:hello@adris.tech?subject=adris.tech Team plan — USD payment">Email us to pay $199 →</a>
   </div>
 </div>
 
@@ -176,7 +231,7 @@ let _session = null;
 
 function show(id) {
   ['loadingState','authState','formState','successState'].forEach(s =>
-    document.getElementById(s).style.display = s === id ? (id === 'formState' ? 'block' : 'block') : 'none'
+    document.getElementById(s).style.display = s === id ? 'block' : 'none'
   );
 }
 
@@ -200,7 +255,7 @@ _supa.auth.onAuthStateChange((_ev, session) => {
   if (session && !_session) { _session = session; init(); }
 });
 
-// Seat management
+// ── Seat management ────────────────────────────────────────────────
 let seatCount = 0;
 
 function addSeat() {
@@ -231,15 +286,13 @@ function updateSeatUI() {
 
 function getEmails() {
   return Array.from(document.querySelectorAll('.seat-row input'))
-    .map(i => i.value.trim().toLowerCase())
-    .filter(Boolean);
+    .map(i => i.value.trim().toLowerCase()).filter(Boolean);
 }
 
+// ── Workspace creation ─────────────────────────────────────────────
 async function createWorkspace() {
   const teamName = document.getElementById('teamName').value.trim();
-  const errEl = document.getElementById('errMsg');
-  errEl.style.display = 'none';
-
+  document.getElementById('errMsg').style.display = 'none';
   if (!teamName) { showErr('Please enter a workspace name.'); return; }
 
   const emails = getEmails();
@@ -254,10 +307,7 @@ async function createWorkspace() {
   try {
     const res = await fetch(`${SUPA_URL}/functions/v1/team-create`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${_session.access_token}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_session.access_token}` },
       body: JSON.stringify({ team_name: teamName, emails })
     });
     const d = await res.json();
@@ -278,16 +328,14 @@ async function createWorkspace() {
 
 function showErr(msg) {
   const el = document.getElementById('errMsg');
-  el.textContent = msg;
-  el.style.display = 'block';
+  el.textContent = msg; el.style.display = 'block';
 }
 
 function showSuccess(d) {
   document.getElementById('successTitle').textContent = `"${d.team_name}" is live!`;
+  const list = document.getElementById('inviteList');
+  list.innerHTML = '';
   if (d.invites?.length) {
-    document.getElementById('successDesc').textContent = 'Share these invite links with your team. Links expire in 7 days.';
-    const list = document.getElementById('inviteList');
-    list.innerHTML = '';
     d.invites.forEach(inv => {
       const row = document.createElement('div');
       row.className = 'inv-row';
@@ -301,8 +349,7 @@ function showSuccess(d) {
       list.appendChild(row);
     });
   } else {
-    document.getElementById('successDesc').textContent = 'Workspace created. Add members from your dashboard.';
-    document.getElementById('inviteList').innerHTML = '<p style="font-size:13px;color:#6b6b6b">No invites sent.</p>';
+    list.innerHTML = '<p style="font-size:13px;color:#6b6b6b;margin-bottom:0">No members invited yet — add them from the dashboard.</p>';
   }
   show('successState');
 }
@@ -313,6 +360,50 @@ function copyLink(btn, url) {
     btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'Copy link'; btn.classList.remove('copied'); }, 2000);
   });
+}
+
+// ── Payment ────────────────────────────────────────────────────────
+async function payINR() {
+  try {
+    const res = await fetch(`${SUPA_URL}/functions/v1/razorpay-create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_session.access_token}` },
+      body: JSON.stringify({ plan: 'pro' })
+    });
+    const order = await res.json();
+    if (!res.ok || order.error) { alert('Payment setup failed: ' + (order.error || 'Please try again.')); return; }
+
+    const rzp = new window.Razorpay({
+      key:         order.key_id,
+      order_id:    order.order_id,
+      amount:      order.amount,
+      currency:    order.currency,
+      name:        'adris.tech',
+      image:       'https://adris.tech/icon.png',
+      description: 'Team Plan',
+      prefill:     { email: _session.user.email || '', name: _session.user.user_metadata?.full_name || '' },
+      theme:       { color: '#7C5CFF' },
+      method:      { upi: true, card: true, netbanking: true, wallet: true, emi: false },
+      config: {
+        display: {
+          blocks: { upi: { name: 'UPI / GPay / PhonePe', instruments: [{ method: 'upi' }] } },
+          sequence: ['block.upi', 'block.card', 'block.netbanking', 'block.wallet'],
+          preferences: { show_default_blocks: true },
+        },
+      },
+      handler: function() {
+        document.getElementById('payBox').style.display = 'none';
+        document.getElementById('payDone').style.display = 'block';
+      },
+    });
+    rzp.open();
+  } catch (err) {
+    alert('Something went wrong: ' + err.message);
+  }
+}
+
+function payUSD() {
+  document.getElementById('usdModal').classList.add('open');
 }
 
 init();
