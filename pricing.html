@@ -632,28 +632,26 @@ function payWithUSD() {
 
 async function startRazorpayPayment(planKey, session) {
   try {
-    const res = await fetch(SUPA_URL + '/functions/v1/razorpay-create-order', {
+    const res = await fetch(SUPA_URL + '/functions/v1/razorpay-create-subscription', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
       body: JSON.stringify({ plan: planKey }),
     });
-    const order = await res.json();
-    if (!res.ok || order.error) { alert('Payment setup failed: ' + (order.error || 'Please try again.')); return; }
+    const sub = await res.json();
+    if (!res.ok || sub.error) { alert('Payment setup failed: ' + (sub.error || 'Please try again.')); return; }
 
     const userEmail = session.user.email || '';
 
     const rzp = new window.Razorpay({
-      key:         order.key_id,
-      order_id:    order.order_id,
-      amount:      order.amount,
-      currency:    order.currency,
+      key:             sub.key_id,
+      subscription_id: sub.subscription_id,
       name:        'adris.tech',
       image:       'https://adris.tech/icon.png',
-      description: PLAN_NAMES[planKey] + ' Plan',
+      description: PLAN_NAMES[planKey] + ' Plan — Monthly',
       prefill:     { email: userEmail, name: session.user.user_metadata?.full_name || '' },
       theme:       { color: '#7C5CFF' },
       method: {
-        upi:        true,   // GPay, PhonePe, Paytm, BHIM
+        upi:        true,
         card:       true,
         netbanking: true,
         wallet:     true,
@@ -669,7 +667,6 @@ async function startRazorpayPayment(planKey, session) {
         },
       },
       handler: function() {
-        // Show success with email so user knows which account to use in the exe
         const planLabel = PLAN_NAMES[planKey] || planKey;
         document.getElementById('successPlan').textContent = planLabel;
         document.getElementById('successEmail').textContent = userEmail || 'your Google account';

@@ -365,22 +365,20 @@ function copyLink(btn, url) {
 // ── Payment ────────────────────────────────────────────────────────
 async function payINR() {
   try {
-    const res = await fetch(`${SUPA_URL}/functions/v1/razorpay-create-order`, {
+    const res = await fetch(`${SUPA_URL}/functions/v1/razorpay-create-subscription`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_session.access_token}` },
-      body: JSON.stringify({ plan: 'pro' })
+      body: JSON.stringify({ plan: 'business' })
     });
-    const order = await res.json();
-    if (!res.ok || order.error) { alert('Payment setup failed: ' + (order.error || 'Please try again.')); return; }
+    const sub = await res.json();
+    if (!res.ok || sub.error) { alert('Payment setup failed: ' + (sub.error || 'Please try again.')); return; }
 
     const rzp = new window.Razorpay({
-      key:         order.key_id,
-      order_id:    order.order_id,
-      amount:      order.amount,
-      currency:    order.currency,
+      key:             sub.key_id,
+      subscription_id: sub.subscription_id,
       name:        'adris.tech',
       image:       'https://adris.tech/icon.png',
-      description: 'Team Plan',
+      description: 'Team Plan — Monthly',
       prefill:     { email: _session.user.email || '', name: _session.user.user_metadata?.full_name || '' },
       theme:       { color: '#7C5CFF' },
       method:      { upi: true, card: true, netbanking: true, wallet: true, emi: false },
