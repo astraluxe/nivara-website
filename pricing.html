@@ -652,22 +652,6 @@ async function startRazorpayPayment(planKey, session) {
       description: PLAN_NAMES[planKey] + ' Plan — Monthly',
       prefill:     { email: userEmail, name: session.user.user_metadata?.full_name || '' },
       theme:       { color: '#7C5CFF' },
-      method: {
-        upi:        true,
-        card:       true,
-        netbanking: true,
-        wallet:     true,
-        emi:        false,
-      },
-      config: {
-        display: {
-          blocks: {
-            upi: { name: 'UPI / GPay / PhonePe', instruments: [{ method: 'upi' }] },
-          },
-          sequence: ['block.upi', 'block.card', 'block.netbanking', 'block.wallet'],
-          preferences: { show_default_blocks: true },
-        },
-      },
       handler: function() {
         const planLabel = PLAN_NAMES[planKey] || planKey;
         document.getElementById('successPlan').textContent = planLabel;
