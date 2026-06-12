@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>krew-stream Connection Test</title>
+<style>
+  body { font-family: monospace; background: #0a0a0a; color: #e0e0e0; padding: 24px; max-width: 780px; margin: 0 auto; }
+  h2 { color: #a78bfa; margin-bottom: 4px; }
+  p.sub { color: #888; font-size: 13px; margin-top: 0; }
+  label { display: block; margin-top: 16px; color: #ccc; font-size: 13px; margin-bottom: 4px; }
+  input, textarea { width: 100%; box-sizing: border-box; background: #1a1a1a; border: 1px solid #333; color: #e0e0e0; padding: 8px 10px; border-radius: 6px; font-family: monospace; font-size: 13px; }
+  button { margin-top: 14px; padding: 10px 22px; background: #7c3aed; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  button:hover { background: #6d28d9; }
+  button:disabled { background: #444; cursor: not-allowed; }
+  #output { margin-top: 20px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 14px; min-height: 120px; white-space: pre-wrap; font-size: 13px; line-height: 1.6; }
+  .ok { color: #4ade80; }
+  .err { color: #f87171; }
+  .info { color: #60a5fa; }
+  .chunk { color: #e0e0e0; }
+  hr { border: none; border-top: 1px solid #222; margin: 20px 0; }
+</style>
+</head>
+<body>
+<h2>krew-stream Diagnostic</h2>
+<p class="sub">Tests the adris.tech AI connection (nivara mode) directly from your browser.</p>
+
+<hr>
+<h3 style="color:#60a5fa;font-size:14px">Step 1 — Sign In</h3>
+<label>Email</label>
+<input type="email" id="email" value="astraluxe.tech@gmail.com" />
+<label>Password</label>
+<input type="password" id="password" placeholder="Your adris.tech password" />
+<button id="loginBtn" onclick="doLogin()">Sign In &amp; Get Token</button>
+
+<div id="tokenSection" style="display:none">
+  <hr>
+  <h3 style="color:#60a5fa;font-size:14px">Step 2 — Test krew-stream</h3>
+  <label>Access Token (auto-filled after sign-in)</label>
+  <textarea id="token" rows="3" style="font-size:11px"></textarea>
+  <label>Test Message</label>
+  <input type="text" id="msg" value="Hello! What is 2+2?" />
+  <button id="testBtn" onclick="doTest()">Test krew-stream</button>
+</div>
+
+<hr>
+<div id="output"><span class="info">Results will appear here...</span></div>
+
+<script>
+const SUPABASE_URL = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0';
+const KREW_URL = `${SUPABASE_URL}/functions/v1/krew-stream`;
+
+const out = document.getElementById('output');
+function log(msg, cls='') {
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = msg + '\n';
+  out.appendChild(span);
+  out.scrollTop = out.scrollHeight;
+}
+function clearLog() { out.innerHTML = ''; }
+
+async function doLogin() {
+  clearLog();
+  const email = document.getElementById('email').value.trim();
+  const pass = document.getElementById('password').value;
+  if (!email || !pass) { log('Enter email and password.', 'err'); return; }
+
+  document.getElementById('loginBtn').disabled = true;
+  log('Signing in...', 'info');
+
+  try {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': ANON_KEY,
+      },
+      body: JSON.stringify({ email, password: pass }),
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      log(`Sign-in failed (${r.status}): ${JSON.stringify(data)}`, 'err');
+      document.getElementById('loginBtn').disabled = false;
+      return;
+    }
+    const token = data.access_token;
+    log(`✓ Signed in! Token expires in ${data.expires_in}s`, 'ok');
+
+    // Decode JWT to show plan info
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      log(`  User ID: ${payload.sub}`, 'info');
+      log(`  Email: ${payload.email || '(see user_metadata)'}`, 'info');
+    } catch {}
+
+    document.getElementById('token').value = token;
+    document.getElementById('tokenSection').style.display = 'block';
+  } catch(e) {
+    log(`Network error during sign-in: ${e}`, 'err');
+  }
+  document.getElementById('loginBtn').disabled = false;
+}
+
+async function doTest() {
+  clearLog();
+  const token = document.getElementById('token').value.trim();
+  const msg = document.getElementById('msg').value.trim();
+  if (!token) { log('No token — sign in first.', 'err'); return; }
+
+  document.getElementById('testBtn').disabled = true;
+  log(`→ POST ${KREW_URL}`, 'info');
+  log(`→ Authorization: Bearer ${token.slice(0, 30)}...`, 'info');
+  log(`→ Message: "${msg}"`, 'info');
+  log('', '');
+
+  const startMs = Date.now();
+
+  try {
+    const r = await fetch(KREW_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'apikey': ANON_KEY,
+      },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: msg }],
+        systemPrompt: '',
+      }),
+    });
+
+    log(`← HTTP ${r.status} ${r.statusText} (${Date.now()-startMs}ms)`, r.ok ? 'ok' : 'err');
+
+    if (!r.ok) {
+      const body = await r.text();
+      log(`← Body: ${body}`, 'err');
+      document.getElementById('testBtn').disabled = false;
+      return;
+    }
+
+    // Read SSE stream
+    log('← Streaming response:', 'info');
+    const reader = r.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    let chunkCount = 0;
+    let responseText = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop(); // keep incomplete line
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6);
+          if (data === '[DONE]') {
+            log(`\n✓ Stream complete! (${Date.now()-startMs}ms total, ${chunkCount} chunks)`, 'ok');
+            log(`← Full response: "${responseText}"`, 'ok');
+          } else if (data === '[TRUNCATED]') {
+            log('[TRUNCATED]', 'err');
+          } else {
+            try {
+              const v = JSON.parse(data);
+              if (v.text) {
+                chunkCount++;
+                responseText += v.text;
+                process.stdout ? null : log(v.text, 'chunk');
+                out.lastChild && (out.lastChild.textContent = responseText);
+                if (chunkCount === 1) log('', 'chunk'); // placeholder for streaming text
+              } else if (v.error) {
+                log(`← Error from krew-stream: ${v.error}`, 'err');
+              } else {
+                log(`← Unknown SSE data: ${data}`, 'info');
+              }
+            } catch {
+              log(`← Raw SSE: ${data}`, 'info');
+            }
+          }
+        } else if (line && !line.startsWith(':')) {
+          log(`← Non-data line: ${line}`, 'info');
+        }
+      }
+    }
+  } catch(e) {
+    log(`✗ Network error: ${e}`, 'err');
+    log('', '');
+    log('This means your browser/machine cannot reach the Supabase Edge Function.', 'err');
+    log('Possible causes:', 'info');
+    log('  • Firewall blocking outbound HTTPS to supabase.co', 'info');
+    log('  • DNS resolution failure for xkkqcqsacgdrfwbwdqsp.supabase.co', 'info');
+    log('  • VPN or proxy interfering', 'info');
+    log('  • Windows Defender / antivirus blocking the connection', 'info');
+  }
+  document.getElementById('testBtn').disabled = false;
+}
+</script>
+</body>
+</html>
