@@ -15,7 +15,7 @@
 <meta property="og:url"         content="https://adris.tech/download" />
 <meta property="og:image"       content="https://adris.tech/og-cover.png" />
 <meta name="twitter:card"       content="summary_large_image" />
-<meta name="twitter:site"       content="@adris_tech" />
+<meta name="twitter:creator"    content="@Amogh_Misra_" />
 <meta name="twitter:title"      content="Download adris.tech" />
 <meta name="twitter:description" content="Six AI modules. One installer. Runs locally on Windows." />
 <meta name="twitter:image"      content="https://adris.tech/og-cover.png" />
@@ -989,9 +989,8 @@ document.getElementById('navHam').addEventListener('click', function() {
         <h3>Connect</h3>
         <ul>
           <li><a href="/download">Download — free</a></li>
-          <li><a href="#">X / @adris_tech</a></li>
-          <li><a href="#">LinkedIn</a></li>
-          <li><a href="mailto:hello@adris.tech">hello@adris.tech</a></li>
+          <li><a href="https://x.com/Amogh_Misra_" target="_blank" rel="noopener">X · @Amogh_Misra_</a></li>
+          <li><a href="/partner">Contact / Partner</a></li>
         </ul>
       </div>
     </div>
@@ -1051,14 +1050,14 @@ document.getElementById('navHam').addEventListener('click', function() {
   })();
 
   // ── Download URLs
-  const WIN_INSTALLER = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris.tech_1.0.30_x64-setup.exe';
+  const WIN_INSTALLER = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup.exe';
 
   function _isWindowsUser() {
     const ua = navigator.userAgent.toLowerCase();
     const isMac   = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
     const isLinux = /linux/.test(ua) && !/android/.test(ua);
     if (isMac || isLinux) {
-      alert('macOS and Linux builds are coming soon. Follow @adris_tech for updates.');
+      alert('macOS and Linux builds are coming soon. Check adris.tech for updates.');
       return false;
     }
     return true;
