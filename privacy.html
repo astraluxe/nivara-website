@@ -116,7 +116,7 @@ document.getElementById('navHam').addEventListener('click', function() {
 <section style="padding:0 0 clamp(72px,8vw,120px);">
   <div class="wrap">
     <div class="legal-wrap">
-      <p class="legal-meta">Last updated: 30 May 2026 · Effective immediately · Bengaluru, India</p>
+      <p class="legal-meta">Last updated: 13 June 2026 · Effective immediately · Bengaluru, India</p>
       <p class="legal-intro">adris.tech ("Adris", "we", "us", or "our") operates the adris.tech website and the Adris desktop application (the "App"). This policy explains what data we collect, why we collect it, and how you can control it. We've written it in plain language — not lawyer-speak.</p>
 
       <h2>1. Who we are</h2>
@@ -138,7 +138,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       </ul>
 
       <h3>2c. Cloud feature data</h3>
-      <p>If you use adris.tech Cloud AI (our server-side model inference), we process your message through our Supabase Edge Function and log token usage to enforce plan limits. We do not store message content beyond the immediate request/response cycle.</p>
+      <p>If you use adris.tech AI mode, we deliver a temporary, session-scoped API key to your device via our Supabase Edge Function. This key is held exclusively in application memory (RAM) and is never written to disk — it is discarded when the App closes. Your AI messages are sent directly from the App to Google Gemini using this key; they do not pass through our servers. We log aggregate token counts (not message content) to enforce your monthly plan limit, synced every 5 minutes from your device to our database.</p>
 
       <h3>2d. Payment data</h3>
       <p>Payments are processed by Razorpay. We never see or store your card number, UPI PIN, or bank credentials. We receive a payment confirmation and subscription status from Razorpay's webhook.</p>
@@ -192,7 +192,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       <p>The Adris desktop app does not use cookies. The website uses strictly necessary cookies only (session state for the theme toggle and tour progress). No third-party tracking cookies are set.</p>
 
       <h2>8. Security</h2>
-      <p>All data in transit is encrypted via TLS 1.2+. Data at rest in Supabase is AES-256 encrypted. API keys you enter in the App are stored in your operating system's native keychain (Windows Credential Manager), not in our database. We perform regular security audits and notify affected users within 72 hours of a confirmed data breach.</p>
+      <p>All data in transit is encrypted via TLS 1.2+. Data at rest in Supabase is AES-256 encrypted. API keys you enter in the App are stored in your operating system's native keychain (Windows Credential Manager), not in our database. The adris.tech AI session key (a temporary credential delivered for your session) is stored only in application RAM and is never persisted to disk or our servers — it is automatically forgotten when the App closes. We perform regular security audits and notify affected users within 72 hours of a confirmed data breach.</p>
 
       <h2>9. Children's privacy</h2>
       <p>Adris is not directed at children under 13. We do not knowingly collect data from children. If you believe we have inadvertently collected data from a child, email us immediately and we will delete it.</p>
