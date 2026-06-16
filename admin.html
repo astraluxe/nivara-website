@@ -229,6 +229,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <button class="tab" onclick="switchTab('announcements')">Announcements</button>
       <button class="tab" onclick="switchTab('feedback')">Feedback</button>
       <button class="tab" onclick="switchTab('revenue')">Revenue</button>
+      <button class="tab" onclick="switchTab('offers')">Offers</button>
     </div>
 
     <!-- OVERVIEW TAB -->
@@ -443,6 +444,58 @@ tr:hover td { background:rgba(124,92,255,.03); }
 
     </div>
 
+    <!-- OFFERS TAB -->
+    <div id="tab-offers" class="tab-panel">
+      <div class="ann-form">
+        <h3>Create promo offer</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Offer name</label>
+            <input type="text" id="promo-name" placeholder="e.g. Early Bird Launch" />
+          </div>
+          <div class="form-group">
+            <label>Code (uppercase)</label>
+            <input type="text" id="promo-code" placeholder="e.g. EARLYBIRD50" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Discount %</label>
+            <input type="number" id="promo-discount" placeholder="e.g. 50" min="1" max="100" />
+          </div>
+          <div class="form-group">
+            <label>Max uses (blank = unlimited)</label>
+            <input type="number" id="promo-max-uses" placeholder="e.g. 100" min="1" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expires at (optional)</label>
+            <input type="datetime-local" id="promo-expires" />
+          </div>
+          <div class="form-group">
+            <label>Active</label>
+            <select id="promo-active">
+              <option value="true">Yes — live immediately</option>
+              <option value="false">No — draft</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;margin-top:4px">
+          <button class="ann-submit" onclick="createPromo()">Create offer</button>
+          <span class="ann-msg" id="promoMsg"></span>
+        </div>
+      </div>
+
+      <div class="sec">All promo codes</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Code</th><th>Discount</th><th>Uses</th><th>Max uses</th><th>Active</th><th>Expires</th><th>Created</th><th>Actions</th></tr></thead>
+          <tbody id="promoTable"></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- REVENUE TAB -->
     <div id="tab-revenue" class="tab-panel">
       <div class="stats-grid" style="margin-bottom:20px">
@@ -537,13 +590,14 @@ function checkPin() {
 
 // ── Tabs ─────────────────────────────────────────────────────────────────────
 function switchTab(name) {
-  const tabs = ['overview','users','affiliates','announcements','feedback','revenue'];
+  const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers'];
   document.querySelectorAll('.tab').forEach((t,i) => {
     t.classList.toggle('active', tabs[i]===name);
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   if (name === 'affiliates') loadAffiliates();
+  if (name === 'offers') loadOffers();
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
@@ -959,6 +1013,79 @@ async function revokeAffiliate(id, email) {
   if (!confirm(`Revoke affiliate status for ${email}?`)) return;
   await _supa.from('affiliate_applications').update({ status: 'rejected', rejected_reason: 'Revoked by admin' }).eq('id', id);
   _affLoaded = false; loadAffiliates();
+}
+
+// ── Promo / Offers CRUD ───────────────────────────────────────────────────────
+let _offersLoaded = false;
+async function loadOffers() {
+  const { data, error } = await _supa.from('promo_codes')
+    .select('*').order('created_at', { ascending: false });
+  if (error) { console.error('offers load:', error); return; }
+  renderOffers(data || []);
+  _offersLoaded = true;
+}
+
+function renderOffers(rows) {
+  document.getElementById('promoTable').innerHTML = rows.length
+    ? rows.map(r => `
+      <tr id="promo-row-${r.id}">
+        <td style="font-size:12px;font-weight:500">${r.name}</td>
+        <td class="mono" style="font-size:11px;color:var(--accent);letter-spacing:.06em">${r.code}</td>
+        <td class="mono" style="font-size:12px;color:var(--green)">${r.discount_pct}%</td>
+        <td class="mono" style="font-size:11px">${r.uses_count||0}</td>
+        <td class="mono" style="font-size:11px;color:var(--muted)">${r.max_uses ?? '∞'}</td>
+        <td><span class="${r.active?'status-active':'status-free'}" style="font-size:11px;font-family:var(--mono)">${r.active?'live':'draft'}</span></td>
+        <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(r.expires_at)}</td>
+        <td class="mono" style="font-size:10px;color:var(--muted)">${fmtDate(r.created_at)}</td>
+        <td style="display:flex;gap:6px;align-items:center">
+          <button class="act-btn ${r.active?'toggle-on':'toggle-off'}" onclick="togglePromo('${r.id}',${r.active})">${r.active?'Deactivate':'Activate'}</button>
+          <button class="act-btn del" onclick="deletePromo('${r.id}')">Delete</button>
+        </td>
+      </tr>`).join('')
+    : `<tr><td colspan="9" class="empty">No promo codes yet</td></tr>`;
+}
+
+async function createPromo() {
+  const name      = document.getElementById('promo-name').value.trim();
+  const code      = document.getElementById('promo-code').value.trim().toUpperCase();
+  const discountS = document.getElementById('promo-discount').value.trim();
+  const maxUsesS  = document.getElementById('promo-max-uses').value.trim();
+  const expires   = document.getElementById('promo-expires').value;
+  const active    = document.getElementById('promo-active').value === 'true';
+  const msg       = document.getElementById('promoMsg');
+
+  if (!name || !code || !discountS) { msg.textContent = 'Name, code, and discount % are required.'; msg.style.color='var(--red)'; return; }
+  const discount_pct = parseInt(discountS, 10);
+  if (isNaN(discount_pct) || discount_pct < 1 || discount_pct > 100) { msg.textContent = 'Discount must be 1–100.'; msg.style.color='var(--red)'; return; }
+
+  msg.textContent = 'Saving…'; msg.style.color = 'var(--muted)';
+  const { error } = await _supa.from('promo_codes').insert({
+    name, code, discount_pct,
+    max_uses:   maxUsesS ? parseInt(maxUsesS, 10) : null,
+    expires_at: expires  || null,
+    active,
+  });
+
+  if (error) {
+    msg.textContent = error.code === '23505' ? 'Code already exists.' : 'Error: ' + error.message;
+    msg.style.color = 'var(--red)';
+  } else {
+    msg.textContent = 'Created ✓'; msg.style.color = 'var(--green)';
+    ['promo-name','promo-code','promo-discount','promo-max-uses','promo-expires'].forEach(id => { document.getElementById(id).value = ''; });
+    setTimeout(() => { msg.textContent = ''; }, 3000);
+    await loadOffers();
+  }
+}
+
+async function togglePromo(id, currentlyActive) {
+  const { error } = await _supa.from('promo_codes').update({ active: !currentlyActive }).eq('id', id);
+  if (!error) await loadOffers();
+}
+
+async function deletePromo(id) {
+  if (!confirm('Delete this promo code? Users who applied it will keep their discount.')) return;
+  const { error } = await _supa.from('promo_codes').delete().eq('id', id);
+  if (!error) await loadOffers();
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────

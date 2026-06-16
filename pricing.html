@@ -240,6 +240,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <li><a href="/pricing" style="font-weight:600">Pricing</a></li>
       <li><a href="/download">Download</a></li>
       <li><a href="/affiliates">Affiliates</a></li>
+      <li><a href="/promo" style="color:#7C5CFF;font-weight:600">Offers</a></li>
     </ul>
     <div class="nav-right">
       <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid #e5e5e5;border-radius:8px;font-size:12px;font-weight:500;color:#111;text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='#7C5CFF';this.style.color='#7C5CFF'" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#111'">Sign in</a>
@@ -285,6 +286,20 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   <p>Free to start. Upgrade when you need more AI power, automation, or devices.</p>
 </section>
 
+<!-- ── PROMO BANNER (shown only when user has active promo) ─── -->
+<div id="promoBanner" style="display:none;max-width:680px;margin:0 auto;padding:0 32px 0;margin-top:24px">
+  <div style="background:rgba(124,92,255,.08);border:1px solid rgba(124,92,255,.25);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:14px;">
+    <div style="width:34px;height:34px;background:rgba(124,92,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="#7C5CFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:600;color:#7C5CFF;margin-bottom:2px" id="promoBannerTitle">Offer applied</div>
+      <div style="font-size:12px;color:#6b6b6b" id="promoBannerDesc">Your discount is reflected in the prices below.</div>
+    </div>
+    <a href="/promo" style="font-size:11px;color:#7C5CFF;text-decoration:none;white-space:nowrap;font-family:var(--font-mono)">manage →</a>
+  </div>
+</div>
+
 <!-- ── PLANS ─────────────────────────────────────────────────── -->
 <section class="ps">
   <div class="pg">
@@ -320,7 +335,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <div class="pn">Solo</div>
       <div class="pt">For freelancers, creators and students doing daily AI work.</div>
       <div class="pri">
-        <div class="pi" style="flex-wrap:wrap;gap:6px">
+        <div class="pi" data-price-inr="1499" style="flex-wrap:wrap;gap:6px">
           <span style="text-decoration:line-through;opacity:.35;font-size:.65em;font-weight:500">&#8377;1,799</span>&#8377;1,499<sub>/mo</sub>
         </div>
         <div class="pu"><span style="text-decoration:line-through;opacity:.5">$18</span> &nbsp;$15 / month</div>
@@ -347,7 +362,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <div class="pn">Builder</div>
       <div class="pt">For agencies, founders and power users running real AI workflows.</div>
       <div class="pri">
-        <div class="pi">&#8377;4,999<sub>/mo</sub></div>
+        <div class="pi" data-price-inr="4999">&#8377;4,999<sub>/mo</sub></div>
         <div class="pu">$49 / month</div>
       </div>
       <div class="plan-pic"><img src="/images/plan-builder.png" alt="Builder plan"/></div>
@@ -674,6 +689,35 @@ async function onLoad() {
     if (pending) {
       sessionStorage.removeItem('pendingPlan');
       await startRazorpayPayment(pending, session);
+    }
+
+    // Check for active promo and show discounted prices
+    const { data: userData } = await _supa.from('users')
+      .select('active_promo').eq('id', session.user.id).single();
+    if (userData?.active_promo?.discount_pct) {
+      const p = userData.active_promo;
+      const pct = p.discount_pct;
+
+      // Show banner
+      document.getElementById('promoBannerTitle').textContent = p.name + ' — ' + pct + '% off applied';
+      document.getElementById('promoBannerDesc').textContent = 'Your exclusive discount is reflected in the prices below.';
+      document.getElementById('promoBanner').style.display = 'block';
+
+      // Update all .pi elements (price displays) to show discounted amount
+      document.querySelectorAll('[data-price-inr]').forEach(el => {
+        const orig = parseInt(el.getAttribute('data-price-inr'), 10);
+        const disc = Math.round(orig * (1 - pct / 100));
+        const origEl = el.querySelector('.orig-price');
+        const discEl = el.querySelector('.disc-price');
+        if (origEl && discEl) {
+          origEl.textContent = '₹' + orig.toLocaleString('en-IN');
+          discEl.textContent = '₹' + disc.toLocaleString('en-IN');
+          origEl.style.display = 'inline';
+          discEl.style.display = 'inline';
+        } else {
+          el.innerHTML = '<span style="text-decoration:line-through;opacity:.45;font-size:.65em">₹'+orig.toLocaleString('en-IN')+'</span> ₹' + disc.toLocaleString('en-IN');
+        }
+      });
     }
   }
 }
