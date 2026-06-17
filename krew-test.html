@@ -9,46 +9,52 @@
   p.sub { color: #888; font-size: 13px; margin-top: 0; }
   label { display: block; margin-top: 16px; color: #ccc; font-size: 13px; margin-bottom: 4px; }
   input, textarea { width: 100%; box-sizing: border-box; background: #1a1a1a; border: 1px solid #333; color: #e0e0e0; padding: 8px 10px; border-radius: 6px; font-family: monospace; font-size: 13px; }
-  button { margin-top: 14px; padding: 10px 22px; background: #7c3aed; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
-  button:hover { background: #6d28d9; }
-  button:disabled { background: #444; cursor: not-allowed; }
-  #output { margin-top: 20px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 14px; min-height: 120px; white-space: pre-wrap; font-size: 13px; line-height: 1.6; }
+  button { margin-top: 10px; padding: 10px 22px; background: #7c3aed; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  button.secondary { background: #2a2a2a; border: 1px solid #444; }
+  button:hover { opacity: 0.85; }
+  button:disabled { background: #444; cursor: not-allowed; opacity: 0.6; }
+  #output { margin-top: 20px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 14px; min-height: 100px; white-space: pre-wrap; font-size: 13px; line-height: 1.6; }
   .ok { color: #4ade80; }
   .err { color: #f87171; }
   .info { color: #60a5fa; }
-  .chunk { color: #e0e0e0; }
+  .warn { color: #fbbf24; }
   hr { border: none; border-top: 1px solid #222; margin: 20px 0; }
+  .step { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 16px; margin-bottom: 14px; }
+  .step h3 { color: #a78bfa; font-size: 14px; margin: 0 0 8px 0; }
+  .tip { background: #1a1120; border: 1px solid #4c1d95; border-radius: 6px; padding: 12px; font-size: 12px; color: #c4b5fd; margin-top: 10px; }
 </style>
 </head>
 <body>
 <h2>krew-stream Diagnostic</h2>
-<p class="sub">Tests the adris.tech AI connection (nivara mode) directly from your browser.</p>
+<p class="sub">Checks whether adris.tech AI (krew-stream) is reachable from your machine.</p>
 
-<hr>
-<h3 style="color:#60a5fa;font-size:14px">Step 1 — Sign In</h3>
-<label>Email</label>
-<input type="email" id="email" value="astraluxe.tech@gmail.com" />
-<label>Password</label>
-<input type="password" id="password" placeholder="Your adris.tech password" />
-<button id="loginBtn" onclick="doLogin()">Sign In &amp; Get Token</button>
-
-<div id="tokenSection" style="display:none">
-  <hr>
-  <h3 style="color:#60a5fa;font-size:14px">Step 2 — Test krew-stream</h3>
-  <label>Access Token (auto-filled after sign-in)</label>
-  <textarea id="token" rows="3" style="font-size:11px"></textarea>
-  <label>Test Message</label>
-  <input type="text" id="msg" value="Hello! What is 2+2?" />
-  <button id="testBtn" onclick="doTest()">Test krew-stream</button>
+<div class="step">
+  <h3>Step 1 — Network Connectivity Test (no login needed)</h3>
+  <p style="color:#888;font-size:12px;margin:0 0 8px">Checks if your browser can reach the Supabase endpoint at all.</p>
+  <button onclick="doConnectivityTest()">Run Connectivity Check</button>
 </div>
 
-<hr>
-<div id="output"><span class="info">Results will appear here...</span></div>
+<div class="step">
+  <h3>Step 2 — Full Stream Test (needs your session token)</h3>
+  <label>Paste your session token here:</label>
+  <textarea id="token" rows="3" style="font-size:11px" placeholder="eyJhbGci..."></textarea>
+  <div class="tip">
+    <b>How to get your token from the adris.tech app:</b><br>
+    In the app, click your profile / account → there should be a "Copy Session Token" option (if not, add one per instructions below).<br><br>
+    <b>Alternative — from app DevTools (if enabled):</b><br>
+    Press <code>Ctrl+Shift+I</code> in the app → Console → type: <code>JSON.parse(Object.keys(localStorage).find(k=>k.includes('supabase'))&&localStorage[Object.keys(localStorage).find(k=>k.includes('supabase'))]).access_token</code>
+  </div>
+  <label style="margin-top:12px">Test message</label>
+  <input type="text" id="msg" value="Hello! What is 2+2?" />
+  <button id="testBtn" onclick="doTest()">Test krew-stream with token</button>
+</div>
+
+<div id="output"><span class="info">Results appear here...</span></div>
 
 <script>
 const SUPABASE_URL = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
 const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0';
-const KREW_URL = `${SUPABASE_URL}/functions/v1/krew-stream`;
+const KREW_URL  = `${SUPABASE_URL}/functions/v1/krew-stream`;
 
 const out = document.getElementById('output');
 function log(msg, cls='') {
@@ -60,62 +66,82 @@ function log(msg, cls='') {
 }
 function clearLog() { out.innerHTML = ''; }
 
-async function doLogin() {
+async function doConnectivityTest() {
   clearLog();
-  const email = document.getElementById('email').value.trim();
-  const pass = document.getElementById('password').value;
-  if (!email || !pass) { log('Enter email and password.', 'err'); return; }
+  log('=== Connectivity Test ===', 'info');
+  log('');
 
-  document.getElementById('loginBtn').disabled = true;
-  log('Signing in...', 'info');
-
+  // 1. DNS / basic fetch — use a GET to the Supabase health endpoint
+  const healthUrl = `${SUPABASE_URL}/health`;
+  log(`→ Checking Supabase domain...`, 'info');
+  log(`  GET ${healthUrl}`, 'info');
   try {
-    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': ANON_KEY,
-      },
-      body: JSON.stringify({ email, password: pass }),
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      log(`Sign-in failed (${r.status}): ${JSON.stringify(data)}`, 'err');
-      document.getElementById('loginBtn').disabled = false;
-      return;
-    }
-    const token = data.access_token;
-    log(`✓ Signed in! Token expires in ${data.expires_in}s`, 'ok');
-
-    // Decode JWT to show plan info
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      log(`  User ID: ${payload.sub}`, 'info');
-      log(`  Email: ${payload.email || '(see user_metadata)'}`, 'info');
-    } catch {}
-
-    document.getElementById('token').value = token;
-    document.getElementById('tokenSection').style.display = 'block';
+    const t0 = Date.now();
+    const r = await fetch(healthUrl, { method: 'GET', mode: 'no-cors' });
+    // no-cors always returns opaque, but if it doesn't throw, network works
+    log(`✓ Supabase domain reachable (${Date.now()-t0}ms) — network is OK`, 'ok');
   } catch(e) {
-    log(`Network error during sign-in: ${e}`, 'err');
+    log(`✗ Cannot reach ${SUPABASE_URL}`, 'err');
+    log(`  Error: ${e}`, 'err');
+    log('', '');
+    log('Possible causes:', 'warn');
+    log('  • Firewall / Windows Defender blocking outbound HTTPS to supabase.co', 'warn');
+    log('  • DNS cannot resolve xkkqcqsacgdrfwbwdqsp.supabase.co', 'warn');
+    log('  • VPN or proxy interfering', 'warn');
+    log('  • Corporate network blocking external connections', 'warn');
+    return;
   }
-  document.getElementById('loginBtn').disabled = false;
+
+  // 2. Check edge function reachability (GET → should return 405 or 401, not a network error)
+  log('', '');
+  log(`→ Checking krew-stream endpoint reachability...`, 'info');
+  log(`  POST ${KREW_URL} (no auth — expect 401)`, 'info');
+  try {
+    const t0 = Date.now();
+    const r = await fetch(KREW_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': ANON_KEY },
+      body: JSON.stringify({ messages: [], systemPrompt: '' }),
+    });
+    log(`← HTTP ${r.status} ${r.statusText} (${Date.now()-t0}ms)`, r.status === 401 || r.status === 403 ? 'ok' : 'warn');
+    const body = await r.text();
+    log(`← Body: ${body.slice(0, 200)}`, 'info');
+    if (r.status === 401 || r.status === 403) {
+      log('', '');
+      log('✓ krew-stream endpoint is reachable! (401 = auth required — expected)', 'ok');
+      log('  The network path is fine. The issue is likely in the Rust HTTP client', 'ok');
+      log('  inside the desktop app, NOT a network problem.', 'ok');
+      log('', '');
+      log('→ Next step: paste your session token above and run Step 2 to test the', 'info');
+      log('  full authenticated flow from the browser.', 'info');
+    } else if (r.ok) {
+      log('✓ krew-stream responded (check the stream output above)', 'ok');
+    } else {
+      log(`  Unexpected status. Check if the edge function is deployed.`, 'warn');
+    }
+  } catch(e) {
+    log(`✗ Cannot reach krew-stream endpoint`, 'err');
+    log(`  Error: ${e}`, 'err');
+    log('', '');
+    log('The Supabase domain resolved but the edge function is not reachable.', 'warn');
+    log('This is unusual — try again in a minute (cold start?).', 'warn');
+  }
 }
 
 async function doTest() {
   clearLog();
   const token = document.getElementById('token').value.trim();
-  const msg = document.getElementById('msg').value.trim();
-  if (!token) { log('No token — sign in first.', 'err'); return; }
+  const msg   = document.getElementById('msg').value.trim();
+  if (!token) { log('No token pasted. See the instructions above.', 'err'); return; }
 
   document.getElementById('testBtn').disabled = true;
+  log('=== Authenticated Stream Test ===', 'info');
   log(`→ POST ${KREW_URL}`, 'info');
-  log(`→ Authorization: Bearer ${token.slice(0, 30)}...`, 'info');
+  log(`→ Bearer ${token.slice(0, 30)}...`, 'info');
   log(`→ Message: "${msg}"`, 'info');
-  log('', '');
+  log('');
 
-  const startMs = Date.now();
-
+  const t0 = Date.now();
   try {
     const r = await fetch(KREW_URL, {
       method: 'POST',
@@ -124,75 +150,52 @@ async function doTest() {
         'Content-Type': 'application/json',
         'apikey': ANON_KEY,
       },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: msg }],
-        systemPrompt: '',
-      }),
+      body: JSON.stringify({ messages: [{ role: 'user', content: msg }], systemPrompt: '' }),
     });
 
-    log(`← HTTP ${r.status} ${r.statusText} (${Date.now()-startMs}ms)`, r.ok ? 'ok' : 'err');
-
+    log(`← HTTP ${r.status} ${r.statusText} (${Date.now()-t0}ms)`, r.ok ? 'ok' : 'err');
     if (!r.ok) {
       const body = await r.text();
       log(`← Body: ${body}`, 'err');
+      if (r.status === 401) log('Token is expired or invalid. Restart the app to get a fresh token.', 'warn');
       document.getElementById('testBtn').disabled = false;
       return;
     }
 
-    // Read SSE stream
-    log('← Streaming response:', 'info');
+    log('← Streaming chunks:', 'info');
     const reader = r.body.getReader();
     const dec = new TextDecoder();
-    let buf = '';
-    let chunkCount = 0;
-    let responseText = '';
+    let buf = '', chunkCount = 0, responseText = '';
+    const streamLine = document.createElement('span');
+    streamLine.className = 'ok';
+    out.appendChild(streamLine);
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
       buf += dec.decode(value, { stream: true });
       const lines = buf.split('\n');
-      buf = lines.pop(); // keep incomplete line
+      buf = lines.pop();
       for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          const data = line.slice(6);
-          if (data === '[DONE]') {
-            log(`\n✓ Stream complete! (${Date.now()-startMs}ms total, ${chunkCount} chunks)`, 'ok');
-            log(`← Full response: "${responseText}"`, 'ok');
-          } else if (data === '[TRUNCATED]') {
-            log('[TRUNCATED]', 'err');
-          } else {
-            try {
-              const v = JSON.parse(data);
-              if (v.text) {
-                chunkCount++;
-                responseText += v.text;
-                process.stdout ? null : log(v.text, 'chunk');
-                out.lastChild && (out.lastChild.textContent = responseText);
-                if (chunkCount === 1) log('', 'chunk'); // placeholder for streaming text
-              } else if (v.error) {
-                log(`← Error from krew-stream: ${v.error}`, 'err');
-              } else {
-                log(`← Unknown SSE data: ${data}`, 'info');
-              }
-            } catch {
-              log(`← Raw SSE: ${data}`, 'info');
-            }
-          }
-        } else if (line && !line.startsWith(':')) {
-          log(`← Non-data line: ${line}`, 'info');
+        if (!line.startsWith('data: ')) { if (line.trim()) log(`raw: ${line}`, 'info'); continue; }
+        const data = line.slice(6);
+        if (data === '[DONE]') {
+          log(`\n✓ Stream complete (${Date.now()-t0}ms, ${chunkCount} chunks)`, 'ok');
+          log(`Full response: "${responseText}"`, 'ok');
+        } else if (data === '[TRUNCATED]') {
+          log('\n[TRUNCATED]', 'warn');
+        } else {
+          try {
+            const v = JSON.parse(data);
+            if (v.text) { chunkCount++; responseText += v.text; streamLine.textContent = responseText; }
+            else if (v.error) log(`\nkrew-stream error: ${v.error}`, 'err');
+          } catch { log(`non-JSON data: ${data}`, 'info'); }
         }
       }
     }
   } catch(e) {
     log(`✗ Network error: ${e}`, 'err');
-    log('', '');
-    log('This means your browser/machine cannot reach the Supabase Edge Function.', 'err');
-    log('Possible causes:', 'info');
-    log('  • Firewall blocking outbound HTTPS to supabase.co', 'info');
-    log('  • DNS resolution failure for xkkqcqsacgdrfwbwdqsp.supabase.co', 'info');
-    log('  • VPN or proxy interfering', 'info');
-    log('  • Windows Defender / antivirus blocking the connection', 'info');
+    log('Browser cannot reach krew-stream with your token.', 'err');
   }
   document.getElementById('testBtn').disabled = false;
 }
