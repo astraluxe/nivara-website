@@ -372,7 +372,7 @@ async function validateCode() {
   showMsg('Checking…', '');
 
   const { data, error } = await _supa.from('promo_codes')
-    .select('id,name,code,discount_pct,max_uses,uses_count,active,expires_at')
+    .select('id,name,code,offer_type,plan,duration_days,discount_pct,max_uses,uses_count,active,expires_at')
     .eq('code', code)
     .single();
 
