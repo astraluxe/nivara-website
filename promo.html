@@ -3,70 +3,271 @@
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Redeem Offer — adris.tech</title>
-<meta name="description" content="Have a promo code? Redeem your exclusive offer here." />
+<title>Exclusive Offers — adris.tech</title>
+<meta name="description" content="Have a promo code? Redeem your exclusive offer here and unlock discounts on adris.tech plans." />
+
+<meta property="og:type"        content="website" />
+<meta property="og:title"       content="Exclusive Offers — adris.tech" />
+<meta property="og:description" content="Redeem your promo code to unlock discounts on adris.tech plans." />
+<meta property="og:url"         content="https://adris.tech/promo" />
+<meta property="og:image"       content="https://adris.tech/og-cover.png" />
+<meta name="twitter:card"       content="summary_large_image" />
+<meta name="twitter:creator"    content="@Amogh_Misra_" />
+<link rel="canonical" href="https://adris.tech/promo" />
+<meta name="robots" content="index, follow" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
 <link rel="stylesheet" href="styles.css" />
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
 <style>
-.promo-wrap { min-height:calc(100dvh - 120px); display:flex; align-items:center; justify-content:center; padding:40px 20px; }
-.promo-card { width:100%; max-width:440px; }
-.promo-card .eyebrow { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7C5CFF; margin-bottom:14px; display:flex; align-items:center; gap:7px; }
-.promo-card .eyebrow::before { content:''; display:inline-block; width:22px; height:1px; background:#7C5CFF; }
-.promo-card h1 { font-size:clamp(26px,5vw,38px); font-weight:600; letter-spacing:-.03em; line-height:1.1; margin-bottom:8px; }
-.promo-card .sub { font-size:14px; color:#6b6b6b; line-height:1.6; margin-bottom:32px; }
-[data-theme="ink"] .promo-card .sub { color:#9a9a9a; }
 
-.promo-input-row { display:flex; gap:10px; margin-bottom:12px; }
-.promo-input { flex:1; padding:13px 16px; border:1px solid #e5e5e5; border-radius:10px; font-size:15px; font-family:'JetBrains Mono',monospace; letter-spacing:.08em; text-transform:uppercase; background:transparent; color:inherit; outline:none; transition:border-color .15s; }
-.promo-input::placeholder { text-transform:none; letter-spacing:0; color:#bbb; }
-.promo-input:focus { border-color:#7C5CFF; }
-[data-theme="ink"] .promo-input { border-color:#2a2a2a; }
-[data-theme="ink"] .promo-input:focus { border-color:#7C5CFF; }
-.promo-btn { padding:13px 22px; background:#111; color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:background .15s; white-space:nowrap; }
-.promo-btn:hover { background:#7C5CFF; }
-.promo-btn:disabled { opacity:.5; cursor:default; }
+/* ── Nav additions ────────────────────────────────── */
+.nav-cta {
+  padding: 7px 14px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.nav-cta:hover { border-color: var(--accent); color: var(--accent); }
+.nav-link-active { color: var(--accent) !important; font-weight: 600; }
 
-.promo-msg { font-size:13px; min-height:20px; margin-bottom:20px; font-family:'JetBrains Mono',monospace; }
-.promo-msg.ok  { color:#16a34a; }
-.promo-msg.err { color:#ef4444; }
+/* ── Page layout ──────────────────────────────────── */
+.promo-hero {
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(80px, 12vh, 140px) var(--pad-x) 80px;
+  position: relative;
+  overflow: hidden;
+}
+.promo-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,92,255,.10) 0%, transparent 70%);
+  pointer-events: none;
+}
 
-.promo-preview { background:#f5f5f5; border:1px solid #e5e5e5; border-radius:12px; padding:20px; margin-bottom:20px; display:none; }
-[data-theme="ink"] .promo-preview { background:#16161a; border-color:#2a2a2a; }
-.promo-preview.show { display:block; animation:fadeUp .25s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-.promo-preview .pv-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#7C5CFF; margin-bottom:8px; }
-.promo-preview .pv-name { font-size:18px; font-weight:600; margin-bottom:4px; }
-.promo-preview .pv-desc { font-size:13px; color:#6b6b6b; line-height:1.5; }
-[data-theme="ink"] .promo-preview .pv-desc { color:#9a9a9a; }
-.promo-preview .pv-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; background:rgba(124,92,255,.12); border:1px solid rgba(124,92,255,.3); border-radius:20px; font-size:12px; font-weight:600; color:#7C5CFF; font-family:'JetBrains Mono',monospace; margin-top:10px; }
+/* ── Promo card ───────────────────────────────────── */
+.promo-card {
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+}
 
-.promo-apply-btn { width:100%; padding:14px; background:#7C5CFF; color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:background .15s; display:none; }
-.promo-apply-btn.show { display:block; }
-.promo-apply-btn:hover { background:#6a4ee0; }
-.promo-apply-btn:disabled { opacity:.5; cursor:default; }
+.promo-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.promo-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: var(--accent);
+}
 
-.promo-active-box { background:rgba(34,197,94,.08); border:1px solid rgba(34,197,94,.25); border-radius:12px; padding:18px 20px; display:none; }
-.promo-active-box.show { display:block; }
-.promo-active-box .pa-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#16a34a; margin-bottom:8px; }
-.promo-active-box .pa-name { font-size:16px; font-weight:600; margin-bottom:3px; }
-.promo-active-box .pa-desc { font-size:13px; color:#6b6b6b; }
-[data-theme="ink"] .promo-active-box .pa-desc { color:#9a9a9a; }
+.promo-card h1 {
+  font-family: var(--font-sans);
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.promo-card h1 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
 
-.signin-nudge { text-align:center; padding:28px; background:#f5f5f5; border-radius:12px; }
-[data-theme="ink"] .signin-nudge { background:#16161a; }
-.signin-nudge p { font-size:14px; color:#6b6b6b; margin-bottom:14px; }
-.signin-nudge a { display:inline-block; padding:11px 24px; background:#111; color:#fff; border-radius:9px; font-size:13px; font-weight:600; text-decoration:none; transition:background .15s; }
-.signin-nudge a:hover { background:#7C5CFF; }
+.promo-sub {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+/* ── Input row ────────────────────────────────────── */
+.promo-input-row { display: flex; gap: 10px; margin-bottom: 12px; }
+
+.promo-input {
+  flex: 1;
+  padding: 13px 16px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s;
+}
+.promo-input::placeholder { text-transform: none; letter-spacing: 0; color: var(--muted-2); }
+.promo-input:focus { border-color: var(--accent); }
+
+.promo-btn {
+  padding: 13px 22px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background .15s;
+  white-space: nowrap;
+}
+.promo-btn:hover { background: var(--accent); }
+.promo-btn:disabled { opacity: .5; cursor: default; }
+
+/* ── Status message ───────────────────────────────── */
+.promo-msg {
+  font-size: 13px;
+  min-height: 20px;
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+}
+.promo-msg.ok  { color: #16a34a; }
+.promo-msg.err { color: #ef4444; }
+
+/* ── Offer preview card ───────────────────────────── */
+.promo-preview {
+  background: var(--paper-2);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: none;
+}
+.promo-preview.show { display: block; animation: fadeUp .25s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.promo-preview .pv-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.promo-preview .pv-name { font-size: 18px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
+.promo-preview .pv-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.promo-preview .pv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  background: rgba(124,92,255,.12);
+  border: 1px solid rgba(124,92,255,.3);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  margin-top: 10px;
+}
+
+/* ── Apply button ─────────────────────────────────── */
+.promo-apply-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: opacity .15s;
+  display: none;
+}
+.promo-apply-btn.show { display: block; }
+.promo-apply-btn:hover { opacity: .88; }
+.promo-apply-btn:disabled { opacity: .5; cursor: default; }
+
+/* ── Active promo box ─────────────────────────────── */
+.promo-active-box {
+  background: rgba(34,197,94,.08);
+  border: 1px solid rgba(34,197,94,.25);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  display: none;
+}
+.promo-active-box.show { display: block; }
+.promo-active-box .pa-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #16a34a;
+  margin-bottom: 8px;
+}
+.promo-active-box .pa-name { font-size: 16px; font-weight: 600; margin-bottom: 3px; color: var(--ink); }
+.promo-active-box .pa-desc { font-size: 13px; color: var(--muted); }
+
+/* ── Sign-in gate ─────────────────────────────────── */
+.signin-nudge {
+  text-align: center;
+  padding: 32px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+}
+.signin-nudge p { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+.signin-nudge a {
+  display: inline-block;
+  padding: 11px 24px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .15s;
+}
+.signin-nudge a:hover { background: var(--accent); }
+
+/* ── Footer note ──────────────────────────────────── */
+.promo-note {
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted-2);
+  line-height: 1.6;
+}
+.promo-note a { color: var(--accent); text-decoration: none; }
+
 </style>
 </head>
 <body>
 
-<!-- Nav injected by styles.css / nav component -->
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="nav-mark" aria-label="adris.tech home">
@@ -80,10 +281,10 @@
       <li><a href="/pricing">Pricing</a></li>
       <li><a href="/download">Download</a></li>
       <li><a href="/affiliates">Affiliates</a></li>
-      <li><a href="/promo" style="color:#7C5CFF;font-weight:600">Offers</a></li>
+      <li><a href="/promo" class="nav-link-active">Offers</a></li>
     </ul>
     <div class="nav-right">
-      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid #e5e5e5;border-radius:8px;font-size:12px;font-weight:500;color:#111;text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='#7C5CFF';this.style.color='#7C5CFF'" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#111'">Sign in</a>
+      <a id="navSignIn" href="/signin" class="nav-cta">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
         <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -92,7 +293,7 @@
   </div>
 </nav>
 
-<main class="promo-wrap">
+<main class="promo-hero">
   <div class="promo-card">
 
     <!-- Not logged in -->
@@ -103,9 +304,9 @@
 
     <!-- Logged in — main UI -->
     <div id="promoMain" style="display:none">
-      <div class="eyebrow">Exclusive offers</div>
-      <h1>Redeem your offer code</h1>
-      <p class="sub">Have an early access or launch code? Enter it below to unlock your discount — applied instantly to your account.</p>
+      <div class="promo-eyebrow">Exclusive offers</div>
+      <h1>Redeem your <em>offer code</em></h1>
+      <p class="promo-sub">Have an early access or launch code? Enter it below to unlock your discount — applied instantly to your account.</p>
 
       <!-- Already has active promo -->
       <div id="activePromoBox" class="promo-active-box">
@@ -135,8 +336,8 @@
         <button class="promo-apply-btn" id="applyBtn" onclick="applyCode()">Apply this offer to my account</button>
       </div>
 
-      <p style="margin-top:24px;font-size:12px;color:#9a9a9a;line-height:1.6">
-        Offers are applied to your account and reflected on the <a href="/pricing" style="color:#7C5CFF;text-decoration:none">pricing page</a> when you're signed in.
+      <p class="promo-note">
+        Offers are applied to your account and reflected on the <a href="/pricing">pricing page</a> when you're signed in.
         Each code can only be redeemed once per account.
       </p>
     </div>
@@ -183,7 +384,6 @@ async function validateCode() {
   if (data.expires_at && new Date(data.expires_at) < new Date()) { showMsg('This offer has expired.', 'err'); return; }
   if (data.max_uses !== null && data.uses_count >= data.max_uses) { showMsg('This offer is fully claimed — no spots remaining.', 'err'); return; }
 
-  // Check if user already used this code
   const { data: existingUser } = await _supa.from('users')
     .select('active_promo').eq('id', _session.user.id).single();
   if (existingUser?.active_promo?.code === data.code) {
@@ -208,10 +408,10 @@ async function applyCode() {
   btn.disabled = true; btn.textContent = 'Applying…';
 
   const promoData = {
-    code:        _foundPromo.code,
-    name:        _foundPromo.name,
+    code:         _foundPromo.code,
+    name:         _foundPromo.name,
     discount_pct: _foundPromo.discount_pct,
-    redeemed_at: new Date().toISOString(),
+    redeemed_at:  new Date().toISOString(),
   };
 
   const { error: userErr } = await _supa.from('users')
@@ -223,11 +423,9 @@ async function applyCode() {
     return;
   }
 
-  // Increment uses_count
   await _supa.from('promo_codes')
     .update({ uses_count: (_foundPromo.uses_count || 0) + 1 }).eq('id', _foundPromo.id);
 
-  // Show active box
   document.getElementById('activePromoName').textContent = _foundPromo.name;
   document.getElementById('activePromoDesc').textContent = `${_foundPromo.discount_pct}% discount applied to your account.`;
   document.getElementById('activePromoBox').classList.add('show');
@@ -249,7 +447,6 @@ async function applyCode() {
 (async () => {
   const { data: { session } } = await _supa.auth.getSession();
 
-  // Update nav sign-in link if logged in
   if (session) {
     const navLink = document.getElementById('navSignIn');
     if (navLink) { navLink.textContent = session.user.email.split('@')[0]; navLink.href = '/pricing'; }
@@ -262,7 +459,6 @@ async function applyCode() {
   _session = session;
   document.getElementById('promoMain').style.display = 'block';
 
-  // Check if user already has an active promo
   const { data: userData } = await _supa.from('users')
     .select('active_promo').eq('id', session.user.id).single();
 
