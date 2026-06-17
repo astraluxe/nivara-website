@@ -392,12 +392,19 @@ async function validateCode() {
 
   _foundPromo = data;
   showMsg('', '');
+  const PLAN_LABELS = { solo: 'Solo', builder: 'Builder', business: 'Business' };
   document.getElementById('pvName').textContent = data.name;
-  document.getElementById('pvDesc').textContent = `${data.discount_pct}% off all plans on adris.tech`;
+  if (data.offer_type === 'free_plan') {
+    const planName = PLAN_LABELS[data.plan] || data.plan;
+    document.getElementById('pvDesc').textContent = `${planName} plan free for ${data.duration_days} days — then auto-reverts to Free`;
+    document.getElementById('pvBadge').textContent = `${planName.toUpperCase()} FREE · ${data.duration_days}D`;
+  } else {
+    document.getElementById('pvDesc').textContent = `${data.discount_pct}% off all plans on adris.tech`;
+    document.getElementById('pvBadge').textContent = `${data.discount_pct}% OFF`;
+  }
   if (data.max_uses) {
     document.getElementById('pvDesc').textContent += ` · ${data.max_uses - data.uses_count} spots remaining`;
   }
-  document.getElementById('pvBadge').textContent = `${data.discount_pct}% OFF`;
   document.getElementById('promoPreview').classList.add('show');
   document.getElementById('applyBtn').classList.add('show');
 }
@@ -407,15 +414,27 @@ async function applyCode() {
   const btn = document.getElementById('applyBtn');
   btn.disabled = true; btn.textContent = 'Applying…';
 
+  const now = new Date();
+  const planExpiresAt = _foundPromo.offer_type === 'free_plan'
+    ? new Date(now.getTime() + _foundPromo.duration_days * 24 * 60 * 60 * 1000).toISOString()
+    : null;
+
   const promoData = {
-    code:         _foundPromo.code,
-    name:         _foundPromo.name,
-    discount_pct: _foundPromo.discount_pct,
-    redeemed_at:  new Date().toISOString(),
+    code:            _foundPromo.code,
+    name:            _foundPromo.name,
+    offer_type:      _foundPromo.offer_type || 'discount',
+    discount_pct:    _foundPromo.discount_pct,
+    plan:            _foundPromo.plan || null,
+    duration_days:   _foundPromo.duration_days || null,
+    plan_expires_at: planExpiresAt,
+    redeemed_at:     now.toISOString(),
   };
 
+  const userUpdate = { active_promo: promoData };
+  if (_foundPromo.offer_type === 'free_plan') userUpdate.plan = _foundPromo.plan;
+
   const { error: userErr } = await _supa.from('users')
-    .update({ active_promo: promoData }).eq('id', _session.user.id);
+    .update(userUpdate).eq('id', _session.user.id);
 
   if (userErr) {
     showMsg('Failed to apply: ' + userErr.message, 'err');
@@ -426,8 +445,15 @@ async function applyCode() {
   await _supa.from('promo_codes')
     .update({ uses_count: (_foundPromo.uses_count || 0) + 1 }).eq('id', _foundPromo.id);
 
+  const PLAN_LABELS2 = { solo: 'Solo', builder: 'Builder', business: 'Business' };
   document.getElementById('activePromoName').textContent = _foundPromo.name;
-  document.getElementById('activePromoDesc').textContent = `${_foundPromo.discount_pct}% discount applied to your account.`;
+  if (_foundPromo.offer_type === 'free_plan') {
+    const planName = PLAN_LABELS2[_foundPromo.plan] || _foundPromo.plan;
+    document.getElementById('activePromoDesc').textContent =
+      `${planName} plan is now active on your account for ${_foundPromo.duration_days} days.`;
+  } else {
+    document.getElementById('activePromoDesc').textContent = `${_foundPromo.discount_pct}% discount applied to your account.`;
+  }
   document.getElementById('activePromoBox').classList.add('show');
   document.getElementById('codeEntry').style.display = 'none';
   showMsg('', '');
@@ -464,8 +490,19 @@ async function applyCode() {
 
   if (userData?.active_promo?.code) {
     const p = userData.active_promo;
+    const PLAN_LABELS3 = { solo: 'Solo', builder: 'Builder', business: 'Business' };
     document.getElementById('activePromoName').textContent = p.name || p.code;
-    document.getElementById('activePromoDesc').textContent = `${p.discount_pct}% discount is active on your account.`;
+    if (p.offer_type === 'free_plan' && p.plan) {
+      const planName = PLAN_LABELS3[p.plan] || p.plan;
+      const daysLeft = p.plan_expires_at
+        ? Math.max(0, Math.ceil((new Date(p.plan_expires_at) - Date.now()) / 86400000))
+        : (p.duration_days || 0);
+      document.getElementById('activePromoDesc').textContent = daysLeft > 0
+        ? `${planName} plan active — ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining.`
+        : `${planName} plan offer has expired.`;
+    } else {
+      document.getElementById('activePromoDesc').textContent = `${p.discount_pct}% discount is active on your account.`;
+    }
     document.getElementById('activePromoBox').classList.add('show');
     document.getElementById('codeEntry').style.display = 'none';
   }

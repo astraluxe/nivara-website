@@ -448,6 +448,8 @@ tr:hover td { background:rgba(124,92,255,.03); }
     <div id="tab-offers" class="tab-panel">
       <div class="ann-form">
         <h3>Create promo offer</h3>
+
+        <!-- Row 1: Name | Code -->
         <div class="form-row">
           <div class="form-group">
             <label>Offer name</label>
@@ -455,24 +457,59 @@ tr:hover td { background:rgba(124,92,255,.03); }
           </div>
           <div class="form-group">
             <label>Code (uppercase)</label>
-            <input type="text" id="promo-code" placeholder="e.g. EARLYBIRD50" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
+            <input type="text" id="promo-code" placeholder="e.g. ADRIS-LAUNCH" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
           </div>
         </div>
-        <div class="form-row">
+
+        <!-- Row 2: Offer type toggle -->
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Offer type</label>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button id="type-free-plan" onclick="setOfferType('free_plan')" style="flex:1;padding:8px 12px;border:1px solid var(--accent);border-radius:8px;font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(124,92,255,.15);color:var(--accent);cursor:pointer;transition:all .15s">Free plan grant</button>
+            <button id="type-discount"  onclick="setOfferType('discount')"  style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s">Discount %</button>
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:6px" id="offer-type-hint">Grant a plan for free for N days. User's plan auto-reverts when the period ends.</div>
+        </div>
+
+        <!-- FREE PLAN fields (default visible) -->
+        <div id="fields-free-plan" class="form-row">
+          <div class="form-group">
+            <label>Plan to grant</label>
+            <select id="promo-plan">
+              <option value="solo">Solo (₹1,499/mo)</option>
+              <option value="builder">Builder (₹4,999/mo)</option>
+              <option value="business">Business (₹19,999/mo)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Duration (days) — plan auto-reverts after this</label>
+            <input type="number" id="promo-duration" placeholder="e.g. 30" min="1" max="365" />
+          </div>
+        </div>
+
+        <!-- DISCOUNT % fields (hidden by default) -->
+        <div id="fields-discount" class="form-row" style="display:none">
           <div class="form-group">
             <label>Discount %</label>
             <input type="number" id="promo-discount" placeholder="e.g. 50" min="1" max="100" />
           </div>
+          <div class="form-group"></div>
+        </div>
+
+        <!-- Row 4: Max uses | Code expires at -->
+        <div class="form-row">
           <div class="form-group">
             <label>Max uses (blank = unlimited)</label>
             <input type="number" id="promo-max-uses" placeholder="e.g. 100" min="1" />
           </div>
-        </div>
-        <div class="form-row">
           <div class="form-group">
-            <label>Expires at (optional)</label>
+            <label>Code expires at — nobody can claim after this date</label>
             <input type="datetime-local" id="promo-expires" />
           </div>
+        </div>
+
+        <!-- Row 5: Active -->
+        <div class="form-row">
           <div class="form-group">
             <label>Active</label>
             <select id="promo-active">
@@ -480,7 +517,9 @@ tr:hover td { background:rgba(124,92,255,.03); }
               <option value="false">No — draft</option>
             </select>
           </div>
+          <div class="form-group"></div>
         </div>
+
         <div style="display:flex;align-items:center;margin-top:4px">
           <button class="ann-submit" onclick="createPromo()">Create offer</button>
           <span class="ann-msg" id="promoMsg"></span>
@@ -490,7 +529,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <div class="sec">All promo codes</div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Name</th><th>Code</th><th>Discount</th><th>Uses</th><th>Max uses</th><th>Active</th><th>Expires</th><th>Created</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Name</th><th>Code</th><th>Type</th><th>Plan / Discount</th><th>Duration</th><th>Uses</th><th>Max uses</th><th>Active</th><th>Code Expires</th><th>Created</th><th>Actions</th></tr></thead>
           <tbody id="promoTable"></tbody>
         </table>
       </div>
@@ -1026,12 +1065,24 @@ async function loadOffers() {
 }
 
 function renderOffers(rows) {
+  const PLAN_COLORS = { solo:'plan-solo', builder:'plan-builder', business:'plan-business' };
   document.getElementById('promoTable').innerHTML = rows.length
-    ? rows.map(r => `
+    ? rows.map(r => {
+        const isFreePlan = r.offer_type === 'free_plan';
+        const typeLabel  = isFreePlan
+          ? '<span class="td-plan plan-solo">free plan</span>'
+          : '<span class="td-plan plan-free">discount</span>';
+        const planOrDisc = isFreePlan
+          ? `<span class="td-plan ${PLAN_COLORS[r.plan]||'plan-solo'}">${r.plan||'—'}</span>`
+          : `<span class="mono" style="font-size:12px;color:var(--green)">${r.discount_pct||0}%</span>`;
+        const duration = isFreePlan ? `<span class="mono" style="font-size:11px">${r.duration_days||'—'}d</span>` : '—';
+        return `
       <tr id="promo-row-${r.id}">
         <td style="font-size:12px;font-weight:500">${r.name}</td>
         <td class="mono" style="font-size:11px;color:var(--accent);letter-spacing:.06em">${r.code}</td>
-        <td class="mono" style="font-size:12px;color:var(--green)">${r.discount_pct}%</td>
+        <td>${typeLabel}</td>
+        <td>${planOrDisc}</td>
+        <td>${duration}</td>
         <td class="mono" style="font-size:11px">${r.uses_count||0}</td>
         <td class="mono" style="font-size:11px;color:var(--muted)">${r.max_uses ?? '∞'}</td>
         <td><span class="${r.active?'status-active':'status-free'}" style="font-size:11px;font-family:var(--mono)">${r.active?'live':'draft'}</span></td>
@@ -1041,37 +1092,67 @@ function renderOffers(rows) {
           <button class="act-btn ${r.active?'toggle-on':'toggle-off'}" onclick="togglePromo('${r.id}',${r.active})">${r.active?'Deactivate':'Activate'}</button>
           <button class="act-btn del" onclick="deletePromo('${r.id}')">Delete</button>
         </td>
-      </tr>`).join('')
-    : `<tr><td colspan="9" class="empty">No promo codes yet</td></tr>`;
+      </tr>`;
+      }).join('')
+    : `<tr><td colspan="11" class="empty">No promo codes yet</td></tr>`;
+}
+
+let _offerType = 'free_plan';
+function setOfferType(type) {
+  _offerType = type;
+  const fp = type === 'free_plan';
+  document.getElementById('fields-free-plan').style.display = fp ? '' : 'none';
+  document.getElementById('fields-discount').style.display  = fp ? 'none' : '';
+  const activeStyle   = 'flex:1;padding:8px 12px;border:1px solid var(--accent);border-radius:8px;font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;background:rgba(124,92,255,.15);color:var(--accent);cursor:pointer;transition:all .15s';
+  const inactiveStyle = 'flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s';
+  document.getElementById('type-free-plan').style.cssText = fp  ? activeStyle : inactiveStyle;
+  document.getElementById('type-discount').style.cssText  = !fp ? activeStyle : inactiveStyle;
+  document.getElementById('offer-type-hint').textContent = fp
+    ? "Grant a plan for free for N days. User's plan auto-reverts when the period ends."
+    : 'Slash the price by a % — user still pays via Razorpay at the discounted amount.';
 }
 
 async function createPromo() {
-  const name      = document.getElementById('promo-name').value.trim();
-  const code      = document.getElementById('promo-code').value.trim().toUpperCase();
-  const discountS = document.getElementById('promo-discount').value.trim();
-  const maxUsesS  = document.getElementById('promo-max-uses').value.trim();
-  const expires   = document.getElementById('promo-expires').value;
-  const active    = document.getElementById('promo-active').value === 'true';
-  const msg       = document.getElementById('promoMsg');
+  const name     = document.getElementById('promo-name').value.trim();
+  const code     = document.getElementById('promo-code').value.trim().toUpperCase();
+  const maxUsesS = document.getElementById('promo-max-uses').value.trim();
+  const expires  = document.getElementById('promo-expires').value;
+  const active   = document.getElementById('promo-active').value === 'true';
+  const msg      = document.getElementById('promoMsg');
 
-  if (!name || !code || !discountS) { msg.textContent = 'Name, code, and discount % are required.'; msg.style.color='var(--red)'; return; }
-  const discount_pct = parseInt(discountS, 10);
-  if (isNaN(discount_pct) || discount_pct < 1 || discount_pct > 100) { msg.textContent = 'Discount must be 1–100.'; msg.style.color='var(--red)'; return; }
+  if (!name || !code) { msg.textContent = 'Name and code are required.'; msg.style.color='var(--red)'; return; }
+
+  let insertData = { name, code, offer_type: _offerType, active,
+    max_uses:   maxUsesS ? parseInt(maxUsesS, 10) : null,
+    expires_at: expires || null,
+  };
+
+  if (_offerType === 'free_plan') {
+    const plan = document.getElementById('promo-plan').value;
+    const durS = document.getElementById('promo-duration').value.trim();
+    if (!plan || !durS) { msg.textContent = 'Plan and duration are required.'; msg.style.color='var(--red)'; return; }
+    const duration_days = parseInt(durS, 10);
+    if (isNaN(duration_days) || duration_days < 1) { msg.textContent = 'Duration must be at least 1 day.'; msg.style.color='var(--red)'; return; }
+    insertData = { ...insertData, plan, duration_days, discount_pct: 100 };
+  } else {
+    const discountS = document.getElementById('promo-discount').value.trim();
+    if (!discountS) { msg.textContent = 'Discount % is required.'; msg.style.color='var(--red)'; return; }
+    const discount_pct = parseInt(discountS, 10);
+    if (isNaN(discount_pct) || discount_pct < 1 || discount_pct > 100) { msg.textContent = 'Discount must be 1–100.'; msg.style.color='var(--red)'; return; }
+    insertData = { ...insertData, discount_pct };
+  }
 
   msg.textContent = 'Saving…'; msg.style.color = 'var(--muted)';
-  const { error } = await _supa.from('promo_codes').insert({
-    name, code, discount_pct,
-    max_uses:   maxUsesS ? parseInt(maxUsesS, 10) : null,
-    expires_at: expires  || null,
-    active,
-  });
+  const { error } = await _supa.from('promo_codes').insert(insertData);
 
   if (error) {
     msg.textContent = error.code === '23505' ? 'Code already exists.' : 'Error: ' + error.message;
     msg.style.color = 'var(--red)';
   } else {
     msg.textContent = 'Created ✓'; msg.style.color = 'var(--green)';
-    ['promo-name','promo-code','promo-discount','promo-max-uses','promo-expires'].forEach(id => { document.getElementById(id).value = ''; });
+    ['promo-name','promo-code','promo-discount','promo-duration','promo-max-uses','promo-expires'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
     setTimeout(() => { msg.textContent = ''; }, 3000);
     await loadOffers();
   }

@@ -702,33 +702,50 @@ async function onLoad() {
       await startRazorpayPayment(pending, session);
     }
 
-    // Check for active promo and show discounted prices
+    // Check for active promo / plan grant
     const { data: userData } = await _supa.from('users')
       .select('active_promo').eq('id', session.user.id).single();
-    if (userData?.active_promo?.discount_pct) {
-      const p = userData.active_promo;
-      const pct = p.discount_pct;
+    const ap = userData?.active_promo;
+    if (ap?.code) {
+      const PLAN_LABELS = { solo: 'Solo', builder: 'Builder', business: 'Business' };
 
-      // Show banner
-      document.getElementById('promoBannerTitle').textContent = p.name + ' — ' + pct + '% off applied';
-      document.getElementById('promoBannerDesc').textContent = 'Your exclusive discount is reflected in the prices below.';
-      document.getElementById('promoBanner').style.display = 'block';
-
-      // Update all .pi elements (price displays) to show discounted amount
-      document.querySelectorAll('[data-price-inr]').forEach(el => {
-        const orig = parseInt(el.getAttribute('data-price-inr'), 10);
-        const disc = Math.round(orig * (1 - pct / 100));
-        const origEl = el.querySelector('.orig-price');
-        const discEl = el.querySelector('.disc-price');
-        if (origEl && discEl) {
-          origEl.textContent = '₹' + orig.toLocaleString('en-IN');
-          discEl.textContent = '₹' + disc.toLocaleString('en-IN');
-          origEl.style.display = 'inline';
-          discEl.style.display = 'inline';
+      if (ap.offer_type === 'free_plan' && ap.plan) {
+        // Check expiry — auto-revert if past
+        if (ap.plan_expires_at && new Date(ap.plan_expires_at) < new Date()) {
+          await _supa.from('users').update({ plan: 'free', active_promo: null }).eq('id', session.user.id);
         } else {
-          el.innerHTML = '<span style="text-decoration:line-through;opacity:.45;font-size:.65em">₹'+orig.toLocaleString('en-IN')+'</span> ₹' + disc.toLocaleString('en-IN');
+          const daysLeft = ap.plan_expires_at
+            ? Math.max(0, Math.ceil((new Date(ap.plan_expires_at) - Date.now()) / 86400000))
+            : (ap.duration_days || 0);
+          const planName = PLAN_LABELS[ap.plan] || ap.plan;
+          document.getElementById('promoBannerTitle').textContent =
+            `${ap.name} — ${planName} plan active`;
+          document.getElementById('promoBannerDesc').textContent =
+            `You have ${planName} for free. ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining — enjoy!`;
+          document.getElementById('promoBanner').style.display = 'block';
         }
-      });
+      } else if (ap.discount_pct) {
+        // Discount-type promo — slash prices
+        const pct = ap.discount_pct;
+        document.getElementById('promoBannerTitle').textContent = ap.name + ' — ' + pct + '% off applied';
+        document.getElementById('promoBannerDesc').textContent = 'Your exclusive discount is reflected in the prices below.';
+        document.getElementById('promoBanner').style.display = 'block';
+
+        document.querySelectorAll('[data-price-inr]').forEach(el => {
+          const orig = parseInt(el.getAttribute('data-price-inr'), 10);
+          const disc = Math.round(orig * (1 - pct / 100));
+          const origEl = el.querySelector('.orig-price');
+          const discEl = el.querySelector('.disc-price');
+          if (origEl && discEl) {
+            origEl.textContent = '₹' + orig.toLocaleString('en-IN');
+            discEl.textContent = '₹' + disc.toLocaleString('en-IN');
+            origEl.style.display = 'inline';
+            discEl.style.display = 'inline';
+          } else {
+            el.innerHTML = '<span style="text-decoration:line-through;opacity:.45;font-size:.65em">₹'+orig.toLocaleString('en-IN')+'</span> ₹' + disc.toLocaleString('en-IN');
+          }
+        });
+      }
     }
   }
 }
