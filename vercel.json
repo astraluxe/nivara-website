@@ -25,6 +25,7 @@
     { "source": "/modules/mesh",        "destination": "/modules/mesh.html" },
     { "source": "/team",               "destination": "/team.html" },
     { "source": "/team-dashboard",     "destination": "/team-dashboard.html" },
-    { "source": "/enterprise",         "destination": "/enterprise.html" }
+    { "source": "/enterprise",         "destination": "/enterprise.html" },
+    { "source": "/promo",              "destination": "/promo.html" }
   ]
 }
