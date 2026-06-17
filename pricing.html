@@ -724,8 +724,8 @@ async function onLoad() {
             `You have ${planName} for free. ${daysLeft} day${daysLeft === 1 ? '' : 's'} remaining — enjoy!`;
           document.getElementById('promoBanner').style.display = 'block';
         }
-      } else if (ap.discount_pct) {
-        // Discount-type promo — slash prices
+      } else if (ap.discount_pct && ap.discount_pct < 100) {
+        // Discount-type promo — slash prices (100% is always a free-plan grant, never a price slash)
         const pct = ap.discount_pct;
         document.getElementById('promoBannerTitle').textContent = ap.name + ' — ' + pct + '% off applied';
         document.getElementById('promoBannerDesc').textContent = 'Your exclusive discount is reflected in the prices below.';
