@@ -710,6 +710,24 @@ document.getElementById('navHam').addEventListener('click', function() {
       </button>
     </div>
 
+    <!-- SmartScreen notice — shown right below the download button -->
+    <div class="dl-notice">
+      <svg class="dl-notice-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <strong>⚠ Windows may show a SmartScreen warning — here's what to do</strong>
+        <p>Because adris.tech is in <b>Windows Beta</b> and not yet commercially code-signed, SmartScreen flags the installer as "unrecognized." <b>This is completely safe.</b> Click through in 2 steps:</p>
+        <div class="dl-notice-steps">
+          <span class="dl-notice-step">Click "More info"</span>
+          <span class="dl-notice-arrow">→</span>
+          <span class="dl-notice-step">Click "Run anyway"</span>
+        </div>
+        <p style="margin-top:10px;">We are getting our publisher certificate — the warning disappears once certified. Verify the download is from <b>github.com/astraluxe/nivara-desktop</b>.</p>
+      </div>
+    </div>
+
     <p class="dl-platform-note" id="platformNote">Windows 10 or later · Beta · No credit card required</p>
 
     <!-- Linux coming soon strip -->
@@ -725,24 +743,6 @@ document.getElementById('navHam').addEventListener('click', function() {
         <div class="dl-linux-strip-sub">AppImage · No code signing required · No security warnings</div>
       </div>
       <span class="dl-linux-badge">Q3 2026</span>
-    </div>
-  </div>
-
-  <!-- SmartScreen notice -->
-  <div class="dl-notice">
-    <svg class="dl-notice-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <div>
-      <strong>⚠ Windows may show a SmartScreen security warning — here's what to do</strong>
-      <p>Because adris.tech is currently in <b>Windows Beta</b> and not yet commercially code-signed, Microsoft SmartScreen flags the installer as "unrecognized." <b>This is completely safe.</b> Click through in 2 steps:</p>
-      <div class="dl-notice-steps">
-        <span class="dl-notice-step">Click "More info"</span>
-        <span class="dl-notice-arrow">→</span>
-        <span class="dl-notice-step">Click "Run anyway"</span>
-      </div>
-      <p style="margin-top:10px;">We are in the process of getting our publisher certificate. This warning will disappear once we're certified. You can verify the download URL is from <b>github.com/astraluxe/nivara-desktop</b> — the official release source.</p>
     </div>
   </div>
 
