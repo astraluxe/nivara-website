@@ -641,31 +641,42 @@ async function payWithINR(planKey) {
     openLogin(planKey);
     return;
   }
-  await startRazorpayPayment(planKey, session);
+  // Check for active promo so we can apply the discount
+  let activePromo = null;
+  try {
+    const { data: ud } = await _supa.from('users').select('active_promo').eq('id', session.user.id).single();
+    if (ud?.active_promo?.discount_pct) activePromo = ud.active_promo;
+  } catch {}
+  await startRazorpayPayment(planKey, session, activePromo);
 }
 
 function payWithUSD() {
   document.getElementById('usdModal').classList.add('open');
 }
 
-async function startRazorpayPayment(planKey, session) {
+async function startRazorpayPayment(planKey, session, activePromo) {
   try {
+    const body = activePromo
+      ? { plan: planKey, promo_code: activePromo.code, discount_pct: activePromo.discount_pct }
+      : { plan: planKey };
+
     const res = await fetch(SUPA_URL + '/functions/v1/razorpay-create-subscription', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
-      body: JSON.stringify({ plan: planKey }),
+      body: JSON.stringify(body),
     });
     const sub = await res.json();
     if (!res.ok || sub.error) { alert('Payment setup failed: ' + (sub.error || 'Please try again.')); return; }
 
     const userEmail = session.user.email || '';
+    const promoNote = activePromo ? ` — ${activePromo.discount_pct}% off` : '';
 
     const rzp = new window.Razorpay({
       key:             sub.key_id,
       subscription_id: sub.subscription_id,
       name:        'adris.tech',
       image:       'https://adris.tech/icon.png',
-      description: PLAN_NAMES[planKey] + ' Plan — Monthly',
+      description: PLAN_NAMES[planKey] + ' Plan — Monthly' + promoNote,
       prefill:     { email: userEmail, name: session.user.user_metadata?.full_name || '' },
       theme:       { color: '#7C5CFF' },
       handler: function() {
