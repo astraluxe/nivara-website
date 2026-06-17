@@ -85,15 +85,37 @@
   line-height: 1.6;
 }
 
-/* ── Download options (two cards) ── */
+/* ── Download options ── */
 .dl-options {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   width: 100%;
-  max-width: 560px;
+  max-width: 940px;
   margin: 0 auto;
+}
+
+/* Card + SmartScreen side by side */
+.dl-main-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  align-items: stretch;
+}
+.dl-main-row .dl-card {
+  flex: 1.1;
+  min-width: 0;
+}
+.dl-main-row .dl-notice {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  max-width: none;
+}
+@media (max-width: 700px) {
+  .dl-main-row { flex-direction: column; }
+  .dl-options { max-width: 560px; }
 }
 
 .dl-card {
@@ -481,8 +503,6 @@
   border-radius: 10px;
   padding: 18px 20px;
   text-align: left;
-  max-width: 560px;
-  margin: 20px auto 0;
 }
 .dl-notice-icon {
   width: 22px;
@@ -559,8 +579,7 @@
 /* ── Linux coming soon strip ── */
 .dl-linux-strip {
   width: 100%;
-  max-width: 560px;
-  margin: 10px auto 0;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -691,42 +710,47 @@ document.getElementById('navHam').addEventListener('click', function() {
 
   <div id="download-now" class="dl-options">
 
-    <!-- Windows Beta -->
-    <div class="dl-card" id="completeCard">
-      <div class="dl-card-badge">Windows Beta</div>
-      <div class="dl-card-body">
-        <div class="dl-card-name">
-          adris.tech for Windows
-          <span class="dl-card-beta">Beta</span>
-        </div>
-        <div class="dl-card-sub">All 6 modules · Mesh · Voice · ~22 MB · one installer</div>
-      </div>
-      <button class="dl-btn-primary" id="completeDlBtn" onclick="handleDownload()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-        </svg>
-        <span id="completeDlLabel">Download for Windows</span>
-      </button>
-    </div>
+    <!-- Windows card + SmartScreen notice side by side -->
+    <div class="dl-main-row">
 
-    <!-- SmartScreen notice — shown right below the download button -->
-    <div class="dl-notice">
-      <svg class="dl-notice-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <div>
-        <strong>⚠ Windows may show a SmartScreen warning — here's what to do</strong>
-        <p>Because adris.tech is in <b>Windows Beta</b> and not yet commercially code-signed, SmartScreen flags the installer as "unrecognized." <b>This is completely safe.</b> Click through in 2 steps:</p>
-        <div class="dl-notice-steps">
-          <span class="dl-notice-step">Click "More info"</span>
-          <span class="dl-notice-arrow">→</span>
-          <span class="dl-notice-step">Click "Run anyway"</span>
+      <!-- Left: Windows download card -->
+      <div class="dl-card" id="completeCard">
+        <div class="dl-card-badge">Windows Beta</div>
+        <div class="dl-card-body">
+          <div class="dl-card-name">
+            adris.tech for Windows
+            <span class="dl-card-beta">Beta</span>
+          </div>
+          <div class="dl-card-sub">All 6 modules · Mesh · Voice · ~22 MB · one installer</div>
         </div>
-        <p style="margin-top:10px;">We are getting our publisher certificate — the warning disappears once certified. Verify the download is from <b>github.com/astraluxe/nivara-desktop</b>.</p>
+        <button class="dl-btn-primary" id="completeDlBtn" onclick="handleDownload()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          <span id="completeDlLabel">Download for Windows</span>
+        </button>
       </div>
-    </div>
+
+      <!-- Right: SmartScreen warning -->
+      <div class="dl-notice">
+        <svg class="dl-notice-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <strong>⚠ Windows SmartScreen warning — here's what to do</strong>
+          <p>adris.tech is in <b>Windows Beta</b> and not yet commercially code-signed, so SmartScreen flags it as "unrecognized." <b>This is completely safe.</b> Click through in 2 steps:</p>
+          <div class="dl-notice-steps">
+            <span class="dl-notice-step">Click "More info"</span>
+            <span class="dl-notice-arrow">→</span>
+            <span class="dl-notice-step">Click "Run anyway"</span>
+          </div>
+          <p style="margin-top:10px;">Publisher certificate in progress — warning disappears once certified. Download is from <b>github.com/astraluxe/nivara-desktop</b>.</p>
+        </div>
+      </div>
+
+    </div><!-- end dl-main-row -->
 
     <p class="dl-platform-note" id="platformNote">Windows 10 or later · Beta · No credit card required</p>
 
