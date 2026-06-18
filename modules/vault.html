@@ -485,6 +485,14 @@
     letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--accent);
   }
+  /* Ink mode: lock white-bg .nolog panel text to dark hardcoded colors */
+  [data-theme="ink"] .nolog { color: #1A1A18; }
+  [data-theme="ink"] .nolog h4 { color: #1A1A18; }
+  [data-theme="ink"] .nolog ul li { color: #4A4845; }
+  [data-theme="ink"] .nolog ul li strong { color: #1A1A18; }
+  [data-theme="ink"] .nolog ul li::before { background: #1A1A18; color: #FFFFFF; }
+  [data-theme="ink"] .nolog .badge { color: #6B6963; border-color: #C8C4BC; }
+  [data-theme="ink"] .nolog .badges { border-top-color: #E0DDD6; }
 
   /* ============================================
      SECTION 05 — DOWNLOAD
