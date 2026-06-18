@@ -335,6 +335,27 @@
   }
   .vuln-affected.no { color: #2D9E5F; }
 
+  /* ── Lock mock document panels to always show dark text regardless of theme.
+     These have hardcoded #FFFFFF backgrounds (they're simulating documents/emails)
+     so their text must always be dark — var(--ink) flips to white in Ink mode. ── */
+
+  /* Contract scanner findings */
+  .scanner .findings { color: #1A1A18; }
+  .scanner .finding .ftitle { color: #1A1A18; }
+  .scanner .finding p { color: #6B6963; }
+
+  /* Phishing email mock */
+  .email-mock { color: #1A1A18; }
+  .email-mock .ehead { color: #6B6963; }
+  .email-mock .ebody { color: #1A1A18; }
+  .email-mock .ebody p { color: #4A4845; }
+
+  /* Compliance dropdown selects + rows */
+  .compl-form .field .sel { color: #1A1A18; }
+  .compl-rows { color: #1A1A18; }
+  .compl-row .cname { color: #1A1A18; }
+  .compl-row .cdesc { color: #6B6963; }
+
   /* Compliance checker */
   .compl {
     background: var(--paper-2);
