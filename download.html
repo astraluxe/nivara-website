@@ -232,6 +232,111 @@
   position: relative;
 }
 
+/* ── After-download steps ── */
+.dl-steps {
+  margin-top: 20px;
+  border-top: 1px solid rgba(124,92,255,.18);
+  padding-top: 18px;
+  position: relative;
+}
+.dl-steps-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #A78BFA;
+  width: 100%;
+  justify-content: center;
+}
+.dl-steps-toggle svg { transition: transform .2s; }
+.dl-steps-toggle.open svg { transform: rotate(180deg); }
+.dl-steps-body {
+  display: none;
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.dl-steps-body.hidden { display: none; }
+.dl-step-box {
+  flex: 1;
+  min-width: 220px;
+  background: rgba(124,92,255,.07);
+  border: 1px solid rgba(124,92,255,.18);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: left;
+}
+.dl-step-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #A78BFA;
+  margin-bottom: 10px;
+}
+.dl-step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.dl-step-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(124,92,255,.25);
+  color: #A78BFA;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.dl-step-text {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.dl-step-cmd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(124,92,255,.2);
+  border-radius: 6px;
+  padding: 7px 12px;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #C4B5FD;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: background .15s;
+  word-break: break-all;
+}
+.dl-step-cmd:hover { background: rgba(124,92,255,.15); }
+.dl-step-cmd svg { flex-shrink: 0; color: #A78BFA; }
+.dl-copy-tick { display: none; color: #4ade80; }
+.dl-step-or {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted-2);
+  text-align: center;
+  margin: 8px 0;
+  letter-spacing: .06em;
+}
+
 /* ── Windows secondary row ── */
 .dl-win-row {
   display: flex;
@@ -916,8 +1021,61 @@ document.getElementById('navHam').addEventListener('click', function() {
           .AppImage — Arch · Fedora · Any Distro
         </a>
       </div>
-      <div class="dl-linux-footer">On Arch Linux? Use the <strong style="color:#A78BFA;">AppImage</strong> — no install needed, just run it.</div>
-      <div class="dl-linux-footer" style="margin-top:6px;">v1.0.57 · Live Now · ~22 MB · No credit card required · Free to start</div>
+      <!-- After-download steps -->
+      <div class="dl-steps">
+        <button class="dl-steps-toggle" id="stepsToggle" onclick="toggleSteps()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          After downloading — what to do next
+        </button>
+        <div class="dl-steps-body hidden" id="stepsBody">
+
+          <!-- .deb -->
+          <div class="dl-step-box">
+            <div class="dl-step-label">.deb — Ubuntu / Debian</div>
+            <div class="dl-step-row">
+              <div class="dl-step-num">1</div>
+              <div class="dl-step-text">Double-click the downloaded <code style="font-size:10px;color:#A78BFA;">.deb</code> file — Ubuntu Software Center opens automatically.</div>
+            </div>
+            <div class="dl-step-row">
+              <div class="dl-step-num">2</div>
+              <div class="dl-step-text">Click <strong style="color:var(--ink);">Install</strong>. Done — find adris.tech in your app launcher.</div>
+            </div>
+            <div class="dl-step-or">or via terminal</div>
+            <div class="dl-step-cmd" onclick="copyCmd(this, 'sudo dpkg -i adris-setup-linux-1.0.57.deb')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>
+              <span class="dl-copy-tick">✓ Copied</span>
+              <span>sudo dpkg -i adris-setup-linux-1.0.57.deb</span>
+            </div>
+          </div>
+
+          <!-- .AppImage -->
+          <div class="dl-step-box">
+            <div class="dl-step-label">.AppImage — Arch · Fedora · Any Distro</div>
+            <div class="dl-step-row">
+              <div class="dl-step-num">1</div>
+              <div class="dl-step-text">Right-click the file → <strong style="color:var(--ink);">Properties</strong> → <strong style="color:var(--ink);">Permissions</strong> → tick <strong style="color:var(--ink);">"Allow executing as program"</strong></div>
+            </div>
+            <div class="dl-step-row">
+              <div class="dl-step-num">2</div>
+              <div class="dl-step-text">Double-click it. Done — no install, no package manager.</div>
+            </div>
+            <div class="dl-step-or">or via terminal</div>
+            <div class="dl-step-cmd" onclick="copyCmd(this, 'chmod +x adris-setup-linux-1.0.57.AppImage')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>
+              <span class="dl-copy-tick">✓ Copied</span>
+              <span>chmod +x adris-setup-linux-1.0.57.AppImage</span>
+            </div>
+            <div class="dl-step-cmd" onclick="copyCmd(this, './adris-setup-linux-1.0.57.AppImage')" style="margin-top:4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>
+              <span class="dl-copy-tick">✓ Copied</span>
+              <span>./adris-setup-linux-1.0.57.AppImage</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="dl-linux-footer" style="margin-top:14px;">v1.0.57 · Live Now · ~22 MB · No credit card required · Free to start</div>
     </div>
 
     <!-- ② Windows — Beta (below Linux) -->
@@ -1301,6 +1459,27 @@ document.getElementById('navHam').addEventListener('click', function() {
     const lbl = document.getElementById('completeDlLabel');
     if (lbl) { lbl.textContent = 'Starting download…'; setTimeout(() => { lbl.textContent = 'Download adris.tech'; }, 3000); }
     window.location.href = WIN_INSTALLER;
+  }
+
+  // ── After-download steps toggle
+  function toggleSteps() {
+    const body = document.getElementById('stepsBody');
+    const btn  = document.getElementById('stepsToggle');
+    const hidden = body.classList.toggle('hidden');
+    btn.classList.toggle('open', !hidden);
+  }
+
+  // ── Copy command to clipboard
+  function copyCmd(el, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const tick = el.querySelector('.dl-copy-tick');
+      const span = el.querySelectorAll('span')[1];
+      if (tick && span) {
+        tick.style.display = 'inline';
+        span.style.opacity = '.4';
+        setTimeout(() => { tick.style.display = 'none'; span.style.opacity = '1'; }, 1800);
+      }
+    });
   }
 
   // ── Reveal on scroll
