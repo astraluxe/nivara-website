@@ -930,11 +930,12 @@
 
 /* ── Terminal command box ── */
 .dl-cmd-box {
-  background: rgba(10,10,12,.55);
-  border: 1px solid rgba(124,92,255,.35);
+  background: #ffffff;
+  border: 1.5px solid rgba(124,92,255,.3);
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 8px;
+  box-shadow: 0 2px 16px rgba(124,92,255,.1);
 }
 .dl-cmd-line {
   display: flex;
@@ -944,12 +945,12 @@
   cursor: pointer;
   transition: background .15s;
 }
-.dl-cmd-line:hover { background: rgba(124,92,255,.1); }
+.dl-cmd-line:hover { background: rgba(124,92,255,.05); }
 .dl-cmd-line code {
   flex: 1;
   font-family: var(--font-mono);
   font-size: 15px;
-  color: #C4B5FD;
+  color: #4a2fcc;
   letter-spacing: .02em;
   user-select: all;
   white-space: nowrap;
@@ -962,25 +963,26 @@
   gap: 5px;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: #A78BFA;
-  background: rgba(124,92,255,.15);
-  border: 1px solid rgba(124,92,255,.3);
+  color: #7C5CFF;
+  background: rgba(124,92,255,.1);
+  border: 1px solid rgba(124,92,255,.28);
   border-radius: 6px;
   padding: 5px 12px;
   white-space: nowrap;
   flex-shrink: 0;
   transition: background .15s;
 }
-.dl-cmd-line:hover .dl-cmd-copy-btn { background: rgba(124,92,255,.28); }
+.dl-cmd-line:hover .dl-cmd-copy-btn { background: rgba(124,92,255,.2); }
 .dl-cmd-sub {
   padding: 10px 22px 14px;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: rgba(167,139,250,.65);
+  color: #7C5CFF;
+  opacity: .7;
   letter-spacing: .04em;
-  border-top: 1px solid rgba(124,92,255,.15);
+  border-top: 1px solid rgba(124,92,255,.12);
 }
-.dl-cmd-link { color: #A78BFA; text-decoration: none; }
+.dl-cmd-link { color: #5B3FCC; text-decoration: none; }
 .dl-cmd-link:hover { text-decoration: underline; }
 
 /* ── "or" divider ── */
