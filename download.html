@@ -90,43 +90,190 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   width: 100%;
-  max-width: 940px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
-/* Card + SmartScreen side by side */
-.dl-main-row {
+/* ── Linux primary hero card ── */
+.dl-linux-primary {
+  width: 100%;
+  border-radius: 16px;
+  padding: 30px 32px 26px;
+  border: 1px solid rgba(124,92,255,.5);
+  background: linear-gradient(135deg, rgba(124,92,255,.09) 0%, rgba(109,76,255,.04) 100%);
+  box-shadow: 0 0 48px rgba(124,92,255,.1), inset 0 1px 0 rgba(255,255,255,.04);
+  position: relative;
+  overflow: hidden;
+}
+.dl-linux-primary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse 80% 70% at 5% 50%, rgba(124,92,255,.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.dl-linux-primary-badge {
+  position: absolute;
+  top: -1px; left: 26px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #7C5CFF 0%, #A78BFA 100%);
+  color: #fff;
+  padding: 4px 14px;
+  border-radius: 0 0 8px 8px;
+}
+.dl-linux-primary-top {
   display: flex;
-  gap: 16px;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 22px;
+  position: relative;
+}
+.dl-linux-primary-icon {
+  width: 52px; height: 52px;
+  background: rgba(124,92,255,.15);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #A78BFA;
+  border: 1px solid rgba(124,92,255,.2);
+}
+.dl-linux-primary-info { flex: 1; }
+.dl-linux-primary-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.025em;
+  margin-bottom: 5px;
+}
+.dl-linux-primary-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted-2);
+  letter-spacing: .04em;
+  margin-bottom: 10px;
+}
+.dl-linux-perks {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.dl-linux-perk {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #A78BFA;
+  background: rgba(167,139,250,.1);
+  border: 1px solid rgba(167,139,250,.22);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.dl-linux-primary-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+}
+.dl-btn-deb {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #7C5CFF 0%, #6048E8 100%);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: -.01em;
+  transition: opacity .15s, transform .15s, box-shadow .15s;
+  box-shadow: 0 4px 24px rgba(124,92,255,.35);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dl-btn-deb:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 32px rgba(124,92,255,.5); }
+.dl-btn-deb svg { flex-shrink: 0; }
+.dl-btn-appimage {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(124,92,255,.12);
+  color: #BDB4FE;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 26px;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: -.01em;
+  border: 1px solid rgba(124,92,255,.35);
+  transition: background .15s, transform .15s, color .15s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dl-btn-appimage:hover { background: rgba(124,92,255,.2); color: #C4B5FD; transform: translateY(-1px); }
+.dl-btn-appimage svg { flex-shrink: 0; }
+.dl-linux-footer {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted-2);
+  letter-spacing: .04em;
+  opacity: .7;
+  position: relative;
+}
+
+/* ── Windows secondary row ── */
+.dl-win-row {
+  display: flex;
+  gap: 14px;
   width: 100%;
   align-items: stretch;
 }
-.dl-main-row .dl-card {
+.dl-win-row .dl-card {
   flex: 1.1;
   min-width: 0;
 }
-.dl-main-row .dl-notice {
+.dl-win-row .dl-notice {
   flex: 1;
   min-width: 0;
   margin: 0;
   max-width: none;
 }
 @media (max-width: 700px) {
-  .dl-main-row { flex-direction: column; }
-  .dl-options { max-width: 560px; }
+  .dl-win-row  { flex-direction: column; }
+  .dl-options  { max-width: 560px; }
+  .dl-linux-primary { padding: 24px 20px 20px; }
+  .dl-linux-primary-name { font-size: 17px; }
+  .dl-btn-deb, .dl-btn-appimage { font-size: 13px; padding: 11px 18px; }
 }
+
+/* Card + SmartScreen side by side (kept for Windows) */
+.dl-main-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  align-items: stretch;
+}
+.dl-main-row .dl-card { flex: 1.1; min-width: 0; }
+.dl-main-row .dl-notice { flex: 1; min-width: 0; margin: 0; max-width: none; }
+@media (max-width: 700px) { .dl-main-row { flex-direction: column; } }
 
 .dl-card {
   width: 100%;
   border-radius: 12px;
-  padding: 20px 24px;
-  border: 1px solid rgba(124,92,255,.2);
-  background: rgba(124,92,255,.05);
+  padding: 18px 22px;
+  border: 1px solid var(--rule-strong);
+  background: rgba(255,255,255,.02);
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
   position: relative;
 }
 
@@ -704,7 +851,7 @@ document.getElementById('navHam').addEventListener('click', function() {
 
 <!-- ── HERO ── -->
 <section class="dl-hero" id="top">
-  <div class="dl-eyebrow">adris.tech Desktop · Windows · Free to start</div>
+  <div class="dl-eyebrow">adris.tech Desktop · Linux & Windows · Free to start</div>
 
   <h1>
     Download the app.<br/>
@@ -717,10 +864,51 @@ document.getElementById('navHam').addEventListener('click', function() {
 
   <div id="download-now" class="dl-options">
 
-    <!-- Windows card + SmartScreen notice side by side -->
+    <!-- ① Linux — PRIMARY download (no warnings, no SmartScreen) -->
+    <div class="dl-linux-primary">
+      <div class="dl-linux-primary-badge">Recommended</div>
+      <div class="dl-linux-primary-top">
+        <div class="dl-linux-primary-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2C7.4 2 2 7.4 2 14s5.4 12 12 12 12-5.4 12-12S20.6 2 14 2Z" stroke="currentColor" stroke-width="1.8" fill="none"/>
+            <path d="M9 11.5c0-1.4.9-2.5 2-2.5s2 1.1 2 2.5M15 11.5c0-1.4.9-2.5 2-2.5s2 1.1 2 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M10 18s1-2 4-2 4 2 4 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M9 14l1 1M19 14l-1 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="dl-linux-primary-info">
+          <div class="dl-linux-primary-name">adris.tech for Linux</div>
+          <div class="dl-linux-primary-sub">Ubuntu 22.04+ · Fedora 38+ · Arch · Any distro via AppImage</div>
+          <div class="dl-linux-perks">
+            <span class="dl-linux-perk">No SmartScreen</span>
+            <span class="dl-linux-perk">No warnings</span>
+            <span class="dl-linux-perk">Runs immediately</span>
+            <span class="dl-linux-perk">All 6 modules</span>
+          </div>
+        </div>
+      </div>
+      <div class="dl-linux-primary-btns">
+        <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb" class="dl-btn-deb" id="completeDlBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          Download .deb — Ubuntu / Debian
+        </a>
+        <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.AppImage" class="dl-btn-appimage" id="linuxAppImageBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          .AppImage — Any Distro
+        </a>
+      </div>
+      <div class="dl-linux-footer">v1.0.57 · ~22 MB · No credit card required · Free to start</div>
+    </div>
+
+    <!-- ② Windows — Beta (below Linux) -->
     <div class="dl-main-row">
 
-      <!-- Left: Windows download card -->
       <div class="dl-card" id="completeCard">
         <div class="dl-card-badge">Windows Beta</div>
         <div class="dl-card-body">
@@ -730,8 +918,8 @@ document.getElementById('navHam').addEventListener('click', function() {
           </div>
           <div class="dl-card-sub">All 6 modules · Mesh · Voice · ~22 MB · one installer</div>
         </div>
-        <button class="dl-btn-primary" id="completeDlBtn" onclick="handleDownload()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <button class="dl-btn-primary" id="liteDlBtn" onclick="handleDownload()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
           </svg>
@@ -739,57 +927,32 @@ document.getElementById('navHam').addEventListener('click', function() {
         </button>
       </div>
 
-      <!-- Right: SmartScreen warning -->
       <div class="dl-notice">
         <svg class="dl-notice-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
           <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
         <div>
-          <strong>⚠ Windows SmartScreen warning — here's what to do</strong>
-          <p>adris.tech is in <b>Windows Beta</b> and not yet commercially code-signed, so SmartScreen flags it as "unrecognized." <b>This is completely safe.</b> Click through in 2 steps:</p>
+          <strong>⚠ Windows SmartScreen warning</strong>
+          <p>Not yet commercially code-signed — SmartScreen flags it as "unrecognized." <b>Safe to install.</b></p>
           <div class="dl-notice-steps">
             <span class="dl-notice-step">Click "More info"</span>
             <span class="dl-notice-arrow">→</span>
             <span class="dl-notice-step">Click "Run anyway"</span>
           </div>
-          <p style="margin-top:10px;">Publisher certificate in progress — warning disappears once certified. Download is from <b>github.com/astraluxe/nivara-desktop</b>.</p>
         </div>
       </div>
 
     </div><!-- end dl-main-row -->
 
-    <p class="dl-platform-note" id="platformNote">Windows 10 or later · Beta · No credit card required</p>
+    <p class="dl-platform-note" id="platformNote">Linux (Ubuntu 22.04+) · Windows 10+ · Free to start · No credit card</p>
 
-    <!-- Linux download strip -->
-    <div class="dl-linux-strip">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="flex-shrink:0;color:var(--accent)">
-        <path d="M14 2C7.4 2 2 7.4 2 14s5.4 12 12 12 12-5.4 12-12S20.6 2 14 2Z" stroke="currentColor" stroke-width="1.8" fill="none"/>
-        <path d="M9 11.5c0-1.4.9-2.5 2-2.5s2 1.1 2 2.5M15 11.5c0-1.4.9-2.5 2-2.5s2 1.1 2 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        <path d="M10 18s1-2 4-2 4 2 4 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        <path d="M9 14l1 1M19 14l-1 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-      </svg>
-      <div class="dl-linux-strip-body">
-        <div class="dl-linux-strip-name">adris.tech for Linux</div>
-        <div class="dl-linux-strip-sub">Ubuntu 22.04+ · Fedora 38+ · Any distro via AppImage · No warnings, no signing</div>
-      </div>
-      <div class="dl-linux-btns">
-        <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb" class="dl-btn-lite" style="font-size:11px;padding:7px 14px;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-          .deb (Ubuntu)
-        </a>
-        <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.AppImage" class="dl-btn-lite" style="font-size:11px;padding:7px 14px;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-          .AppImage
-        </a>
-      </div>
-    </div>
   </div>
 
   <div class="dl-platforms" style="margin-top:24px;">
-    <span>Also on:</span>
+    <span>Also available:</span>
     <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb" class="dl-platform-link" id="linuxDebBtn" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux .deb</a>
-    <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.AppImage" class="dl-platform-link" id="linuxAppImageBtn" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux .AppImage</a>
+    <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.AppImage" class="dl-platform-link" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux .AppImage</a>
     <a href="#" class="dl-platform-link disabled" id="macBtn">macOS — later in 2026</a>
   </div>
 
@@ -1076,25 +1239,27 @@ document.getElementById('navHam').addEventListener('click', function() {
   // ── Platform detection
   (function () {
     const ua = navigator.userAgent.toLowerCase();
-    const isMac   = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
-    const isLinux = /linux/.test(ua) && !/android/.test(ua);
+    const isMac     = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
+    const isLinux   = /linux/.test(ua) && !/android/.test(ua);
+    const isWindows = /win/.test(ua);
 
-    if (isLinux) {
-      // Linux users: point primary buttons at the .deb download
-      const DEB_URL = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb';
-      ['completeDlBtn','liteDlBtn'].forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) { btn.setAttribute('href', DEB_URL); btn.setAttribute('download', ''); }
-      });
+    if (isWindows) {
+      // Windows users: highlight the Windows card slightly
+      const card = document.getElementById('completeCard');
+      if (card) { card.style.borderColor = 'rgba(124,92,255,.35)'; card.style.background = 'rgba(124,92,255,.06)'; }
+      document.getElementById('platformNote').textContent = 'Windows 10 or later · Beta · No credit card required';
+    } else if (isLinux) {
+      // Linux users: they're already on the right card, just update the note
       document.getElementById('platformNote').textContent = 'Linux · Ubuntu 22.04+ · Fedora 38+ · Any distro via AppImage';
     } else if (isMac) {
-      ['completeDlBtn','liteDlBtn'].forEach(id => {
+      // Dim Linux buttons since macOS can't run them
+      ['completeDlBtn','linuxAppImageBtn'].forEach(id => {
         const btn = document.getElementById(id);
-        if (btn) { btn.style.opacity = '.45'; btn.style.cursor = 'default'; }
+        if (btn) { btn.style.opacity = '.45'; btn.style.pointerEvents = 'none'; }
       });
       document.getElementById('platformNote').textContent = 'macOS build coming later in 2026 · Windows 10+ and Linux available now';
-      document.getElementById('macBtn').classList.remove('disabled');
-      document.getElementById('macBtn').textContent = 'macOS — coming soon';
+      const macBtn = document.getElementById('macBtn');
+      if (macBtn) { macBtn.classList.remove('disabled'); macBtn.textContent = 'macOS — coming soon'; }
     }
   })();
 
@@ -1104,8 +1269,14 @@ document.getElementById('navHam').addEventListener('click', function() {
   function _isWindowsUser() {
     const ua = navigator.userAgent.toLowerCase();
     const isMac   = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
+    const isLinux = /linux/.test(ua) && !/android/.test(ua);
     if (isMac) {
       alert('macOS build is coming later in 2026. Windows and Linux are available now.');
+      return false;
+    }
+    if (isLinux) {
+      // Redirect Linux users to the .deb download instead
+      window.location.href = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb';
       return false;
     }
     return true;
