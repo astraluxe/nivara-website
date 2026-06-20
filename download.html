@@ -1440,7 +1440,6 @@ document.getElementById('navHam').addEventListener('click', function() {
       <span id="finalCtaLabel">Download — free</span>
     </a>
   </div>
-  <p id="finalCtaNote" style="margin-top:16px;font-size:12px;color:var(--on-dark-2);opacity:.7;display:none;">Windows will show a security prompt — click <b style="color:var(--on-dark);">More info → Run anyway</b>. Safe to proceed.</p>
 
   <div class="dl-privacy">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1561,34 +1560,15 @@ document.getElementById('navHam').addEventListener('click', function() {
     const isWindows = /win/.test(ua) && !/android/.test(ua);
     const isLinux   = /linux/.test(ua) && !/android/.test(ua);
 
-    if (isWindows) {
-      switchOs('windows');
-      const lbl = document.getElementById('finalCtaLabel');
-      if (lbl) lbl.textContent = 'Download for Windows (Beta)';
-      const note = document.getElementById('finalCtaNote');
-      if (note) note.style.display = '';
-    } else if (isMac) {
-      switchOs('mac');
-      const lbl = document.getElementById('finalCtaLabel');
-      if (lbl) lbl.textContent = 'See download options';
-    } else if (isLinux) {
-      const lbl = document.getElementById('finalCtaLabel');
-      if (lbl) lbl.textContent = 'Download for Linux';
-    }
-    // unknown → stays "Download — free", Linux tab already active
+    if (isWindows) switchOs('windows');
+    else if (isMac) switchOs('mac');
+    // Linux tab is default; label stays "Download — free" for all OS
   })();
 
-  // ── Final CTA — OS-aware click
+  // ── Final CTA — scroll to OS tabs
   function handleFinalCta(e) {
-    const ua = navigator.userAgent.toLowerCase();
-    const isWindows = /win/.test(ua) && !/android/.test(ua);
-    const isLinux   = /linux/.test(ua) && !/android/.test(ua);
-    if (isWindows) { e.preventDefault(); handleDownload(); }
-    else if (isLinux) {
-      e.preventDefault();
-      window.location.href = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb';
-    }
-    // Mac / unknown → follow href to #download-now (tab switcher at top)
+    e.preventDefault();
+    document.getElementById('download-now').scrollIntoView({ behavior: 'smooth' });
   }
 
   // ── Download URLs
