@@ -271,11 +271,14 @@
 .dl-step-box {
   flex: 1;
   min-width: 220px;
-  background: rgba(124,92,255,.07);
-  border: 1px solid rgba(124,92,255,.18);
+  background: rgba(255,255,255,.94);
+  border: 1px solid rgba(124,92,255,.22);
   border-radius: 10px;
   padding: 14px 16px;
   text-align: left;
+}
+[data-theme="ink"] .dl-step-box {
+  background: rgba(255,255,255,.08);
 }
 .dl-step-label {
   font-family: var(--font-mono);
@@ -878,6 +881,134 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* ── Ollama-style OS download ── */
+.dl-download-wrap {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.dl-os-tabs {
+  display: flex;
+  border: 1px solid var(--rule-strong);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.dl-os-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 12px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rule-strong);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.dl-os-tab:last-child { border-right: none; }
+.dl-os-tab:hover:not(.dl-os-tab-disabled) { background: rgba(124,92,255,.06); color: var(--ink); }
+.dl-os-tab.active { background: rgba(124,92,255,.1); color: var(--ink); font-weight: 600; }
+.dl-os-tab-disabled { opacity: .38; cursor: default; }
+.dl-os-tab-badge {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  letter-spacing: .05em;
+  opacity: .65;
+  font-weight: 400;
+}
+.dl-os-panel { width: 100%; }
+
+/* ── Terminal command box ── */
+.dl-cmd-box {
+  background: rgba(10,10,12,.55);
+  border: 1px solid rgba(124,92,255,.35);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.dl-cmd-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 22px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.dl-cmd-line:hover { background: rgba(124,92,255,.1); }
+.dl-cmd-line code {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: #C4B5FD;
+  letter-spacing: .02em;
+  user-select: all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dl-cmd-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #A78BFA;
+  background: rgba(124,92,255,.15);
+  border: 1px solid rgba(124,92,255,.3);
+  border-radius: 6px;
+  padding: 5px 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.dl-cmd-line:hover .dl-cmd-copy-btn { background: rgba(124,92,255,.28); }
+.dl-cmd-sub {
+  padding: 10px 22px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(167,139,250,.65);
+  letter-spacing: .04em;
+  border-top: 1px solid rgba(124,92,255,.15);
+}
+.dl-cmd-link { color: #A78BFA; text-decoration: none; }
+.dl-cmd-link:hover { text-decoration: underline; }
+
+/* ── "or" divider ── */
+.dl-os-or {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-2);
+  letter-spacing: .06em;
+}
+.dl-os-or::before, .dl-os-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule-strong);
+}
+
+/* ── Manual download buttons row ── */
+.dl-os-manual {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+@media (max-width: 600px) {
+  .dl-cmd-line code { font-size: 12px; }
+  .dl-os-tab { font-size: 13px; padding: 11px 8px; gap: 6px; }
+}
 </style>
 </head>
 <body>
@@ -973,57 +1104,74 @@ document.getElementById('navHam').addEventListener('click', function() {
     Six AI modules. One installer. Mesh, Voice, and everything else — included. Your data stays on your machine. Nothing leaves your device.
   </p>
 
-  <div id="download-now" class="dl-options">
+  <div id="download-now" class="dl-download-wrap">
 
-    <!-- ① Linux — PRIMARY download (no warnings, no SmartScreen) -->
-    <div class="dl-linux-primary">
-      <div class="dl-linux-primary-badge">Recommended</div>
-      <div class="dl-linux-primary-top">
-        <div class="dl-linux-primary-icon">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-            <!-- Terminal window body (border-fill) -->
-            <rect x="2" y="3" width="24" height="22" rx="3.5" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/>
-            <!-- Title bar solid fill -->
-            <rect x="2" y="3" width="24" height="7" rx="3.5" fill="currentColor"/>
-            <!-- Flatten bottom of title bar -->
-            <rect x="2" y="7" width="24" height="3" fill="currentColor"/>
-            <!-- Title bar dots -->
-            <circle cx="7.5"  cy="6.5" r="1.25" fill="rgba(14,14,12,.55)"/>
-            <circle cx="11.5" cy="6.5" r="1.25" fill="rgba(14,14,12,.35)"/>
-            <circle cx="15.5" cy="6.5" r="1.25" fill="rgba(14,14,12,.2)"/>
-            <!-- Prompt > (filled triangle feel via thick stroke) -->
-            <path d="M6 15l4.5 2.5L6 20" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- Cursor underscore (filled rect) -->
-            <rect x="13.5" y="20" width="8.5" height="2.1" rx="1.05" fill="currentColor"/>
-          </svg>
+    <!-- OS Tab switcher -->
+    <div class="dl-os-tabs">
+      <button class="dl-os-tab active" data-os="linux" onclick="switchOs('linux')">
+        <!-- Tux penguin -->
+        <svg width="20" height="22" viewBox="0 0 22 24" fill="none" aria-hidden="true">
+          <ellipse cx="11" cy="17" rx="6" ry="5.5" fill="#1a1a1a"/>
+          <ellipse cx="11" cy="18.5" rx="3" ry="4" fill="#f0ede8"/>
+          <circle cx="11" cy="7.5" r="5.5" fill="#1a1a1a"/>
+          <circle cx="9.2" cy="6.5" r="1.7" fill="white"/>
+          <circle cx="12.8" cy="6.5" r="1.7" fill="white"/>
+          <circle cx="9.5" cy="6.7" r=".8" fill="#0a0a14"/>
+          <circle cx="13.1" cy="6.7" r=".8" fill="#0a0a14"/>
+          <path d="M9.2 9.8Q11 11.2 12.8 9.8" stroke="#FF8800" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+          <ellipse cx="7.2" cy="23" rx="2.6" ry=".9" fill="#FF8800"/>
+          <ellipse cx="14.8" cy="23" rx="2.6" ry=".9" fill="#FF8800"/>
+        </svg>
+        Linux
+      </button>
+      <button class="dl-os-tab" data-os="windows" onclick="switchOs('windows')">
+        <!-- Windows logo -->
+        <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+          <rect x="0" y="0" width="9" height="9" rx=".6" fill="#F25022"/>
+          <rect x="11" y="0" width="9" height="9" rx=".6" fill="#7FBA00"/>
+          <rect x="0" y="11" width="9" height="9" rx=".6" fill="#00A4EF"/>
+          <rect x="11" y="11" width="9" height="9" rx=".6" fill="#FFB900"/>
+        </svg>
+        Windows
+        <span class="dl-os-tab-badge">Beta</span>
+      </button>
+      <button class="dl-os-tab dl-os-tab-disabled" data-os="mac" onclick="return false">
+        <!-- Apple logo -->
+        <svg width="16" height="18" viewBox="0 0 16 18" fill="none" aria-hidden="true">
+          <path d="M13 9c0-2.4 1.4-3.8 2-4.4-.7-1-1.9-1.8-3.6-1.9-.2 0-1.5-.2-3 .8-.6.4-1.3.6-2 .6s-1.4-.2-2-.6C2.9 2.6 1.6 2.8 1.4 2.8.2 3 -.9 3.8-1.6 5c.6.6 2 2.2 2 4.4 0 2.7-1.5 5.5-3.1 7 .5.9 1.2 1.5 1.8 1.5.4 0 .9-.2 1.5-.4.6-.3 1.4-.5 2.3-.5s1.7.2 2.3.5c.6.2 1.1.4 1.5.4.6 0 1.3-.6 1.8-1.5C6.9 14.9 5.4 12.1 5.4 9.4z" fill="#999"/>
+          <path d="M8 1.5c.1-.5.3-1.6-.3-1.6h-.2C6.6 0 5.7.7 5.2 1.6c-.2.4-.4.8-.4 1.3s.2.8.3.9c.2.1.4.2.6.2.3 0 .6-.1.9-.3C7.2 3.2 7.9 2.4 8 1.5z" fill="#999"/>
+        </svg>
+        macOS
+        <span class="dl-os-tab-badge">Soon</span>
+      </button>
+    </div>
+
+    <!-- ① LINUX PANEL -->
+    <div class="dl-os-panel" id="panel-linux">
+      <div class="dl-cmd-box">
+        <div class="dl-cmd-line" onclick="copyOsCmd(this,'curl -fsSL https://adris.tech/install.sh | sh')">
+          <code>curl -fsSL https://adris.tech/install.sh | sh</code>
+          <span class="dl-cmd-copy-btn">
+            <span class="cmd-label">Copy</span>
+            <span class="cmd-copied" style="display:none;color:#4ade80;">Copied ✓</span>
+          </span>
         </div>
-        <div class="dl-linux-primary-info">
-          <div class="dl-linux-primary-name">adris.tech for Linux</div>
-          <div class="dl-linux-primary-sub">Ubuntu 22.04+ · Fedora 38+ · Arch · Any distro via AppImage</div>
-          <div class="dl-linux-perks">
-            <span class="dl-linux-perk">Available Now</span>
-            <span class="dl-linux-perk">No SmartScreen</span>
-            <span class="dl-linux-perk">No warnings</span>
-            <span class="dl-linux-perk">All 6 modules</span>
-          </div>
-        </div>
+        <div class="dl-cmd-sub">Paste this in your terminal &nbsp;·&nbsp; Auto-detects Ubuntu, Fedora, Arch &nbsp;·&nbsp; <a href="/install.sh" class="dl-cmd-link">View script source</a></div>
       </div>
-      <div class="dl-linux-primary-btns">
+
+      <div class="dl-os-or">or download manually</div>
+
+      <div class="dl-os-manual">
         <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb" class="dl-btn-deb" id="completeDlBtn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          Download .deb — Ubuntu / Debian
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          .deb — Ubuntu / Debian
         </a>
         <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.AppImage" class="dl-btn-appimage" id="linuxAppImageBtn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
           .AppImage — Arch · Fedora · Any Distro
         </a>
       </div>
+
       <!-- After-download steps -->
       <div class="dl-steps">
         <button class="dl-steps-toggle" id="stepsToggle" onclick="toggleSteps()">
@@ -1031,78 +1179,50 @@ document.getElementById('navHam').addEventListener('click', function() {
           After downloading — what to do next
         </button>
         <div class="dl-steps-body hidden" id="stepsBody">
-
-          <!-- .deb -->
           <div class="dl-step-box">
             <div class="dl-step-label">.deb — Ubuntu / Debian</div>
-            <div class="dl-step-row">
-              <div class="dl-step-num">1</div>
-              <div class="dl-step-text">Double-click the downloaded <code style="font-size:10px;color:#A78BFA;">.deb</code> file — Ubuntu Software Center opens automatically.</div>
-            </div>
-            <div class="dl-step-row">
-              <div class="dl-step-num">2</div>
-              <div class="dl-step-text">Click <strong style="color:var(--ink);">Install</strong>. Done — find adris.tech in your app launcher.</div>
-            </div>
+            <div class="dl-step-row"><div class="dl-step-num">1</div><div class="dl-step-text">Double-click the downloaded <code style="font-size:10px;color:#7C5CFF;">.deb</code> file — Ubuntu Software Center opens automatically.</div></div>
+            <div class="dl-step-row"><div class="dl-step-num">2</div><div class="dl-step-text">Click <strong>Install</strong>. Done — find adris.tech in your app launcher.</div></div>
             <div class="dl-step-or">or via terminal</div>
-            <div class="dl-step-cmd" onclick="copyCmd(this, 'sudo dpkg -i adris-setup-linux-1.0.57.deb')">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>
-              <span class="dl-copy-tick">✓ Copied</span>
-              <span>sudo dpkg -i adris-setup-linux-1.0.57.deb</span>
-            </div>
+            <div class="dl-step-cmd" onclick="copyCmd(this,'sudo dpkg -i adris-setup-linux-1.0.57.deb')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg><span class="dl-copy-tick">✓ Copied</span><span>sudo dpkg -i adris-setup-linux-1.0.57.deb</span></div>
           </div>
-
-          <!-- .AppImage -->
           <div class="dl-step-box">
             <div class="dl-step-label">.AppImage — Arch · Fedora · Any Distro</div>
-            <div class="dl-step-row">
-              <div class="dl-step-num">1</div>
-              <div class="dl-step-text">Right-click the file → <strong style="color:var(--ink);">Properties</strong> → <strong style="color:var(--ink);">Permissions</strong> → tick <strong style="color:var(--ink);">"Allow executing as program"</strong></div>
-            </div>
-            <div class="dl-step-row">
-              <div class="dl-step-num">2</div>
-              <div class="dl-step-text">Double-click it. Done — no install, no package manager.</div>
-            </div>
+            <div class="dl-step-row"><div class="dl-step-num">1</div><div class="dl-step-text">Right-click the file → <strong>Properties</strong> → <strong>Permissions</strong> → tick <strong>"Allow executing as program"</strong></div></div>
+            <div class="dl-step-row"><div class="dl-step-num">2</div><div class="dl-step-text">Double-click it. Done — no install, no package manager needed.</div></div>
             <div class="dl-step-or">or via terminal</div>
-            <div class="dl-step-cmd" onclick="copyCmd(this, 'chmod +x adris-setup-linux-1.0.57.AppImage')">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>
-              <span class="dl-copy-tick">✓ Copied</span>
-              <span>chmod +x adris-setup-linux-1.0.57.AppImage</span>
-            </div>
-            <div class="dl-step-cmd" onclick="copyCmd(this, './adris-setup-linux-1.0.57.AppImage')" style="margin-top:4px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>
-              <span class="dl-copy-tick">✓ Copied</span>
-              <span>./adris-setup-linux-1.0.57.AppImage</span>
-            </div>
+            <div class="dl-step-cmd" onclick="copyCmd(this,'chmod +x adris-setup-linux-1.0.57.AppImage')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg><span class="dl-copy-tick">✓ Copied</span><span>chmod +x adris-setup-linux-1.0.57.AppImage</span></div>
+            <div class="dl-step-cmd" onclick="copyCmd(this,'./adris-setup-linux-1.0.57.AppImage')" style="margin-top:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg><span class="dl-copy-tick">✓ Copied</span><span>./adris-setup-linux-1.0.57.AppImage</span></div>
           </div>
-
         </div>
       </div>
 
-      <div class="dl-linux-footer" style="margin-top:14px;">v1.0.57 · Live Now · ~22 MB · No credit card required · Free to start</div>
+      <p class="dl-platform-note" id="platformNote">v1.0.57 · Live Now · Ubuntu 22.04+ · Fedora 38+ · Arch · Free to start</p>
     </div>
 
-    <!-- ② Windows — Beta (below Linux) -->
-    <div class="dl-main-row">
-
-      <div class="dl-card" id="completeCard">
-        <div class="dl-card-badge">Windows Beta</div>
-        <div class="dl-card-body">
-          <div class="dl-card-name">
-            adris.tech for Windows
-            <span class="dl-card-beta">Beta</span>
-          </div>
-          <div class="dl-card-sub">All 6 modules · Mesh · Voice · ~22 MB · one installer</div>
+    <!-- ② WINDOWS PANEL -->
+    <div class="dl-os-panel" id="panel-windows" style="display:none;">
+      <div class="dl-cmd-box">
+        <div class="dl-cmd-line" onclick="copyOsCmd(this,'irm https://adris.tech/install.ps1 | iex')">
+          <code>irm https://adris.tech/install.ps1 | iex</code>
+          <span class="dl-cmd-copy-btn">
+            <span class="cmd-label">Copy</span>
+            <span class="cmd-copied" style="display:none;color:#4ade80;">Copied ✓</span>
+          </span>
         </div>
+        <div class="dl-cmd-sub">Paste this in PowerShell &nbsp;·&nbsp; Downloads and runs the installer automatically</div>
+      </div>
+
+      <div class="dl-os-or">or</div>
+
+      <div class="dl-os-manual" style="justify-content:center;">
         <button class="dl-btn-primary" id="liteDlBtn" onclick="handleDownload()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
           <span id="completeDlLabel">Download for Windows</span>
         </button>
       </div>
 
-      <div class="dl-notice">
+      <div class="dl-notice" style="max-width:520px;margin:20px auto 0;">
         <svg class="dl-notice-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
           <path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1118,18 +1238,15 @@ document.getElementById('navHam').addEventListener('click', function() {
         </div>
       </div>
 
-    </div><!-- end dl-main-row -->
+      <p class="dl-platform-note" style="margin-top:16px;">v1.0.57 · Beta · Windows 10 or later · Free to start</p>
+    </div>
 
-    <p class="dl-platform-note" id="platformNote">Linux (Ubuntu 22.04+) · Windows 10+ · Free to start · No credit card</p>
+    <!-- ③ MACOS PANEL -->
+    <div class="dl-os-panel" id="panel-mac" style="display:none;text-align:center;padding:56px 0 40px;">
+      <p style="font-size:17px;color:var(--muted);margin-bottom:8px;">macOS build coming later in 2026.</p>
+      <p style="font-family:var(--font-mono);font-size:11px;color:var(--muted-2);letter-spacing:.04em;">Windows and Linux are available now — switch tabs above.</p>
+    </div>
 
-  </div>
-
-  <div class="dl-platforms" style="margin-top:24px;">
-    <span>Also available:</span>
-    <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.deb" class="dl-platform-link" id="linuxDebBtn" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux .deb</a>
-    <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.57.AppImage" class="dl-platform-link" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux .AppImage</a>
-    <a href="#" class="dl-platform-link disabled" id="macBtn">macOS — later in 2026</a>
-  </div>
 
   <div class="dl-features">
     <div class="dl-feat">
@@ -1411,31 +1528,38 @@ document.getElementById('navHam').addEventListener('click', function() {
     });
   });
 
-  // ── Platform detection
+  // ── OS tab switcher
+  function switchOs(os) {
+    document.querySelectorAll('.dl-os-tab').forEach(t => t.classList.remove('active'));
+    const tab = document.querySelector(`.dl-os-tab[data-os="${os}"]`);
+    if (tab && !tab.classList.contains('dl-os-tab-disabled')) tab.classList.add('active');
+    ['linux','windows','mac'].forEach(o => {
+      const p = document.getElementById(`panel-${o}`);
+      if (p) p.style.display = o === os ? '' : 'none';
+    });
+  }
+
+  // ── Copy command in OS panel
+  function copyOsCmd(el, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const label  = el.querySelector('.cmd-label');
+      const copied = el.querySelector('.cmd-copied');
+      if (label && copied) {
+        label.style.display  = 'none';
+        copied.style.display = 'inline';
+        setTimeout(() => { label.style.display = 'inline'; copied.style.display = 'none'; }, 2000);
+      }
+    });
+  }
+
+  // ── Auto-select correct tab based on OS
   (function () {
     const ua = navigator.userAgent.toLowerCase();
     const isMac     = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
-    const isLinux   = /linux/.test(ua) && !/android/.test(ua);
     const isWindows = /win/.test(ua);
-
-    if (isWindows) {
-      // Windows users: highlight the Windows card slightly
-      const card = document.getElementById('completeCard');
-      if (card) { card.style.borderColor = 'rgba(124,92,255,.35)'; card.style.background = 'rgba(124,92,255,.06)'; }
-      document.getElementById('platformNote').textContent = 'Windows 10 or later · Beta · No credit card required';
-    } else if (isLinux) {
-      // Linux users: they're already on the right card, just update the note
-      document.getElementById('platformNote').textContent = 'Linux · Ubuntu 22.04+ · Fedora 38+ · Any distro via AppImage';
-    } else if (isMac) {
-      // Dim Linux buttons since macOS can't run them
-      ['completeDlBtn','linuxAppImageBtn'].forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) { btn.style.opacity = '.45'; btn.style.pointerEvents = 'none'; }
-      });
-      document.getElementById('platformNote').textContent = 'macOS build coming later in 2026 · Windows 10+ and Linux available now';
-      const macBtn = document.getElementById('macBtn');
-      if (macBtn) { macBtn.classList.remove('disabled'); macBtn.textContent = 'macOS — coming soon'; }
-    }
+    if (isWindows) switchOs('windows');
+    else if (isMac) switchOs('mac');
+    // Linux / unknown → Linux tab already active by default
   })();
 
   // ── Download URLs
