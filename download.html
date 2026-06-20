@@ -17,7 +17,7 @@
 <meta name="twitter:card"       content="summary_large_image" />
 <meta name="twitter:creator"    content="@Amogh_Misra_" />
 <meta name="twitter:title"      content="Download adris.tech" />
-<meta name="twitter:description" content="Six AI modules. One installer. Runs locally on Windows." />
+<meta name="twitter:description" content="Six AI modules. One installer. Runs locally on Windows and Linux." />
 <meta name="twitter:image"      content="https://adris.tech/og-cover.png" />
 <link rel="canonical" href="https://adris.tech/download" />
 <meta name="robots" content="index, follow" />
@@ -576,17 +576,17 @@
   display: inline-block;
 }
 
-/* ── Linux coming soon strip ── */
+/* ── Linux download strip ── */
 .dl-linux-strip {
   width: 100%;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 14px;
-  border: 1px dashed rgba(109,76,255,.25);
+  border: 1px solid rgba(109,76,255,.25);
   border-radius: 10px;
   padding: 14px 20px;
-  background: transparent;
+  background: rgba(109,76,255,.03);
 }
 .dl-linux-strip-body { flex: 1; text-align: left; }
 .dl-linux-strip-name {
@@ -600,6 +600,13 @@
   font-size: 10px;
   color: var(--muted-2);
   letter-spacing: .04em;
+}
+.dl-linux-btns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
 }
 .dl-linux-badge {
   font-family: var(--font-mono);
@@ -754,9 +761,9 @@ document.getElementById('navHam').addEventListener('click', function() {
 
     <p class="dl-platform-note" id="platformNote">Windows 10 or later · Beta · No credit card required</p>
 
-    <!-- Linux coming soon strip -->
+    <!-- Linux download strip -->
     <div class="dl-linux-strip">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="flex-shrink:0;color:var(--muted)">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="flex-shrink:0;color:var(--accent)">
         <path d="M14 2C7.4 2 2 7.4 2 14s5.4 12 12 12 12-5.4 12-12S20.6 2 14 2Z" stroke="currentColor" stroke-width="1.8" fill="none"/>
         <path d="M9 11.5c0-1.4.9-2.5 2-2.5s2 1.1 2 2.5M15 11.5c0-1.4.9-2.5 2-2.5s2 1.1 2 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
         <path d="M10 18s1-2 4-2 4 2 4 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -764,16 +771,26 @@ document.getElementById('navHam').addEventListener('click', function() {
       </svg>
       <div class="dl-linux-strip-body">
         <div class="dl-linux-strip-name">adris.tech for Linux</div>
-        <div class="dl-linux-strip-sub">AppImage · No code signing required · No security warnings</div>
+        <div class="dl-linux-strip-sub">Ubuntu 22.04+ · Fedora 38+ · Any distro via AppImage · No warnings, no signing</div>
       </div>
-      <span class="dl-linux-badge">Q3 2026</span>
+      <div class="dl-linux-btns">
+        <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.56.deb" class="dl-btn-lite" style="font-size:11px;padding:7px 14px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          .deb (Ubuntu)
+        </a>
+        <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.56.AppImage" class="dl-btn-lite" style="font-size:11px;padding:7px 14px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          .AppImage
+        </a>
+      </div>
     </div>
   </div>
 
   <div class="dl-platforms" style="margin-top:24px;">
-    <span>Also coming:</span>
+    <span>Also on:</span>
+    <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.56.deb" class="dl-platform-link" id="linuxDebBtn" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux .deb</a>
+    <a href="https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.56.AppImage" class="dl-platform-link" id="linuxAppImageBtn" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux .AppImage</a>
     <a href="#" class="dl-platform-link disabled" id="macBtn">macOS — later in 2026</a>
-    <a href="#" class="dl-platform-link" id="linuxBtn" style="color:var(--accent);border-color:rgba(109,76,255,.35);">Linux AppImage — Q3 2026</a>
   </div>
 
   <div class="dl-features">
@@ -938,13 +955,14 @@ document.getElementById('navHam').addEventListener('click', function() {
     </div>
 
     <div class="dl-req-card">
-      <div class="dl-req-os">Linux · Coming Q3 2026</div>
+      <div class="dl-req-os">Linux · Available Now</div>
       <ul>
-        <li>Ubuntu 22.04+ · Fedora 38+ · Arch</li>
+        <li>Ubuntu 22.04+ · Fedora 38+ · Arch (any distro)</li>
         <li>x86_64 or ARM64</li>
         <li>4 GB RAM minimum</li>
-        <li>AppImage — no installation needed</li>
-        <li>No code signing warnings — runs immediately</li>
+        <li>.deb — install via <code style="font-size:10px;">dpkg -i adris-setup-linux-*.deb</code></li>
+        <li>.AppImage — chmod +x then double-click, no install</li>
+        <li>No SmartScreen, no code signing warnings</li>
         <li style="margin-top:4px;color:var(--muted-2);">macOS support planned for late 2026</li>
       </ul>
     </div>
@@ -1061,15 +1079,22 @@ document.getElementById('navHam').addEventListener('click', function() {
     const isMac   = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
     const isLinux = /linux/.test(ua) && !/android/.test(ua);
 
-    if (isMac || isLinux) {
-      const os = isMac ? 'macOS' : 'Linux';
+    if (isLinux) {
+      // Linux users: point primary buttons at the .deb download
+      const DEB_URL = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup-linux-1.0.56.deb';
+      ['completeDlBtn','liteDlBtn'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) { btn.setAttribute('href', DEB_URL); btn.setAttribute('download', ''); }
+      });
+      document.getElementById('platformNote').textContent = 'Linux · Ubuntu 22.04+ · Fedora 38+ · Any distro via AppImage';
+    } else if (isMac) {
       ['completeDlBtn','liteDlBtn'].forEach(id => {
         const btn = document.getElementById(id);
         if (btn) { btn.style.opacity = '.45'; btn.style.cursor = 'default'; }
       });
-      document.getElementById('platformNote').textContent = os + ' builds coming soon · Windows 10+ available now';
-      if (isMac) { document.getElementById('macBtn').classList.remove('disabled'); document.getElementById('macBtn').textContent = 'macOS — coming soon'; }
-      if (isLinux) { document.getElementById('linuxBtn').classList.remove('disabled'); document.getElementById('linuxBtn').textContent = 'Linux — coming soon'; }
+      document.getElementById('platformNote').textContent = 'macOS build coming later in 2026 · Windows 10+ and Linux available now';
+      document.getElementById('macBtn').classList.remove('disabled');
+      document.getElementById('macBtn').textContent = 'macOS — coming soon';
     }
   })();
 
@@ -1079,9 +1104,8 @@ document.getElementById('navHam').addEventListener('click', function() {
   function _isWindowsUser() {
     const ua = navigator.userAgent.toLowerCase();
     const isMac   = /macintosh|mac os x/.test(ua) && !/iphone|ipad/.test(ua);
-    const isLinux = /linux/.test(ua) && !/android/.test(ua);
-    if (isMac || isLinux) {
-      alert('macOS and Linux builds are coming soon. Check adris.tech for updates.');
+    if (isMac) {
+      alert('macOS build is coming later in 2026. Windows and Linux are available now.');
       return false;
     }
     return true;
