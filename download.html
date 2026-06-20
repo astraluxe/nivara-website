@@ -206,8 +206,8 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(124,92,255,.12);
-  color: #BDB4FE;
+  background: linear-gradient(135deg, #7C5CFF 0%, #6048E8 100%);
+  color: #fff;
   font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 600;
@@ -215,12 +215,13 @@
   border-radius: 8px;
   text-decoration: none;
   letter-spacing: -.01em;
-  border: 1px solid rgba(124,92,255,.35);
-  transition: background .15s, transform .15s, color .15s;
+  border: none;
+  transition: opacity .15s, transform .15s, box-shadow .15s;
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: 0 4px 24px rgba(124,92,255,.35);
 }
-.dl-btn-appimage:hover { background: rgba(124,92,255,.2); color: #C4B5FD; transform: translateY(-1px); }
+.dl-btn-appimage:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 32px rgba(124,92,255,.5); }
 .dl-btn-appimage svg { flex-shrink: 0; }
 .dl-linux-footer {
   margin-top: 14px;
