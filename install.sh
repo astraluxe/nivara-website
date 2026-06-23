@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-VERSION="1.0.57"
-BASE="https://github.com/astraluxe/nivara-desktop/releases/latest/download"
+VERSION="1.0.66"
+TAG="v1.0.66-linux"
+BASE="https://github.com/astraluxe/nivara-desktop/releases/download/$TAG"
 DEB_URL="$BASE/adris-setup-linux-$VERSION.deb"
 APPIMAGE_URL="$BASE/adris-setup-linux-$VERSION.AppImage"
 

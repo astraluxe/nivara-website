@@ -1,6 +1,6 @@
 # adris.tech — Product & Financial Reference
 
-Last updated: 2026-06-13 | krew-stream v33 | get-session-key v2 | app v1.0.37
+Last updated: 2026-06-22 | krew-stream v33 | get-session-key v2 | app v1.0.66 live
 
 ---
 
@@ -21,14 +21,16 @@ FX: $1 = ₹84 (check live before quoting — use web_search "USD to INR today")
 
 ## Plan Pricing & Token Limits
 
-| Plan | Price/month | Token limit/month | Max AI cost to us | Notes |
-|------|------------|-------------------|-------------------|-------|
-| `free` | ₹0 / $0 | 100,000 | ₹14.70 / $0.175 | Acquisition plan — we absorb the cost |
-| `explore` | ₹0 / $0 | 100,000 | ₹14.70 / $0.175 | Same as free — internal alias only, not a separate visible plan |
-| `solo` | ₹1,499 / $15 | 2,000,000 | ₹294 / $3.50 | |
-| `builder` | ₹4,999 / $49 | 8,000,000 | ₹1,176 / $14.00 | |
-| `business` | TBD | 30,000,000 | ₹4,410 / $52.50 | Shown as "Team" in UI |
-| `custom` | Negotiated | Unlimited | Negotiated | Internal/enterprise — NOT public |
+| Plan | Price/month | Token limit/month | AI cost @ 100% (₹165.4/M) | Gateway (2%) | Net profit | Margin |
+|------|------------|-------------------|-----------------------------|-------------|------------|--------|
+| `free` | ₹0 | 100,000 | ₹16.54 | ₹0 | −₹16.54 | — (acquisition) |
+| `explore` | ₹0 | 100,000 | ₹16.54 | ₹0 | −₹16.54 | — (alias of free) |
+| `solo` | ₹1,499 | ~~2M~~ **4,000,000** | ₹662 | ₹30 | **₹807** | **53.8%** |
+| `builder` | ₹4,999 | ~~8M~~ **16,000,000** | ₹2,646 | ₹100 | **₹2,253** | **45.1%** |
+| `business` | ₹14,999 | ~~30M~~ **50,000,000** | ₹8,268 | ₹300 | **₹6,431** | **42.9%** |
+| `custom` | Negotiated | Unlimited | Negotiated | — | — | — |
+
+FX used: ₹94.5/$1. Blended Gemini rate: ₹165.4/M tokens. All three paid plans are profitable even at 100% usage.
 
 Valid plan names in DB/code: `free | explore | solo | builder | business | custom`
 `growth` and `pro` are NOT valid — never use.
@@ -62,25 +64,27 @@ Valid plan names in DB/code: `free | explore | solo | builder | business | custo
 | **Fixed costs total** | **~₹2,240/month** | Before any AI usage |
 
 ### Variable cost per active adris.tech AI user (per month)
+*FX: ₹94.5/$. Blended Gemini rate: ₹165.4/M tokens. 100% = worst case (every user maxes their limit).*
 
-| Plan | Revenue | Max AI cost | Razorpay (2%) | Net per user (worst case) |
-|------|---------|-------------|--------------|--------------------------|
-| `free` | ₹0 | ₹14.70 | ₹0 | **−₹14.70** |
-| `explore` | ₹0 | ₹14.70 | ₹0 | **−₹14.70** |
-| `solo` | ₹1,499 | ₹294 | ₹30 | **+₹1,175** |
-| `builder` | ₹4,999 | ₹1,176 | ₹100 | **+₹3,723** |
-| `business` | TBD | ₹4,410 | TBD | depends on pricing |
+| Plan | Revenue | AI cost @ 100% | Razorpay (2%) | Net profit | Margin |
+|------|---------|----------------|--------------|------------|--------|
+| `free` | ₹0 | ₹16.54 | ₹0 | **−₹16.54** | — |
+| `explore` | ₹0 | ₹16.54 | ₹0 | **−₹16.54** | — |
+| `solo` | ₹1,499 | ₹662 | ₹30 | **+₹807** | **53.8%** |
+| `builder` | ₹4,999 | ₹2,646 | ₹100 | **+₹2,253** | **45.1%** |
+| `business` | ₹14,999 | ₹8,268 | ₹300 | **+₹6,431** | **42.9%** |
 
-"Worst case" = user consumes full token allowance every month. Most users use 20–40%.
+All paid plans are profitable even if every user maxes their token limit every month.
 
-### Realistic per-user AI cost (assuming 30% of limit used)
+### Realistic per-user AI cost (assuming 40% of limit used)
 
 | Plan | Realistic AI cost | Net margin |
 |------|------------------|-----------|
-| `free` | ₹4.40 | −₹4.40 |
-| `explore` | ₹4.40 | −₹4.40 |
-| `solo` | ₹88 | +₹1,381 |
-| `builder` | ₹353 | +₹4,546 |
+| `free` | ₹6.60 | −₹6.60 |
+| `explore` | ₹6.60 | −₹6.60 |
+| `solo` | ₹265 | +₹1,204 (~80%) |
+| `builder` | ₹1,058 | +₹3,841 (~77%) |
+| `business` | ₹3,307 | +₹11,392 (~76%) |
 
 ---
 
@@ -153,6 +157,71 @@ Each krew-stream call:
 4. Logs usage to `token_usage` table (1 write)
 
 Total cost per call: mostly the Gemini token cost. Supabase DB calls are negligible.
+
+---
+
+## Version History — Recent Releases
+
+### v1.0.60
+- **Token drain fix:** Main agent loop history was unbounded — each tool call resent ALL prior results to the API. Fixed: history capped at first message + last 8 entries per step. Tool results capped at 2000 chars before appending.
+- **Browser visibility:** `browser_navigate` now opens user's Chrome immediately so they can see activity. Added 30s timeout to prevent hanging.
+- **Personal data rule:** Added hard agent rule — personal account data (LinkedIn, Gmail, Twitter) MUST use `browser_navigate`, never `web_search`.
+- **UI cleanup:** Removed "592/2000 tasks" counter from home screen. Now shows plan label only.
+
+### v1.0.61
+- **ToolCallBubble labels:** Agent browser calls now show human-readable status: "Scanning linkedin.com", "Opening twitter.com", "Searching '...'" instead of raw tool names.
+- **Setup bug fix:** `localStorage` guard was blocking `setup_agent_browser` from ever retrying after a failed install. Removed.
+
+### v1.0.62
+- **`fetch_page_text` command:** HTTP fetch + HTML stripper for public pages — no browser needed. Used as a fallback when agent browser isn't available.
+- **`read_browser_history` command:** Reads Chrome/Edge SQLite history file to find URLs the user actually visits. Agent checks history before asking user for any URL.
+- **`browser_navigate` fallback chain:** agent binary → HTTP fetch → login prompt.
+- **Profile URL rule:** Agent must never search by name to find user's own social profiles. Order: check memories → check Chrome history → ask user.
+
+### v1.0.63
+- **Option B — Playwright + system Chrome:** Created `scripts/agent-browser/index.js` — Node.js Playwright wrapper using system Chrome (no separate browser download, ~10MB `playwright-core` only). `setup_agent_browser` detects Node.js and silently installs in the background.
+- **4-tier fallback:** `run_browser_persistent` now tries: system binary → local binary → **Node.js Playwright** → HTTP fetch.
+- **Persistent sessions:** Playwright uses a dedicated Chrome profile at `%LOCALAPPDATA%\adris.tech\browser-session`. User logs in once per site; sessions saved forever.
+- **Smart API routing:** System prompt routing table — if Gmail is connected → use `gmail_search`, never `browser_navigate`. Same for LinkedIn, Notion, Slack, GitHub. Connected apps = 4× fewer tokens.
+- **Connect Apps banner:** Added "Connected apps use up to 4× fewer AI tokens" banner to the Connect Apps screen.
+
+### v1.0.64
+- **Single Chrome window:** Removed the duplicate `open_in_system_browser` call from `browser_navigate`. Playwright already opens a visible Chrome — calling both was opening two windows for every navigation. `open_in_system_browser` now only fires when no browser automation is available.
+- **Hard STOP on login required:** Login wall messages now say "STOP ALL TOOL CALLS" explicitly. Previously the agent would hit a LinkedIn login wall and continue with `web_search` anyway.
+- **False-positive login detection fix:** LinkedIn logged-in pages contain "sign in" in the nav/footer. Old detection matched that and wrongly returned LOGIN REQUIRED even when real post content was present. New rule: only flag as login page if content is **< 400 chars AND has login form keywords at the top** — or has an explicit `authwall` marker.
+- **SPA content wait:** Playwright script now scrolls ⅓ down + waits 2.5s after `networkidle` so LinkedIn/Gmail JavaScript finishes rendering before text is captured.
+- **Script auto-update:** `setup_agent_browser` re-writes the agent-browser.js script whenever the embedded version differs from disk — so script fixes reach existing users without reinstalling.
+
+### v1.0.66 (current)
+- **Token limit increase:** Solo 2M→4M, Builder 8M→16M, Business 30M→50M. All plans remain profitable even at 100% usage. FX: ₹94.5/$, blended Gemini ₹165.4/M tokens.
+- **Strikethrough UI:** UpgradeModal shows old token count struck-through with new count highlighted in green, making the increase visible to users deciding to upgrade.
+- **fin.md cost model updated:** Per-user cost table, realistic usage table, and revenue projections all reflect new limits.
+
+### v1.0.65
+- **Auto-save personal URLs:** After every successful `browser_navigate`, the URL is silently matched and saved to memory: `linkedin_url`, `linkedin_activity_url`, `linkedin_notifications_url`, `gmail_url`, `twitter_url`, `github_url`, `notion_url`, `instagram_url`, `reddit_url`. Only saves if value changed.
+- **Smart URL recall:** System prompt tells agents to call `recall_memory("linkedin_url")` etc. before ever asking the user for a URL. After first visit, agent always knows where to go.
+- **Standard fallback entry URLs:** Agent knows LinkedIn feed, Gmail inbox, Twitter home etc. for first-time visits — no searching, no asking.
+
+---
+
+## Token Drain — Root Causes & Fixes (v1.0.60)
+
+| Root Cause | Impact | Fix Applied |
+|------------|--------|-------------|
+| Main agent loop: history unbounded | Each tool-call step sent ALL prior steps' results to API; 4–8 steps × growing context = 50–200K tokens/task | History capped at first message + last 8 entries after each step |
+| Tool results added full to history | Results (up to 3000 chars) replayed in full every subsequent API call | Tool results capped at 2000 chars before appending to history |
+| Agent used web_search for personal data | "Check my LinkedIn posts" → generic B2B research, never opened browser → 11% tokens wasted | Browser rules: personal account data MUST use browser_navigate |
+| Connected app not used when available | Agent opened browser for Gmail even when Gmail API was connected | Smart routing: connected API tools always preferred over browser (4× cheaper) |
+
+### Token budgets per task (post-fix estimates)
+| Task type | Pre-fix | Post-fix |
+|-----------|---------|---------|
+| Simple Q&A (no tools) | ~3K | ~3K (unchanged) |
+| Single web_search | ~6K | ~4K |
+| LinkedIn read (browser_navigate) | ~15K | ~8K |
+| Gmail read (API when connected) | ~15K | ~3K |
+| Complex research (4 searches) | ~40K | ~18K |
+| Multi-agent workflow (3 agents) | ~120K | ~50K |
 
 ---
 
