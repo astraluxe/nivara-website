@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How adris.tech works — Real examples for every module</title>
+<meta name="description" content="Confused about what adris.tech actually does? Read real stories of how Krew, Studio, Coder, Models, Vault, Guard, and Mesh help real people with real work — no tech knowledge needed." />
+<link rel="canonical" href="https://adris.tech/how-it-works" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="module-pages.css" />
+<style>
+
+/* ── Layout ───────────────────────────────────────────────────── */
+.hiw-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .hiw-layout { grid-template-columns: 1fr; }
+  .hiw-sidebar { display: none; }
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────── */
+.hiw-sidebar {
+  position: sticky;
+  top: 80px;
+  padding: 40px 20px 40px 0;
+  border-right: 1px solid var(--rule);
+}
+.hiw-sidebar-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.hiw-nav { list-style: none; padding: 0; margin: 0; }
+.hiw-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .12s, background .12s;
+  line-height: 1.3;
+}
+.hiw-nav a:hover { color: var(--ink); background: var(--paper-2); }
+.hiw-nav a.active { color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.hiw-nav-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted-2);
+  flex-shrink: 0;
+  min-width: 18px;
+}
+.hiw-nav-sep { height: 1px; background: var(--rule); margin: 8px 10px; }
+
+/* ── Hero ─────────────────────────────────────────────────────── */
+.hiw-hero {
+  padding: clamp(52px,6vw,80px) var(--pad-x) clamp(28px,4vw,44px);
+  max-width: 1140px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--rule);
+}
+.hiw-hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.hiw-hero-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.hiw-hero h1 {
+  font-size: clamp(26px, 3.8vw, 42px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.hiw-hero h1 em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-style: italic;
+}
+.hiw-hero-sub {
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 60ch;
+  margin-bottom: 32px;
+}
+.hiw-jump-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 680px;
+}
+.hiw-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 24px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: border-color .12s, color .12s;
+}
+.hiw-jump:hover { border-color: var(--accent); color: var(--accent); }
+.hiw-jump-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted-2);
+}
+
+/* ── Main content ─────────────────────────────────────────────── */
+.hiw-main {
+  padding: 52px 0 80px 44px;
+  max-width: 700px;
+}
+@media (max-width: 820px) { .hiw-main { padding: 36px 0 64px; max-width: 100%; } }
+
+/* ── Back link ────────────────────────────────────────────────── */
+.hiw-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  text-decoration: none;
+  transition: color .12s;
+  margin-bottom: 36px;
+}
+.hiw-back:hover { color: var(--ink); }
+
+/* ── Section ──────────────────────────────────────────────────── */
+.hiw-section {
+  margin-top: 60px;
+  padding-top: 60px;
+  border-top: 1px solid var(--rule);
+}
+.hiw-section:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+
+.hiw-section-tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.hiw-section-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  font-size: 9px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.hiw-section h2 {
+  font-size: clamp(21px, 2.6vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.hiw-oneliner {
+  font-size: 14px;
+  color: var(--muted-2);
+  font-family: var(--font-mono);
+  letter-spacing: 0.015em;
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--rule);
+}
+.hiw-section p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.hiw-section p strong { color: var(--ink); font-weight: 600; }
+
+/* ── Story card ───────────────────────────────────────────────── */
+.story {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 26px 28px;
+  margin: 24px 0 28px;
+}
+[data-theme="ink"] .story { background: #161614; }
+.story-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+.story-who::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.story h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 12px;
+  line-height: 1.35;
+}
+.story p {
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  color: var(--muted) !important;
+  margin-bottom: 10px !important;
+}
+.story p:last-child { margin-bottom: 0 !important; }
+.story strong { color: var(--ink); font-weight: 600; }
+.story em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+/* ── Steps ────────────────────────────────────────────────────── */
+.steps {
+  list-style: none;
+  margin: 20px 0 28px;
+  padding: 0;
+  counter-reset: s;
+}
+.steps li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding-bottom: 18px;
+  position: relative;
+}
+.steps li::before {
+  counter-increment: s;
+  content: counter(s);
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.steps li::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 30px;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+.steps li:last-child::after { display: none; }
+.step-text strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.step-text span {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ── Before / After ───────────────────────────────────────────── */
+.ba {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+@media (max-width: 500px) { .ba { grid-template-columns: 1fr; } }
+.ba-box {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.ba-box.before { background: var(--paper-2); }
+.ba-box.after  { background: color-mix(in srgb, var(--accent) 7%, transparent); border-color: color-mix(in srgb, var(--accent) 28%, transparent); }
+[data-theme="ink"] .ba-box.before { background: #161614; }
+[data-theme="ink"] .ba-box.after  { background: #1a1730; }
+.ba-head {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.ba-box.before .ba-head { color: var(--muted-2); }
+.ba-box.after  .ba-head { color: var(--accent); }
+.ba-box ul { list-style: none; margin: 0; padding: 0; }
+.ba-box ul li {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+  padding: 2px 0 2px 18px;
+  position: relative;
+}
+.ba-box.before ul li::before { content: '✕'; position: absolute; left: 0; color: #e05a5a; font-size: 10px; top: 5px; }
+.ba-box.after  ul li::before { content: '✓'; position: absolute; left: 0; color: #22c55e; font-size: 10px; top: 5px; }
+.ba-box ul li strong { color: var(--ink); font-weight: 600; }
+
+/* ── Replaces chips ───────────────────────────────────────────── */
+.replaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 32px;
+  align-items: center;
+}
+.replaces-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+[data-theme="ink"] .chip { background: #1a1a17; }
+.chip::before { content: '↳'; color: var(--muted-2); font-size: 11px; }
+
+/* ── Result highlight ─────────────────────────────────────────── */
+.result-box {
+  border-left: 3px solid var(--accent);
+  padding: 14px 20px;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border-radius: 0 10px 10px 0;
+  margin: 16px 0 24px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+[data-theme="ink"] .result-box { background: #1a1730; }
+.result-box strong { color: var(--ink); font-weight: 600; }
+
+/* ── Final CTA ────────────────────────────────────────────────── */
+.hiw-cta {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 36px;
+  text-align: center;
+  margin-top: 72px;
+}
+[data-theme="ink"] .hiw-cta { background: #161614; }
+.hiw-cta h2 { font-size: clamp(18px,2.2vw,24px); font-weight: 600; margin: 0 0 10px; letter-spacing: -0.02em; }
+.hiw-cta p  { font-size: 14px; color: var(--muted); margin: 0 0 22px; line-height: 1.7; }
+.hiw-cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cta-btn-main {
+  display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px;
+  background: var(--accent); color: #fff; border-radius: 8px; font-size: 13px;
+  font-weight: 600; text-decoration: none; transition: opacity .15s;
+}
+.cta-btn-main:hover { opacity: .87; }
+.cta-btn-ghost {
+  display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px;
+  border: 1px solid var(--rule-strong); color: var(--ink); border-radius: 8px;
+  font-size: 13px; font-weight: 500; text-decoration: none; transition: all .15s;
+}
+.cta-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV ────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#platform">Platform</a></li>
+      <li><a href="/#modules">Modules</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/download">Download</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span>
+      </button>
+      <a href="/download" class="btn">Download — free <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+      <li><a href="/#modules" onclick="closeMobileNav()">Modules</a></li>
+      <li><a href="/pricing" onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download" onclick="closeMobileNav()">Download</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
+document.getElementById('navHam').addEventListener('click',function(){
+  var open=this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open',open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open',open);
+  this.setAttribute('aria-expanded',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+</script>
+
+<!-- ── HERO ────────────────────────────────────────────────────── -->
+<div class="hiw-hero">
+  <a href="/" class="hiw-back">
+    <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+    Back to home
+  </a>
+  <div class="hiw-hero-tag">How it works</div>
+  <h1>Everything adris does,<br/><em>explained with real stories.</em></h1>
+  <p class="hiw-hero-sub">Still not sure what adris.tech actually does? This page is written for that. No tech terms. Seven modules, each explained through a real person and a real situation you'll recognise.</p>
+
+  <div class="hiw-jump-grid">
+    <a href="#what-is-adris" class="hiw-jump"><span class="hiw-jump-num">00</span> What is adris?</a>
+    <a href="#krew" class="hiw-jump"><span class="hiw-jump-num">01</span> Krew — AI Agents</a>
+    <a href="#studio" class="hiw-jump"><span class="hiw-jump-num">02</span> Studio — Automation</a>
+    <a href="#coder" class="hiw-jump"><span class="hiw-jump-num">03</span> Coder — Dev Tools</a>
+    <a href="#models" class="hiw-jump"><span class="hiw-jump-num">04</span> Models — AI Models</a>
+    <a href="#vault" class="hiw-jump"><span class="hiw-jump-num">05</span> Vault — Protection</a>
+    <a href="#guard" class="hiw-jump"><span class="hiw-jump-num">06</span> Guard — Security</a>
+    <a href="#mesh" class="hiw-jump"><span class="hiw-jump-num">07</span> Mesh — RAM Pooling</a>
+  </div>
+</div>
+
+<!-- ── BODY ───────────────────────────────────────────────────── -->
+<div style="border-top:1px solid var(--rule);">
+<div class="hiw-layout">
+
+  <!-- Sidebar -->
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav" id="sideNav">
+      <li><a href="#what-is-adris" class="active"><span class="hiw-nav-num">00</span>What is adris?</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#krew"><span class="hiw-nav-num">01</span>Krew</a></li>
+      <li><a href="#studio"><span class="hiw-nav-num">02</span>Studio</a></li>
+      <li><a href="#coder"><span class="hiw-nav-num">03</span>Coder</a></li>
+      <li><a href="#models"><span class="hiw-nav-num">04</span>Models</a></li>
+      <li><a href="#vault"><span class="hiw-nav-num">05</span>Vault</a></li>
+      <li><a href="#guard"><span class="hiw-nav-num">06</span>Guard</a></li>
+      <li><a href="#mesh"><span class="hiw-nav-num">07</span>Mesh</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#who"><span class="hiw-nav-num">→</span>Who is this for?</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="hiw-main">
+
+    <!-- ── 00 WHAT IS ADRIS ─────────────────────────────────── -->
+    <section class="hiw-section" id="what-is-adris">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> What is adris.tech</div>
+      <h2>One app that replaces five things you're already paying for.</h2>
+      <p class="hiw-oneliner">It runs on your laptop, not in the cloud — your data stays on your machine.</p>
+
+      <p>Think about the tools you use right now for AI-related work: maybe ChatGPT for writing help, Zapier for automating things, GitHub Copilot if you write code, some VPN or antivirus for safety. Each one has its own login, its own subscription, and they don't talk to each other.</p>
+
+      <p>adris.tech is one desktop app (for Windows, coming to other platforms) that does all of this — plus a few things that didn't have an affordable option before. You install it once and every tool is right there, connected to each other.</p>
+
+      <p><strong>The biggest difference from using ChatGPT or any online AI tool:</strong> adris runs on your own laptop. When you chat with an AI agent in adris, that conversation isn't sent to a company's server. It runs on your machine. Your work, your files, your business conversations — they stay with you.</p>
+
+      <div class="ba">
+        <div class="ba-box before">
+          <div class="ba-head">What most people do today</div>
+          <ul>
+            <li>ChatGPT for writing and questions</li>
+            <li>Zapier or Make for automations</li>
+            <li>Copilot or Cursor for coding help</li>
+            <li>Hugging Face to find AI models</li>
+            <li>VPN or NextDNS for protection</li>
+            <li>A freelancer for security checks</li>
+            <li>5–6 different logins and monthly bills</li>
+          </ul>
+        </div>
+        <div class="ba-box after">
+          <div class="ba-head">With adris</div>
+          <ul>
+            <li>Krew handles writing and agent work</li>
+            <li>Studio builds your automations</li>
+            <li>Coder assists with your code</li>
+            <li>Models lets you run AI locally, free</li>
+            <li>Vault protects every app on your device</li>
+            <li>Guard monitors threats automatically</li>
+            <li>One app. One login.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>Each module is explained below through a real example. Read whichever ones you're curious about — they all work independently.</p>
+    </section>
+
+    <!-- ── 01 KREW ──────────────────────────────────────────── -->
+    <section class="hiw-section" id="krew">
+      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> Krew — AI Agents</div>
+      <h2>An AI assistant that actually does things, not just answers questions.</h2>
+      <p class="hiw-oneliner">Give it a role, give it a task — it works. You get back a finished result.</p>
+
+      <p>Most people think of AI as a chatbot: you ask something, it replies, you copy-paste the answer. Krew is different. A Krew <strong>agent</strong> has a specific job, remembers everything you've told it about your work, and can use tools — search the web, read your files, save things to Notion — to produce a finished result rather than just text you still have to turn into something.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — Content agency owner</div>
+        <h4>Priya runs a small content agency in Hyderabad. She has 7 clients and one employee.</h4>
+        <p>Every week she writes LinkedIn posts for all 7 clients — 3 posts each, all different tones, all different industries. That's 21 posts. She also writes their monthly performance reports and the emails that go with them. This used to take her roughly 2 full working days every single week.</p>
+        <p>Now she has a Krew agent set up for each client. Each agent knows that client's brand — she uploaded their guidelines once. When she wants this week's LinkedIn posts for a client, she types: <em>"write this week's 3 posts for Neeraj's SaaS company."</em> The agent writes 3 complete, properly toned, ready-to-post captions in about 90 seconds.</p>
+        <p>The monthly report agent pulls her notes, formats them into a professional summary, and drafts the email to send to the client. <strong>What used to take 2 days now takes about 3 hours of her actual attention.</strong> The rest runs itself.</p>
+      </div>
+
+      <p><strong>How you set one up:</strong></p>
+      <ol class="steps">
+        <li>
+          <div class="step-text">
+            <strong>Pick a template</strong>
+            <span>Krew has 45+ ready-made agent types — Cold Email Writer, Social Caption Writer, Research Assistant, Client Report Maker, and more. Start with the closest match to your work.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>Tell it about your work</strong>
+            <span>Upload a document, paste your brand notes, or just describe what it should know. It remembers this for every future task — you don't need to explain it again.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>Give it a task</strong>
+            <span>Type what you want in normal language. "Write a cold email for the event management company I spoke to yesterday." The agent does the work and brings back a finished result.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>It can use tools while it works</strong>
+            <span>If you ask it to research something, it searches the web. If you ask it to save a report to Notion, it does. You don't have to copy-paste anything anywhere.</span>
+          </div>
+        </li>
+      </ol>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">ChatGPT for work tasks</span>
+        <span class="chip">Jasper / Copy.ai</span>
+        <span class="chip">Hours of manual writing</span>
+        <span class="chip">Part-time virtual assistant</span>
+      </div>
+    </section>
+
+    <!-- ── 02 STUDIO ────────────────────────────────────────── -->
+    <section class="hiw-section" id="studio">
+      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> Studio — Automation</div>
+      <h2>Build workflows that run by themselves, even while you sleep.</h2>
+      <p class="hiw-oneliner">Connect a trigger → add your AI agent → connect the action. Runs on a schedule, forever.</p>
+
+      <p>Studio is where you build automations — sequences of steps that happen automatically without you clicking anything. You've probably heard of Zapier or Make. Studio does the same thing, except your AI agents from Krew are the workers inside each step, and everything runs on your laptop at no extra cost per run.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — Freelance recruiter</div>
+        <h4>Arjun does freelance recruitment for tech companies in Pune. He manages 4–5 open roles at a time.</h4>
+        <p>Every time a new batch of applications came in, Arjun would spend 3–4 hours reading CVs, deciding who to move forward, writing rejection emails to the others, and creating notes for the shortlisted candidates. Doing this for 30–50 applications, multiple times a week, was burning half his working hours.</p>
+        <p>He built a Studio workflow. Every morning at 9 AM it runs automatically: it checks his email for new application attachments, passes each CV to a Krew agent (which already has the job brief in its memory), the agent scores each candidate and decides "shortlist" or "reject", then the workflow drafts personal rejection emails for the rejections and creates Notion cards for the shortlisted ones with a short summary of why they qualified.</p>
+        <p><strong>Arjun opens his laptop at 9:15 AM and everything is already sorted.</strong> He spends 15 minutes reviewing instead of 4 hours doing it.</p>
+      </div>
+
+      <p><strong>What a Studio workflow looks like:</strong></p>
+      <ol class="steps">
+        <li>
+          <div class="step-text">
+            <strong>A trigger starts it</strong>
+            <span>Could be a time ("every day at 9 AM"), a new email arriving, a form being submitted, or someone else finishing a task. You choose what fires the workflow.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>A Krew agent does the thinking</strong>
+            <span>Read this, summarise that, decide between options, write a response. The AI does the judgement work in the middle of your workflow.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>An action delivers the result</strong>
+            <span>Send an email, update a Notion page, write to a Google Sheet, post to Slack. Studio connects to your other tools to drop the finished result where it belongs.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>It keeps running — you don't have to do anything</strong>
+            <span>Once you've built it, the workflow runs every time its trigger fires. You only get involved when something needs your specific decision.</span>
+          </div>
+        </li>
+      </ol>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">Zapier</span>
+        <span class="chip">Make (Integromat)</span>
+        <span class="chip">n8n</span>
+        <span class="chip">Repetitive manual tasks</span>
+      </div>
+    </section>
+
+    <!-- ── 03 CODER ─────────────────────────────────────────── -->
+    <section class="hiw-section" id="coder">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Coder — Dev Tools</div>
+      <h2>An AI that understands your entire codebase, not just the file you have open.</h2>
+      <p class="hiw-oneliner">For developers. Explains, writes, and fixes code — and it's read your whole project first.</p>
+
+      <p>If you write software, you've probably used GitHub Copilot or pasted code into ChatGPT. The problem with both: they don't know your project. Copilot sees one file at a time. ChatGPT doesn't know how your different parts connect. So you get generic answers that you still have to adapt, or worse, answers that break something else.</p>
+
+      <p>Coder reads your entire codebase when you open a project. When you ask it something, it already knows how everything fits together — so the answer it gives is specific to your actual code, not a generic example.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — Solo developer</div>
+        <h4>Vikram is building a SaaS product by himself in Bengaluru. 80 files, growing every week.</h4>
+        <p>He needed to change how his app handled background tasks — switching from one system to another. The problem: this affected multiple other parts of the codebase. He didn't even know exactly how many. With GitHub Copilot, he'd have had to manually trace through every file to find what breaks.</p>
+        <p>He opened Coder, which had already indexed his full project, and typed: <em>"I want to switch the job processing system. What else in this project will I need to change?"</em></p>
+        <p>Coder read the entire codebase, found 4 affected files, explained what needed to change in each one, and wrote the updated code. Vikram reviewed the changes, accepted them, and was done in an afternoon instead of a week. <strong>No copying files into ChatGPT. No explaining his architecture from scratch every time.</strong></p>
+      </div>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">GitHub Copilot</span>
+        <span class="chip">Cursor</span>
+        <span class="chip">Pasting code into ChatGPT</span>
+      </div>
+    </section>
+
+    <!-- ── 04 MODELS ────────────────────────────────────────── -->
+    <section class="hiw-section" id="models">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Models — AI Models Hub</div>
+      <h2>Browse and run any AI model on your laptop in two clicks — completely free.</h2>
+      <p class="hiw-oneliner">Free AI models exist for everything. Models hub makes them actually usable without any technical setup.</p>
+
+      <p>There are hundreds of powerful AI models that anyone can download and use for free — Llama, Mistral, Phi, Gemma, and many more. The problem is that installing them is complicated. You have to figure out which version fits your laptop's memory, install extra software, configure it, and then figure out how to connect it to the tool you want to use.</p>
+
+      <p>Models hub makes it two clicks. You browse a catalogue, pick a model, click install. adris automatically figures out which version is right for your laptop and handles everything else. The model runs on your machine and connects automatically to Krew and Coder. <strong>You pay nothing per conversation — it runs on your own hardware.</strong></p>
+
+      <div class="story">
+        <div class="story-who">Real story — Student researcher</div>
+        <h4>Rashi is an engineering student in Tamil Nadu running an AI research project.</h4>
+        <p>Her project needed her to test four different AI models on the same task to compare how well each one performs. Testing through paid AI services would have cost thousands of rupees in credits (she needed thousands of test cases). Using those services also meant her research data was being sent to external servers she didn't control.</p>
+        <p>She opened Models hub in adris, found all four models she needed, and installed them in about 20 minutes. adris automatically picked the right version for her laptop for each one. She ran her entire test suite using Krew with each model in turn.</p>
+        <p><strong>Total cost: ₹0. All data stayed on her laptop.</strong> She got her research done two weeks early because she wasn't waiting on credits or managing four separate tools.</p>
+      </div>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">Hugging Face (complex setup)</span>
+        <span class="chip">Ollama CLI (manual)</span>
+        <span class="chip">LM Studio</span>
+        <span class="chip">Paid cloud AI APIs</span>
+      </div>
+    </section>
+
+    <!-- ── 05 VAULT ─────────────────────────────────────────── -->
+    <section class="hiw-section" id="vault">
+      <div class="hiw-section-tag"><span class="hiw-section-num">05</span> Vault — DNS Protection</div>
+      <h2>Blocks harmful websites and trackers before they even reach your screen.</h2>
+      <p class="hiw-oneliner">Works for every app on your device — not just your browser. Free with every adris account.</p>
+
+      <p>When you type a website address or click a link, your device first looks up that address in what's basically an internet directory. Vault sits in that process and checks every single website request against a list of known dangerous, ad-serving, and tracking sites. If the site is on the list, the request is blocked before anything loads. The ad never appears. The tracker never runs. The dangerous page never opens.</p>
+
+      <p>This is different from a browser extension that blocks ads: Vault works for <strong>every app on your device</strong>, not just your browser. It's on by default from the moment you install adris. You don't have to configure anything.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — Freelance designer</div>
+        <h4>Mehul works from cafés in Ahmedabad most of the week. Public Wi-Fi, every day.</h4>
+        <p>He knew public Wi-Fi was risky. He used to run a VPN that made his internet noticeably slower and still didn't stop trackers or check the actual sites he was visiting for threats.</p>
+        <p>One day he got a fake "client enquiry" email with a link. When he clicked it, Vault blocked the page instantly and showed a notification: <em>"Blocked: suspect-website.co (phishing — stopped before loading)."</em> The page never opened. No script ran. Nothing was compromised.</p>
+        <p>He also noticed his browser started loading pages faster. In his first week with adris, Vault had blocked over 800 tracker requests across his normal browsing. <strong>It costs him nothing. It came bundled with adris. He never had to configure it.</strong></p>
+      </div>
+
+      <p><strong>Five protection levels to choose from:</strong></p>
+      <ol class="steps">
+        <li><div class="step-text"><strong>Swift</strong><span>Only blocks known dangerous sites. Nothing breaks, maximum compatibility.</span></div></li>
+        <li><div class="step-text"><strong>Block</strong><span>Blocks ads and trackers on top of dangerous sites. This is the recommended setting for most people.</span></div></li>
+        <li><div class="step-text"><strong>Guard</strong><span>Everything in Block, plus stronger social media tracking protection. Good for anyone handling sensitive business work.</span></div></li>
+        <li><div class="step-text"><strong>Core</strong><span>Maximum blocking. A few websites may not load correctly — best for working on confidential projects.</span></div></li>
+        <li><div class="step-text"><strong>Family</strong><span>Blocks everything except an approved list. Good for a shared home machine.</span></div></li>
+      </ol>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">NextDNS</span>
+        <span class="chip">Pi-hole</span>
+        <span class="chip">Browser ad blockers</span>
+        <span class="chip">AdGuard</span>
+      </div>
+    </section>
+
+    <!-- ── 06 GUARD ─────────────────────────────────────────── -->
+    <section class="hiw-section" id="guard">
+      <div class="hiw-section-tag"><span class="hiw-section-num">06</span> Guard — Security</div>
+      <h2>Cybersecurity protection for businesses that don't have an IT team.</h2>
+      <p class="hiw-oneliner">Watches your accounts 24/7. Catches threats before they become problems. Scans contracts too.</p>
+
+      <p>Most small businesses are exposed to security threats not because the owners don't care, but because staying properly safe requires expertise they don't have time to develop. Guard is an AI security agent that monitors your accounts, watches for problems, and responds to threats automatically — so you don't need to think about it or know anything technical.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — SaaS startup, 7 people</div>
+        <h4>Deepa's small team builds a software product in Chennai. Nobody on the team specialises in security.</h4>
+        <p>In 2024, one of their developers accidentally saved a password into a shared file that ended up visible to anyone on the internet. Nobody noticed for three days. By the time they found it, someone had used that password to run up ₹35,000 of cloud computing charges in their name.</p>
+        <p>After that, they started using Guard. Now, if a password or access key ever shows up somewhere it shouldn't, Guard detects it within a couple of minutes and sends an immediate alert to Deepa's Slack. If it's a type of password Guard can cancel remotely, it does so automatically. The team gets a plain-English incident summary in their Notion workspace.</p>
+        <p>Guard also scans vendor contracts before Deepa signs them. When their hosting provider sent a new contract, Guard flagged one clause in plain language: <em>"Clause 8.3 allows the vendor to raise your price by up to 30% with only 15 days warning. You cannot exit during this window."</em> Deepa renegotiated before signing. <strong>No lawyer needed. No security consultant on retainer.</strong></p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <div class="step-text">
+            <strong>Connect your accounts</strong>
+            <span>AWS, GitHub, Google Workspace, Slack. Guard monitors your activity through the official, secure connections each platform provides. It can only watch — it cannot make changes to your accounts.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>Guard watches in the background</strong>
+            <span>Suspicious logins, passwords showing up where they shouldn't, unusual activity. You get alerted when something actually matters — not constant noise.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>Upload any contract for a plain-English review</strong>
+            <span>Drop a PDF or paste the text. Guard reads every clause and explains in normal language what it means for you, what risks it sees, and what to watch out for.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-text">
+            <strong>Automatic response where possible</strong>
+            <span>For certain types of leaked credentials, Guard can cancel and replace them automatically. For others, it writes out the exact steps you need to take to fix the problem.</span>
+          </div>
+        </li>
+      </ol>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">Hiring a security consultant</span>
+        <span class="chip">Manual contract review</span>
+        <span class="chip">Expensive monitoring tools</span>
+        <span class="chip">GitGuardian</span>
+      </div>
+    </section>
+
+    <!-- ── 07 MESH ──────────────────────────────────────────── -->
+    <section class="hiw-section" id="mesh">
+      <div class="hiw-section-tag"><span class="hiw-section-num">07</span> Mesh — RAM Pooling</div>
+      <h2>Two laptops together can run an AI model that neither can handle alone.</h2>
+      <p class="hiw-oneliner">Share memory across devices on the same Wi-Fi. Run more powerful AI for free.</p>
+
+      <p>Better AI models need more memory than most laptops have. This means most people are stuck running weaker models locally, or paying every time they use a powerful one through a paid service.</p>
+
+      <p>Mesh connects devices on the same Wi-Fi and shares their memory as if it were one bigger machine. Two 16 GB laptops become a 32 GB machine together. The AI runs across all of them — no data leaves your network, and nobody charges you per use.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — Student study group</div>
+        <h4>Four engineering students at a college in Coimbatore are working on an AI research project together.</h4>
+        <p>Their research needed a powerful AI model — the kind that produces much more accurate results than the smaller ones their individual laptops could run. Using a paid AI service for hundreds of experiments would have cost them somewhere between ₹40,000 and ₹80,000. Money none of them had.</p>
+        <p>They formed a Mesh group. All four laptops connected to the same college Wi-Fi. With one click in adris, the memory of all four laptops was combined into a shared pool. The model they needed loaded and ran across all four devices together.</p>
+        <p><strong>They ran their entire semester's worth of experiments. Total cost: ₹0.</strong> They finished their research two weeks ahead of schedule.</p>
+      </div>
+
+      <p><strong>Three ways people use Mesh:</strong></p>
+      <ul style="list-style:none;padding:0;margin:0 0 24px;">
+        <li style="padding:12px 0;border-bottom:1px solid var(--rule);font-size:14px;line-height:1.75;color:var(--muted);">
+          <strong style="color:var(--ink);display:block;margin-bottom:3px;">Your own devices</strong>
+          Your laptop and your old desktop, or your laptop and a spare PC at home. Pool them to run bigger models without buying anything new.
+        </li>
+        <li style="padding:12px 0;border-bottom:1px solid var(--rule);font-size:14px;line-height:1.75;color:var(--muted);">
+          <strong style="color:var(--ink);display:block;margin-bottom:3px;">A team at work</strong>
+          Everyone on the team runs adris. When someone needs a powerful AI task, the whole team's machines chip in memory during idle time. Nobody notices, but the result is much more capable.
+        </li>
+        <li style="padding:12px 0;font-size:14px;line-height:1.75;color:var(--muted);">
+          <strong style="color:var(--ink);display:block;margin-bottom:3px;">Students on the same Wi-Fi</strong>
+          Hostel, library, study room — anyone on the same network can share memory. Up to 3 devices is always free in adris.
+        </li>
+      </ul>
+
+      <div class="result-box">
+        <strong>The bottom line:</strong> if you've ever wanted to use a better AI model but found it too expensive or too slow on your own laptop, Mesh solves that — by using hardware you already own, shared between people you trust.
+      </div>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">Cloud GPU rentals</span>
+        <span class="chip">Expensive AI API costs</span>
+        <span class="chip">Upgrading your laptop</span>
+      </div>
+    </section>
+
+    <!-- ── WHO IS THIS FOR ──────────────────────────────────── -->
+    <section class="hiw-section" id="who">
+      <div class="hiw-section-tag"><span class="hiw-section-num">→</span> Who is this for</div>
+      <h2>If you work on a laptop and want AI to actually help your work — this is for you.</h2>
+
+      <p>You don't need to be technical to use adris. The people who get the most out of it are:</p>
+
+      <div class="ba">
+        <div class="ba-box after" style="grid-column:1/-1;">
+          <div class="ba-head">People who benefit most</div>
+          <ul>
+            <li><strong>Freelancers working alone</strong> — Krew agents handle the parts that take the most time, so you can focus on the work only you can do.</li>
+            <li><strong>Small teams (2–15 people)</strong> — Studio automations run your repetitive processes. Krew writes your deliverables. Guard protects your accounts.</li>
+            <li><strong>Developers and engineers</strong> — Coder + Models + Mesh is the most affordable local AI development setup available anywhere.</li>
+            <li><strong>Students and researchers</strong> — Free plan + Models hub + Mesh means access to powerful AI for zero cost.</li>
+            <li><strong>Small business owners</strong> — Vault and Guard give you security that previously only large companies with IT departments could afford.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>If you're thinking "I already pay for one AI tool — why do I need another one?", that's exactly the point. You probably pay for 3–4 already. adris is the one that replaces all of them. The comparison changes pretty quickly when you add up what you're spending today.</p>
+
+      <!-- CTA -->
+      <div class="hiw-cta">
+        <h2>Free to download. Free to start.</h2>
+        <p>Install the app, connect your existing AI accounts if you have them, and try all seven modules yourself. No credit card. No commitment. If you're not sure where to start, Krew is where most people begin.</p>
+        <div class="hiw-cta-btns">
+          <a href="/download" class="cta-btn-main">
+            Download — free
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          </a>
+          <a href="/pricing" class="cta-btn-ghost">See pricing</a>
+          <a href="/why-adris" class="cta-btn-ghost">ROI case →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────── -->
+<footer style="border-top:1px solid var(--rule);padding:32px 0;">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="18" height="17" viewBox="0 0 26 24" fill="none"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg>
+      <span style="font-size:13px;font-weight:500;color:var(--ink);">adris.tech</span>
+    </div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <a href="/privacy" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Privacy</a>
+      <a href="/terms"   style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Terms</a>
+      <a href="/download" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Download</a>
+      <a href="/pricing"  style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Pricing</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var s=localStorage.getItem('nv-theme')||'paper';
+  if(s==='ink') document.documentElement.setAttribute('data-theme','ink');
+  var b=document.getElementById('themeToggle');
+  if(b) b.setAttribute('aria-pressed',s==='ink'?'true':'false');
+})();
+document.getElementById('themeToggle').addEventListener('click',function(){
+  var c=document.documentElement.getAttribute('data-theme')==='ink'?'paper':'ink';
+  document.documentElement.setAttribute('data-theme',c==='paper'?'':'ink');
+  localStorage.setItem('nv-theme',c);
+  this.setAttribute('aria-pressed',c==='ink'?'true':'false');
+});
+(function(){
+  var sections=document.querySelectorAll('.hiw-section[id]');
+  var links=document.querySelectorAll('.hiw-nav a');
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){a.classList.remove('active');});
+        var m=document.querySelector('.hiw-nav a[href="#'+e.target.id+'"]');
+        if(m) m.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  sections.forEach(function(s){obs.observe(s);});
+})();
+</script>
+</body>
+</html>
