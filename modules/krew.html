@@ -598,8 +598,9 @@ document.getElementById('navHam').addEventListener('click', function() {
         <a class="row" href="#how-it-thinks"><span class="l">02 · How it thinks</span><span>Task Progress · parallel execution<span class="go">↓</span></span></a>
         <a class="row" href="#intelligence"><span class="l">03 · Intelligence</span> <span>Memory · planning · reflection<span class="go">↓</span></span></a>
         <a class="row" href="#integrations"><span class="l">04 · Integrations</span> <span>Gmail · Notion · Slack + 5 more<span class="go">↓</span></span></a>
-        <a class="row" href="#approvals">  <span class="l">05 · Research</span>    <span>Wikidata · Wikipedia · Yahoo Finance · GitHub<span class="go">↓</span></span></a>
-        <a class="row" href="#privacy">   <span class="l">06 · Privacy</span>      <span>Runs locally · zero cloud<span class="go">↓</span></span></a>
+        <a class="row" href="#browser">   <span class="l">05 · Live browser</span>  <span>Navigate · click · extract · screenshot<span class="go">↓</span></span></a>
+        <a class="row" href="#approvals">  <span class="l">06 · Research</span>    <span>Wikidata · Wikipedia · Yahoo Finance · GitHub<span class="go">↓</span></span></a>
+        <a class="row" href="#privacy">   <span class="l">07 · Privacy</span>      <span>Runs locally · zero cloud<span class="go">↓</span></span></a>
       </div>
       <div class="mhero-cta">
         <a href="/download" class="btn">
@@ -1308,6 +1309,17 @@ document.getElementById('navHam').addEventListener('click', function() {
           <div class="idesc">Real-time web search on every agent. No hallucinations — they look it up first.</div>
           <div class="istatus">Live · API key</div>
         </div>
+        <div class="icard" style="border-color:var(--accent);background:linear-gradient(135deg,#7C5CFF08,transparent);">
+          <div class="ilogo" style="color:var(--accent);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 20h8"/><path d="M12 18v2"/>
+              <circle cx="12" cy="10" r="2.5"/>
+            </svg>
+          </div>
+          <div class="iname">Live Browser</div>
+          <div class="idesc">Navigate websites, click buttons, fill forms, screenshot pages — the AI uses a real Chrome window.</div>
+          <div class="istatus" style="color:var(--accent);">Live · Playwright</div>
+        </div>
       </div>
 
       <div class="modes-strip">
@@ -1331,12 +1343,98 @@ document.getElementById('navHam').addEventListener('click', function() {
   </div>
 </section>
 
-<!-- SECTION 5 — ACTION APPROVALS -->
-<section class="fsec reverse" id="approvals" data-screen-label="05 Approvals">
+<!-- SECTION 5 — LIVE BROWSER -->
+<section class="fsec" id="browser" data-screen-label="05 Live Browser">
   <div class="wrap">
     <div class="fsec-grid">
       <div class="fsec-text">
-        <div class="seyebrow"><span class="num">05</span><span class="label">Action approvals</span></div>
+        <div class="seyebrow"><span class="num">05</span><span class="label">Live browser</span></div>
+        <h2>Not web search.<br/><span class="it">The actual web.</span></h2>
+        <p>Your agents open a real Chrome window, navigate to any URL, click buttons, fill in forms, extract page content, and take screenshots — all with full JavaScript support. Not a search query. Not a scraper. The actual browser, running on your machine.</p>
+        <ul>
+          <li class="acc">Navigate to any URL — full JavaScript, SPAs, login walls</li>
+          <li>Click buttons, links, and interactive elements by reference</li>
+          <li>Fill forms — username, password, search fields, dropdowns</li>
+          <li>Extract page content as clean Markdown — preserves links, tables, lists</li>
+          <li>Screenshot any page — full resolution, saved locally</li>
+          <li>Chrome stays open between commands — no re-launch lag</li>
+        </ul>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;">
+          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Navigate</span>
+          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Click</span>
+          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Fill form</span>
+          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Snapshot</span>
+          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Screenshot</span>
+          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Extract text</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="frame frame-dark">
+          <div class="frame-top">
+            <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
+            <span class="ftitle">Krew · browser agent trace</span>
+          </div>
+          <div class="frame-body" style="padding:0;font-family:var(--font-mono);font-size:12px;line-height:1.7;">
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
+              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_navigate</div>
+              <div style="color:#5a5a5a;">url → "https://trends.google.com/trends/explore?q=AI+tools+India"</div>
+              <div style="margin-top:6px;color:#7C5CFF;font-size:11px;">↳ Chrome opened · port 9223 · persistent session</div>
+            </div>
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
+              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_snapshot</div>
+              <div style="color:#5a5a5a;">→ 14 interactive elements indexed · @e1…@e14</div>
+              <div style="color:#5a5a5a;margin-top:2px;">→ page content extracted as Markdown · 3,412 chars</div>
+            </div>
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
+              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_click</div>
+              <div style="color:#5a5a5a;">selector → @e7 · "Last 30 days" dropdown</div>
+              <div style="margin-top:6px;color:#22c55e;font-size:11px;">↳ clicked · page settled · networkidle</div>
+            </div>
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
+              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_screenshot</div>
+              <div style="color:#5a5a5a;">→ saved to desktop/research/trends-india.png</div>
+              <div style="margin-top:6px;color:#22c55e;font-size:11px;">↳ 1920×1080 · PNG · 286 KB</div>
+            </div>
+            <div style="padding:16px 20px;">
+              <div style="color:#a0ffa0;font-size:11px;">✓ Research complete · agent returning results to Arjun.Boss</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+          <div style="border:1px solid var(--rule);border-radius:10px;padding:14px 16px;">
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;">What it can do</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+              Research competitors<br/>
+              Fill lead gen forms<br/>
+              Monitor pricing pages<br/>
+              Extract structured data<br/>
+              Log into SaaS dashboards
+            </div>
+          </div>
+          <div style="border:1px solid var(--rule);border-radius:10px;padding:14px 16px;">
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;">Powered by</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+              Playwright (Microsoft)<br/>
+              Chrome DevTools Protocol<br/>
+              Persistent CDP session<br/>
+              Multi-metric content scoring<br/>
+              Local · no cloud browser
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6 — ACTION APPROVALS -->
+<section class="fsec reverse" id="approvals" data-screen-label="06 Approvals">
+  <div class="wrap">
+    <div class="fsec-grid">
+      <div class="fsec-text">
+        <div class="seyebrow"><span class="num">06</span><span class="label">Action approvals</span></div>
         <h2>They draft.<br/><span class="it">You decide.</span></h2>
         <p>Every external action — send an email, post to Slack, create a GitHub issue, update a Notion page — shows as an approval card first. You see exactly what they want to do, you click approve. Nothing irreversible happens without your sign-off. Ever.</p>
         <ul>
@@ -1389,11 +1487,11 @@ document.getElementById('navHam').addEventListener('click', function() {
 </section>
 
 <!-- SECTION 5 — LOCAL FIRST (privacy) -->
-<section class="fsec" id="privacy" data-screen-label="06 Local first">
+<section class="fsec" id="privacy" data-screen-label="07 Local first">
   <div class="wrap">
     <div class="fsec-grid" style="grid-template-columns: 1fr;">
       <div class="fsec-text" style="margin-bottom: 16px;">
-        <div class="seyebrow"><span class="num">06</span><span class="label">Privacy · local-first</span></div>
+        <div class="seyebrow"><span class="num">07</span><span class="label">Privacy · local-first</span></div>
         <h2>Your Krew.<br/><span class="it">Your device. Your data.</span></h2>
         <p>Krew runs entirely on your laptop. Conversations are stored in a local SQLite database. Your credentials are encrypted in your OS keychain. We never see your chats, your connected tools, or what your agents do. Zero cloud exposure — by architecture, not by policy.</p>
       </div>
