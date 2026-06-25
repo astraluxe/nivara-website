@@ -27,6 +27,7 @@
     { "source": "/team-dashboard",     "destination": "/team-dashboard.html" },
     { "source": "/enterprise",         "destination": "/enterprise.html" },
     { "source": "/promo",              "destination": "/promo.html" },
-    { "source": "/why-adris",          "destination": "/why-adris.html" }
+    { "source": "/why-adris",          "destination": "/why-adris.html" },
+    { "source": "/how-it-works",       "destination": "/how-it-works.html" }
   ]
 }
