@@ -451,16 +451,85 @@
 
 /* ── Print / PDF styles ───────────────────────────────────────── */
 @media print {
-  body { background: #fff !important; color: #111 !important; }
-  nav, .mobile-nav-drawer, .mobile-nav-overlay, .hiw-sidebar,
-  .hiw-back, .print-bar, footer, .hiw-cta { display: none !important; }
-  .hiw-layout { grid-template-columns: 1fr !important; }
-  .hiw-main { padding: 0 !important; max-width: 100% !important; }
-  .hiw-hero { padding: 24px 0 !important; border-bottom: 1px solid #ddd !important; }
-  .hiw-section { page-break-inside: avoid; }
-  .story { page-break-inside: avoid; border: 1px solid #ddd !important; background: #f9f9f9 !important; }
-  .ba-box, .result-box { page-break-inside: avoid; }
-  .hiw-jump-grid { display: none !important; }
+  /* Reset page */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; color: #111 !important; }
+
+  /* Hide everything except the main content column */
+  nav, .mobile-nav-drawer, .mobile-nav-overlay,
+  .hiw-hero, .hiw-sidebar, .hiw-back,
+  .print-bar, footer, .hiw-cta { display: none !important; }
+
+  /* Unwrap the layout wrapper and grid */
+  #hiw-body-wrap { border: none !important; }
+  .hiw-layout { display: block !important; padding: 0 !important; }
+  .hiw-main {
+    padding: 0 !important;
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  /* Inject a compact title at the very top of the PDF */
+  .hiw-main::before {
+    content: 'How adris.tech works — A complete guide';
+    display: block !important;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #0E0E0C;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px !important;
+    padding: 0 !important;
+  }
+  .hiw-main::after {
+    content: 'adris.tech · All seven modules with real-life examples';
+    display: block !important;
+    font-size: 11px;
+    color: #888;
+    margin: 0 0 20px !important;
+    padding-bottom: 14px !important;
+    border-bottom: 2px solid #7C5CFF !important;
+  }
+
+  /* Sections */
+  .hiw-section {
+    margin-top: 28px !important;
+    padding-top: 28px !important;
+    page-break-inside: avoid;
+    border-top: 1px solid #ddd !important;
+  }
+  .hiw-section:first-of-type {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+  }
+  .hiw-section h2 { font-size: 16px !important; margin-bottom: 4px !important; }
+  .hiw-section p  { font-size: 13px !important; line-height: 1.65 !important; margin-bottom: 10px !important; }
+  .hiw-oneliner   { font-size: 11px !important; margin-bottom: 12px !important; padding-bottom: 12px !important; }
+  .hiw-section-tag { margin-bottom: 6px !important; }
+
+  /* Story cards */
+  .story {
+    page-break-inside: avoid;
+    border: 1px solid #ddd !important;
+    background: #f9f9f9 !important;
+    padding: 14px 16px !important;
+    margin: 12px 0 !important;
+  }
+  .story p  { font-size: 12px !important; line-height: 1.6 !important; margin-bottom: 6px !important; }
+  .story h4 { font-size: 13px !important; margin-bottom: 6px !important; }
+
+  /* Steps, chips, ba-boxes */
+  .steps { margin: 10px 0 16px !important; }
+  .steps li { padding-bottom: 10px !important; }
+  .step-text span { font-size: 12px !important; }
+  .ba { gap: 8px !important; margin: 10px 0 16px !important; }
+  .ba-box { padding: 10px 12px !important; }
+  .ba-box ul li { font-size: 12px !important; }
+  .replaces { margin: 8px 0 16px !important; }
+  .result-box { page-break-inside: avoid; padding: 10px 14px !important; margin: 10px 0 !important; }
+
+  /* Links */
   a { color: inherit !important; text-decoration: none !important; }
 }
 
@@ -546,7 +615,7 @@ document.getElementById('navHam').addEventListener('click',function(){
 </div>
 
 <!-- ── BODY ───────────────────────────────────────────────────── -->
-<div style="border-top:1px solid var(--rule);">
+<div id="hiw-body-wrap" style="border-top:1px solid var(--rule);">
 <div class="hiw-layout">
 
   <!-- Sidebar -->
