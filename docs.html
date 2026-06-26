@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Docs — adris.tech</title>
+<meta name="description" content="The complete guide to adris.tech, in one place: every module (Krew, Studio, Coder, Models, Vault, Guard, Mesh), how it works, and the cost case — explained in plain language." />
+<link rel="canonical" href="https://adris.tech/docs" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="module-editorial.css" />
+<link rel="stylesheet" href="docs.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home"><svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg><span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span><span class="dot"></span></a>
+    <ul class="nav-links"><li><a href="/#platform">Platform</a></li><li><a href="/docs">Docs</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/download">Download</a></li></ul>
+    <div class="nav-right">
+      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;white-space:nowrap;">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span></button>
+      <a href="/download" class="btn">Download — free <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile topic switcher -->
+<div class="docs-mobilebar">
+  <select id="mobileTopic" aria-label="Choose a topic"></select>
+</div>
+
+<div class="docs-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="docs-side" id="docsSide">
+    <div class="dgroup-title">Get started</div>
+    <a class="dlink" data-topic="overview">Overview</a>
+    <a class="dlink" data-topic="how">How it works</a>
+    <a class="dlink" data-topic="roi">Is it worth it? (ROI)</a>
+
+    <div class="dgroup-title">Modules</div>
+    <div class="dgroup" data-topic="krew"><button class="dgroup-h">Krew — AI agents <svg class="chev" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 3-4 3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button><div class="dgroup-list"><a class="dsub" data-sec="krew-office">Your AI office</a><a class="dsub" data-sec="krew-team">The 48 agents</a><a class="dsub" data-sec="krew-think">How it thinks</a><a class="dsub" data-sec="krew-control">You stay in control</a></div></div>
+    <div class="dgroup" data-topic="studio"><button class="dgroup-h">Studio — automation <svg class="chev" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 3-4 3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button><div class="dgroup-list"><a class="dsub" data-sec="studio-what">What it is</a><a class="dsub" data-sec="studio-canvas">The canvas</a><a class="dsub" data-sec="studio-templates">Templates</a><a class="dsub" data-sec="studio-control">Human in the loop</a></div></div>
+    <div class="dgroup" data-topic="coder"><button class="dgroup-h">Coder — dev tools <svg class="chev" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 3-4 3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button><div class="dgroup-list"><a class="dsub" data-sec="coder-what">What it is</a><a class="dsub" data-sec="coder-models">Pick the model</a><a class="dsub" data-sec="coder-files">Edits your files</a></div></div>
+    <div class="dgroup" data-topic="models"><button class="dgroup-h">Models — AI hub <svg class="chev" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 3-4 3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button><div class="dgroup-list"><a class="dsub" data-sec="models-what">What it is</a><a class="dsub" data-sec="models-setup">One-click setup</a><a class="dsub" data-sec="models-cloud">No GPU? Cloud</a></div></div>
+    <div class="dgroup" data-topic="vault"><button class="dgroup-h">Vault — protection <svg class="chev" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 3-4 3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button><div class="dgroup-list"><a class="dsub" data-sec="vault-what">What it is</a><a class="dsub" data-sec="vault-levels">Five levels</a><a class="dsub" data-sec="vault-privacy">Private by design</a></div></div>
+    <div class="dgroup" data-topic="guard"><button class="dgroup-h">Guard — security <svg class="chev" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 3-4 3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button><div class="dgroup-list"><a class="dsub" data-sec="guard-what">What it is</a><a class="dsub" data-sec="guard-contracts">Contract scanner</a><a class="dsub" data-sec="guard-more">Threats &amp; compliance</a></div></div>
+    <div class="dgroup" data-topic="mesh"><button class="dgroup-h">Mesh — RAM pooling <svg class="chev" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 2l4 3-4 3" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button><div class="dgroup-list"><a class="dsub" data-sec="mesh-what">What it is</a><a class="dsub" data-sec="mesh-how">How it works</a><a class="dsub" data-sec="mesh-uses">Ways to use it</a></div></div>
+
+    <div class="dgroup-title">More</div>
+    <a class="dlink" href="/pricing">Pricing ↗</a>
+    <a class="dlink" href="/download">Download ↗</a>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="docs-main" id="docsMain">
+
+    <!-- OVERVIEW -->
+    <article class="dtopic" data-topic="overview">
+      <div class="dcrumb">Get started</div>
+      <h1>One app that replaces <em>five things</em> you already pay for.</h1>
+      <p class="dlede">adris.tech is one desktop app that bundles seven tools — AI agents, automation, a coding assistant, a model hub, network protection, a security analyst, and RAM pooling. It runs on <strong>your own laptop</strong>, so your work, files and conversations stay with you.</p>
+
+      <div class="dsec" id="overview-map">
+        <h2>The seven modules</h2>
+        <p class="one">Tap any module to read its guide — it opens right here, no new tab.</p>
+        <div class="dfig">
+          <div class="modgrid">
+            <div class="modcard" data-goto="krew"><div class="mn">01 · Krew</div><h4>AI agents</h4><p>A team of 48 named specialists that do the work, not just answer questions.</p></div>
+            <div class="modcard" data-goto="studio"><div class="mn">02 · Studio</div><h4>Automation</h4><p>Visual workflows that run by themselves on a schedule.</p></div>
+            <div class="modcard" data-goto="coder"><div class="mn">03 · Coder</div><h4>Dev tools</h4><p>AI that reads your whole codebase and edits your files directly.</p></div>
+            <div class="modcard" data-goto="models"><div class="mn">04 · Models</div><h4>AI model hub</h4><p>Run any open model on your laptop in two clicks, free.</p></div>
+            <div class="modcard" data-goto="vault"><div class="mn">05 · Vault</div><h4>Protection</h4><p>Blocks harmful sites &amp; trackers, system-wide, by default.</p></div>
+            <div class="modcard" data-goto="guard"><div class="mn">06 · Guard</div><h4>Security</h4><p>An AI security analyst: contracts, phishing, compliance.</p></div>
+          </div>
+        </div>
+        <p>New here? Start with <a class="dlink" style="display:inline;padding:0;color:var(--accent);" data-goto="how">How it works</a> for the plain-language tour, or jump straight to <a class="dlink" style="display:inline;padding:0;color:var(--accent);" data-goto="krew">Krew</a> — where most people begin.</p>
+      </div>
+    </article>
+
+    <!-- HOW IT WORKS -->
+    <article class="dtopic" data-topic="how">
+      <div class="dcrumb">Get started</div>
+      <h1>Everything adris does, <em>in plain language.</em></h1>
+      <p class="dlede">No tech terms. Here's what the app actually is, why it runs on your laptop instead of the cloud, and who gets the most out of it.</p>
+
+      <div class="dsec" id="how-what">
+        <h2>What it actually is</h2>
+        <p>Think about the tools you use for AI-related work today: maybe ChatGPT for writing, Zapier for automating, Copilot for code, a VPN or antivirus for safety. Each has its own login and bill, and they don't talk to each other. adris.tech is <strong>one desktop app</strong> that does all of it — and a few things that didn't have an affordable option before.</p>
+        <p>The biggest difference from any online AI tool: adris runs on your own machine. When you chat with an agent, that conversation isn't sent to a company's server. Your work, your files, your business conversations stay with you.</p>
+        <div class="dfig">
+          <div class="ba">
+            <div class="ba-box before"><div class="ba-head">What most people do today</div><ul><li>ChatGPT for writing</li><li>Zapier / Make for automations</li><li>Copilot / Cursor for code</li><li>Hugging Face to find models</li><li>VPN / NextDNS for protection</li><li>5–6 logins and monthly bills</li></ul></div>
+            <div class="ba-box after"><div class="ba-head">With adris</div><ul><li>Krew handles writing &amp; agent work</li><li>Studio builds your automations</li><li>Coder assists with your code</li><li>Models runs AI locally, free</li><li>Vault + Guard protect your device</li><li>One app. One login.</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dsec" id="how-who">
+        <h2>Who is this for?</h2>
+        <p>You don't need to be technical. The people who get the most out of adris are:</p>
+        <ol class="steps">
+          <li><div class="step-text"><strong>Freelancers working alone</strong><span>Krew agents handle the time-consuming parts so you focus on the work only you can do.</span></div></li>
+          <li><div class="step-text"><strong>Small teams (2–15 people)</strong><span>Studio runs your repetitive processes, Krew writes your deliverables, Guard protects your accounts.</span></div></li>
+          <li><div class="step-text"><strong>Developers &amp; students</strong><span>Coder + Models + Mesh is the most affordable local-AI setup available — much of it free.</span></div></li>
+          <li><div class="step-text"><strong>Small business owners</strong><span>Vault and Guard give you security that used to need an in-house IT team.</span></div></li>
+        </ol>
+      </div>
+    </article>
+
+    <!-- ROI -->
+    <article class="dtopic" data-topic="roi">
+      <div class="dcrumb">Get started</div>
+      <h1>Is it worth it? <em>Add up what you spend.</em></h1>
+      <p class="dlede">If you already pay for one AI tool, you probably pay for three or four. adris is the one that replaces all of them — and most of the platform is free.</p>
+
+      <div class="dsec" id="roi-stack">
+        <h2>The stack it replaces</h2>
+        <p>A typical solo operator's monthly AI spend, versus the same work inside adris:</p>
+        <div class="dfig">
+          <div class="ba">
+            <div class="ba-box before"><div class="ba-head">Separate tools · per month</div><ul><li>ChatGPT Plus — writing &amp; chat</li><li>Zapier — automations</li><li>Copilot — coding</li><li>A cloud AI API — model access</li><li>NextDNS / VPN — protection</li><li>Plus the time lost switching between them</li></ul></div>
+            <div class="ba-box after"><div class="ba-head">adris · one plan</div><ul><li>Krew, Studio, Coder in one place</li><li>Models hub — run AI free, locally</li><li>Vault &amp; Guard included</li><li>Bring your own AI key at provider cost</li><li>Free tier to start — no card</li><li>One bill, shared across every module</li></ul></div>
+          </div>
+        </div>
+        <p>The comparison changes quickly once you add up the subscriptions you're already paying. And because the heavy AI can run on your own hardware (or your own provider key at cost), there's no per-message markup.</p>
+        <div class="result-box"><strong>The short version:</strong> most people who switch are consolidating 3–4 paid tools into one — and moving the parts that used to cost per-use onto hardware they already own.</div>
+      </div>
+    </article>
+
+    <!-- KREW -->
+    <article class="dtopic" data-topic="krew">
+      <div class="dcrumb">Modules · 01</div>
+      <h1>Krew — <em>your AI office.</em></h1>
+      <p class="dlede">A team of <strong>48 AI specialists</strong> across 10 departments, each with a name and a job, running on your laptop. You give one a task; it does the work and hands you a finished result.</p>
+
+      <div class="dsec" id="krew-office">
+        <h2>An office, not a chatbot</h2>
+        <p>Most AI is a chat box: you ask, it answers, you do the rest. Krew is a team of named workers — Arjun the chief of staff routes your task, Zara writes captions, Vera reviews code, Nyx researches companies. You talk to one; your whole office works.</p>
+        <div class="dfig">
+          <div class="krew-stage">
+            <div class="k-strip">
+              <div class="ks"><span class="kl">Tasks today</span><span class="kv">17</span></div>
+              <div class="ks"><span class="kl">Agents active</span><span class="kv">3 <span class="u">/ 48</span></span></div>
+              <div class="ks"><span class="kl">Avg response</span><span class="kv">2.4<span class="u">s</span></span></div>
+              <div class="ks"><span class="kl">Integrations</span><span class="kv">5 <span class="u">live</span></span></div>
+              <div class="ks"><span class="kl">Data to cloud</span><span class="kv">0</span></div>
+            </div>
+            <div class="k-body">
+              <aside class="k-side">
+                <div class="knew">+ new · pick agent</div>
+                <div class="kgroup">Today</div>
+                <div class="kconv on">Launch copy for v1.0<span class="kct"><span class="kbadge">AR</span>Arjun.Boss</span></div>
+                <div class="kconv">Instagram captions<span class="kct"><span class="kbadge" style="background:rgba(249,115,22,0.2);color:#f97316;">ZA</span>Zara.Content</span></div>
+                <div class="kconv">PR review · auth<span class="kct"><span class="kbadge" style="background:rgba(6,182,212,0.2);color:#06b6d4;">VE</span>Vera.Engineer</span></div>
+              </aside>
+              <div class="k-chat">
+                <div class="khdr"><div class="agent"><div class="av">AR</div><div><div class="nm">Arjun.Boss</div><div class="role">orchestrator · routing</div></div></div><div class="indstate"><span class="ind"></span>2 working</div></div>
+                <div class="kmsg you">Write launch copy for v1.0, and make sure the auth PR is reviewed before I merge.</div>
+                <div class="kmsg ai"><div class="who">Arjun.Boss · routing</div>Two jobs, two agents. <strong>Zara.Content</strong> is on the copy. <strong>Vera.Engineer</strong> has the PR open. I'll surface both when done.</div>
+                <div class="kapproval"><div class="kah">↳ Vera.Engineer · PR #47</div><div class="kab">Found 2 issues: missing rate limit on /token, JWT secret in plain env. Comments added.</div><div class="kabtns"><button class="primary">View on GitHub</button><button>Merge anyway</button></div></div>
+                <div class="k-compose"><span>Ask Arjun or @mention any of your 48 agents…</span><div class="send">→</div></div>
+              </div>
+              <aside class="k-wf">
+                <div class="kwh"><span>// Workflow</span><span class="live">running</span></div>
+                <div class="knode done"><div class="nicon">✓</div><div><span class="nname">Zara · copy</span><span class="nstep">28s</span></div><span class="ntime">10:42</span></div>
+                <div class="knode done"><div class="nicon">✓</div><div><span class="nname">Vera · PR review</span><span class="nstep">2 issues</span></div><span class="ntime">10:42</span></div>
+                <div class="knode active"><div class="nicon">◐</div><div><span class="nname">Your decision</span><span class="nstep">merge or fix?</span></div><span class="ntime">now</span></div>
+              </aside>
+            </div>
+          </div>
+          <div class="figcap">A real Krew session — one task in, two specialists working in parallel, nothing leaving your laptop.</div>
+        </div>
+      </div>
+
+      <div class="dsec" id="krew-team">
+        <h2>The 48 agents</h2>
+        <p class="one">10 departments · all included on every plan</p>
+        <p>Each specialist is shown as <strong>Name.Role</strong> so you always know who's doing what. The line-up spans <strong>Content</strong> (6), <strong>Marketing</strong> (5), <strong>Sales</strong> (4), <strong>Support</strong> (6), <strong>Design</strong> (3), <strong>Data</strong> (6), <strong>Engineering</strong> (7), <strong>Product</strong> (8), <strong>Ops</strong> (2) and a <strong>Boss</strong> who routes everything — 48 in all. Nothing is locked behind a higher tier.</p>
+        <div class="replaces"><span class="replaces-label">Replaces</span><span class="chip">ChatGPT for work tasks</span><span class="chip">Jasper / Copy.ai</span><span class="chip">A part-time assistant</span></div>
+      </div>
+
+      <div class="dsec" id="krew-think">
+        <h2>It reasons, then verifies</h2>
+        <p>Every agent runs a loop — think, use a tool, look at the result, continue — before answering. It searches the web, reads your files and connected apps, and only then replies. That's the difference between a confident guess and a checked answer.</p>
+        <div class="story"><div class="story-who">Real story — Content agency owner</div><h4>Priya runs a 7-client content agency in Hyderabad.</h4><p>Weekly LinkedIn posts for all 7 clients used to eat two full days. Now an agent per client — each taught the brand once — turns out this week's posts in about 90 seconds each. <strong>Two days of work became three hours of her attention.</strong></p></div>
+      </div>
+
+      <div class="dsec" id="krew-control">
+        <h2>You stay in control</h2>
+        <p>Every action that touches the outside world — send an email, post to Slack, create an issue — shows up as an approval card first. You see exactly what it wants to do, edit it if you like, and nothing irreversible happens until you tap approve. And when a task is done, the agent's browser window closes itself automatically.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <!-- STUDIO -->
+    <article class="dtopic" data-topic="studio">
+      <div class="dcrumb">Modules · 02</div>
+      <h1>Studio — <em>runs while you sleep.</em></h1>
+      <p class="dlede">A visual workflow builder: connect a trigger, drop in a Krew agent, connect an action — and it runs by itself, on a schedule. Like Zapier, but the workers are your AI agents and it runs on your laptop.</p>
+
+      <div class="dsec" id="studio-what">
+        <h2>What it is</h2>
+        <p>Studio is where you build automations — sequences that happen without you clicking anything. A workflow is three parts: something that <strong>starts</strong> it, an agent that does the <strong>thinking</strong>, and an <strong>action</strong> that delivers the result.</p>
+        <div class="story"><div class="story-who">Real story — Freelance recruiter</div><h4>Arjun does tech recruitment in Pune, 4–5 roles at a time.</h4><p>Sorting each batch of CVs took 3–4 hours, several times a week. Now one Studio workflow runs at 9 AM: it reads new CVs, scores each candidate, drafts rejections, and makes Notion cards for the shortlist. <strong>He opens his laptop at 9:15 and it's already done.</strong></p></div>
+      </div>
+
+      <div class="dsec" id="studio-canvas">
+        <h2>Build it once. <span class="it">Watch it run.</span></h2>
+        <p class="one">An infinite canvas where every block is a step in your business</p>
+        <p>Drag a trigger from the sidebar, drop an agent in the middle, connect it to your tools on the right. That's a workflow — no code, no servers, no fragile glue.</p>
+        <div class="dfig">
+          <div class="studio-canvas">
+            <svg viewBox="0 0 1200 480" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+              <path d="M180 100 L420 100" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M180 100 Q300 100 300 240 L420 240" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M180 100 Q300 100 300 380 L420 380" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M580 100 L780 240" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M580 240 L780 240" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M580 380 L780 240" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M940 240 L1080 100" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M940 240 L1080 240" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <path d="M940 240 L1080 380" stroke="rgba(242,239,233,0.5)" stroke-width="2" fill="none"/>
+              <g><rect x="60" y="68" width="120" height="64" fill="#1a1a17" stroke="rgba(242,239,233,0.2)"/><text x="120" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">TRIGGER</text><text x="120" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">webhook</text></g>
+              <g><rect x="420" y="68" width="160" height="64" fill="#F7F4ED"/><text x="500" y="100" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CONTENT</text><text x="500" y="118" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">draft outline</text></g>
+              <g><rect x="420" y="208" width="160" height="64" fill="#7C5CFF"/><text x="500" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · RESEARCH</text><text x="500" y="258" text-anchor="middle" fill="rgba(242,239,233,0.7)" font-family="JetBrains Mono" font-size="9">gather facts</text></g>
+              <g><rect x="420" y="348" width="160" height="64" fill="#F7F4ED"/><text x="500" y="380" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CHECK</text><text x="500" y="398" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">brand voice</text></g>
+              <g><rect x="780" y="208" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2" stroke-dasharray="4 3"/><text x="860" y="240" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">PAUSE · APPROVE</text><text x="860" y="258" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">waiting · you</text></g>
+              <g><rect x="1080" y="68" width="100" height="64" fill="#1a1a17" stroke="rgba(242,239,233,0.2)"/><text x="1130" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ NOTION</text></g>
+              <g><rect x="1080" y="208" width="100" height="64" fill="#1a1a17" stroke="rgba(242,239,233,0.2)"/><text x="1130" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ EMAIL</text></g>
+              <g><rect x="1080" y="348" width="100" height="64" fill="#1a1a17" stroke="rgba(242,239,233,0.2)"/><text x="1130" y="380" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ SLACK</text></g>
+              <circle r="5" fill="#7C5CFF"><animateMotion dur="4s" repeatCount="indefinite" path="M180 100 L420 100 L500 240 L780 240 L940 240 L1080 100"/></circle>
+              <circle r="5" fill="#7C5CFF" opacity="0.7"><animateMotion dur="4s" begin="-1.3s" repeatCount="indefinite" path="M180 100 Q300 100 300 240 L420 240 L580 240 L780 240 L940 240 L1080 240"/></circle>
+              <circle r="5" fill="#7C5CFF" opacity="0.5"><animateMotion dur="4s" begin="-2.6s" repeatCount="indefinite" path="M180 100 Q300 100 300 380 L420 380 L580 380 L780 240 L940 240 L1080 380"/></circle>
+            </svg>
+          </div>
+          <div class="figcap">One trigger fires three agents, pauses for your approval, then delivers to Notion, email and Slack.</div>
+        </div>
+        <ol class="steps">
+          <li><div class="step-text"><strong>A trigger starts it</strong><span>A time, a new email, a form submission, a webhook — you choose what fires the workflow.</span></div></li>
+          <li><div class="step-text"><strong>An agent does the thinking</strong><span>Read this, summarise that, decide, write a reply — the AI handles the judgement in the middle.</span></div></li>
+          <li><div class="step-text"><strong>An action delivers the result</strong><span>Send an email, update Notion, write a Sheet, post to Slack — dropped where it belongs.</span></div></li>
+        </ol>
+      </div>
+
+      <div class="dsec" id="studio-templates">
+        <h2>Start from a template</h2>
+        <p>Pre-wired, pre-tested workflows you can plug your accounts into and run: auto-reply to leads, weekly client report, invoice tracker, social scheduler, support router, daily standup digest, and more.</p>
+        <div class="replaces"><span class="replaces-label">Replaces</span><span class="chip">Zapier</span><span class="chip">Make</span><span class="chip">n8n</span></div>
+      </div>
+
+      <div class="dsec" id="studio-control">
+        <h2>Human in the loop</h2>
+        <p>Pause the workflow at any step, get a WhatsApp or Slack notification, and approve before anything irreversible — a client email, a payment. On approve it ships; on reject it's discarded, with the reason logged. Every run is recorded with a full step-by-step trace.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <!-- CODER -->
+    <article class="dtopic" data-topic="coder">
+      <div class="dcrumb">Modules · 03</div>
+      <h1>Coder — <em>knows your whole codebase.</em></h1>
+      <p class="dlede">An AI coding tool that reads your entire project, writes changes straight into your files, and runs on free open-source models. Free to start, forever.</p>
+
+      <div class="dsec" id="coder-what">
+        <h2>What it is</h2>
+        <p>Copilot sees one file; ChatGPT doesn't know how your project connects. Coder reads your <strong>entire codebase</strong> when you open a project, so its answers are specific to your actual code — and it writes the change <strong>directly into the file</strong>, with a history you can roll back.</p>
+        <div class="dfig">
+          <div class="coder-stage">
+            <div class="cleft">
+              <div class="chead"><span>chat · session 01</span><span>2.4k tokens</span></div>
+              <div class="cbubble you">Build a REST API in FastAPI with JWT auth — POST /signup and GET /me.</div>
+              <div class="cbubble ai"><div class="who"><span class="badge">DeepSeek V3</span><span>free · 0.0¢</span></div>Scaffolded with python-jose and passlib. <span style="color:var(--accent);">Code on the right →</span></div>
+              <div class="cbubble you">Add rate limiting on /signup.</div>
+            </div>
+            <div class="cright">
+              <div class="chead"><span>main.py</span><span class="clang">PYTHON</span></div>
+              <div class="ccode">
+                <div class="cln"><span class="lno">5</span><span>app = <span class="tok-f">FastAPI</span>()</span></div>
+                <div class="cln"><span class="lno">6</span><span>pwd = <span class="tok-f">CryptContext</span>(schemes=[<span class="tok-s">"bcrypt"</span>])</span></div>
+                <div class="cln"><span class="lno">7</span><span></span></div>
+                <div class="cln add"><span class="lno">8</span><span><span class="tok-k">from</span> slowapi <span class="tok-k">import</span> Limiter</span></div>
+                <div class="cln add"><span class="lno">9</span><span>limiter = <span class="tok-f">Limiter</span>(...)</span></div>
+                <div class="cln"><span class="lno">10</span><span></span></div>
+                <div class="cln"><span class="lno">11</span><span><span class="tok-c"># POST /signup</span></span></div>
+                <div class="cln add"><span class="lno">12</span><span><span class="tok-p">@limiter.limit</span>(<span class="tok-s">"5/minute"</span>)</span></div>
+                <div class="cln"><span class="lno">13</span><span><span class="tok-p">@app.post</span>(<span class="tok-s">"/signup"</span>)</span></div>
+                <div class="cln"><span class="lno">14</span><span><span class="tok-k">def</span> <span class="tok-f">signup</span>(payload):</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="figcap">You chat on the left; Coder writes and edits real code on the right — on a free model.</div>
+        </div>
+      </div>
+
+      <div class="dsec" id="coder-models">
+        <h2>You pick the model</h2>
+        <p>Most tools pick a model for you and bill what they like. Coder gives you a dropdown — free open-source (DeepSeek, Llama, Mistral, Qwen Coder) for the everyday 80%, premium models (Claude, GPT) at-cost with no markup only when you need them. A "free models only" toggle keeps you from spending by accident.</p>
+        <div class="replaces"><span class="replaces-label">Replaces</span><span class="chip">GitHub Copilot</span><span class="chip">Cursor</span><span class="chip">Pasting code into ChatGPT</span></div>
+      </div>
+
+      <div class="dsec" id="coder-files">
+        <h2>It edits your files — and remembers</h2>
+        <p>Accept a change and it's written straight to disk. Every applied edit is snapshotted, so you can just say <code>revert the last change</code> and the file is restored. It remembers the conversation too — "now do the same for the other route" just works.</p>
+        <div class="story"><div class="story-who">Real story — Solo developer</div><h4>Vikram is building a SaaS alone in Bengaluru — 80 files.</h4><p>He needed to switch his background-job system, which touched files he couldn't fully trace. Coder, already indexed on his project, found the 4 affected files, explained each change and wrote the code. <strong>Done in an afternoon instead of a week.</strong></p></div>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <!-- MODELS -->
+    <article class="dtopic" data-topic="models">
+      <div class="dcrumb">Modules · 04</div>
+      <h1>Models — <em>any open AI model, free.</em></h1>
+      <p class="dlede">Browse a catalogue, click install, and adris picks the right version for your laptop and runs it. Free — because it runs on your own hardware.</p>
+
+      <div class="dsec" id="models-what">
+        <h2>What it is</h2>
+        <p>Hundreds of powerful models can be run for free; the hard part has always been setup. Models hub makes it two clicks — it auto-detects your RAM, downloads the right version, verifies it, and wires it into Krew and Coder automatically.</p>
+        <div class="dfig">
+          <div class="hub-grid">
+            <div class="hubcard"><div class="htop"><div class="hbadge">DS</div><div><h5>DeepSeek R1 · 7B</h5><div class="hcre">deepseek-ai</div></div></div><div class="htags"><span class="htag">Reasoning</span><span class="htag">Coding</span></div><div class="hstats"><div><span class="lbl">Params</span><span class="v">7B</span></div><div><span class="lbl">RAM</span><span class="v">4.5 GB</span></div><div><span class="lbl">Speed</span><span class="v">fast</span></div></div></div>
+            <div class="hubcard"><div class="htop"><div class="hbadge">MS</div><div><h5>Mistral · 24B</h5><div class="hcre">mistralai</div></div></div><div class="htags"><span class="htag">Chat</span><span class="htag">Quick</span></div><div class="hstats"><div><span class="lbl">Params</span><span class="v">24B</span></div><div><span class="lbl">RAM</span><span class="v">14 GB</span></div><div><span class="lbl">Speed</span><span class="v">fast</span></div></div></div>
+            <div class="hubcard mesh-card"><div class="htop"><div class="hbadge">LL</div><div><h5>Llama · 405B</h5><div class="hcre">meta</div></div></div><div class="htags"><span class="htag mesh-badge">Mesh frontier</span></div><div class="hstats"><div><span class="lbl">Params</span><span class="v">405B</span></div><div><span class="lbl">RAM</span><span class="v">230 GB</span></div><div><span class="lbl">Speed</span><span class="v">mesh</span></div></div></div>
+          </div>
+          <div class="figcap">The catalogue in the app — search by use case, filter by your RAM, install in one click.</div>
+        </div>
+        <div class="story"><div class="story-who">Real story — Student researcher</div><h4>Rashi is an engineering student in Tamil Nadu.</h4><p>She needed to test four models on the same task. Paid services would have cost thousands and sent her data to servers she didn't control. She installed all four locally in 20 minutes. <strong>Total cost: ₹0. Data stayed on her laptop.</strong></p></div>
+      </div>
+
+      <div class="dsec" id="models-setup">
+        <h2>One-click setup</h2>
+        <p>No terminal, no external tools. Open the Models tab, pick a model, click Download — adris detects your hardware, recommends a model that fits, verifies the download, and makes it ready in Coder.</p>
+        <div class="replaces"><span class="replaces-label">Replaces</span><span class="chip">Hugging Face setup</span><span class="chip">Ollama CLI</span><span class="chip">LM Studio</span><span class="chip">Paid cloud APIs</span></div>
+      </div>
+
+      <div class="dsec" id="models-cloud">
+        <h2>No GPU? Use the cloud</h2>
+        <p>If your laptop can't run a big model, plug your own OpenAI / Gemini / Claude key into Connect Apps. adris routes through it at the provider's price — no markup. Keys are stored encrypted in your OS keychain, never on our servers.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <!-- VAULT -->
+    <article class="dtopic" data-topic="vault">
+      <div class="dcrumb">Modules · 05</div>
+      <h1>Vault — <em>a private internet.</em></h1>
+      <p class="dlede">Blocks dangerous sites, ads and trackers before they reach your screen — for every app on your device, not just your browser. On by default, free with every account.</p>
+
+      <div class="dsec" id="vault-what">
+        <h2>What it is</h2>
+        <p>When you open a link, your device first looks up the address. Vault sits in that lookup and checks every request against lists of dangerous, ad-serving and tracking sites — blocking the bad ones before anything loads. Unlike a browser ad-blocker, it works <strong>system-wide</strong>.</p>
+        <div class="dfig">
+          <div class="vlevels">
+            <div class="vlevel"><span class="vltag">Level 1</span><span class="vlname">Swift</span><p>Only known-dangerous sites. Nothing breaks.</p></div>
+            <div class="vlevel on"><span class="vltag">Default</span><span class="vlname">Block</span><p>Adds ads &amp; trackers. Best for most people.</p></div>
+            <div class="vlevel"><span class="vltag">Level 3</span><span class="vlname">Guard</span><p>Stronger social-media tracking protection.</p></div>
+            <div class="vlevel"><span class="vltag">Level 4</span><span class="vlname">Core</span><p>Maximum blocking — for confidential work.</p></div>
+            <div class="vlevel"><span class="vltag">Level 5</span><span class="vlname">Family</span><p>Allow-list only. Good for a shared machine.</p></div>
+          </div>
+          <div class="figcap">One switch, five levels — most people stay on Block.</div>
+        </div>
+        <div class="story"><div class="story-who">Real story — Freelance designer</div><h4>Mehul works from cafés in Ahmedabad — public Wi-Fi daily.</h4><p>He clicked a link in a fake "client enquiry." Vault blocked the page instantly: <em>"phishing — stopped before loading."</em> In his first week it blocked 800+ tracker requests. <strong>Free, bundled, never configured.</strong></p></div>
+      </div>
+
+      <div class="dsec" id="vault-levels">
+        <h2>Five protection levels</h2>
+        <p>From "never break anything" to "lock it all down" — Swift, Block (recommended), Guard, Core and Family. Pick how aggressive it is; most people leave it on Block.</p>
+        <div class="replaces"><span class="replaces-label">Replaces</span><span class="chip">NextDNS</span><span class="chip">Pi-hole</span><span class="chip">Browser ad blockers</span></div>
+      </div>
+
+      <div class="dsec" id="vault-privacy">
+        <h2>Private by design</h2>
+        <p>Every lookup is encrypted (DNS-over-HTTPS), so nobody on your network — not your ISP, not the café router — can log where you go. It checks every domain against malware and phishing lists too, so flagged domains never reach your device.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <!-- GUARD -->
+    <article class="dtopic" data-topic="guard">
+      <div class="dcrumb">Modules · 06</div>
+      <h1>Guard — <em>your AI security team.</em></h1>
+      <p class="dlede">An AI security analyst for businesses without an IT team: reviews contracts in plain English, watches for phishing, tracks vulnerabilities, and checks compliance. On Builder &amp; up (Solo gets 10 scans a month to try it).</p>
+
+      <div class="dsec" id="guard-what">
+        <h2>What it is</h2>
+        <p>Most small businesses are exposed not because they don't care, but because staying safe takes expertise they don't have time to build. Guard reviews your contracts, watches for threats and tells you what to fix — in plain language, nothing technical required.</p>
+        <div class="story"><div class="story-who">Real story — SaaS startup, 7 people</div><h4>Deepa's team builds software in Chennai. Nobody specialises in security.</h4><p>Guard now scans their vendor contracts before signing. On a new hosting agreement it flagged: <em>"Clause 8.3 lets the vendor raise your price 30% with 15 days' notice, and you can't exit."</em> Deepa renegotiated. <strong>No lawyer, no consultant.</strong></p></div>
+      </div>
+
+      <div class="dsec" id="guard-contracts">
+        <h2>Contract scanner</h2>
+        <p class="one">Drop a PDF — even scanned, even multi-language — and get a risk score in seconds</p>
+        <div class="dfig">
+          <div class="gscan">
+            <div class="gs-head"><span>Risk Assessment</span><span>47-page agreement · 3 sections</span></div>
+            <div class="gs-score"><span class="num">62</span><span class="out">/ 100</span><span class="lbl">Moderate Risk</span></div>
+            <div class="gs-meta">✓ Scanned the entire document · any Hindi / regional clauses translated to English</div>
+            <div class="gf"><span class="sev high">HIGH</span><div><div class="ft">Auto-renewal trap</div><p>Section 8.2: renews for 24 months unless cancelled 90 days prior, with 40% price-rise cap.</p></div></div>
+            <div class="gf"><span class="sev med">MED</span><div><div class="ft">Data residency gap</div><p>Section 6.3: vendor may store data outside India — DPDP Act disclosure required.</p></div></div>
+          </div>
+          <div class="figcap">Drop a PDF — even a scanned one, even in Hindi — and Guard returns a risk score with plain-English findings.</div>
+        </div>
+        <ol class="steps">
+          <li><div class="step-text"><strong>Reads scanned PDFs</strong><span>If the pages are images, OCR pulls the text straight off the scan.</span></div></li>
+          <li><div class="step-text"><strong>Handles Hindi &amp; regional languages</strong><span>Mixed-language documents are transcribed, translated and analysed in English.</span></div></li>
+          <li><div class="step-text"><strong>Scans 200-page agreements</strong><span>Long contracts are read section by section in one upload — bounded so a scan never drains your budget.</span></div></li>
+        </ol>
+      </div>
+
+      <div class="dsec" id="guard-more">
+        <h2>Threats, vulnerabilities &amp; compliance</h2>
+        <p>Connect your inbox and Guard checks incoming email for phishing and fraud, logging everything to a tamper-evident audit trail. It sends a weekly briefing of new vulnerabilities in your stack — scored by whether you're actually affected. And it checks your code, config and policies against GDPR, DPDP, PCI and ISO, giving you a one-page scorecard with specific fixes.</p>
+        <div class="replaces"><span class="replaces-label">Replaces</span><span class="chip">A security consultant</span><span class="chip">Manual contract review</span><span class="chip">GitGuardian</span></div>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <!-- MESH -->
+    <article class="dtopic" data-topic="mesh">
+      <div class="dcrumb">Modules · 07</div>
+      <h1>Mesh — <em>run models no single device can.</em></h1>
+      <p class="dlede">Links devices on the same Wi-Fi and shares their memory as one bigger machine — two 16 GB laptops become a 32 GB machine. No data leaves your network, nobody charges per use. Mesh 3 (3 devices) is free.</p>
+
+      <div class="dsec" id="mesh-what">
+        <h2>What it is</h2>
+        <p>Better models need more memory than most laptops have. Mesh pools the RAM of devices on the same Wi-Fi, so the model runs across all of them — three 8 GB laptops become one 24 GB pool. It's <strong>live in the app today</strong>.</p>
+        <div class="dfig">
+          <div class="frame frame-dark">
+            <div class="frame-top"><span class="ldot"></span><span class="ldot"></span><span class="ldot"></span><span class="ftitle">adris.tech MESH · ROOM 472819</span></div>
+            <div class="mesh-stage-body">
+              <div class="mesh-graph-area">
+                <svg class="mesh-graph-svg" viewBox="0 0 460 290" fill="none">
+                  <line x1="90" y1="210" x2="230" y2="250" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+                  <line x1="370" y1="210" x2="230" y2="250" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+                  <line x1="230" y1="60" x2="230" y2="250" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+                  <circle r="3.5" fill="#7C5CFF"><animateMotion dur="1.8s" repeatCount="indefinite"><mpath href="#mpA"/></animateMotion></circle>
+                  <circle r="3.5" fill="#7C5CFF"><animateMotion dur="1.8s" repeatCount="indefinite" begin="0.6s"><mpath href="#mpB"/></animateMotion></circle>
+                  <defs><path id="mpA" d="M90,210 L230,250"/><path id="mpB" d="M370,210 L230,250"/></defs>
+                  <circle cx="90" cy="210" r="38" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/><text x="90" y="203" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="rgba(242,239,233,0.92)">8 GB</text><text x="90" y="220" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(242,239,233,0.38)">Device A</text>
+                  <circle cx="230" cy="60" r="38" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/><text x="230" y="53" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="rgba(242,239,233,0.92)">8 GB</text><text x="230" y="70" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(242,239,233,0.38)">Device B</text>
+                  <circle cx="370" cy="210" r="38" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/><text x="370" y="203" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="rgba(242,239,233,0.92)">8 GB</text><text x="370" y="220" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(242,239,233,0.38)">Device C</text>
+                  <circle cx="230" cy="250" r="44" fill="rgba(124,92,255,0.12)" stroke="rgba(124,92,255,0.75)" stroke-width="2"/><text x="230" y="244" text-anchor="middle" font-family="JetBrains Mono" font-size="16" fill="#7C5CFF">24 GB</text><text x="230" y="262" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(242,239,233,0.38)">unified pool</text>
+                </svg>
+              </div>
+              <div class="mesh-info-area">
+                <div class="mi-row"><span class="mi-label">Pool</span><span class="mi-val">24 GB · 3 nodes</span></div>
+                <div class="mi-row"><span class="mi-label">Model</span><span class="mi-val">Llama 3.3 70B</span><div class="mi-bar"><div class="mi-bar-fill"></div></div></div>
+                <div class="mi-row"><span class="mi-label">Layer routing</span><div class="mi-layers"><div class="mi-layer"><span>Layer 28–31</span><span class="mi-layer-node">→ A</span></div><div class="mi-layer"><span>Layer 32–35</span><span class="mi-layer-node">→ B</span></div><div class="mi-layer"><span>Layer 36–40</span><span class="mi-layer-node">→ C</span></div></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="figcap">Three 8 GB laptops on the same Wi-Fi become one 24 GB pool — the model's layers split across them.</div>
+        </div>
+      </div>
+
+      <div class="dsec" id="mesh-how">
+        <h2>How it works</h2>
+        <p>A large model is made of many layers. Mesh splits those layers across the devices in your group, so each only holds a slice — and they work together over the local network to run the whole model. That's why three small laptops can run something none could alone.</p>
+        <div class="story"><div class="story-who">Real story — Student study group</div><h4>Four engineering students in Coimbatore.</h4><p>Their research needed a model too big for any one laptop; a paid service would have cost ₹40,000–₹80,000. They pooled four laptops on the college Wi-Fi into one 24 GB machine. <strong>A whole semester of experiments for ₹0.</strong></p></div>
+      </div>
+
+      <div class="dsec" id="mesh-uses">
+        <h2>Ways to use it</h2>
+        <p>Pool <strong>your own devices</strong> (laptop + an old PC), <strong>a team's machines</strong> (idle memory chips in for heavy tasks), or <strong>students on the same Wi-Fi</strong> (hostel, library, study room). Up to 3 devices is always free; add more pay-as-you-go.</p>
+        <div class="replaces"><span class="replaces-label">Replaces</span><span class="chip">Cloud GPU rentals</span><span class="chip">Expensive AI APIs</span><span class="chip">Upgrading your laptop</span></div>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+  </main>
+</div>
+
+<script>
+// Theme
+(function(){var s=localStorage.getItem('nv-theme')||'paper';if(s==='ink')document.documentElement.setAttribute('data-theme','ink');})();
+document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme')==='ink'?'paper':'ink';document.documentElement.setAttribute('data-theme',c==='paper'?'':'ink');localStorage.setItem('nv-theme',c);});
+
+// ── Docs router ────────────────────────────────────────────────
+(function(){
+  var TOPICS = ['overview','how','roi','krew','studio','coder','models','vault','guard','mesh'];
+  var TITLES = {overview:'Overview',how:'How it works',roi:'Is it worth it?',krew:'Krew — AI agents',studio:'Studio — automation',coder:'Coder — dev tools',models:'Models — AI hub',vault:'Vault — protection',guard:'Guard — security',mesh:'Mesh — RAM pooling'};
+  var topics = document.querySelectorAll('.dtopic');
+  var sideLinks = document.querySelectorAll('.dlink[data-topic]');
+  var groups = document.querySelectorAll('.dgroup[data-topic]');
+  var mobile = document.getElementById('mobileTopic');
+  var main = document.getElementById('docsMain');
+
+  // Build mobile select
+  TOPICS.forEach(function(t){ var o=document.createElement('option'); o.value=t; o.textContent=TITLES[t]; mobile.appendChild(o); });
+
+  function setActive(topic){
+    if (TOPICS.indexOf(topic) === -1) topic = 'overview';
+    topics.forEach(function(p){ p.classList.toggle('active', p.dataset.topic===topic); });
+    sideLinks.forEach(function(a){ a.classList.toggle('active', a.dataset.topic===topic); });
+    groups.forEach(function(g){ var on=g.dataset.topic===topic; g.classList.toggle('active',on); g.classList.toggle('open',on); });
+    mobile.value = topic;
+    buildPager(topic);
+    if (location.hash.slice(1) !== topic) history.replaceState(null,'','#'+topic);
+    main.scrollTop = 0; window.scrollTo(0,0);
+  }
+
+  function buildPager(topic){
+    var i = TOPICS.indexOf(topic);
+    var panel = document.querySelector('.dtopic[data-topic="'+topic+'"] [data-pager]');
+    if (!panel) return;
+    var prev = TOPICS[i-1], next = TOPICS[i+1];
+    panel.innerHTML =
+      (prev ? '<a data-goto="'+prev+'"><div class="pl">← Previous</div><div class="pt">'+TITLES[prev]+'</div></a>' : '<a class="disabled"></a>') +
+      (next ? '<a class="next" data-goto="'+next+'"><div class="pl">Next →</div><div class="pt">'+TITLES[next]+'</div></a>' : '<a class="next disabled"></a>');
+  }
+
+  // Sidebar group headers + simple links
+  groups.forEach(function(g){
+    g.querySelector('.dgroup-h').addEventListener('click', function(){ setActive(g.dataset.topic); });
+  });
+  sideLinks.forEach(function(a){
+    a.addEventListener('click', function(e){ if(a.dataset.topic){ e.preventDefault(); setActive(a.dataset.topic); } });
+  });
+  // Sub-section links → switch topic (if needed) then scroll
+  document.querySelectorAll('.dsub[data-sec]').forEach(function(a){
+    a.addEventListener('click', function(){
+      var g = a.closest('.dgroup'); if(g) setActive(g.dataset.topic);
+      var el = document.getElementById(a.dataset.sec);
+      if(el) setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); }, 30);
+    });
+  });
+  // Any element with data-goto (cards, pager, inline links)
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('[data-goto]');
+    if(t){ e.preventDefault(); setActive(t.dataset.goto); }
+  });
+  mobile.addEventListener('change', function(){ setActive(mobile.value); });
+  window.addEventListener('hashchange', function(){ setActive(location.hash.slice(1)); });
+
+  setActive(location.hash.slice(1) || 'overview');
+})();
+</script>
+</body>
+</html>
