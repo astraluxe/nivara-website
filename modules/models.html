@@ -74,7 +74,21 @@
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="nav-mark" aria-label="adris.tech home"><svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg><span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span><span class="dot"></span></a>
-    <ul class="nav-links"><li><a href="/#platform">Platform</a></li><li><a href="/#modules">Modules</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/download">Download</a></li></ul>
+    <ul class="nav-links"><li><a href="/#platform">Platform</a></li><li class="has-dropdown">
+        <a href="/#modules" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
+            <a href="/modules/automation"><span class="nav-dd-tag">02</span>Automation</a>
+            <a href="/modules/coder"><span class="nav-dd-tag">03</span>Coder</a>
+            <a href="/modules/models"><span class="nav-dd-tag">04</span>Models</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
+            <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
+            <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+          </div>
+        </div>
+      </li><li><a href="/pricing">Pricing</a></li><li><a href="/download">Download</a></li></ul>
     <div class="nav-right">
       <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span></button>
