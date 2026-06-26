@@ -440,6 +440,16 @@
   }
   .plan-presets button:hover { color: var(--paper); border-color: var(--paper); }
   .plan-presets button.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  /* currency toggle */
+  .cur-toggle { display: inline-flex; gap: 0; margin: 14px 0 4px; border: 1px solid rgba(242,239,233,0.18); width: fit-content; }
+  .cur-toggle button { padding: 7px 16px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: rgba(242,239,233,0.6); background: transparent; border: none; cursor: pointer; transition: all 0.15s ease; }
+  .cur-toggle button + button { border-left: 1px solid rgba(242,239,233,0.18); }
+  .cur-toggle button:hover { color: var(--paper); }
+  .cur-toggle button.active { background: var(--accent); color: var(--accent-ink); }
+  [data-theme="ink"] .cur-toggle { border-color: rgba(14,14,12,0.18); }
+  [data-theme="ink"] .cur-toggle button { color: rgba(14,14,12,0.6); }
+  [data-theme="ink"] .cur-toggle button + button { border-left-color: rgba(14,14,12,0.18); }
+  [data-theme="ink"] .cur-toggle button.active { background: var(--accent); color: var(--accent-ink); }
 
   /* Right panel — earnings result */
   .e-tag {
@@ -1184,6 +1194,11 @@ document.getElementById('navHam').addEventListener('click', function() {
         <h3>Earnings <span class="it">estimator</span></h3>
         <p class="e-sub">Drag the sliders. Earnings update live. Numbers reflect real adris.tech plan pricing.</p>
 
+        <div class="cur-toggle" id="curToggle">
+          <button type="button" data-cur="inr" class="active">₹ INR</button>
+          <button type="button" data-cur="usd">$ USD</button>
+        </div>
+
         <div class="ctrl">
           <div class="clbl">
             <span>// Active paying referrals</span>
@@ -1202,11 +1217,11 @@ document.getElementById('navHam').addEventListener('click', function() {
         <div class="ctrl">
           <div class="clbl">
             <span>// Average plan value</span>
-            <span class="cval"><span style="font-size: 14px; opacity: 0.6; margin-right: 2px;">₹</span><span id="planVal">1,499</span> <span class="u">/ mo</span></span>
+            <span class="cval"><span class="cur" style="font-size: 14px; opacity: 0.6; margin-right: 2px;">₹</span><span id="planVal">1,499</span> <span class="u">/ mo</span></span>
           </div>
           <input type="range" id="planRange" min="0" max="19999" value="1499" step="1" />
           <div class="ticks">
-            <span style="left:0;transform:none">₹0</span>
+            <span style="left:0;transform:none" id="planTickZero">₹0</span>
             <span style="left:8%;transform:translateX(-50%)">Solo</span>
             <span style="left:25%;transform:translateX(-50%)">Builder</span>
             <span style="left:100%;transform:translateX(-100%)">Team</span>
@@ -1576,15 +1591,46 @@ document.getElementById('navHam').addEventListener('click', function() {
   const tierName  = document.getElementById('tierName');
   const tierRate  = document.getElementById('tierRate');
 
+  const presetBtns   = document.querySelectorAll('.plan-presets button');
+  const planTickZero = document.getElementById('planTickZero');
+  const curBtns      = document.querySelectorAll('#curToggle button');
+
+  // Real adris.tech plans, per currency.  [amount, label]
+  const CURS = {
+    inr: { sym: '₹', locale: 'en-IN', max: 19999, presets: [[0,'Free'],[1499,'Solo'],[4999,'Builder'],[19999,'Team']] },
+    usd: { sym: '$', locale: 'en-US', max: 199,   presets: [[0,'Free'],[15,'Solo'],[49,'Builder'],[199,'Team']] }
+  };
+  let cur = 'inr';
+
   function tierFromRefs(n) {
     if (n >= 100) return { name: 'Elite',   rate: 0.20 };
     if (n >= 31)  return { name: 'Partner', rate: 0.16 };
     if (n >= 11)  return { name: 'Builder', rate: 0.13 };
     return         { name: 'Starter', rate: 0.10 };
   }
-  function inr(n) {
-    return Math.round(n).toLocaleString('en-IN');
+  function fmt(n) { return Math.round(n).toLocaleString(CURS[cur].locale); }
+
+  function applyCurrency(next) {
+    if (next === cur || !CURS[next]) return;
+    const c = CURS[cur], n = CURS[next];
+    // snap to the equivalent plan tier in the new currency
+    const v = parseInt(planRange.value, 10);
+    let idx = 0, best = Infinity;
+    c.presets.forEach((p, i) => { const d = Math.abs(p[0] - v); if (d < best) { best = d; idx = i; } });
+    cur = next;
+    planRange.max = n.max;
+    planRange.value = n.presets[idx][0];
+    document.querySelectorAll('.cur').forEach(el => { el.textContent = n.sym; });
+    if (planTickZero) planTickZero.textContent = n.sym + '0';
+    presetBtns.forEach((b, i) => {
+      const p = n.presets[i]; if (!p) return;
+      b.dataset.plan = p[0];
+      b.textContent = p[1] + ' · ' + n.sym + p[0].toLocaleString(n.locale);
+    });
+    curBtns.forEach(b => b.classList.toggle('active', b.dataset.cur === next));
+    updateEstim();
   }
+
   function updateEstim() {
     const refs = parseInt(refsRange.value, 10);
     const plan = parseInt(planRange.value, 10);
@@ -1593,36 +1639,25 @@ document.getElementById('navHam').addEventListener('click', function() {
     const cut = gross * t.rate;
 
     refsVal.textContent = refs;
-    planVal.textContent = inr(plan);
+    planVal.textContent = fmt(plan);
     refsOut.textContent = refs;
     rateOut.innerHTML = Math.round(t.rate * 100) + '<span style="font-size: 14px; opacity: 0.55;">%</span>';
-    grossOut.textContent = inr(gross);
-    cutOut.textContent = inr(cut);
-    monthlyVal.textContent = inr(cut);
-    annualVal.textContent = inr(cut * 12);
+    grossOut.textContent = fmt(gross);
+    cutOut.textContent = fmt(cut);
+    monthlyVal.textContent = fmt(cut);
+    annualVal.textContent = fmt(cut * 12);
     tierName.textContent = t.name;
     tierRate.textContent = Math.round(t.rate * 100) + '%';
 
-    // sync plan preset buttons
-    document.querySelectorAll('.plan-presets button').forEach(b => {
-      b.classList.toggle('active', parseInt(b.dataset.plan, 10) === plan);
-    });
+    presetBtns.forEach(b => b.classList.toggle('active', parseInt(b.dataset.plan, 10) === plan));
 
-    // sync tier-progress marker (visual)
     const marker = document.querySelector('.tier-progress .pmarker');
-    if (marker) {
-      const pct = Math.min(100, (refs / 100) * 100);
-      marker.style.left = pct + '%';
-    }
+    if (marker) marker.style.left = Math.min(100, (refs / 100) * 100) + '%';
   }
   refsRange.addEventListener('input', updateEstim);
   planRange.addEventListener('input', updateEstim);
-  document.querySelectorAll('.plan-presets button').forEach(b => {
-    b.addEventListener('click', e => {
-      planRange.value = b.dataset.plan;
-      updateEstim();
-    });
-  });
+  presetBtns.forEach(b => b.addEventListener('click', () => { planRange.value = b.dataset.plan; updateEstim(); }));
+  curBtns.forEach(b => b.addEventListener('click', () => applyCurrency(b.dataset.cur)));
   updateEstim();
 
   // ============= FORM SUBMIT (Supabase) =============
