@@ -1,12 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/png" href="/icon.png" />
 <link rel="apple-touch-icon" href="/icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Krew — 43 AI Specialists · adris.tech</title>
-<meta name="description" content="43 AI specialists across 9 departments — content, marketing, sales, engineering, PM, data and more. Each one has a name, a role, and a job to do. Running locally on your laptop." />
+<title>Krew — Your AI office, explained · adris.tech</title>
+<meta name="description" content="Krew is a team of 43 AI specialists that runs on your laptop — each with a name, a role, and a job to do. See exactly how it works, in plain language, with real examples." />
+<link rel="canonical" href="https://adris.tech/modules/krew" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,466 +18,363 @@
 <link rel="stylesheet" href="../backgrounds.css" />
 
 <style>
-  /* ===========================================
-     Dashboard mock
-  =========================================== */
-  .krew-stage {
-    background: #0E0E0C;
-    color: #F2EFE9;
-    border: 1px solid rgba(242,239,233,0.12);
-    display: grid;
-    grid-template-rows: auto 1fr;
-    overflow: hidden;
-  }
-  .k-strip {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1px;
-    background: rgba(242,239,233,0.08);
-    border-bottom: 1px solid rgba(242,239,233,0.08);
-  }
-  .k-strip .ks {
-    background: #0E0E0C;
-    padding: 14px 18px;
-    display: flex; flex-direction: column; gap: 2px;
-  }
-  .k-strip .ks .kl {
-    font-family: var(--font-mono); font-size: 9px;
-    letter-spacing: 0.12em; color: rgba(242,239,233,0.45);
-    text-transform: uppercase;
-  }
-  .k-strip .ks .kv {
-    font-family: var(--font-sans); font-size: 18px;
-    font-weight: 500; letter-spacing: -0.02em; color: #F2EFE9;
-  }
-  .k-strip .ks .kv .u { font-size: 12px; color: rgba(242,239,233,0.5); margin-left: 3px; }
-  .k-strip .ks .kbar {
-    margin-top: 4px; height: 4px;
-    background: rgba(242,239,233,0.08); position: relative;
-  }
-  .k-strip .ks .kbar::after {
-    content: ""; position: absolute; inset: 0 var(--rem,50%) 0 0; background: var(--accent);
-  }
-  .k-strip .ks.warn .kbar::after { background: #FFD83C; }
+/* ════════════════════════════════════════════════════════════════
+   EDITORIAL LAYOUT  (shared look with /how-it-works)
+   ════════════════════════════════════════════════════════════════ */
+.hiw-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .hiw-layout { grid-template-columns: 1fr; }
+  .hiw-sidebar { display: none; }
+}
 
-  .k-body {
-    display: grid;
-    grid-template-columns: 220px 1fr 280px;
-    min-height: 460px;
-  }
-  .k-side {
-    padding: 16px 14px; border-right: 1px solid rgba(242,239,233,0.06);
-    background: #0B0B09; display: flex; flex-direction: column; gap: 12px; overflow: hidden;
-  }
-  .k-side .ktabs {
-    display: grid; grid-template-columns: 1fr 1fr;
-    border-bottom: 1px solid rgba(242,239,233,0.08); margin-bottom: 4px;
-  }
-  .k-side .ktabs span {
-    padding: 8px 0; text-align: center; font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.1em; color: rgba(242,239,233,0.5); text-transform: uppercase;
-    border-bottom: 1px solid transparent; margin-bottom: -1px;
-  }
-  .k-side .ktabs span.on { color: #F2EFE9; border-bottom-color: var(--accent); }
-  .k-side .knew {
-    padding: 10px 12px; background: var(--accent); color: var(--accent-ink);
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
-    text-transform: uppercase; text-align: center;
-  }
-  .k-side .kgroup {
-    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
-    color: rgba(242,239,233,0.4); text-transform: uppercase; margin: 4px 0;
-  }
-  .k-side .kconv {
-    padding: 8px 10px; font-size: 12px; color: rgba(242,239,233,0.8);
-    border-left: 2px solid transparent; cursor: pointer; line-height: 1.4;
-  }
-  .k-side .kconv.on {
-    background: rgba(124,92,255,0.1); border-left-color: var(--accent); color: #F2EFE9;
-  }
-  .k-side .kconv .kct {
-    font-family: var(--font-mono); font-size: 9px; color: rgba(242,239,233,0.4);
-    display: block; margin-top: 2px;
-  }
-  .k-side .kconv .kbadge {
-    display: inline-block; font-family: var(--font-mono); font-size: 8px;
-    padding: 1px 5px; border-radius: 2px; margin-right: 4px;
-    background: rgba(124,92,255,0.2); color: var(--accent);
-  }
-  .k-side .ktok {
-    margin-top: auto; padding: 12px;
-    background: rgba(242,239,233,0.04); border: 1px solid rgba(242,239,233,0.08);
-  }
-  .k-side .ktok .ktoktop {
-    display: flex; justify-content: space-between; align-items: baseline;
-    font-family: var(--font-mono); font-size: 10px; color: rgba(242,239,233,0.5);
-    margin-bottom: 6px; letter-spacing: 0.1em; text-transform: uppercase;
-  }
-  .k-side .ktok .ktoktop .v { color: #F2EFE9; }
-  .k-side .ktok .ktokbar { height: 4px; background: rgba(242,239,233,0.08); position: relative; }
-  .k-side .ktok .ktokbar::after { content: ""; position: absolute; inset: 0 38% 0 0; background: var(--accent); }
-  .k-side .kplan {
-    margin-top: 8px; padding: 8px 12px; background: rgba(124,92,255,0.1);
-    border: 1px solid var(--accent); font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.1em; color: var(--accent); text-align: center; text-transform: uppercase;
-  }
+/* Sidebar */
+.hiw-sidebar { position: sticky; top: 80px; padding: 40px 20px 40px 0; border-right: 1px solid var(--rule); }
+.hiw-sidebar-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted-2); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--rule);
+}
+.hiw-nav { list-style: none; padding: 0; margin: 0; }
+.hiw-nav a {
+  display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px;
+  font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none;
+  transition: color .12s, background .12s; line-height: 1.3;
+}
+.hiw-nav a:hover { color: var(--ink); background: var(--paper-2); }
+.hiw-nav a.active { color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.hiw-nav-num { font-family: var(--font-mono); font-size: 10px; color: var(--muted-2); flex-shrink: 0; min-width: 18px; }
+.hiw-nav-sep { height: 1px; background: var(--rule); margin: 8px 10px; }
 
-  .k-chat {
-    padding: 16px 20px 14px; border-right: 1px solid rgba(242,239,233,0.06);
-    display: flex; flex-direction: column; overflow: hidden; background: #0E0E0C;
-  }
-  .k-chat .khdr {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(242,239,233,0.08);
-  }
-  .k-chat .khdr .agent { display: flex; align-items: center; gap: 10px; }
-  .k-chat .khdr .agent .av {
-    width: 28px; height: 28px; background: var(--accent); color: var(--accent-ink);
-    display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; font-weight: 500;
-  }
-  .k-chat .khdr .agent .nm { font-size: 14px; font-weight: 500; }
-  .k-chat .khdr .agent .role {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-    color: rgba(242,239,233,0.5); text-transform: uppercase;
-  }
-  .k-chat .khdr .indstate {
-    display: flex; align-items: center; gap: 6px; font-family: var(--font-mono);
-    font-size: 10px; letter-spacing: 0.1em; color: rgba(242,239,233,0.6); text-transform: uppercase;
-  }
-  .k-chat .khdr .indstate .ind {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-    box-shadow: 0 0 0 2px rgba(124,92,255,0.3);
-  }
-  .k-chat .kbody { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
-  .kmsg { font-size: 13px; line-height: 1.55; max-width: 85%; }
-  .kmsg.you {
-    align-self: flex-end; background: rgba(242,239,233,0.06);
-    border: 1px solid rgba(242,239,233,0.08); padding: 10px 14px; color: #F2EFE9;
-  }
-  .kmsg.ai { align-self: flex-start; color: rgba(242,239,233,0.85); padding: 4px 0; }
-  .kmsg.ai .who {
-    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: rgba(242,239,233,0.4); margin-bottom: 4px;
-  }
-  .kmsg.ai .body { color: rgba(242,239,233,0.9); }
-  .kapproval {
-    border: 1px solid rgba(242,239,233,0.12); background: rgba(242,239,233,0.02);
-    padding: 12px 14px; margin-top: 4px;
-  }
-  .kapproval .kah {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
-    color: var(--accent); text-transform: uppercase; margin-bottom: 8px;
-  }
-  .kapproval .kab { color: rgba(242,239,233,0.8); font-size: 12px; margin-bottom: 10px; }
-  .kapproval .kabtns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .kapproval .kabtns button {
-    padding: 7px 10px; font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.08em; text-transform: uppercase; background: transparent;
-    color: rgba(242,239,233,0.85); border: 1px solid rgba(242,239,233,0.2); cursor: pointer;
-  }
-  .kapproval .kabtns .primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .k-compose {
-    margin-top: 12px; padding: 10px 12px; background: rgba(242,239,233,0.04);
-    border: 1px solid rgba(242,239,233,0.1); display: flex; align-items: center; gap: 10px;
-    font-family: var(--font-mono); font-size: 12px; color: rgba(242,239,233,0.5);
-  }
-  .k-compose .send {
-    width: 22px; height: 22px; background: #F2EFE9; color: #0E0E0C;
-    display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; margin-left: auto;
-  }
+/* Hero */
+.hiw-hero { padding: clamp(52px,6vw,80px) var(--pad-x) clamp(28px,4vw,44px); max-width: 1140px; margin: 0 auto; }
+.hiw-hero-tag {
+  display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+}
+.hiw-hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+.hiw-hero h1 { font-size: clamp(26px, 3.8vw, 42px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px; }
+.hiw-hero h1 em { font-family: var(--font-serif); font-weight: 400; font-style: italic; }
+.hiw-hero-sub { font-size: clamp(15px, 1.4vw, 17px); line-height: 1.75; color: var(--muted); max-width: 62ch; margin-bottom: 32px; }
+.hiw-jump-grid { display: flex; flex-wrap: wrap; gap: 8px; max-width: 760px; }
+.hiw-jump {
+  display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid var(--rule);
+  border-radius: 24px; font-size: 12.5px; font-weight: 500; color: var(--muted); text-decoration: none;
+  transition: border-color .12s, color .12s;
+}
+.hiw-jump:hover { border-color: var(--accent); color: var(--accent); }
+.hiw-jump-num { font-family: var(--font-mono); font-size: 10px; color: var(--muted-2); }
 
-  .k-wf {
-    padding: 16px 18px; background: #0B0B09;
-    display: flex; flex-direction: column; gap: 0; overflow: hidden;
-  }
-  .k-wf .kwh {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: rgba(242,239,233,0.5); margin-bottom: 16px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .k-wf .kwh .live { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
-  .k-wf .kwh .live::before {
-    content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-    box-shadow: 0 0 0 2px rgba(124,92,255,0.3); animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 2px rgba(124,92,255,0.3); }
-    50% { box-shadow: 0 0 0 6px rgba(124,92,255,0.05); }
-  }
-  .k-wf .knode { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; padding: 12px 0; position: relative; align-items: center; }
-  .k-wf .knode:not(:last-child)::after { content: ""; position: absolute; left: 13px; top: 38px; bottom: 4px; width: 1px; background: rgba(242,239,233,0.15); }
-  .k-wf .knode .nicon {
-    width: 28px; height: 28px; display: grid; place-items: center;
-    background: rgba(242,239,233,0.06); color: rgba(242,239,233,0.6);
-    border: 1px solid rgba(242,239,233,0.12); font-family: var(--font-mono); font-size: 11px; z-index: 1;
-  }
-  .k-wf .knode.done .nicon { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .k-wf .knode.active .nicon { background: #0E0E0C; color: var(--accent); border: 1px solid var(--accent); animation: pulse 2s ease-in-out infinite; }
-  .k-wf .knode.queued .nicon { color: rgba(242,239,233,0.3); }
-  .k-wf .knode .ntext { display: flex; flex-direction: column; gap: 2px; }
-  .k-wf .knode .ntext .nname { font-size: 12px; color: #F2EFE9; font-weight: 500; }
-  .k-wf .knode .ntext .nstep { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: rgba(242,239,233,0.4); text-transform: uppercase; }
-  .k-wf .knode.queued .ntext .nname { color: rgba(242,239,233,0.4); }
-  .k-wf .knode .ntime { font-family: var(--font-mono); font-size: 10px; color: rgba(242,239,233,0.45); }
+/* Hero showcase stage (keeps the big app mockup) */
+.krew-showcase { max-width: 1140px; margin: 8px auto 0; padding: 0 var(--pad-x) clamp(40px,5vw,64px); }
+.krew-showcase .mstage-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--muted-2);
+  padding: 10px 2px; text-transform: none;
+}
+.krew-showcase .mstage-head .right { color: var(--accent); }
 
-  @media (max-width: 1100px) { .k-body { grid-template-columns: 200px 1fr; } .k-wf { display: none; } }
-  @media (max-width: 680px) { .k-body { grid-template-columns: 1fr; } .k-side { display: none; } .k-strip { grid-template-columns: repeat(2, 1fr); } }
+/* Main */
+.hiw-main { padding: 52px 0 80px 44px; max-width: 720px; }
+@media (max-width: 900px) { .hiw-main { padding: 36px 0 64px; max-width: 100%; } }
 
-  /* ===========================================
-     Agent grid + category colors
-  =========================================== */
-  .agent-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 32px;
-  }
-  .acard {
-    background: var(--paper); padding: 22px 20px;
-    display: flex; flex-direction: column; gap: 8px; min-height: 190px;
-    transition: background 0.2s ease;
-  }
-  .acard:hover { background: var(--paper-2); }
-  .acard .ahead { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-  .acard .av {
-    width: 36px; height: 36px; display: grid; place-items: center;
-    flex-shrink: 0; font-family: var(--font-mono); font-size: 11px; font-weight: 600;
-  }
-  .acard .acat { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; text-align: right; line-height: 1.3; }
-  .acard .ahandle { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-top: 4px; }
-  .acard .arole { font-family: var(--font-serif); font-style: italic; font-size: 14px; color: var(--muted); }
-  .acard p { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: auto; max-width: 36ch; }
-  .acard.hide { display: none; }
-  .acard.collapsed { display: none; }
+.hiw-back {
+  display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-2); text-decoration: none;
+  transition: color .12s; margin-bottom: 30px;
+}
+.hiw-back:hover { color: var(--ink); }
 
-  /* Category avatar colors */
-  .av-boss     { background: #7C5CFF; color: #fff; }
-  .av-content  { background: #f97316; color: #fff; }
-  .av-marketing{ background: #3b82f6; color: #fff; }
-  .av-sales    { background: #22c55e; color: #fff; }
-  .av-support  { background: #14b8a6; color: #fff; }
-  .av-designer { background: #ec4899; color: #fff; }
-  .av-data     { background: #eab308; color: #111; }
-  .av-engineer { background: #06b6d4; color: #fff; }
-  .av-pm       { background: #6366f1; color: #fff; }
+/* Section */
+.hiw-section { margin-top: 60px; padding-top: 60px; border-top: 1px solid var(--rule); }
+.hiw-section:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+.hiw-section-tag {
+  display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+}
+.hiw-section-num {
+  display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+  border: 1px solid var(--accent); border-radius: 50%; font-size: 9px; color: var(--accent); flex-shrink: 0;
+}
+.hiw-section h2 { font-size: clamp(21px, 2.6vw, 28px); font-weight: 600; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 6px; }
+.hiw-section h2 em, .hiw-section h2 .it { font-family: var(--font-serif); font-weight: 400; font-style: italic; }
+.hiw-oneliner {
+  font-size: 14px; color: var(--muted-2); font-family: var(--font-mono); letter-spacing: 0.015em;
+  margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid var(--rule);
+}
+.hiw-section > p { font-size: 15px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; max-width: 66ch; }
+.hiw-section > p strong { color: var(--ink); font-weight: 600; }
 
-  .agent-expand { grid-column: 1 / -1; text-align: center; padding: 28px 20px; background: var(--paper); }
-  .agent-expand-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 13px 24px; background: transparent; color: var(--ink);
-    border: 1px solid var(--ink); border-radius: 999px; font-family: var(--font-sans);
-    font-size: 13px; font-weight: 500; letter-spacing: -0.005em; cursor: pointer; transition: all 0.2s ease;
-  }
-  .agent-expand-btn:hover { background: var(--ink); color: var(--paper); transform: translateY(-1px); }
-  .agent-expand-btn .chev { transition: transform 0.25s ease; }
-  .agent-expand-btn[data-state="expanded"] .chev { transform: rotate(180deg); }
+/* Story card */
+.story { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 14px; padding: 26px 28px; margin: 24px 0 28px; }
+[data-theme="ink"] .story { background: #161614; }
+.story-who {
+  display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px;
+}
+.story-who::before { content: ''; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+.story h4 { font-size: 16px; font-weight: 600; color: var(--ink); margin: 0 0 12px; line-height: 1.35; }
+.story p { font-size: 14px !important; line-height: 1.8 !important; color: var(--muted) !important; margin-bottom: 10px !important; }
+.story p:last-child { margin-bottom: 0 !important; }
+.story strong { color: var(--ink); font-weight: 600; }
+.story em { color: var(--accent); font-style: normal; font-weight: 600; }
 
-  @media (max-width: 1100px) { .agent-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 820px)  { .agent-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 540px)  { .agent-grid { grid-template-columns: 1fr; } }
+/* Steps */
+.steps { list-style: none; margin: 20px 0 28px; padding: 0; counter-reset: s; }
+.steps li { display: flex; gap: 14px; align-items: flex-start; padding-bottom: 18px; position: relative; }
+.steps li::before {
+  counter-increment: s; content: counter(s); flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; font-family: var(--font-mono);
+  display: flex; align-items: center; justify-content: center;
+}
+.steps li::after { content: ''; position: absolute; left: 12px; top: 30px; bottom: 0; width: 1px; background: var(--rule); }
+.steps li:last-child::after { display: none; }
+.step-text strong { display: block; font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.step-text span { font-size: 14px; line-height: 1.7; color: var(--muted); }
 
-  /* Role pills */
-  .role-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
-  .role-pill {
-    padding: 8px 14px; border: 1px solid var(--rule-strong); border-radius: 999px;
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
-    color: var(--ink-2); background: var(--paper); cursor: pointer; transition: all 0.2s ease;
-  }
-  .role-pill:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .role-pill.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+/* Before / After */
+.ba { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0 28px; }
+@media (max-width: 540px) { .ba { grid-template-columns: 1fr; } }
+.ba-box { border: 1px solid var(--rule); border-radius: 12px; padding: 18px 20px; }
+.ba-box.before { background: var(--paper-2); }
+.ba-box.after  { background: color-mix(in srgb, var(--accent) 7%, transparent); border-color: color-mix(in srgb, var(--accent) 28%, transparent); }
+[data-theme="ink"] .ba-box.before { background: #161614; }
+[data-theme="ink"] .ba-box.after  { background: #1a1730; }
+.ba-head { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; }
+.ba-box.before .ba-head { color: var(--muted-2); }
+.ba-box.after  .ba-head { color: var(--accent); }
+.ba-box ul { list-style: none; margin: 0; padding: 0; }
+.ba-box ul li { font-size: 13px; line-height: 1.7; color: var(--muted); padding: 2px 0 2px 18px; position: relative; }
+.ba-box.before ul li::before { content: '✕'; position: absolute; left: 0; color: #e05a5a; font-size: 10px; top: 5px; }
+.ba-box.after  ul li::before { content: '✓'; position: absolute; left: 0; color: #22c55e; font-size: 10px; top: 5px; }
+.ba-box ul li strong { color: var(--ink); font-weight: 600; }
 
-  /* ===========================================
-     Integrations grid
-  =========================================== */
-  .int-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 24px;
-  }
-  .icard {
-    background: var(--paper); padding: 22px;
-    display: flex; flex-direction: column; gap: 8px; transition: background 0.2s ease;
-  }
-  .icard:hover { background: var(--paper-2); }
-  .icard .ilogo {
-    width: 32px; height: 32px; background: var(--ink); color: var(--paper);
-    display: grid; place-items: center; font-family: var(--font-mono); font-weight: 500; margin-bottom: 6px;
-  }
-  .icard .iname { font-size: 14px; font-weight: 500; }
-  .icard .idesc { font-size: 11px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
-  .icard .istatus { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-top: auto; }
-  @media (max-width: 880px) { .int-grid { grid-template-columns: repeat(2, 1fr); } }
+/* Replaces chips */
+.replaces { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 32px; align-items: center; }
+.replaces-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-2); }
+.chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; background: var(--paper-2);
+  border: 1px solid var(--rule); border-radius: 20px; font-size: 12px; color: var(--muted); font-weight: 500;
+}
+[data-theme="ink"] .chip { background: #1a1a17; }
+.chip::before { content: '↳'; color: var(--muted-2); font-size: 11px; }
 
-  /* ===========================================
-     ReAct loop visual
-  =========================================== */
-  .react-loop {
-    display: flex; flex-direction: column; gap: 0;
-    border: 1px solid rgba(242,239,233,0.1); background: #0B0B09; padding: 28px;
-  }
-  .react-step { display: grid; grid-template-columns: 36px 1fr; gap: 16px; padding: 0 0 20px 0; position: relative; }
-  .react-step:not(:last-child)::before {
-    content: ""; position: absolute; left: 17px; top: 36px; bottom: 0;
-    width: 1px; background: rgba(242,239,233,0.12);
-  }
-  .react-step .rnum {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: rgba(124,92,255,0.1); border: 1px solid rgba(124,92,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-mono); font-size: 10px; color: #7C5CFF;
-    flex-shrink: 0; z-index: 1;
-  }
-  .react-step.active .rnum { background: rgba(124,92,255,0.25); border-color: var(--accent); animation: pulse 2s ease-in-out infinite; }
-  .react-step.done .rnum { background: #7C5CFF; color: #F2EFE9; border-color: #7C5CFF; }
-  .react-step .rcontent { padding-top: 6px; }
-  .react-step .rlabel { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #7C5CFF; margin-bottom: 4px; }
-  .react-step .rtext { font-size: 13px; color: rgba(242,239,233,0.8); line-height: 1.6; }
-  .react-step .rtool {
-    font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.6);
-    background: rgba(242,239,233,0.04); border: 1px solid rgba(242,239,233,0.1);
-    padding: 8px 12px; margin-top: 8px; display: inline-block;
-  }
-  .react-step .rtool .fn { color: #7C5CFF; }
+/* Result highlight */
+.result-box {
+  border-left: 3px solid var(--accent); padding: 14px 20px; background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border-radius: 0 10px 10px 0; margin: 16px 0 24px; font-size: 14px; line-height: 1.75; color: var(--muted);
+}
+[data-theme="ink"] .result-box { background: #1a1730; }
+.result-box strong { color: var(--ink); font-weight: 600; }
 
-  /* ===========================================
-     Privacy / local-first
-  =========================================== */
-  .privacy-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 32px;
-  }
-  .pcard {
-    background: var(--paper); padding: 28px 24px;
-    display: flex; flex-direction: column; gap: 12px;
-    transition: background 0.2s ease;
-  }
-  .pcard:hover { background: var(--paper-2); }
-  .pcard .picon {
-    width: 40px; height: 40px; background: var(--ink); color: var(--paper);
-    display: grid; place-items: center; flex-shrink: 0;
-  }
-  .pcard h5 { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
-  .pcard p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-  @media (max-width: 820px) { .privacy-grid { grid-template-columns: 1fr; } }
+/* Figure (an app mockup embedded in the narrative) */
+.hiw-figure { margin: 26px 0 30px; }
+.hiw-figure .figcap {
+  display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px;
+  color: var(--muted-2); letter-spacing: 0.02em; margin-top: 12px; line-height: 1.5;
+}
+.hiw-figure .figcap::before {
+  content: ''; width: 14px; height: 1px; background: var(--accent); flex-shrink: 0;
+}
+/* Wide figures break gently into the right-hand whitespace on desktop */
+@media (min-width: 1024px) {
+  .hiw-figure--wide { width: calc(100% + 168px); }
+}
 
-  /* ===========================================
-     Value bar
-  =========================================== */
-  .val-bar {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--rule); border: 1px solid var(--rule);
-    margin-top: 48px; margin-bottom: 64px;
-  }
-  .val-item { background: var(--paper); padding: 24px 22px; }
-  .val-item .vnum { font-size: 36px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
-  .val-item .vlabel { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
-  @media (max-width: 820px) { .val-bar { grid-template-columns: repeat(2, 1fr); } }
+/* Filter pills (agent grid) */
+.role-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 4px; }
+.role-pill {
+  padding: 7px 13px; border: 1px solid var(--rule-strong); border-radius: 999px; font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.05em; color: var(--ink-2); background: var(--paper); cursor: pointer; transition: all 0.18s ease;
+}
+.role-pill:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.role-pill.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
-  /* ===========================================
-     Name.Role explainer
-  =========================================== */
-  .name-role-row {
-    display: flex; align-items: stretch; gap: 0;
-    border: 1px solid var(--rule); margin-top: 32px; overflow: hidden;
-    flex-wrap: wrap;
-  }
-  .nrcard {
-    flex: 1; min-width: 180px;
-    padding: 24px 20px; border-right: 1px solid var(--rule);
-    display: flex; flex-direction: column; gap: 8px;
-    transition: background 0.2s ease;
-  }
-  .nrcard:last-child { border-right: none; }
-  .nrcard:hover { background: var(--paper-2); }
-  .nrcard .nrav {
-    width: 40px; height: 40px; display: grid; place-items: center;
-    font-family: var(--font-mono); font-size: 13px; font-weight: 700;
-  }
-  .nrcard .nrname { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; margin-top: 4px; }
-  .nrcard .nrname .nrdot { color: var(--muted); font-weight: 400; }
-  .nrcard .nrrole { font-family: var(--font-serif); font-style: italic; font-size: 12px; color: var(--muted); }
-  .nrcard p { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 4px; }
+/* Final CTA */
+.hiw-cta { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 16px; padding: 36px; text-align: center; margin-top: 64px; }
+[data-theme="ink"] .hiw-cta { background: #161614; }
+.hiw-cta h2 { font-size: clamp(18px,2.2vw,24px); font-weight: 600; margin: 0 0 10px; letter-spacing: -0.02em; }
+.hiw-cta h2 .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+.hiw-cta p  { font-size: 14px; color: var(--muted); margin: 0 0 22px; line-height: 1.7; }
+.hiw-cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cta-btn-main { display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px; background: var(--accent); color: #fff; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: opacity .15s; }
+.cta-btn-main:hover { opacity: .87; }
+.cta-btn-ghost { display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px; border: 1px solid var(--rule-strong); color: var(--ink); border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; transition: all .15s; }
+.cta-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ===========================================
-     Clickable hero index
-  =========================================== */
-  .mhero-meta a.row {
-    text-decoration: none; display: grid; grid-template-columns: 90px 1fr;
-    gap: 12px; color: var(--ink-2); transition: color 0.15s ease;
-  }
-  .mhero-meta a.row:hover { color: var(--accent); }
-  .mhero-meta a.row:hover .l { color: var(--accent); }
-  .mhero-meta a.row .go {
-    display: inline-block; opacity: 0; transform: translateX(-4px);
-    transition: opacity 0.15s ease, transform 0.15s ease;
-    font-family: var(--font-mono); font-size: 10px; margin-left: 4px;
-  }
-  .mhero-meta a.row:hover .go { opacity: 1; transform: translateX(0); }
+/* ════════════════════════════════════════════════════════════════
+   APP MOCKUPS  (preserved from the original Krew page)
+   ════════════════════════════════════════════════════════════════ */
+.krew-stage { background: #0E0E0C; color: #F2EFE9; border: 1px solid rgba(242,239,233,0.12); display: grid; grid-template-rows: auto 1fr; overflow: hidden; border-radius: 12px; }
+.k-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: rgba(242,239,233,0.08); border-bottom: 1px solid rgba(242,239,233,0.08); }
+.k-strip .ks { background: #0E0E0C; padding: 14px 18px; display: flex; flex-direction: column; gap: 2px; }
+.k-strip .ks .kl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; color: rgba(242,239,233,0.45); text-transform: uppercase; }
+.k-strip .ks .kv { font-family: var(--font-sans); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; color: #F2EFE9; }
+.k-strip .ks .kv .u { font-size: 12px; color: rgba(242,239,233,0.5); margin-left: 3px; }
+.k-strip .ks .kbar { margin-top: 4px; height: 4px; background: rgba(242,239,233,0.08); position: relative; }
+.k-strip .ks .kbar::after { content: ""; position: absolute; inset: 0 var(--rem,50%) 0 0; background: var(--accent); }
+.k-strip .ks.warn .kbar::after { background: #FFD83C; }
+.k-body { display: grid; grid-template-columns: 220px 1fr 280px; min-height: 460px; }
+.k-side { padding: 16px 14px; border-right: 1px solid rgba(242,239,233,0.06); background: #0B0B09; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+.k-side .ktabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid rgba(242,239,233,0.08); margin-bottom: 4px; }
+.k-side .ktabs span { padding: 8px 0; text-align: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(242,239,233,0.5); text-transform: uppercase; border-bottom: 1px solid transparent; margin-bottom: -1px; }
+.k-side .ktabs span.on { color: #F2EFE9; border-bottom-color: var(--accent); }
+.k-side .knew { padding: 10px 12px; background: var(--accent); color: var(--accent-ink); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
+.k-side .kgroup { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; color: rgba(242,239,233,0.4); text-transform: uppercase; margin: 4px 0; }
+.k-side .kconv { padding: 8px 10px; font-size: 12px; color: rgba(242,239,233,0.8); border-left: 2px solid transparent; cursor: pointer; line-height: 1.4; }
+.k-side .kconv.on { background: rgba(124,92,255,0.1); border-left-color: var(--accent); color: #F2EFE9; }
+.k-side .kconv .kct { font-family: var(--font-mono); font-size: 9px; color: rgba(242,239,233,0.4); display: block; margin-top: 2px; }
+.k-side .kconv .kbadge { display: inline-block; font-family: var(--font-mono); font-size: 8px; padding: 1px 5px; border-radius: 2px; margin-right: 4px; background: rgba(124,92,255,0.2); color: var(--accent); }
+.k-side .ktok { margin-top: auto; padding: 12px; background: rgba(242,239,233,0.04); border: 1px solid rgba(242,239,233,0.08); }
+.k-side .ktok .ktoktop { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-mono); font-size: 10px; color: rgba(242,239,233,0.5); margin-bottom: 6px; letter-spacing: 0.1em; text-transform: uppercase; }
+.k-side .ktok .ktoktop .v { color: #F2EFE9; }
+.k-side .ktok .ktokbar { height: 4px; background: rgba(242,239,233,0.08); position: relative; }
+.k-side .ktok .ktokbar::after { content: ""; position: absolute; inset: 0 38% 0 0; background: var(--accent); }
+.k-side .kplan { margin-top: 8px; padding: 8px 12px; background: rgba(124,92,255,0.1); border: 1px solid var(--accent); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--accent); text-align: center; text-transform: uppercase; }
+.k-chat { padding: 16px 20px 14px; border-right: 1px solid rgba(242,239,233,0.06); display: flex; flex-direction: column; overflow: hidden; background: #0E0E0C; }
+.k-chat .khdr { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(242,239,233,0.08); }
+.k-chat .khdr .agent { display: flex; align-items: center; gap: 10px; }
+.k-chat .khdr .agent .av { width: 28px; height: 28px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; font-weight: 500; }
+.k-chat .khdr .agent .nm { font-size: 14px; font-weight: 500; }
+.k-chat .khdr .agent .role { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: rgba(242,239,233,0.5); text-transform: uppercase; }
+.k-chat .khdr .indstate { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(242,239,233,0.6); text-transform: uppercase; }
+.k-chat .khdr .indstate .ind { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px rgba(124,92,255,0.3); }
+.k-chat .kbody { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+.kmsg { font-size: 13px; line-height: 1.55; max-width: 85%; }
+.kmsg.you { align-self: flex-end; background: rgba(242,239,233,0.06); border: 1px solid rgba(242,239,233,0.08); padding: 10px 14px; color: #F2EFE9; }
+.kmsg.ai { align-self: flex-start; color: rgba(242,239,233,0.85); padding: 4px 0; }
+.kmsg.ai .who { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,239,233,0.4); margin-bottom: 4px; }
+.kmsg.ai .body { color: rgba(242,239,233,0.9); }
+.kapproval { border: 1px solid rgba(242,239,233,0.12); background: rgba(242,239,233,0.02); padding: 12px 14px; margin-top: 4px; }
+.kapproval .kah { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+.kapproval .kab { color: rgba(242,239,233,0.8); font-size: 12px; margin-bottom: 10px; }
+.kapproval .kabtns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kapproval .kabtns button { padding: 7px 10px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; color: rgba(242,239,233,0.85); border: 1px solid rgba(242,239,233,0.2); cursor: pointer; }
+.kapproval .kabtns .primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.k-compose { margin-top: 12px; padding: 10px 12px; background: rgba(242,239,233,0.04); border: 1px solid rgba(242,239,233,0.1); display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: rgba(242,239,233,0.5); }
+.k-compose .send { width: 22px; height: 22px; background: #F2EFE9; color: #0E0E0C; display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; margin-left: auto; }
+.k-wf { padding: 16px 18px; background: #0B0B09; display: flex; flex-direction: column; gap: 0; overflow: hidden; }
+.k-wf .kwh { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,239,233,0.5); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.k-wf .kwh .live { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
+.k-wf .kwh .live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px rgba(124,92,255,0.3); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 2px rgba(124,92,255,0.3); } 50% { box-shadow: 0 0 0 6px rgba(124,92,255,0.05); } }
+.k-wf .knode { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; padding: 12px 0; position: relative; align-items: center; }
+.k-wf .knode:not(:last-child)::after { content: ""; position: absolute; left: 13px; top: 38px; bottom: 4px; width: 1px; background: rgba(242,239,233,0.15); }
+.k-wf .knode .nicon { width: 28px; height: 28px; display: grid; place-items: center; background: rgba(242,239,233,0.06); color: rgba(242,239,233,0.6); border: 1px solid rgba(242,239,233,0.12); font-family: var(--font-mono); font-size: 11px; z-index: 1; }
+.k-wf .knode.done .nicon { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.k-wf .knode.active .nicon { background: #0E0E0C; color: var(--accent); border: 1px solid var(--accent); animation: pulse 2s ease-in-out infinite; }
+.k-wf .knode.queued .nicon { color: rgba(242,239,233,0.3); }
+.k-wf .knode .ntext { display: flex; flex-direction: column; gap: 2px; }
+.k-wf .knode .ntext .nname { font-size: 12px; color: #F2EFE9; font-weight: 500; }
+.k-wf .knode .ntext .nstep { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: rgba(242,239,233,0.4); text-transform: uppercase; }
+.k-wf .knode.queued .ntext .nname { color: rgba(242,239,233,0.4); }
+.k-wf .knode .ntime { font-family: var(--font-mono); font-size: 10px; color: rgba(242,239,233,0.45); }
+@media (max-width: 1100px) { .k-body { grid-template-columns: 200px 1fr; } .k-wf { display: none; } }
+@media (max-width: 680px) { .k-body { grid-template-columns: 1fr; } .k-side { display: none; } .k-strip { grid-template-columns: repeat(2, 1fr); } }
 
-  /* ===========================================
-     Intelligence features grid
-  =========================================== */
-  .intel-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 32px;
-  }
-  .ifeature {
-    background: var(--paper); padding: 28px 24px;
-    display: flex; flex-direction: column; gap: 10px;
-    transition: background 0.2s ease;
-  }
-  .ifeature:hover { background: var(--paper-2); }
-  .ifeature .iftag {
-    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--accent);
-  }
-  .ifeature h5 { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); margin-top: 2px; }
-  .ifeature p { font-size: 13px; color: var(--muted); line-height: 1.55; }
-  .ifeature code {
-    font-family: var(--font-mono); font-size: 11px;
-    background: color-mix(in oklab, var(--accent) 10%, transparent);
-    color: var(--accent); padding: 1px 5px;
-  }
-  @media (max-width: 720px) { .intel-grid { grid-template-columns: 1fr; } }
+/* Agent grid */
+.agent-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 4px; }
+.acard { background: var(--paper); padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; min-height: 190px; transition: background 0.2s ease; }
+.acard:hover { background: var(--paper-2); }
+.acard .ahead { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.acard .av { width: 36px; height: 36px; display: grid; place-items: center; flex-shrink: 0; font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+.acard .acat { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; text-align: right; line-height: 1.3; }
+.acard .ahandle { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-top: 4px; }
+.acard .arole { font-family: var(--font-serif); font-style: italic; font-size: 14px; color: var(--muted); }
+.acard p { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: auto; max-width: 36ch; }
+.acard.hide { display: none; }
+.acard.collapsed { display: none; }
+.av-boss { background: #7C5CFF; color: #fff; } .av-content { background: #f97316; color: #fff; } .av-marketing{ background: #3b82f6; color: #fff; } .av-sales { background: #22c55e; color: #fff; } .av-support { background: #14b8a6; color: #fff; } .av-designer { background: #ec4899; color: #fff; } .av-data { background: #eab308; color: #111; } .av-engineer { background: #06b6d4; color: #fff; } .av-pm { background: #6366f1; color: #fff; }
+.agent-expand { grid-column: 1 / -1; text-align: center; padding: 28px 20px; background: var(--paper); }
+.agent-expand-btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 24px; background: transparent; color: var(--ink); border: 1px solid var(--ink); border-radius: 999px; font-family: var(--font-sans); font-size: 13px; font-weight: 500; letter-spacing: -0.005em; cursor: pointer; transition: all 0.2s ease; }
+.agent-expand-btn:hover { background: var(--ink); color: var(--paper); transform: translateY(-1px); }
+.agent-expand-btn .chev { transition: transform 0.25s ease; }
+.agent-expand-btn[data-state="expanded"] .chev { transform: rotate(180deg); }
+@media (max-width: 1100px) { .agent-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 820px)  { .agent-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px)  { .agent-grid { grid-template-columns: 1fr; } }
 
-  /* ===========================================
-     Connection modes strip
-  =========================================== */
-  .modes-strip {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 32px;
-  }
-  .mmode { background: var(--paper); padding: 24px 22px; display: flex; flex-direction: column; gap: 8px; }
-  .mmode .mmode-tag {
-    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--accent);
-  }
-  .mmode .mmode-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
-  .mmode p { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  @media (max-width: 720px) { .modes-strip { grid-template-columns: 1fr; } }
+/* Integrations / intelligence / privacy / modes / values */
+.int-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.icard { background: var(--paper); padding: 22px; display: flex; flex-direction: column; gap: 8px; transition: background 0.2s ease; }
+.icard:hover { background: var(--paper-2); }
+.icard .ilogo { width: 32px; height: 32px; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-family: var(--font-mono); font-weight: 500; margin-bottom: 6px; }
+.icard .iname { font-size: 14px; font-weight: 500; }
+.icard .idesc { font-size: 11px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+.icard .istatus { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-top: auto; }
+@media (max-width: 880px) { .int-grid { grid-template-columns: repeat(2, 1fr); } }
+.react-loop { display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(242,239,233,0.1); background: #0B0B09; padding: 28px; border-radius: 12px; }
+.react-step { display: grid; grid-template-columns: 36px 1fr; gap: 16px; padding: 0 0 20px 0; position: relative; }
+.react-step:not(:last-child)::before { content: ""; position: absolute; left: 17px; top: 36px; bottom: 0; width: 1px; background: rgba(242,239,233,0.12); }
+.react-step .rnum { width: 36px; height: 36px; border-radius: 50%; background: rgba(124,92,255,0.1); border: 1px solid rgba(124,92,255,0.3); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; color: #7C5CFF; flex-shrink: 0; z-index: 1; }
+.react-step.active .rnum { background: rgba(124,92,255,0.25); border-color: var(--accent); animation: pulse 2s ease-in-out infinite; }
+.react-step.done .rnum { background: #7C5CFF; color: #F2EFE9; border-color: #7C5CFF; }
+.react-step .rcontent { padding-top: 6px; }
+.react-step .rlabel { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #7C5CFF; margin-bottom: 4px; }
+.react-step .rtext { font-size: 13px; color: rgba(242,239,233,0.8); line-height: 1.6; }
+.react-step .rtool { font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.6); background: rgba(242,239,233,0.04); border: 1px solid rgba(242,239,233,0.1); padding: 8px 12px; margin-top: 8px; display: inline-block; }
+.react-step .rtool .fn { color: #7C5CFF; }
+.privacy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.pcard { background: var(--paper); padding: 28px 24px; display: flex; flex-direction: column; gap: 12px; transition: background 0.2s ease; }
+.pcard:hover { background: var(--paper-2); }
+.pcard .picon { width: 40px; height: 40px; background: var(--ink); color: var(--paper); display: grid; place-items: center; flex-shrink: 0; }
+.pcard h5 { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
+.pcard p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+@media (max-width: 820px) { .privacy-grid { grid-template-columns: 1fr; } }
+.val-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.val-item { background: var(--paper); padding: 24px 22px; }
+.val-item .vnum { font-size: 36px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
+.val-item .vlabel { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+@media (max-width: 540px) { .val-bar { grid-template-columns: repeat(2, 1fr); } }
+.intel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.ifeature { background: var(--paper); padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; transition: background 0.2s ease; }
+.ifeature:hover { background: var(--paper-2); }
+.ifeature .iftag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.ifeature h5 { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); margin-top: 2px; }
+.ifeature p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.ifeature code { font-family: var(--font-mono); font-size: 11px; background: color-mix(in oklab, var(--accent) 10%, transparent); color: var(--accent); padding: 1px 5px; }
+@media (max-width: 720px) { .intel-grid { grid-template-columns: 1fr; } }
+.modes-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 12px; }
+.mmode { background: var(--paper); padding: 24px 22px; display: flex; flex-direction: column; gap: 8px; }
+.mmode .mmode-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.mmode .mmode-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.mmode p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+@media (max-width: 720px) { .modes-strip { grid-template-columns: 1fr; } }
+.kapproval-lg { border: 1px solid rgba(124,92,255,0.4); background: rgba(124,92,255,0.06); padding: 20px 22px; }
+.kapproval-lg .kah { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+.kapproval-lg .kab { color: rgba(242,239,233,0.85); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+.kapproval-lg .kabtns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.kapproval-lg .kabtns button { padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; color: rgba(242,239,233,0.85); border: 1px solid rgba(242,239,233,0.2); cursor: pointer; }
+.kapproval-lg .kabtns .primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.audit-row { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; padding: 10px 14px; background: rgba(242,239,233,0.03); border: 1px solid rgba(242,239,233,0.06); align-items: center; font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.7); }
+.audit-row .adot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.audit-row .adot.warn { background: #FFD83C; }
+.audit-row .ameta { color: rgba(242,239,233,0.4); }
+.frame { border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+.frame-dark { background: #0E0E0C; border-color: rgba(242,239,233,0.12); }
+.frame-top { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid rgba(242,239,233,0.08); }
+.frame-top .ldot { width: 9px; height: 9px; border-radius: 50%; background: rgba(242,239,233,0.18); }
+.frame-top .ftitle { font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.5); margin-left: 8px; }
+.frame-body { color: #F2EFE9; }
 
-  /* Approval section reuse */
-  .kapproval-lg {
-    border: 1px solid rgba(124,92,255,0.4); background: rgba(124,92,255,0.06); padding: 20px 22px;
-  }
-  .kapproval-lg .kah { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
-  .kapproval-lg .kab { color: rgba(242,239,233,0.85); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
-  .kapproval-lg .kabtns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .kapproval-lg .kabtns button {
-    padding: 10px 12px; font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.08em; text-transform: uppercase; background: transparent;
-    color: rgba(242,239,233,0.85); border: 1px solid rgba(242,239,233,0.2); cursor: pointer;
-  }
-  .kapproval-lg .kabtns .primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .audit-row {
-    display: grid; grid-template-columns: auto 1fr auto; gap: 12px; padding: 10px 14px;
-    background: rgba(242,239,233,0.03); border: 1px solid rgba(242,239,233,0.06);
-    align-items: center; font-family: var(--font-mono); font-size: 11px; color: rgba(242,239,233,0.7);
-  }
-  .audit-row .adot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-  .audit-row .adot.warn { background: #FFD83C; }
-  .audit-row .ameta { color: rgba(242,239,233,0.4); }
+/* Print: hide chrome, keep the narrative + figures */
+@media print {
+  nav, .mobile-nav-drawer, .mobile-nav-overlay, .hiw-hero, .hiw-sidebar, .hiw-back, footer, .hiw-cta, .krew-showcase { display: none !important; }
+  .hiw-layout { display: block !important; padding: 0 !important; }
+  .hiw-main { padding: 0 !important; max-width: 100% !important; }
+  .hiw-figure--wide { width: 100% !important; }
+}
 </style>
 </head>
 <body>
 
+<!-- ── NAV ───────────────────────────────────────────────────────── -->
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="nav-mark" aria-label="adris.tech home">
@@ -484,7 +382,7 @@
         <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
         <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
       </svg>
-      <span>adris.tech<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
       <span class="dot"></span>
     </a>
     <ul class="nav-links">
@@ -494,1161 +392,571 @@
       <li><a href="/download">Download</a></li>
     </ul>
     <div class="nav-right">
+      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="tt-track">
-          <span class="tt-thumb" aria-hidden="true"></span>
-          <span class="tt-l tt-paper">Paper</span>
-          <span class="tt-l tt-ink">Ink</span>
-        </span>
+        <span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span>
       </button>
-      <span class="mono nav-meta">01 · Krew</span>
-      <a href="/download" class="btn">
-        Download free
-        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-      </a>
-      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="/download" class="btn">Download — free <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
-
-<!-- Mobile nav drawer -->
 <div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-inner">
     <ul>
-      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
-      <li><a href="/#modules"   onclick="closeMobileNav()">Modules</a></li>
-      <li><a href="/pricing"   onclick="closeMobileNav()">Pricing</a></li>
-      <li><a href="/download"                onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+      <li><a href="/#modules" onclick="closeMobileNav()">Modules</a></li>
+      <li><a href="/pricing" onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download" onclick="closeMobileNav()">Download</a></li>
     </ul>
     <a href="/download" class="btn mobile-nav-cta">Download — free</a>
   </div>
 </div>
 <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
 
-<script>
-function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('mobileNavOverlay').classList.remove('open');
-  document.getElementById('navHam').classList.remove('open');
-  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
-  document.body.style.overflow = '';
-}
-document.getElementById('navHam').addEventListener('click', function() {
-  const open = this.classList.toggle('open');
-  document.getElementById('mobileNav').classList.toggle('open', open);
-  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
-  this.setAttribute('aria-expanded', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-});
-</script>
+<!-- ── HERO ──────────────────────────────────────────────────────── -->
+<div class="hiw-hero">
+  <a href="/#modules" class="hiw-back">
+    <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+    All modules
+  </a>
+  <div class="hiw-hero-tag">01 · Krew — AI Agents</div>
+  <h1>43 specialists.<br/><em>One AI office, on your laptop.</em></h1>
+  <p class="hiw-hero-sub">Most AI is a chat box: you ask, it answers, you do the rest. Krew is different — it's a team of AI workers, each with a name and a job, that actually <em>does</em> the task and hands you a finished result. This page explains exactly how, in plain language, with real examples.</p>
 
-<section class="crumb">
-  <div class="wrap">
-    <div class="crumb-row">
-      <a href="/"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Modules</a>
-      <span class="sep">/</span>
-      <span class="here">01 · Krew</span>
+  <div class="hiw-jump-grid">
+    <a href="#what" class="hiw-jump"><span class="hiw-jump-num">00</span> What is Krew?</a>
+    <a href="#team" class="hiw-jump"><span class="hiw-jump-num">01</span> The team</a>
+    <a href="#thinks" class="hiw-jump"><span class="hiw-jump-num">02</span> How it thinks</a>
+    <a href="#smart" class="hiw-jump"><span class="hiw-jump-num">03</span> What makes it smart</a>
+    <a href="#tools" class="hiw-jump"><span class="hiw-jump-num">04</span> Works with your tools</a>
+    <a href="#browser" class="hiw-jump"><span class="hiw-jump-num">05</span> Uses the real web</a>
+    <a href="#approvals" class="hiw-jump"><span class="hiw-jump-num">06</span> You approve everything</a>
+    <a href="#privacy" class="hiw-jump"><span class="hiw-jump-num">07</span> Runs on your device</a>
+  </div>
+</div>
+
+<!-- ── HERO SHOWCASE (the app, as you'd see it) ──────────────────── -->
+<div class="krew-showcase">
+  <div class="mstage-head">
+    <span>// A real Krew session</span>
+    <span class="right">Arjun.Boss → routed to Zara.Content + Neo.Engineer</span>
+  </div>
+  <div class="krew-stage">
+    <div class="k-strip">
+      <div class="ks"><span class="kl">Tasks today</span><span class="kv">17</span></div>
+      <div class="ks"><span class="kl">Agents active</span><span class="kv">3 <span class="u">/ 43</span></span></div>
+      <div class="ks warn"><span class="kl">Tokens this month</span><span class="kv">2.1M <span class="u">/ 10M</span></span><span class="kbar" style="--rem: 67%;"></span></div>
+      <div class="ks"><span class="kl">Avg response</span><span class="kv">2.4<span class="u">s</span></span></div>
+      <div class="ks"><span class="kl">Integrations</span><span class="kv">5 <span class="u">live</span></span></div>
+    </div>
+    <div class="k-body">
+      <aside class="k-side">
+        <div class="ktabs"><span class="on">Chats</span><span>Agents</span></div>
+        <div class="knew">+ new · pick agent</div>
+        <div class="kgroup">Today</div>
+        <div class="kconv on">Launch copy for v1.0<span class="kct"><span class="kbadge">AR</span>Arjun.Boss</span></div>
+        <div class="kconv">Instagram captions · 5 variants<span class="kct"><span class="kbadge" style="background:rgba(249,115,22,0.2);color:#f97316;">ZA</span>Zara.Content</span></div>
+        <div class="kconv">PR review · auth module<span class="kct"><span class="kbadge" style="background:rgba(6,182,212,0.2);color:#06b6d4;">NE</span>Neo.Engineer</span></div>
+        <div class="kgroup">Yesterday</div>
+        <div class="kconv">Q2 roadmap · OKR mapping<span class="kct"><span class="kbadge" style="background:rgba(99,102,241,0.2);color:#6366f1;">EC</span>Echo.PM</span></div>
+        <div class="kconv">Cold email sequence · 5 steps<span class="kct"><span class="kbadge" style="background:rgba(34,197,94,0.2);color:#22c55e;">AY</span>Ayan.Sales</span></div>
+        <div class="ktok">
+          <div class="ktoktop"><span>Tokens</span><span class="v">2.1M / 10M</span></div>
+          <div class="ktokbar"></div>
+          <div class="kplan">Builder plan · ₹1,999/mo</div>
+        </div>
+      </aside>
+      <div class="k-chat">
+        <div class="khdr">
+          <div class="agent"><div class="av" style="background:#7C5CFF;">AR</div><div><div class="nm">Arjun.Boss</div><div class="role">orchestrator · routing</div></div></div>
+          <div class="indstate"><span class="ind"></span>2 agents working</div>
+        </div>
+        <div class="kbody">
+          <div class="kmsg you">Write launch copy for v1.0 — website hero, a Twitter thread, and 3 Instagram captions. Also, make sure the API auth PR is reviewed before I merge.</div>
+          <div class="kmsg ai"><div class="who">Arjun.Boss · routing</div><div class="body">Two jobs, two agents. <strong>Zara.Content</strong> is handling the copy — hero, thread, captions. <strong>Neo.Engineer</strong> has the PR open for review. I'll surface both when they're done.</div></div>
+          <div class="kmsg ai"><div class="who">Zara.Content · drafted</div><div class="body">Hero copy ready — 3 variants (bold, soft, curiosity). Thread is 9 tweets with a hook and call-to-action at the end. Captions: platform-tuned for Instagram with hashtag sets. Want me to adjust tone?</div></div>
+          <div class="kapproval">
+            <div class="kah">↳ Neo.Engineer · PR #47 · auth module</div>
+            <div class="kab">Found 2 issues: missing rate limit on /token endpoint, JWT secret in plain env reference (should use secrets manager). Detailed comments added on GitHub.</div>
+            <div class="kabtns"><button class="primary">View on GitHub</button><button>Merge anyway</button></div>
+          </div>
+        </div>
+        <div class="k-compose"><span>Ask Arjun or @mention any of your 43 agents…</span><div class="send">→</div></div>
+      </div>
+      <aside class="k-wf">
+        <div class="kwh"><span>// Workflow</span><span class="live">running</span></div>
+        <div class="knode done"><div class="nicon">✓</div><div class="ntext"><span class="nname">Arjun.Boss · received</span><span class="nstep">routing · 0.3s</span></div><span class="ntime">10:41</span></div>
+        <div class="knode done"><div class="nicon">✓</div><div class="ntext"><span class="nname">Zara.Content · copy</span><span class="nstep">hero + thread + captions · 28s</span></div><span class="ntime">10:42</span></div>
+        <div class="knode done"><div class="nicon">✓</div><div class="ntext"><span class="nname">Neo.Engineer · PR review</span><span class="nstep">2 issues flagged · 18s</span></div><span class="ntime">10:42</span></div>
+        <div class="knode active"><div class="nicon">◐</div><div class="ntext"><span class="nname">Awaiting your decision</span><span class="nstep">merge or fix?</span></div><span class="ntime">now</span></div>
+        <div class="knode queued"><div class="nicon">○</div><div class="ntext"><span class="nname">Publish copy to Notion</span><span class="nstep">queued · on approval</span></div><span class="ntime">—</span></div>
+      </aside>
     </div>
   </div>
-</section>
-
-<!-- HERO -->
-<section class="mhero" data-screen-label="01 Hero">
-  <div class="pgbg pgbg-orbit" aria-hidden="true">
-    <svg viewBox="0 0 1000 1000" fill="none">
-      <g class="o1">
-        <circle cx="500" cy="500" r="200" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 6" fill="none"/>
-        <circle cx="700" cy="500" r="6" fill="var(--accent)"/>
-        <circle cx="430" cy="650" r="4" fill="currentColor"/>
-      </g>
-      <g class="o2">
-        <circle cx="500" cy="500" r="320" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 7" fill="none"/>
-        <circle cx="500" cy="180" r="5" fill="currentColor"/>
-        <circle cx="820" cy="500" r="5" fill="currentColor"/>
-        <circle cx="290" cy="640" r="5" fill="var(--accent)"/>
-      </g>
-      <g class="o3">
-        <circle cx="500" cy="500" r="440" stroke="currentColor" stroke-width="1" stroke-dasharray="2 9" fill="none"/>
-        <circle cx="940" cy="500" r="4" fill="currentColor"/>
-        <circle cx="500" cy="60" r="4" fill="currentColor"/>
-        <circle cx="170" cy="700" r="4" fill="currentColor"/>
-        <circle cx="780" cy="800" r="4" fill="var(--accent)"/>
-      </g>
-      <circle cx="500" cy="500" r="60" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
-      <circle cx="500" cy="500" r="14" fill="var(--accent)" opacity="0.7"/>
-    </svg>
+  <div class="hiw-figure" style="margin-top:0;">
+    <div class="figcap">This is the actual app. One task in, two specialists working in parallel, a live workflow on the right — and nothing leaves your laptop.</div>
   </div>
+</div>
 
-  <div class="wrap">
-    <div class="mhero-top">
-      <div>
-        <div class="mhero-tag"><span class="ind"></span>Live · v0.3 · Windows desktop</div>
-        <h1>43 specialists.<br/>One <span class="it">AI office.</span></h1>
-      </div>
-    </div>
+<!-- ── BODY ──────────────────────────────────────────────────────── -->
+<div id="krew-body-wrap" style="border-top:1px solid var(--rule);">
+<div class="hiw-layout">
 
-    <div class="mhero-foot">
-      <p>
-        Content writers, engineers, PMs, sales agents, data analysts — each one with a name, a role, and a focus. <em>Krew</em> is your local AI team. 44 specialists. Running on your laptop. Working in your tools.
-      </p>
-      <div class="mhero-meta">
-        <a class="row" href="#agents">   <span class="l">01 · Agents</span>      <span>44 across 9 departments<span class="go">↓</span></span></a>
-        <a class="row" href="#how-it-thinks"><span class="l">02 · How it thinks</span><span>Task Progress · parallel execution<span class="go">↓</span></span></a>
-        <a class="row" href="#intelligence"><span class="l">03 · Intelligence</span> <span>Memory · planning · reflection<span class="go">↓</span></span></a>
-        <a class="row" href="#integrations"><span class="l">04 · Integrations</span> <span>Gmail · Notion · Slack + 5 more<span class="go">↓</span></span></a>
-        <a class="row" href="#browser">   <span class="l">05 · Live browser</span>  <span>Navigate · click · extract · screenshot<span class="go">↓</span></span></a>
-        <a class="row" href="#approvals">  <span class="l">06 · Research</span>    <span>Wikidata · Wikipedia · Yahoo Finance · GitHub<span class="go">↓</span></span></a>
-        <a class="row" href="#privacy">   <span class="l">07 · Privacy</span>      <span>Runs locally · zero cloud<span class="go">↓</span></span></a>
-      </div>
-      <div class="mhero-cta">
-        <a href="/download" class="btn">
-          Download — free
-          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-        </a>
-        <span class="note">Free to start · no credit card</span>
-      </div>
-    </div>
+  <!-- Sidebar -->
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav" id="sideNav">
+      <li><a href="#what" class="active"><span class="hiw-nav-num">00</span>What is Krew?</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#team"><span class="hiw-nav-num">01</span>The team</a></li>
+      <li><a href="#thinks"><span class="hiw-nav-num">02</span>How it thinks</a></li>
+      <li><a href="#smart"><span class="hiw-nav-num">03</span>What makes it smart</a></li>
+      <li><a href="#tools"><span class="hiw-nav-num">04</span>Your tools</a></li>
+      <li><a href="#browser"><span class="hiw-nav-num">05</span>The real web</a></li>
+      <li><a href="#approvals"><span class="hiw-nav-num">06</span>You approve</a></li>
+      <li><a href="#privacy"><span class="hiw-nav-num">07</span>Your device</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#who"><span class="hiw-nav-num">→</span>Who is this for?</a></li>
+    </ul>
+  </aside>
 
-    <!-- STAGE: dashboard mock -->
-    <div class="mstage">
-      <div class="mstage-head">
-        <span>// Krew · live session</span>
-        <span class="right">Arjun.Boss → routed to Zara.Content + Neo.Engineer</span>
-      </div>
+  <!-- Main -->
+  <main class="hiw-main">
 
-      <div class="krew-stage">
-        <div class="k-strip">
-          <div class="ks">
-            <span class="kl">Tasks today</span>
-            <span class="kv">17</span>
-          </div>
-          <div class="ks">
-            <span class="kl">Agents active</span>
-            <span class="kv">3 <span class="u">/ 43</span></span>
-          </div>
-          <div class="ks warn">
-            <span class="kl">Tokens this month</span>
-            <span class="kv">2.1M <span class="u">/ 10M</span></span>
-            <span class="kbar" style="--rem: 67%;"></span>
-          </div>
-          <div class="ks">
-            <span class="kl">Avg response</span>
-            <span class="kv">2.4<span class="u">s</span></span>
-          </div>
-          <div class="ks">
-            <span class="kl">Integrations</span>
-            <span class="kv">5 <span class="u">live</span></span>
-          </div>
+    <!-- 00 WHAT IS KREW -->
+    <section class="hiw-section" id="what">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> What is Krew</div>
+      <h2>An AI team that does the work — <span class="it">not just answers questions.</span></h2>
+      <p class="hiw-oneliner">43 specialists · 9 departments · all yours on every plan · runs locally</p>
+
+      <p>When most people think "AI", they think of a chat window: you type a question, it types back, and you copy-paste the answer somewhere. Useful, but you're still doing the real work — turning that text into a finished email, a posted caption, a reviewed pull request.</p>
+
+      <p>Krew flips that. Instead of one general chatbot, you get a <strong>team of named specialists</strong> — Arjun the chief of staff, Zara the caption writer, Neo the code reviewer, and 40 more. You give one a task in normal language, and it goes and does it: searches the web, reads your files, drafts the email, and brings back something finished. You're reviewing, not doing.</p>
+
+      <div class="ba">
+        <div class="ba-box before">
+          <div class="ba-head">A normal AI chatbot</div>
+          <ul>
+            <li>Answers, then stops</li>
+            <li>Forgets you between chats</li>
+            <li>Can't open your tools or the web</li>
+            <li>You still do the actual work</li>
+            <li>Your words go to a company server</li>
+          </ul>
         </div>
-
-        <div class="k-body">
-          <aside class="k-side">
-            <div class="ktabs">
-              <span class="on">Chats</span>
-              <span>Agents</span>
-            </div>
-            <div class="knew">+ new · pick agent</div>
-
-            <div class="kgroup">Today</div>
-            <div class="kconv on">
-              Launch copy for v1.0
-              <span class="kct"><span class="kbadge">AR</span>Arjun.Boss</span>
-            </div>
-            <div class="kconv">
-              Instagram captions · 5 variants
-              <span class="kct"><span class="kbadge" style="background:rgba(249,115,22,0.2);color:#f97316;">ZA</span>Zara.Content</span>
-            </div>
-            <div class="kconv">
-              PR review · auth module
-              <span class="kct"><span class="kbadge" style="background:rgba(6,182,212,0.2);color:#06b6d4;">NE</span>Neo.Engineer</span>
-            </div>
-
-            <div class="kgroup">Yesterday</div>
-            <div class="kconv">
-              Q2 roadmap · OKR mapping
-              <span class="kct"><span class="kbadge" style="background:rgba(99,102,241,0.2);color:#6366f1;">EC</span>Echo.PM</span>
-            </div>
-            <div class="kconv">
-              Cold email sequence · 5 steps
-              <span class="kct"><span class="kbadge" style="background:rgba(34,197,94,0.2);color:#22c55e;">AY</span>Ayan.Sales</span>
-            </div>
-
-            <div class="ktok">
-              <div class="ktoktop"><span>Tokens</span><span class="v">2.1M / 10M</span></div>
-              <div class="ktokbar"></div>
-              <div class="kplan">Builder plan · ₹1,999/mo</div>
-            </div>
-          </aside>
-
-          <div class="k-chat">
-            <div class="khdr">
-              <div class="agent">
-                <div class="av" style="background:#7C5CFF;">AR</div>
-                <div>
-                  <div class="nm">Arjun.Boss</div>
-                  <div class="role">orchestrator · routing</div>
-                </div>
-              </div>
-              <div class="indstate"><span class="ind"></span>2 agents working</div>
-            </div>
-
-            <div class="kbody">
-              <div class="kmsg you">
-                Write launch copy for v1.0 — website hero, a Twitter thread, and 3 Instagram captions. Also, make sure the API auth PR is reviewed before I merge.
-              </div>
-
-              <div class="kmsg ai">
-                <div class="who">Arjun.Boss · routing</div>
-                <div class="body">
-                  Two jobs, two agents. <strong>Zara.Content</strong> is handling the copy — hero, thread, captions. <strong>Neo.Engineer</strong> has the PR open for review. I'll surface both when they're done.
-                </div>
-              </div>
-
-              <div class="kmsg ai">
-                <div class="who">Zara.Content · drafted</div>
-                <div class="body">
-                  Hero copy ready — 3 variants (bold, soft, curiosity). Thread is 9 tweets with a hook and call-to-action at the end. Captions: platform-tuned for Instagram with hashtag sets. Want me to adjust tone?
-                </div>
-              </div>
-
-              <div class="kapproval">
-                <div class="kah">↳ Neo.Engineer · PR #47 · auth module</div>
-                <div class="kab">Found 2 issues: missing rate limit on /token endpoint, JWT secret in plain env reference (should use secrets manager). Detailed comments added on GitHub.</div>
-                <div class="kabtns">
-                  <button class="primary">View on GitHub</button>
-                  <button>Merge anyway</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="k-compose">
-              <span>Ask Arjun or @mention any of your 43 agents…</span>
-              <div class="send">→</div>
-            </div>
-          </div>
-
-          <aside class="k-wf">
-            <div class="kwh">
-              <span>// Workflow</span>
-              <span class="live">running</span>
-            </div>
-            <div class="knode done">
-              <div class="nicon">✓</div>
-              <div class="ntext"><span class="nname">Arjun.Boss · received</span><span class="nstep">routing · 0.3s</span></div>
-              <span class="ntime">10:41</span>
-            </div>
-            <div class="knode done">
-              <div class="nicon">✓</div>
-              <div class="ntext"><span class="nname">Zara.Content · copy</span><span class="nstep">hero + thread + captions · 28s</span></div>
-              <span class="ntime">10:42</span>
-            </div>
-            <div class="knode done">
-              <div class="nicon">✓</div>
-              <div class="ntext"><span class="nname">Neo.Engineer · PR review</span><span class="nstep">2 issues flagged · 18s</span></div>
-              <span class="ntime">10:42</span>
-            </div>
-            <div class="knode active">
-              <div class="nicon">◐</div>
-              <div class="ntext"><span class="nname">Awaiting your decision</span><span class="nstep">merge or fix?</span></div>
-              <span class="ntime">now</span>
-            </div>
-            <div class="knode queued">
-              <div class="nicon">○</div>
-              <div class="ntext"><span class="nname">Publish copy to Notion</span><span class="nstep">queued · on approval</span></div>
-              <span class="ntime">—</span>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VALUE BAR -->
-<section style="padding: 0 0 0 0; background: var(--paper);">
-  <div class="wrap">
-    <div class="val-bar">
-      <div class="val-item">
-        <div class="vnum" style="color: var(--accent);">43</div>
-        <div class="vlabel">AI specialists</div>
-      </div>
-      <div class="val-item">
-        <div class="vnum">9</div>
-        <div class="vlabel">departments</div>
-      </div>
-      <div class="val-item">
-        <div class="vnum">8</div>
-        <div class="vlabel">live integrations</div>
-      </div>
-      <div class="val-item">
-        <div class="vnum">0</div>
-        <div class="vlabel">data sent to cloud</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 1 — THE TEAM (Name.Role format) -->
-<section class="fsec" id="agents" data-screen-label="02 Agent grid">
-  <div class="wrap">
-    <div class="fsec-grid" style="grid-template-columns: 1fr;">
-      <div class="fsec-text" style="margin-bottom: 16px;">
-        <div class="seyebrow"><span class="num">01</span><span class="label">Your AI office</span></div>
-        <h2>Each one has a name.<br/><span class="it">Each name means something.</span></h2>
-        <p>Krew isn't a general chatbot you rename. These are 44 distinct specialists — each trained for one job, each with a human name shown as <strong>Name.Role</strong> in chat. Arjun.Boss orchestrates. Zara.Content writes your captions. Neo.Engineer reviews your PRs. Nyx.Research finds companies from open databases. All 44 are yours on every plan, no feature gating.</p>
-
-        <div class="role-row" id="agent-filters">
-          <span class="role-pill on" data-filter="all">All · 44</span>
-          <span class="role-pill" data-filter="boss">Boss · 1</span>
-          <span class="role-pill" data-filter="content">Content · 6</span>
-          <span class="role-pill" data-filter="marketing">Marketing · 5</span>
-          <span class="role-pill" data-filter="sales">Sales · 4</span>
-          <span class="role-pill" data-filter="support">Support · 6</span>
-          <span class="role-pill" data-filter="designer">Designer · 2</span>
-          <span class="role-pill" data-filter="data">Data · 5</span>
-          <span class="role-pill" data-filter="engineer">Engineer · 6</span>
-          <span class="role-pill" data-filter="pm">Product · 8</span>
+        <div class="ba-box after">
+          <div class="ba-head">A Krew agent</div>
+          <ul>
+            <li>Finishes the task, end to end</li>
+            <li>Remembers your work permanently</li>
+            <li>Reads Gmail, Notion, GitHub + the live web</li>
+            <li>Hands you a ready result</li>
+            <li>Runs on your laptop — nothing uploaded</li>
+          </ul>
         </div>
       </div>
 
-      <div class="agent-grid" id="agent-grid">
-
-        <!-- BOSS -->
-        <article class="acard" data-cat="boss">
-          <div class="ahead"><div class="av av-boss">AR</div><span class="acat">Boss</span></div>
-          <div class="ahandle">Arjun<span style="color:var(--muted)">.Boss</span></div>
-          <div class="arole">Chief of Staff · orchestrator</div>
-          <p>Receives your task, decides which specialists to call, runs the workflow, brings back the answer. The only agent who talks to all others.</p>
-        </article>
-
-        <!-- CONTENT -->
-        <article class="acard" data-cat="content">
-          <div class="ahead"><div class="av av-content">ZA</div><span class="acat">Content</span></div>
-          <div class="ahandle">Zara<span style="color:var(--muted)">.Content</span></div>
-          <div class="arole">Caption Writer</div>
-          <p>Platform-tuned social captions for Instagram, LinkedIn, X. Hook + hashtags + hook variant — every time.</p>
-        </article>
-
-        <article class="acard" data-cat="content">
-          <div class="ahead"><div class="av av-content">DE</div><span class="acat">Content</span></div>
-          <div class="ahandle">Dev<span style="color:var(--muted)">.Content</span></div>
-          <div class="arole">Script Writer</div>
-          <p>Viral short-form scripts with hook-retain-reward structure. Researches the topic first, then scripts Reels, Shorts, TikTok.</p>
-        </article>
-
-        <article class="acard" data-cat="content">
-          <div class="ahead"><div class="av av-content">PR</div><span class="acat">Content</span></div>
-          <div class="ahandle">Priya<span style="color:var(--muted)">.Content</span></div>
-          <div class="arole">Video Script Writer</div>
-          <p>Full production scripts — timestamps, B-roll notes, voiceover direction. YouTube-ready from the first draft.</p>
-        </article>
-
-        <article class="acard" data-cat="content">
-          <div class="ahead"><div class="av av-content">KI</div><span class="acat">Content</span></div>
-          <div class="ahandle">Kira<span style="color:var(--muted)">.Content</span></div>
-          <div class="arole">Blog Writer</div>
-          <p>Long-form, SEO-optimised blog posts. Pulls research from the web before writing, cites every source.</p>
-        </article>
-
-        <article class="acard" data-cat="content">
-          <div class="ahead"><div class="av av-content">ME</div><span class="acat">Content</span></div>
-          <div class="ahandle">Meera<span style="color:var(--muted)">.Content</span></div>
-          <div class="arole">Newsletter Writer</div>
-          <p>Newsletters that get opened. Subject line, preview text, body — structured for the reader, not just the sender.</p>
-        </article>
-
-        <article class="acard" data-cat="content">
-          <div class="ahead"><div class="av av-content">RO</div><span class="acat">Content</span></div>
-          <div class="ahandle">Rohan<span style="color:var(--muted)">.Content</span></div>
-          <div class="arole">Content Repurposer</div>
-          <p>One piece of content → 5 formats across platforms. Blog post → Twitter thread, LinkedIn post, email, Reel script.</p>
-        </article>
-
-        <!-- MARKETING -->
-        <article class="acard" data-cat="marketing">
-          <div class="ahead"><div class="av av-marketing">VI</div><span class="acat">Marketing</span></div>
-          <div class="ahandle">Vikram<span style="color:var(--muted)">.Marketing</span></div>
-          <div class="arole">Campaign Strategist</div>
-          <p>30-day campaign plans with channels, timelines, budgets, and KPIs. Thinks in funnels, not one-off posts.</p>
-        </article>
-
-        <article class="acard" data-cat="marketing">
-          <div class="ahead"><div class="av av-marketing">NE</div><span class="acat">Marketing</span></div>
-          <div class="ahandle">Neha<span style="color:var(--muted)">.Marketing</span></div>
-          <div class="arole">Ad Copywriter</div>
-          <p>Meta and Google ad variations — headline, body, CTA. Delivers 3 variants across tones so you can A/B test.</p>
-        </article>
-
-        <article class="acard" data-cat="marketing">
-          <div class="ahead"><div class="av av-marketing">SI</div><span class="acat">Marketing</span></div>
-          <div class="ahandle">Sid<span style="color:var(--muted)">.Marketing</span></div>
-          <div class="arole">SEO Researcher</div>
-          <p>Keyword research, content gaps, competitor analysis. Finds the low-competition angles that actually rank.</p>
-        </article>
-
-        <article class="acard" data-cat="marketing">
-          <div class="ahead"><div class="av av-marketing">AN</div><span class="acat">Marketing</span></div>
-          <div class="ahandle">Anika<span style="color:var(--muted)">.Marketing</span></div>
-          <div class="arole">Community Manager</div>
-          <p>Welcome messages, community posts, engagement replies. Keeps your Discord or Slack feeling alive.</p>
-        </article>
-
-        <article class="acard" data-cat="marketing">
-          <div class="ahead"><div class="av av-marketing">SA</div><span class="acat">Marketing</span></div>
-          <div class="ahandle">Sam<span style="color:var(--muted)">.Marketing</span></div>
-          <div class="arole">Email Marketer</div>
-          <p>End-to-end email campaigns — sequences, A/B subject lines, open-rate analysis. Connects to your actual inbox.</p>
-        </article>
-
-        <!-- SALES -->
-        <article class="acard" data-cat="sales">
-          <div class="ahead"><div class="av av-sales">KA</div><span class="acat">Sales</span></div>
-          <div class="ahandle">Kabir<span style="color:var(--muted)">.Sales</span></div>
-          <div class="arole">Lead Gen</div>
-          <p>Builds targeted lead lists, researches each prospect, qualifies them before you spend a minute on outreach.</p>
-        </article>
-
-        <article class="acard" data-cat="sales">
-          <div class="ahead"><div class="av av-sales">DI</div><span class="acat">Sales</span></div>
-          <div class="ahandle">Divya<span style="color:var(--muted)">.Sales</span></div>
-          <div class="arole">CRM Manager</div>
-          <p>Follow-up sequences for stale deals, re-engagement emails for churned accounts. Connects to your CRM.</p>
-        </article>
-
-        <article class="acard" data-cat="sales">
-          <div class="ahead"><div class="av av-sales">AY</div><span class="acat">Sales</span></div>
-          <div class="ahandle">Ayan<span style="color:var(--muted)">.Sales</span></div>
-          <div class="arole">Cold Outreach</div>
-          <p>First-touch cold emails that feel personal — researched from the web, not copy-pasted from a template.</p>
-        </article>
-
-        <article class="acard" data-cat="sales">
-          <div class="ahead"><div class="av av-sales">KR</div><span class="acat">Sales</span></div>
-          <div class="ahandle">Krish<span style="color:var(--muted)">.Sales</span></div>
-          <div class="arole">Sales Coach</div>
-          <p>Role-plays objection handling, evaluates your pitch, gives specific notes — not generic encouragement.</p>
-        </article>
-
-        <!-- SUPPORT -->
-        <article class="acard" data-cat="support">
-          <div class="ahead"><div class="av av-support">NI</div><span class="acat">Support</span></div>
-          <div class="ahandle">Nia<span style="color:var(--muted)">.Support</span></div>
-          <div class="arole">Support Agent</div>
-          <p>Drafts tier-1 replies to incoming tickets in your brand voice. Escalates what she can't resolve.</p>
-        </article>
-
-        <article class="acard" data-cat="support">
-          <div class="ahead"><div class="av av-support">TA</div><span class="acat">Support</span></div>
-          <div class="ahandle">Tara<span style="color:var(--muted)">.Support</span></div>
-          <div class="arole">Onboarding Specialist</div>
-          <p>Onboarding email sequences, in-app tooltip copy, and 7-day activation checklists for SaaS products.</p>
-        </article>
-
-        <article class="acard" data-cat="support">
-          <div class="ahead"><div class="av av-support">RI</div><span class="acat">Support</span></div>
-          <div class="ahandle">Riya<span style="color:var(--muted)">.Support</span></div>
-          <div class="arole">FAQ Builder</div>
-          <p>Turns your support patterns into clean, searchable FAQ docs and help-centre articles.</p>
-        </article>
-
-        <article class="acard" data-cat="support">
-          <div class="ahead"><div class="av av-support">JA</div><span class="acat">Support</span></div>
-          <div class="ahandle">Jay<span style="color:var(--muted)">.Support</span></div>
-          <div class="arole">Refund Handler</div>
-          <p>Professional refund responses that preserve goodwill. Approvals, denials, and partial refunds — all handled with care.</p>
-        </article>
-
-        <article class="acard" data-cat="support">
-          <div class="ahead"><div class="av av-support">MI</div><span class="acat">Support</span></div>
-          <div class="ahandle">Mia<span style="color:var(--muted)">.Support</span></div>
-          <div class="arole">Escalation Manager</div>
-          <p>Internal escalation reports, customer-facing status updates during incidents, handoff notes for Tier-2.</p>
-        </article>
-
-        <article class="acard" data-cat="support">
-          <div class="ahead"><div class="av av-support">AR</div><span class="acat">Support</span></div>
-          <div class="ahandle">Aryan<span style="color:var(--muted)">.Support</span></div>
-          <div class="arole">Review Responder</div>
-          <p>Replies to Google, Play Store, App Store reviews — 1-star to 5-star, always in your brand voice.</p>
-        </article>
-
-        <!-- DESIGNER -->
-        <article class="acard" data-cat="designer">
-          <div class="ahead"><div class="av av-designer">LU</div><span class="acat">Designer</span></div>
-          <div class="ahandle">Luna<span style="color:var(--muted)">.Design</span></div>
-          <div class="arole">UX Writer</div>
-          <p>Empty states, error messages, onboarding tooltips, button copy. Every pixel of text, written right.</p>
-        </article>
-
-        <article class="acard" data-cat="designer">
-          <div class="ahead"><div class="av av-designer">NO</div><span class="acat">Designer</span></div>
-          <div class="ahandle">Nova<span style="color:var(--muted)">.Design</span></div>
-          <div class="arole">Design Doc Writer</div>
-          <p>Design briefs, specs, and UX decision docs that engineers can actually follow without a 30-minute walkthrough.</p>
-        </article>
-
-        <!-- DATA -->
-        <article class="acard" data-cat="data">
-          <div class="ahead"><div class="av av-data">KU</div><span class="acat">Data</span></div>
-          <div class="ahandle">Kunal<span style="color:var(--muted)">.Data</span></div>
-          <div class="arole">Data Analyst</div>
-          <p>Queries your data, surfaces 3 actionable insights, explains findings in plain language — no SQL required from you.</p>
-        </article>
-
-        <article class="acard" data-cat="data">
-          <div class="ahead"><div class="av av-data">SN</div><span class="acat">Data</span></div>
-          <div class="ahandle">Sana<span style="color:var(--muted)">.Data</span></div>
-          <div class="arole">Report Builder</div>
-          <p>Weekly, monthly, quarterly reports — structured for decisions, not just for record-keeping.</p>
-        </article>
-
-        <article class="acard" data-cat="data">
-          <div class="ahead"><div class="av av-data">NK</div><span class="acat">Data</span></div>
-          <div class="ahandle">Nikhil<span style="color:var(--muted)">.Data</span></div>
-          <div class="arole">A/B Tester</div>
-          <p>Designs experiments, calculates sample sizes, reads results, recommends the winner with statistical confidence.</p>
-        </article>
-
-        <article class="acard" data-cat="data">
-          <div class="ahead"><div class="av av-data">LE</div><span class="acat">Data</span></div>
-          <div class="ahandle">Lexi<span style="color:var(--muted)">.Data</span></div>
-          <div class="arole">Market Researcher</div>
-          <p>Market sizing, trend reports, competitor landscape. Sourced from the web, cited, and summarised for decisions.</p>
-        </article>
-
-        <article class="acard" data-cat="data">
-          <div class="ahead"><div class="av av-data">IS</div><span class="acat">Data</span></div>
-          <div class="ahandle">Ishaan<span style="color:var(--muted)">.Data</span></div>
-          <div class="arole">Data Cleaner</div>
-          <p>Cleans messy CSVs, deduplicates rows, fixes date formats, writes the Python script to automate it next time.</p>
-        </article>
-
-        <article class="acard" data-cat="data">
-          <div class="ahead"><div class="av av-data">NY</div><span class="acat">Data</span></div>
-          <div class="ahandle">Nyx<span style="color:var(--muted)">.Research</span></div>
-          <div class="arole">Research Specialist · open data</div>
-          <p>Finds companies, startups, and prospects from Wikidata, Wikipedia, Yahoo Finance, and GitHub — no API key needed. Solo plan gets ~300 results; Builder+ gets thousands with parallel queries.</p>
-        </article>
-
-        <!-- ENGINEER -->
-        <article class="acard" data-cat="engineer">
-          <div class="ahead"><div class="av av-engineer">NE</div><span class="acat">Engineer</span></div>
-          <div class="ahandle">Neo<span style="color:var(--muted)">.Engineer</span></div>
-          <div class="arole">Code Reviewer</div>
-          <p>Reviews PRs for bugs, security holes, and code quality. Leaves GitHub comments like a senior engineer would.</p>
-        </article>
-
-        <article class="acard" data-cat="engineer">
-          <div class="ahead"><div class="av av-engineer">DX</div><span class="acat">Engineer</span></div>
-          <div class="ahandle">Dex<span style="color:var(--muted)">.Engineer</span></div>
-          <div class="arole">Bug Hunter</div>
-          <p>Reproduces, traces, and proposes fixes for the edge cases QA missed. Reads your stack traces fluently.</p>
-        </article>
-
-        <article class="acard" data-cat="engineer">
-          <div class="ahead"><div class="av av-engineer">VE</div><span class="acat">Engineer</span></div>
-          <div class="ahandle">Vera<span style="color:var(--muted)">.Engineer</span></div>
-          <div class="arole">DevOps Engineer</div>
-          <p>CI/CD pipelines, Dockerfiles, GitHub Actions. Writes the infra-as-code so you never touch YAML again.</p>
-        </article>
-
-        <article class="acard" data-cat="engineer">
-          <div class="ahead"><div class="av av-engineer">MA</div><span class="acat">Engineer</span></div>
-          <div class="ahandle">Maya<span style="color:var(--muted)">.Engineer</span></div>
-          <div class="arole">Docs Writer</div>
-          <p>READMEs, API references, inline JSDoc — current with your actual code, not what it was three sprints ago.</p>
-        </article>
-
-        <article class="acard" data-cat="engineer">
-          <div class="ahead"><div class="av av-engineer">RE</div><span class="acat">Engineer</span></div>
-          <div class="ahandle">Rex<span style="color:var(--muted)">.Engineer</span></div>
-          <div class="arole">Test Engineer</div>
-          <p>Unit and integration tests with realistic fixtures and edge case coverage for the cases you forgot to think of.</p>
-        </article>
-
-        <article class="acard" data-cat="engineer">
-          <div class="ahead"><div class="av av-engineer">FL</div><span class="acat">Engineer</span></div>
-          <div class="ahandle">Flux<span style="color:var(--muted)">.Engineer</span></div>
-          <div class="arole">API Designer</div>
-          <p>REST API specs, OpenAPI docs, and design reviews for consistency. Spots versioning problems before they ship.</p>
-        </article>
-
-        <!-- PM -->
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">AV</div><span class="acat">Product</span></div>
-          <div class="ahandle">Ava<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">Roadmap Builder</div>
-          <p>90-day roadmaps, RICE-scored priority stacks, and board-ready summaries that non-technical execs actually read.</p>
-        </article>
-
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">RA</div><span class="acat">Product</span></div>
-          <div class="ahandle">Raj<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">User Researcher</div>
-          <p>Interview guides, research synthesis, persona creation. Turns raw interview notes into usable insights.</p>
-        </article>
-
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">NO</div><span class="acat">Product</span></div>
-          <div class="ahandle">Nora<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">Sprint Planner</div>
-          <p>Epics to tickets, acceptance criteria written, 2-week sprints planned for any team size. Jira-ready output.</p>
-        </article>
-
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">FI</div><span class="acat">Product</span></div>
-          <div class="ahandle">Finn<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">PRD Writer</div>
-          <p>Product requirement docs with user stories, success metrics, edge cases, and out-of-scope calls.</p>
-        </article>
-
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">LE</div><span class="acat">Product</span></div>
-          <div class="ahandle">Lena<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">Stakeholder Comms</div>
-          <p>Product updates for non-technical execs — clear, brief, no jargon. Sprint summaries that get read.</p>
-        </article>
-
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">SI</div><span class="acat">Product</span></div>
-          <div class="ahandle">Siya<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">Launch Manager</div>
-          <p>Go-to-market checklists, Product Hunt copy, launch announcement drafts. Ships launches, not just features.</p>
-        </article>
-
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">RV</div><span class="acat">Product</span></div>
-          <div class="ahandle">Ravi<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">Retro Facilitator</div>
-          <p>Summarises retro notes, extracts action items, creates improvement templates your team will actually use.</p>
-        </article>
-
-        <article class="acard" data-cat="pm">
-          <div class="ahead"><div class="av av-pm">EC</div><span class="acat">Product</span></div>
-          <div class="ahandle">Echo<span style="color:var(--muted)">.PM</span></div>
-          <div class="arole">OKR Manager</div>
-          <p>Quarter-level OKRs, measurable key results, and roadmap-to-OKR alignment. Spots objectives that can't be measured.</p>
-        </article>
-
-        <div class="agent-expand" id="agentExpand">
-          <button type="button" class="agent-expand-btn" id="agentExpandBtn" data-state="collapsed">
-            <span class="lbl-more">Show all 43 agents</span>
-            <span class="lbl-less" style="display:none;">Show fewer</span>
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" class="chev">
-              <path d="M2 4 L5 7 L8 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" fill="none"/>
-            </svg>
-          </button>
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="val-bar">
+          <div class="val-item"><div class="vnum" style="color: var(--accent);">43</div><div class="vlabel">AI specialists</div></div>
+          <div class="val-item"><div class="vnum">9</div><div class="vlabel">departments</div></div>
+          <div class="val-item"><div class="vnum">8</div><div class="vlabel">live integrations</div></div>
+          <div class="val-item"><div class="vnum">0</div><div class="vlabel">data sent to cloud</div></div>
         </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 2 — HOW KREW THINKS (ReAct loop) -->
-<section class="fsec reverse" id="how-it-thinks" data-screen-label="03 How Krew thinks">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">02</span><span class="label">How agents work</span></div>
-        <h2>They don't guess.<br/><span class="it">They reason and verify.</span></h2>
-        <p>Every agent runs a ReAct loop — Reason, Act, Observe, repeat — before giving you an answer. They search the web, read your connected tools, verify what they find, and only then reply. No hallucinating, no shortcuts.</p>
-        <ul>
-          <li class="acc">Up to 10 reasoning steps per task</li>
-          <li>Web search, file reads, API calls — all in-loop</li>
-          <li>Sees tool output before continuing — not guessing</li>
-          <li>Stops and asks if it genuinely can't proceed</li>
-        </ul>
       </div>
 
-      <div class="react-loop">
-        <div class="react-step done">
-          <div class="rnum">1</div>
-          <div class="rcontent">
-            <div class="rlabel">User</div>
-            <div class="rtext">"Write a LinkedIn post about our v1.0 launch — make it feel like a milestone, not a press release."</div>
+      <p>Every section below explains one part of how this works — read whichever ones you're curious about. If you only read one, read the next.</p>
+    </section>
+
+    <!-- 01 THE TEAM -->
+    <section class="hiw-section" id="team">
+      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> Your AI office</div>
+      <h2>Each one has a name. <span class="it">Each name means a job.</span></h2>
+      <p class="hiw-oneliner">Name.Role — like Zara.Content or Neo.Engineer — so you always know who's doing what</p>
+
+      <p>Krew isn't one chatbot you rename. It's 43 distinct specialists, each trained for a single job and shown in chat as <strong>Name.Role</strong>. Arjun.Boss runs the show and hands tasks to the right person. Zara.Content writes your captions. Neo.Engineer reviews your code. Nyx.Research digs up companies from public databases. All 43 are included on every plan — nothing is locked behind a higher tier.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — Content agency owner</div>
+        <h4>Priya runs a small content agency in Hyderabad — 7 clients, one employee.</h4>
+        <p>Every week she writes LinkedIn posts for all 7 clients — 3 each, every one a different tone and industry. That's 21 posts, plus monthly reports and the emails that go with them. It used to eat roughly 2 full working days a week.</p>
+        <p>Now she has a Krew agent set up per client, each one taught that client's brand once. When she needs this week's posts she types: <em>"write this week's 3 posts for Neeraj's SaaS company."</em> Three ready-to-post captions come back in about 90 seconds. <strong>Two days of work is now about three hours of her attention.</strong></p>
+      </div>
+
+      <p><strong>Browse the full team.</strong> Filter by department, or expand to see all 43:</p>
+
+      <div class="role-row" id="agent-filters">
+        <span class="role-pill on" data-filter="all">All</span>
+        <span class="role-pill" data-filter="boss">Boss · 1</span>
+        <span class="role-pill" data-filter="content">Content · 6</span>
+        <span class="role-pill" data-filter="marketing">Marketing · 5</span>
+        <span class="role-pill" data-filter="sales">Sales · 4</span>
+        <span class="role-pill" data-filter="support">Support · 6</span>
+        <span class="role-pill" data-filter="designer">Designer · 2</span>
+        <span class="role-pill" data-filter="data">Data · 6</span>
+        <span class="role-pill" data-filter="engineer">Engineer · 6</span>
+        <span class="role-pill" data-filter="pm">Product · 8</span>
+      </div>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="agent-grid" id="agent-grid">
+          <article class="acard" data-cat="boss"><div class="ahead"><div class="av av-boss">AR</div><span class="acat">Boss</span></div><div class="ahandle">Arjun<span style="color:var(--muted)">.Boss</span></div><div class="arole">Chief of Staff · orchestrator</div><p>Receives your task, decides which specialists to call, runs the workflow, brings back the answer. The only agent who talks to all others.</p></article>
+          <article class="acard" data-cat="content"><div class="ahead"><div class="av av-content">ZA</div><span class="acat">Content</span></div><div class="ahandle">Zara<span style="color:var(--muted)">.Content</span></div><div class="arole">Caption Writer</div><p>Platform-tuned social captions for Instagram, LinkedIn, X. Hook + hashtags + hook variant — every time.</p></article>
+          <article class="acard" data-cat="content"><div class="ahead"><div class="av av-content">DE</div><span class="acat">Content</span></div><div class="ahandle">Dev<span style="color:var(--muted)">.Content</span></div><div class="arole">Script Writer</div><p>Viral short-form scripts with hook-retain-reward structure. Researches the topic first, then scripts Reels, Shorts, TikTok.</p></article>
+          <article class="acard" data-cat="content"><div class="ahead"><div class="av av-content">PR</div><span class="acat">Content</span></div><div class="ahandle">Priya<span style="color:var(--muted)">.Content</span></div><div class="arole">Video Script Writer</div><p>Full production scripts — timestamps, B-roll notes, voiceover direction. YouTube-ready from the first draft.</p></article>
+          <article class="acard" data-cat="content"><div class="ahead"><div class="av av-content">KI</div><span class="acat">Content</span></div><div class="ahandle">Kira<span style="color:var(--muted)">.Content</span></div><div class="arole">Blog Writer</div><p>Long-form, SEO-optimised blog posts. Pulls research from the web before writing, cites every source.</p></article>
+          <article class="acard" data-cat="content"><div class="ahead"><div class="av av-content">ME</div><span class="acat">Content</span></div><div class="ahandle">Meera<span style="color:var(--muted)">.Content</span></div><div class="arole">Newsletter Writer</div><p>Newsletters that get opened. Subject line, preview text, body — structured for the reader, not just the sender.</p></article>
+          <article class="acard" data-cat="content"><div class="ahead"><div class="av av-content">RO</div><span class="acat">Content</span></div><div class="ahandle">Rohan<span style="color:var(--muted)">.Content</span></div><div class="arole">Content Repurposer</div><p>One piece of content → 5 formats across platforms. Blog post → Twitter thread, LinkedIn post, email, Reel script.</p></article>
+          <article class="acard" data-cat="marketing"><div class="ahead"><div class="av av-marketing">VI</div><span class="acat">Marketing</span></div><div class="ahandle">Vikram<span style="color:var(--muted)">.Marketing</span></div><div class="arole">Campaign Strategist</div><p>30-day campaign plans with channels, timelines, budgets, and KPIs. Thinks in funnels, not one-off posts.</p></article>
+          <article class="acard" data-cat="marketing"><div class="ahead"><div class="av av-marketing">NE</div><span class="acat">Marketing</span></div><div class="ahandle">Neha<span style="color:var(--muted)">.Marketing</span></div><div class="arole">Ad Copywriter</div><p>Meta and Google ad variations — headline, body, CTA. Delivers 3 variants across tones so you can A/B test.</p></article>
+          <article class="acard" data-cat="marketing"><div class="ahead"><div class="av av-marketing">SI</div><span class="acat">Marketing</span></div><div class="ahandle">Sid<span style="color:var(--muted)">.Marketing</span></div><div class="arole">SEO Researcher</div><p>Keyword research, content gaps, competitor analysis. Finds the low-competition angles that actually rank.</p></article>
+          <article class="acard" data-cat="marketing"><div class="ahead"><div class="av av-marketing">AN</div><span class="acat">Marketing</span></div><div class="ahandle">Anika<span style="color:var(--muted)">.Marketing</span></div><div class="arole">Community Manager</div><p>Welcome messages, community posts, engagement replies. Keeps your Discord or Slack feeling alive.</p></article>
+          <article class="acard" data-cat="marketing"><div class="ahead"><div class="av av-marketing">SA</div><span class="acat">Marketing</span></div><div class="ahandle">Sam<span style="color:var(--muted)">.Marketing</span></div><div class="arole">Email Marketer</div><p>End-to-end email campaigns — sequences, A/B subject lines, open-rate analysis. Connects to your actual inbox.</p></article>
+          <article class="acard" data-cat="sales"><div class="ahead"><div class="av av-sales">KA</div><span class="acat">Sales</span></div><div class="ahandle">Kabir<span style="color:var(--muted)">.Sales</span></div><div class="arole">Lead Gen</div><p>Builds targeted lead lists, researches each prospect, qualifies them before you spend a minute on outreach.</p></article>
+          <article class="acard" data-cat="sales"><div class="ahead"><div class="av av-sales">DI</div><span class="acat">Sales</span></div><div class="ahandle">Divya<span style="color:var(--muted)">.Sales</span></div><div class="arole">CRM Manager</div><p>Follow-up sequences for stale deals, re-engagement emails for churned accounts. Connects to your CRM.</p></article>
+          <article class="acard" data-cat="sales"><div class="ahead"><div class="av av-sales">AY</div><span class="acat">Sales</span></div><div class="ahandle">Ayan<span style="color:var(--muted)">.Sales</span></div><div class="arole">Cold Outreach</div><p>First-touch cold emails that feel personal — researched from the web, not copy-pasted from a template.</p></article>
+          <article class="acard" data-cat="sales"><div class="ahead"><div class="av av-sales">KR</div><span class="acat">Sales</span></div><div class="ahandle">Krish<span style="color:var(--muted)">.Sales</span></div><div class="arole">Sales Coach</div><p>Role-plays objection handling, evaluates your pitch, gives specific notes — not generic encouragement.</p></article>
+          <article class="acard" data-cat="support"><div class="ahead"><div class="av av-support">NI</div><span class="acat">Support</span></div><div class="ahandle">Nia<span style="color:var(--muted)">.Support</span></div><div class="arole">Support Agent</div><p>Drafts tier-1 replies to incoming tickets in your brand voice. Escalates what she can't resolve.</p></article>
+          <article class="acard" data-cat="support"><div class="ahead"><div class="av av-support">TA</div><span class="acat">Support</span></div><div class="ahandle">Tara<span style="color:var(--muted)">.Support</span></div><div class="arole">Onboarding Specialist</div><p>Onboarding email sequences, in-app tooltip copy, and 7-day activation checklists for SaaS products.</p></article>
+          <article class="acard" data-cat="support"><div class="ahead"><div class="av av-support">RI</div><span class="acat">Support</span></div><div class="ahandle">Riya<span style="color:var(--muted)">.Support</span></div><div class="arole">FAQ Builder</div><p>Turns your support patterns into clean, searchable FAQ docs and help-centre articles.</p></article>
+          <article class="acard" data-cat="support"><div class="ahead"><div class="av av-support">JA</div><span class="acat">Support</span></div><div class="ahandle">Jay<span style="color:var(--muted)">.Support</span></div><div class="arole">Refund Handler</div><p>Professional refund responses that preserve goodwill. Approvals, denials, and partial refunds — all handled with care.</p></article>
+          <article class="acard" data-cat="support"><div class="ahead"><div class="av av-support">MI</div><span class="acat">Support</span></div><div class="ahandle">Mia<span style="color:var(--muted)">.Support</span></div><div class="arole">Escalation Manager</div><p>Internal escalation reports, customer-facing status updates during incidents, handoff notes for Tier-2.</p></article>
+          <article class="acard" data-cat="support"><div class="ahead"><div class="av av-support">AR</div><span class="acat">Support</span></div><div class="ahandle">Aryan<span style="color:var(--muted)">.Support</span></div><div class="arole">Review Responder</div><p>Replies to Google, Play Store, App Store reviews — 1-star to 5-star, always in your brand voice.</p></article>
+          <article class="acard" data-cat="designer"><div class="ahead"><div class="av av-designer">LU</div><span class="acat">Designer</span></div><div class="ahandle">Luna<span style="color:var(--muted)">.Design</span></div><div class="arole">UX Writer</div><p>Empty states, error messages, onboarding tooltips, button copy. Every pixel of text, written right.</p></article>
+          <article class="acard" data-cat="designer"><div class="ahead"><div class="av av-designer">NO</div><span class="acat">Designer</span></div><div class="ahandle">Nova<span style="color:var(--muted)">.Design</span></div><div class="arole">Design Doc Writer</div><p>Design briefs, specs, and UX decision docs that engineers can actually follow without a 30-minute walkthrough.</p></article>
+          <article class="acard" data-cat="data"><div class="ahead"><div class="av av-data">KU</div><span class="acat">Data</span></div><div class="ahandle">Kunal<span style="color:var(--muted)">.Data</span></div><div class="arole">Data Analyst</div><p>Queries your data, surfaces 3 actionable insights, explains findings in plain language — no SQL required from you.</p></article>
+          <article class="acard" data-cat="data"><div class="ahead"><div class="av av-data">SN</div><span class="acat">Data</span></div><div class="ahandle">Sana<span style="color:var(--muted)">.Data</span></div><div class="arole">Report Builder</div><p>Weekly, monthly, quarterly reports — structured for decisions, not just for record-keeping.</p></article>
+          <article class="acard" data-cat="data"><div class="ahead"><div class="av av-data">NK</div><span class="acat">Data</span></div><div class="ahandle">Nikhil<span style="color:var(--muted)">.Data</span></div><div class="arole">A/B Tester</div><p>Designs experiments, calculates sample sizes, reads results, recommends the winner with statistical confidence.</p></article>
+          <article class="acard" data-cat="data"><div class="ahead"><div class="av av-data">LE</div><span class="acat">Data</span></div><div class="ahandle">Lexi<span style="color:var(--muted)">.Data</span></div><div class="arole">Market Researcher</div><p>Market sizing, trend reports, competitor landscape. Sourced from the web, cited, and summarised for decisions.</p></article>
+          <article class="acard" data-cat="data"><div class="ahead"><div class="av av-data">IS</div><span class="acat">Data</span></div><div class="ahandle">Ishaan<span style="color:var(--muted)">.Data</span></div><div class="arole">Data Cleaner</div><p>Cleans messy CSVs, deduplicates rows, fixes date formats, writes the Python script to automate it next time.</p></article>
+          <article class="acard" data-cat="data"><div class="ahead"><div class="av av-data">NY</div><span class="acat">Data</span></div><div class="ahandle">Nyx<span style="color:var(--muted)">.Research</span></div><div class="arole">Research Specialist · open data</div><p>Finds companies, startups, and prospects from Wikidata, Wikipedia, Yahoo Finance, and GitHub — no API key needed.</p></article>
+          <article class="acard" data-cat="engineer"><div class="ahead"><div class="av av-engineer">NE</div><span class="acat">Engineer</span></div><div class="ahandle">Neo<span style="color:var(--muted)">.Engineer</span></div><div class="arole">Code Reviewer</div><p>Reviews PRs for bugs, security holes, and code quality. Leaves GitHub comments like a senior engineer would.</p></article>
+          <article class="acard" data-cat="engineer"><div class="ahead"><div class="av av-engineer">DX</div><span class="acat">Engineer</span></div><div class="ahandle">Dex<span style="color:var(--muted)">.Engineer</span></div><div class="arole">Bug Hunter</div><p>Reproduces, traces, and proposes fixes for the edge cases QA missed. Reads your stack traces fluently.</p></article>
+          <article class="acard" data-cat="engineer"><div class="ahead"><div class="av av-engineer">VE</div><span class="acat">Engineer</span></div><div class="ahandle">Vera<span style="color:var(--muted)">.Engineer</span></div><div class="arole">DevOps Engineer</div><p>CI/CD pipelines, Dockerfiles, GitHub Actions. Writes the infra-as-code so you never touch YAML again.</p></article>
+          <article class="acard" data-cat="engineer"><div class="ahead"><div class="av av-engineer">MA</div><span class="acat">Engineer</span></div><div class="ahandle">Maya<span style="color:var(--muted)">.Engineer</span></div><div class="arole">Docs Writer</div><p>READMEs, API references, inline JSDoc — current with your actual code, not what it was three sprints ago.</p></article>
+          <article class="acard" data-cat="engineer"><div class="ahead"><div class="av av-engineer">RE</div><span class="acat">Engineer</span></div><div class="ahandle">Rex<span style="color:var(--muted)">.Engineer</span></div><div class="arole">Test Engineer</div><p>Unit and integration tests with realistic fixtures and edge case coverage for the cases you forgot to think of.</p></article>
+          <article class="acard" data-cat="engineer"><div class="ahead"><div class="av av-engineer">FL</div><span class="acat">Engineer</span></div><div class="ahandle">Flux<span style="color:var(--muted)">.Engineer</span></div><div class="arole">API Designer</div><p>REST API specs, OpenAPI docs, and design reviews for consistency. Spots versioning problems before they ship.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">AV</div><span class="acat">Product</span></div><div class="ahandle">Ava<span style="color:var(--muted)">.PM</span></div><div class="arole">Roadmap Builder</div><p>90-day roadmaps, RICE-scored priority stacks, and board-ready summaries that non-technical execs actually read.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">RA</div><span class="acat">Product</span></div><div class="ahandle">Raj<span style="color:var(--muted)">.PM</span></div><div class="arole">User Researcher</div><p>Interview guides, research synthesis, persona creation. Turns raw interview notes into usable insights.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">NO</div><span class="acat">Product</span></div><div class="ahandle">Nora<span style="color:var(--muted)">.PM</span></div><div class="arole">Sprint Planner</div><p>Epics to tickets, acceptance criteria written, 2-week sprints planned for any team size. Jira-ready output.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">FI</div><span class="acat">Product</span></div><div class="ahandle">Finn<span style="color:var(--muted)">.PM</span></div><div class="arole">PRD Writer</div><p>Product requirement docs with user stories, success metrics, edge cases, and out-of-scope calls.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">LE</div><span class="acat">Product</span></div><div class="ahandle">Lena<span style="color:var(--muted)">.PM</span></div><div class="arole">Stakeholder Comms</div><p>Product updates for non-technical execs — clear, brief, no jargon. Sprint summaries that get read.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">SI</div><span class="acat">Product</span></div><div class="ahandle">Siya<span style="color:var(--muted)">.PM</span></div><div class="arole">Launch Manager</div><p>Go-to-market checklists, Product Hunt copy, launch announcement drafts. Ships launches, not just features.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">RV</div><span class="acat">Product</span></div><div class="ahandle">Ravi<span style="color:var(--muted)">.PM</span></div><div class="arole">Retro Facilitator</div><p>Summarises retro notes, extracts action items, creates improvement templates your team will actually use.</p></article>
+          <article class="acard" data-cat="pm"><div class="ahead"><div class="av av-pm">EC</div><span class="acat">Product</span></div><div class="ahandle">Echo<span style="color:var(--muted)">.PM</span></div><div class="arole">OKR Manager</div><p>Quarter-level OKRs, measurable key results, and roadmap-to-OKR alignment. Spots objectives that can't be measured.</p></article>
+          <div class="agent-expand" id="agentExpand">
+            <button type="button" class="agent-expand-btn" id="agentExpandBtn" data-state="collapsed">
+              <span class="lbl-more">Show all agents</span>
+              <span class="lbl-less" style="display:none;">Show fewer</span>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" class="chev"><path d="M2 4 L5 7 L8 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" fill="none"/></svg>
+            </button>
           </div>
         </div>
-
-        <div class="react-step done">
-          <div class="rnum">2</div>
-          <div class="rcontent">
-            <div class="rlabel">Zara.Content · Reason</div>
-            <div class="rtext">I need context on what v1.0 actually includes before I write. Let me search for recent product-launch post formats that feel authentic, then ask what shipped.</div>
-          </div>
-        </div>
-
-        <div class="react-step done">
-          <div class="rnum">3</div>
-          <div class="rcontent">
-            <div class="rlabel">Act</div>
-            <div class="rtext">Calling web search for best practices.</div>
-            <div class="rtool"><span class="fn">web_search</span>("authentic product launch LinkedIn post 2024")</div>
-          </div>
-        </div>
-
-        <div class="react-step done">
-          <div class="rnum">4</div>
-          <div class="rcontent">
-            <div class="rlabel">Observe</div>
-            <div class="rtext">Result: 3 high-performing frameworks — story arc (struggle → solution → milestone), team shoutout format, and behind-the-scenes format. Story arc has 4× the average engagement.</div>
-          </div>
-        </div>
-
-        <div class="react-step active">
-          <div class="rnum">5</div>
-          <div class="rcontent">
-            <div class="rlabel">Zara.Content · Final answer</div>
-            <div class="rtext">Drafting with story arc: opening hook about the day you started, 3 milestones, team acknowledgement, and a close that invites the reader in. Tone: human, not corporate.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 3 — INTELLIGENCE FEATURES -->
-<section class="fsec" id="intelligence" data-screen-label="03 Intelligence">
-  <div class="wrap">
-    <div class="fsec-grid" style="grid-template-columns: 1fr;">
-      <div class="fsec-text" style="margin-bottom: 16px;">
-        <div class="seyebrow"><span class="num">03</span><span class="label">Built to think</span></div>
-        <h2>Not a chatbot.<br/><span class="it">An actual agent.</span></h2>
-        <p>Four systems run under the hood on every task — invisible to you, but the reason Krew's answers feel different from a plain chat window. These aren't prompts. They're mechanics baked into the loop.</p>
+        <div class="figcap">The Agents tab inside Krew — pick a specialist, or let Arjun.Boss choose for you.</div>
       </div>
 
-      <div class="intel-grid">
-        <div class="ifeature">
-          <span class="iftag">Memory</span>
-          <h5>Remembers you across sessions</h5>
-          <p>Each agent can save facts with <code>save_memory</code> and recall them in future conversations. Tell Zara your brand voice once — she uses it every time. Tell Kunal which metrics matter — he tracks them without being reminded. Memory is per-agent and stored locally on your machine.</p>
-        </div>
-        <div class="ifeature">
-          <span class="iftag">Planning</span>
-          <h5>Plans before it acts</h5>
-          <p>For any multi-step task, every agent writes a numbered plan before touching a single tool. You see the plan first. You can redirect before a single API call is made. No blind tool-calling, no surprises halfway through a 10-step workflow. Plan → execute → done.</p>
-        </div>
-        <div class="ifeature">
-          <span class="iftag">Self-reflection</span>
-          <h5>Reviews its own answer</h5>
-          <p>After drafting a response, the agent runs a second pass — asking itself whether the answer is complete, accurate, and worth sending. If not, it revises before you see it. What arrives in your chat is the second draft, not the first. The mistakes get caught before they reach you.</p>
-        </div>
-        <div class="ifeature">
-          <span class="iftag">Boss delegation</span>
-          <h5>Arjun.Boss assigns the right agent</h5>
-          <p>Give Boss a complex task and he breaks it into subtasks, assigns each to the right specialist, coordinates the results, and returns one unified answer. Zara handles the copy. Neo handles the code review. Ava handles the roadmap. You talk to one agent, your whole office works.</p>
-        </div>
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">ChatGPT for work tasks</span>
+        <span class="chip">Jasper / Copy.ai</span>
+        <span class="chip">Hours of manual writing</span>
+        <span class="chip">A part-time assistant</span>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- SECTION 4 — INTEGRATIONS (8 actual services) -->
-<section class="fsec" id="integrations" data-screen-label="04 Integrations">
-  <div class="wrap">
-    <div class="fsec-grid" style="grid-template-columns: 1fr;">
-      <div class="fsec-text" style="margin-bottom: 16px;">
-        <div class="seyebrow"><span class="num">04</span><span class="label">Integrations</span></div>
-        <h2>Your agents know<br/>your <span class="it">tools.</span></h2>
-        <p>Connect your Gmail, Notion, Slack, GitHub, and more — and your agents can read from and act on them in real time. Not just "import data" — they can draft emails in your inbox, check your Notion pages, read your GitHub issues, and post results back. All with your approval before anything is sent.</p>
+    <!-- 02 HOW IT THINKS -->
+    <section class="hiw-section" id="thinks">
+      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> How it thinks</div>
+      <h2>It doesn't guess. <span class="it">It reasons, then verifies.</span></h2>
+      <p class="hiw-oneliner">Reason → Act → Observe → repeat — up to 10 steps before it answers</p>
+
+      <p>A plain chatbot answers from memory, which is why it sometimes confidently makes things up. Every Krew agent works differently: it thinks about what it needs, uses a tool to go get it, looks at what came back, and only then continues. It's the difference between a confident guess and a checked answer.</p>
+
+      <p>Here's that loop on a real task — writing a launch post — shown exactly as it runs inside the app:</p>
+
+      <div class="hiw-figure">
+        <div class="react-loop">
+          <div class="react-step done"><div class="rnum">1</div><div class="rcontent"><div class="rlabel">You</div><div class="rtext">"Write a LinkedIn post about our v1.0 launch — make it feel like a milestone, not a press release."</div></div></div>
+          <div class="react-step done"><div class="rnum">2</div><div class="rcontent"><div class="rlabel">Zara.Content · Reason</div><div class="rtext">I need to know what makes a launch post feel authentic before I write. Let me look up high-performing formats first.</div></div></div>
+          <div class="react-step done"><div class="rnum">3</div><div class="rcontent"><div class="rlabel">Act</div><div class="rtext">Searching the web for current best practices.</div><div class="rtool"><span class="fn">web_search</span>("authentic product launch LinkedIn post 2024")</div></div></div>
+          <div class="react-step done"><div class="rnum">4</div><div class="rcontent"><div class="rlabel">Observe</div><div class="rtext">Found 3 frameworks — story arc, team shoutout, behind-the-scenes. The story arc gets 4× the average engagement.</div></div></div>
+          <div class="react-step active"><div class="rnum">5</div><div class="rcontent"><div class="rlabel">Zara.Content · Final answer</div><div class="rtext">Drafting with the story arc: a human opening hook, three milestones, a team thank-you, and a close that invites the reader in. Tone: human, not corporate.</div></div></div>
+        </div>
+        <div class="figcap">You can watch each step happen — so you always know why the answer is what it is.</div>
       </div>
 
-      <div class="int-grid">
-        <div class="icard">
-          <div class="ilogo">G</div>
-          <div class="iname">Gmail</div>
-          <div class="idesc">Read inbox, draft replies, search threads. IMAP — no Google review needed.</div>
-          <div class="istatus">Live · IMAP</div>
+      <ol class="steps">
+        <li><div class="step-text"><strong>Up to 10 reasoning steps per task</strong><span>Complex jobs get multiple rounds of think-act-check, not one rushed reply.</span></div></li>
+        <li><div class="step-text"><strong>Real tools, in the loop</strong><span>Web search, file reads, and app calls happen mid-task — the agent sees real results before continuing.</span></div></li>
+        <li><div class="step-text"><strong>It stops and asks if it's genuinely stuck</strong><span>No quiet guessing. If it can't proceed safely, it tells you instead of inventing an answer.</span></div></li>
+      </ol>
+    </section>
+
+    <!-- 03 WHAT MAKES IT SMART -->
+    <section class="hiw-section" id="smart">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Built to think</div>
+      <h2>Not a chatbot. <span class="it">An actual agent.</span></h2>
+      <p class="hiw-oneliner">Four systems run on every task — the reason Krew feels different from a chat window</p>
+
+      <p>These aren't clever prompts you have to write. They're built into how every agent works, quietly, on every task you give it.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="intel-grid">
+          <div class="ifeature"><span class="iftag">Memory</span><h5>Remembers you across sessions</h5><p>Tell Zara your brand voice once — she uses it every time. Tell Kunal which metrics matter — he tracks them without being reminded. Memory is per-agent and stored on your machine.</p></div>
+          <div class="ifeature"><span class="iftag">Planning</span><h5>Plans before it acts</h5><p>For any multi-step task, the agent writes a numbered plan before touching a single tool. You see the plan first and can redirect before any action is taken.</p></div>
+          <div class="ifeature"><span class="iftag">Self-review</span><h5>Checks its own answer</h5><p>After a first draft, the agent runs a second pass — is this complete, accurate, worth sending? What arrives in your chat is the second draft, not the first.</p></div>
+          <div class="ifeature"><span class="iftag">Delegation</span><h5>Boss assigns the right agent</h5><p>Give Arjun.Boss a big task and he splits it up, hands each piece to the right specialist, and returns one unified answer. You talk to one agent; your whole office works.</p></div>
         </div>
-        <div class="icard">
-          <div class="ilogo" style="font-size: 10px;">G+</div>
-          <div class="iname">Google Suite</div>
-          <div class="idesc">Calendar, Sheets, Drive, Slides — read and write with OAuth. Your credentials, your data.</div>
-          <div class="istatus">Live · OAuth</div>
+        <div class="figcap">Memory, planning, self-review and delegation — working together on every request.</div>
+      </div>
+    </section>
+
+    <!-- 04 YOUR TOOLS -->
+    <section class="hiw-section" id="tools">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Integrations</div>
+      <h2>Your agents know <span class="it">your tools.</span></h2>
+      <p class="hiw-oneliner">Gmail · Google Suite · Notion · Slack · GitHub · Linear · Airtable · Brave + live browser</p>
+
+      <p>Connect the apps you already use, and your agents can read from them and act in them in real time — draft a reply in your inbox, check a Notion page, read a GitHub issue, post a result to Slack. Not a one-time "import": a live connection, with your approval before anything is sent.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="int-grid">
+          <div class="icard"><div class="ilogo">G</div><div class="iname">Gmail</div><div class="idesc">Read inbox, draft replies, search threads. IMAP — no Google review needed.</div><div class="istatus">Live · IMAP</div></div>
+          <div class="icard"><div class="ilogo" style="font-size: 10px;">G+</div><div class="iname">Google Suite</div><div class="idesc">Calendar, Sheets, Drive, Slides — read and write with OAuth. Your credentials, your data.</div><div class="istatus">Live · OAuth</div></div>
+          <div class="icard"><div class="ilogo">N</div><div class="iname">Notion</div><div class="idesc">Read pages, update databases, create docs. Integration token — one-time setup.</div><div class="istatus">Live · API token</div></div>
+          <div class="icard"><div class="ilogo">#</div><div class="iname">Slack</div><div class="idesc">Read channels, post messages, DM teammates. Bot token with scoped permissions.</div><div class="istatus">Live · Bot token</div></div>
+          <div class="icard"><div class="ilogo">⌥</div><div class="iname">GitHub</div><div class="idesc">Read issues, review PRs, list repos, check CI status. Personal access token.</div><div class="istatus">Live · PAT</div></div>
+          <div class="icard"><div class="ilogo">L</div><div class="iname">Linear</div><div class="idesc">Read and create issues, update statuses, track sprint progress.</div><div class="istatus">Live · API key</div></div>
+          <div class="icard"><div class="ilogo">A</div><div class="iname">Airtable</div><div class="idesc">Query bases, create records, update fields. Works like a database your agents can query.</div><div class="istatus">Live · PAT</div></div>
+          <div class="icard"><div class="ilogo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><line x1="17" y1="17" x2="22" y2="22"/></svg></div><div class="iname">Brave Search</div><div class="idesc">Real-time web search on every agent. No hallucinations — they look it up first.</div><div class="istatus">Live · API key</div></div>
         </div>
-        <div class="icard">
-          <div class="ilogo">N</div>
-          <div class="iname">Notion</div>
-          <div class="idesc">Read pages, update databases, create docs. Integration token — one-time setup.</div>
-          <div class="istatus">Live · API token</div>
-        </div>
-        <div class="icard">
-          <div class="ilogo">#</div>
-          <div class="iname">Slack</div>
-          <div class="idesc">Read channels, post messages, DM teammates. Bot token with scoped permissions.</div>
-          <div class="istatus">Live · Bot token</div>
-        </div>
-        <div class="icard">
-          <div class="ilogo">⌥</div>
-          <div class="iname">GitHub</div>
-          <div class="idesc">Read issues, review PRs, list repos, check CI status. Personal access token.</div>
-          <div class="istatus">Live · PAT</div>
-        </div>
-        <div class="icard">
-          <div class="ilogo">L</div>
-          <div class="iname">Linear</div>
-          <div class="idesc">Read and create issues, update statuses, track sprint progress.</div>
-          <div class="istatus">Live · API key</div>
-        </div>
-        <div class="icard">
-          <div class="ilogo">A</div>
-          <div class="iname">Airtable</div>
-          <div class="idesc">Query bases, create records, update fields. Works like a database your agents can query.</div>
-          <div class="istatus">Live · PAT</div>
-        </div>
-        <div class="icard">
-          <div class="ilogo">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="7.5"/>
-              <line x1="17" y1="17" x2="22" y2="22"/>
-            </svg>
-          </div>
-          <div class="iname">Brave Search</div>
-          <div class="idesc">Real-time web search on every agent. No hallucinations — they look it up first.</div>
-          <div class="istatus">Live · API key</div>
-        </div>
-        <div class="icard" style="border-color:var(--accent);background:linear-gradient(135deg,#7C5CFF08,transparent);">
-          <div class="ilogo" style="color:var(--accent);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 20h8"/><path d="M12 18v2"/>
-              <circle cx="12" cy="10" r="2.5"/>
-            </svg>
-          </div>
-          <div class="iname">Live Browser</div>
-          <div class="idesc">Navigate websites, click buttons, fill forms, screenshot pages — the AI uses a real Chrome window.</div>
-          <div class="istatus" style="color:var(--accent);">Live · Playwright</div>
-        </div>
+        <div class="figcap">Connect Apps inside Krew — each one shows exactly what access it has.</div>
       </div>
 
-      <div class="modes-strip">
-        <div class="mmode">
-          <span class="mmode-tag">Free forever</span>
-          <div class="mmode-name">Local · Ollama</div>
-          <p>Run any open-source model completely offline. Zero API cost, zero data sent anywhere. Requires Ollama installed on your machine.</p>
-        </div>
-        <div class="mmode">
-          <span class="mmode-tag">Bring your key</span>
-          <div class="mmode-name">Own Key · 9 providers</div>
-          <p>Gemini, OpenAI, Claude, Groq, Mistral, Perplexity, Together.ai, DeepSeek, or any OpenAI-compatible endpoint. Your key, your bill, your control.</p>
-        </div>
-        <div class="mmode">
-          <span class="mmode-tag">Hosted</span>
-          <div class="mmode-name">adris.tech · managed tokens</div>
-          <p>One plan, one bill. Tokens shared across Krew, Coder, and Automation. No API keys to manage — just open the app and start.</p>
+      <p><strong>How the AI itself is powered is up to you</strong> — run it free and offline, bring your own provider key, or use one simple adris.tech plan:</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="modes-strip">
+          <div class="mmode"><span class="mmode-tag">Free forever</span><div class="mmode-name">Local · Ollama</div><p>Run any open-source model completely offline. Zero API cost, zero data sent anywhere. Needs Ollama installed.</p></div>
+          <div class="mmode"><span class="mmode-tag">Bring your key</span><div class="mmode-name">Own Key · 9 providers</div><p>Gemini, OpenAI, Claude, Groq, Mistral, Perplexity, Together.ai, DeepSeek, or any OpenAI-compatible endpoint.</p></div>
+          <div class="mmode"><span class="mmode-tag">Hosted</span><div class="mmode-name">adris.tech · managed</div><p>One plan, one bill. Tokens shared across Krew, Coder, and Studio. No API keys to manage — just open the app.</p></div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- SECTION 5 — LIVE BROWSER -->
-<section class="fsec" id="browser" data-screen-label="05 Live Browser">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">05</span><span class="label">Live browser</span></div>
-        <h2>Not web search.<br/><span class="it">The actual web.</span></h2>
-        <p>Your agents open a real Chrome window, navigate to any URL, click buttons, fill in forms, extract page content, and take screenshots — all with full JavaScript support. Not a search query. Not a scraper. The actual browser, running on your machine.</p>
-        <ul>
-          <li class="acc">Navigate to any URL — full JavaScript, SPAs, login walls</li>
-          <li>Click buttons, links, and interactive elements by reference</li>
-          <li>Fill forms — username, password, search fields, dropdowns</li>
-          <li>Extract page content as clean Markdown — preserves links, tables, lists</li>
-          <li>Screenshot any page — full resolution, saved locally</li>
-          <li>Chrome stays open between commands — no re-launch lag</li>
-        </ul>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;">
-          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Navigate</span>
-          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Click</span>
-          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Fill form</span>
-          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Snapshot</span>
-          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Screenshot</span>
-          <span style="display:inline-block;font-size:11px;font-family:var(--font-mono);padding:5px 11px;border:1px solid var(--rule);border-radius:6px;color:var(--muted);">Extract text</span>
-        </div>
-      </div>
+    <!-- 05 THE REAL WEB -->
+    <section class="hiw-section" id="browser">
+      <div class="hiw-section-tag"><span class="hiw-section-num">05</span> Live browser</div>
+      <h2>Not web search. <span class="it">The actual web.</span></h2>
+      <p class="hiw-oneliner">Opens a real Chrome window, clicks, fills forms, reads pages, takes screenshots</p>
 
-      <div>
+      <p>Sometimes an answer isn't on a search results page — it's behind a login, inside a dashboard, or on a site that only works with full JavaScript. So Krew opens a <strong>real Chrome window</strong> on your machine and uses it like a person would: navigate to a page, click a button, fill a form, copy the content, take a screenshot. Not a scraper — the actual browser.</p>
+
+      <div class="hiw-figure">
         <div class="frame frame-dark">
-          <div class="frame-top">
-            <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
-            <span class="ftitle">Krew · browser agent trace</span>
-          </div>
+          <div class="frame-top"><span class="ldot"></span><span class="ldot"></span><span class="ldot"></span><span class="ftitle">Krew · browser agent trace</span></div>
           <div class="frame-body" style="padding:0;font-family:var(--font-mono);font-size:12px;line-height:1.7;">
-            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
-              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_navigate</div>
-              <div style="color:#5a5a5a;">url → "https://trends.google.com/trends/explore?q=AI+tools+India"</div>
-              <div style="margin-top:6px;color:#7C5CFF;font-size:11px;">↳ Chrome opened · port 9223 · persistent session</div>
-            </div>
-            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
-              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_snapshot</div>
-              <div style="color:#5a5a5a;">→ 14 interactive elements indexed · @e1…@e14</div>
-              <div style="color:#5a5a5a;margin-top:2px;">→ page content extracted as Markdown · 3,412 chars</div>
-            </div>
-            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
-              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_click</div>
-              <div style="color:#5a5a5a;">selector → @e7 · "Last 30 days" dropdown</div>
-              <div style="margin-top:6px;color:#22c55e;font-size:11px;">↳ clicked · page settled · networkidle</div>
-            </div>
-            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);">
-              <div style="color:#9d8fff;margin-bottom:4px;">▶ browser_screenshot</div>
-              <div style="color:#5a5a5a;">→ saved to desktop/research/trends-india.png</div>
-              <div style="margin-top:6px;color:#22c55e;font-size:11px;">↳ 1920×1080 · PNG · 286 KB</div>
-            </div>
-            <div style="padding:16px 20px;">
-              <div style="color:#a0ffa0;font-size:11px;">✓ Research complete · agent returning results to Arjun.Boss</div>
-            </div>
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);"><div style="color:#9d8fff;margin-bottom:4px;">▶ browser_navigate</div><div style="color:#7a7a7a;">url → "trends.google.com/trends/explore?q=AI+tools+India"</div><div style="margin-top:6px;color:#9d8fff;font-size:11px;">↳ Chrome opened · persistent session</div></div>
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);"><div style="color:#9d8fff;margin-bottom:4px;">▶ browser_snapshot</div><div style="color:#7a7a7a;">→ 14 interactive elements indexed · @e1…@e14</div><div style="color:#7a7a7a;margin-top:2px;">→ page content read as clean text · 3,412 chars</div></div>
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);"><div style="color:#9d8fff;margin-bottom:4px;">▶ browser_click</div><div style="color:#7a7a7a;">selector → @e7 · "Last 30 days" dropdown</div><div style="margin-top:6px;color:#22c55e;font-size:11px;">↳ clicked · page settled</div></div>
+            <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);"><div style="color:#9d8fff;margin-bottom:4px;">▶ browser_screenshot</div><div style="color:#7a7a7a;">→ saved to desktop/research/trends-india.png</div><div style="margin-top:6px;color:#22c55e;font-size:11px;">↳ 1920×1080 · PNG · 286 KB</div></div>
+            <div style="padding:16px 20px;"><div style="color:#a0ffa0;font-size:11px;">✓ Research complete · returning results to Arjun.Boss</div></div>
           </div>
         </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
-          <div style="border:1px solid var(--rule);border-radius:10px;padding:14px 16px;">
-            <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;">What it can do</div>
-            <div style="font-size:12px;color:var(--muted);line-height:1.7;">
-              Research competitors<br/>
-              Fill lead gen forms<br/>
-              Monitor pricing pages<br/>
-              Extract structured data<br/>
-              Log into SaaS dashboards
-            </div>
-          </div>
-          <div style="border:1px solid var(--rule);border-radius:10px;padding:14px 16px;">
-            <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;">Powered by</div>
-            <div style="font-size:12px;color:var(--muted);line-height:1.7;">
-              Playwright (Microsoft)<br/>
-              Chrome DevTools Protocol<br/>
-              Persistent CDP session<br/>
-              Multi-metric content scoring<br/>
-              Local · no cloud browser
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 6 — ACTION APPROVALS -->
-<section class="fsec reverse" id="approvals" data-screen-label="06 Approvals">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">06</span><span class="label">Action approvals</span></div>
-        <h2>They draft.<br/><span class="it">You decide.</span></h2>
-        <p>Every external action — send an email, post to Slack, create a GitHub issue, update a Notion page — shows as an approval card first. You see exactly what they want to do, you click approve. Nothing irreversible happens without your sign-off. Ever.</p>
-        <ul>
-          <li class="acc">Every external action requires your approval by default</li>
-          <li>One-tap approve from inside the chat</li>
-          <li>Edit the draft before approving — not all-or-nothing</li>
-          <li>Full audit trail of every approved and rejected action</li>
-        </ul>
+        <div class="figcap">A real browsing session, step by step — and the Chrome window closes itself when the job is done.</div>
       </div>
 
-      <div>
+      <ol class="steps">
+        <li><div class="step-text"><strong>Reaches what search can't</strong><span>Logged-in dashboards, SaaS tools, JavaScript-heavy pages — your own accounts, read on your behalf.</span></div></li>
+        <li><div class="step-text"><strong>Does, not just reads</strong><span>Fill a lead form, monitor a pricing page, pull structured data, research a competitor.</span></div></li>
+        <li><div class="step-text"><strong>Runs on your machine</strong><span>It's your Chrome, your logins, your network. No cloud browser, nothing handed to a third party.</span></div></li>
+      </ol>
+    </section>
+
+    <!-- 06 APPROVALS -->
+    <section class="hiw-section" id="approvals">
+      <div class="hiw-section-tag"><span class="hiw-section-num">06</span> You're in control</div>
+      <h2>They draft. <span class="it">You decide.</span></h2>
+      <p class="hiw-oneliner">Every outside action — send, post, create — waits for your one-tap approval</p>
+
+      <p>An agent that can send emails and post to Slack is powerful — and that power needs a seatbelt. So every action that touches the outside world shows up as an <strong>approval card</strong> first. You see exactly what it wants to do, in full, and nothing irreversible happens until you tap approve. You can also edit the draft before sending — it's never all-or-nothing.</p>
+
+      <div class="hiw-figure">
         <div class="frame frame-dark">
-          <div class="frame-top">
-            <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
-            <span class="ftitle">Ayan.Sales · action approval</span>
-          </div>
+          <div class="frame-top"><span class="ldot"></span><span class="ldot"></span><span class="ldot"></span><span class="ftitle">Ayan.Sales · action approval</span></div>
           <div class="frame-body" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
             <div class="kapproval-lg">
               <div class="kah">↳ Gmail · send cold email · approval required</div>
-              <div class="kab">Send to <strong style="color:#F2EFE9;">rahul@startupname.in</strong> with subject <em style="font-family:var(--font-serif);font-style:italic;color:rgba(242,239,233,0.7);">"Quick question about your onboarding flow"</em><br/><br/>Body: researched Rahul's recent LinkedIn post about retention, references it naturally in the first line. 4 sentences. No pitch in the first email.</div>
-              <div class="kabtns">
-                <button class="primary">Send now</button>
-                <button>Edit first</button>
-                <button>Reject</button>
-              </div>
+              <div class="kab">Send to <strong style="color:#F2EFE9;">rahul@startupname.in</strong> with subject <em style="font-family:var(--font-serif);font-style:italic;color:rgba(242,239,233,0.7);">"Quick question about your onboarding flow"</em><br/><br/>Body references Rahul's recent LinkedIn post about retention in the first line. 4 sentences. No pitch in the first email.</div>
+              <div class="kabtns"><button class="primary">Send now</button><button>Edit first</button><button>Reject</button></div>
             </div>
-
             <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div class="audit-row">
-                <span class="adot"></span>
-                <span>Sent to rahul@startupname.in via Gmail</span>
-                <span class="ameta">11:02 · you approved</span>
-              </div>
-              <div class="audit-row">
-                <span class="adot"></span>
-                <span>Logged follow-up task in Linear · 3 days</span>
-                <span class="ameta">11:02 · auto</span>
-              </div>
-              <div class="audit-row">
-                <span class="adot warn"></span>
-                <span>Schedule follow-up email · awaiting approval</span>
-                <span class="ameta">11:02 · pending</span>
-              </div>
+              <div class="audit-row"><span class="adot"></span><span>Sent to rahul@startupname.in via Gmail</span><span class="ameta">11:02 · you approved</span></div>
+              <div class="audit-row"><span class="adot"></span><span>Logged follow-up task in Linear · 3 days</span><span class="ameta">11:02 · auto</span></div>
+              <div class="audit-row"><span class="adot warn"></span><span>Schedule follow-up email · awaiting approval</span><span class="ameta">11:02 · pending</span></div>
             </div>
           </div>
         </div>
+        <div class="figcap">See the full draft, approve / edit / reject — and every action is logged in an audit trail.</div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- SECTION 5 — LOCAL FIRST (privacy) -->
-<section class="fsec" id="privacy" data-screen-label="07 Local first">
-  <div class="wrap">
-    <div class="fsec-grid" style="grid-template-columns: 1fr;">
-      <div class="fsec-text" style="margin-bottom: 16px;">
-        <div class="seyebrow"><span class="num">07</span><span class="label">Privacy · local-first</span></div>
-        <h2>Your Krew.<br/><span class="it">Your device. Your data.</span></h2>
-        <p>Krew runs entirely on your laptop. Conversations are stored in a local SQLite database. Your credentials are encrypted in your OS keychain. We never see your chats, your connected tools, or what your agents do. Zero cloud exposure — by architecture, not by policy.</p>
-      </div>
+    <!-- 07 PRIVACY -->
+    <section class="hiw-section" id="privacy">
+      <div class="hiw-section-tag"><span class="hiw-section-num">07</span> Privacy · local-first</div>
+      <h2>Your Krew. <span class="it">Your device. Your data.</span></h2>
+      <p class="hiw-oneliner">Conversations on your disk · credentials in your OS keychain · zero cloud by design</p>
 
-      <div class="privacy-grid">
-        <div class="pcard">
-          <div class="picon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="1.8"/></svg>
-          </div>
-          <h5>Conversations stay local</h5>
-          <p>Every chat, every tool call, every agent response — stored in a SQLite file on your machine. Nothing leaves unless you explicitly export. No cloud sync, no background upload. Delete the file and the data is permanently gone — no recovery from any server because it was never there.</p>
-        </div>
-        <div class="pcard">
-          <div class="picon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <h5>Credentials in your keychain</h5>
-          <p>Gmail tokens, Notion secrets, GitHub PATs — encrypted in your OS keychain (Windows Credential Manager) and never written to disk in plain text. Krew reads them at runtime only. adris.tech's servers never see them, not even during setup.</p>
-        </div>
-        <div class="pcard">
-          <div class="picon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8"/></svg>
-          </div>
-          <h5>Bring your own AI key</h5>
-          <p>Connect your Gemini, OpenAI, or Groq key and requests go directly from your laptop to the AI provider — adris.tech never sees the prompt or the response. Your conversations are between you and the model. We have no way to read them even if we wanted to.</p>
+      <p>This is the part that's genuinely different from any online AI tool. Krew runs on your laptop. Your chats live in a database file on your machine, your passwords are encrypted in the operating system's keychain, and we never see any of it. Not because we promise not to look — because there's nothing on our side to look at.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="privacy-grid">
+          <div class="pcard"><div class="picon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="1.8"/></svg></div><h5>Conversations stay local</h5><p>Every chat and tool call is stored in a SQLite file on your machine. Nothing leaves unless you export it. Delete the file and it's gone — there's no server copy, because there never was one.</p></div>
+          <div class="pcard"><div class="picon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><h5>Credentials in your keychain</h5><p>Gmail tokens, Notion secrets, GitHub keys — encrypted in your OS keychain, never written to disk in plain text. adris.tech's servers never see them, not even during setup.</p></div>
+          <div class="pcard"><div class="picon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8"/></svg></div><h5>Bring your own AI key</h5><p>Connect your own Gemini, OpenAI or Groq key and requests go straight from your laptop to the provider — we never see the prompt or the response.</p></div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- CALLOUT CTA -->
-<section class="callout" data-screen-label="07 CTA">
-  <div class="wrap">
-    <h3>43 specialists.<br/><span class="it">One download.</span></h3>
-    <p>Arjun, Zara, Neo, Kunal, Ava — your whole AI office, running locally on Windows. Free to start. No credit card. No waitlist.</p>
-    <div class="btn-row">
-      <a href="/download" class="btn">
-        Download — free — Free
-        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-      </a>
-      <a href="/#modules" class="btn alt">See all modules</a>
-    </div>
-  </div>
-</section>
+    <!-- WHO IS THIS FOR + CTA -->
+    <section class="hiw-section" id="who">
+      <div class="hiw-section-tag"><span class="hiw-section-num">→</span> Who is this for</div>
+      <h2>If a few hours of your week is repeatable work, <span class="it">Krew is for you.</span></h2>
 
-<!-- FOOTER -->
-<footer data-screen-label="08 Footer">
-  <div class="wrap">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a class="brand-mark" href="/">
-          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
-            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
-          </svg>
-          <span>adris.tech</span><span class="dot"></span>
-        </a>
-        <span class="tag">tech / blr</span>
+      <p>You don't need to be technical. The people who get the most from Krew are:</p>
+
+      <div class="ba">
+        <div class="ba-box after" style="grid-column:1/-1;">
+          <div class="ba-head">People who benefit most</div>
+          <ul>
+            <li><strong>Freelancers working alone</strong> — agents handle the repetitive writing and research, so you focus on the work only you can do.</li>
+            <li><strong>Small teams (2–15 people)</strong> — one shared AI office for content, sales outreach, support replies and reports.</li>
+            <li><strong>Founders &amp; small business owners</strong> — the equivalent of a small team's worth of help, for the price of one tool.</li>
+            <li><strong>Developers</strong> — Neo reviews PRs, Dex hunts bugs, Rex writes tests — right next to your code.</li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h3>Platform</h3>
-        <ul>
-          <li><a href="/modules/krew">Krew</a></li>
-          <li><a href="/modules/automation">Studio</a></li>
-          <li><a href="/modules/coder">Coder</a></li>
-          <li><a href="/modules/models">Models</a></li>
-          <li><a href="/modules/vault">Vault</a></li>
-          <li><a href="/modules/guard">Guard</a></li>
-          <li><a href="/modules/mesh">Mesh</a></li>
-        </ul>
+
+      <div class="hiw-cta">
+        <h2>43 specialists. <span class="it">One download.</span></h2>
+        <p>Arjun, Zara, Neo, Kunal, Ava — your whole AI office, running locally on Windows. Free to start, no credit card, no waitlist.</p>
+        <div class="hiw-cta-btns">
+          <a href="/download" class="cta-btn-main">Download — free <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+          <a href="/how-it-works" class="cta-btn-ghost">See all modules explained</a>
+          <a href="/pricing" class="cta-btn-ghost">Pricing</a>
+        </div>
       </div>
-      <div>
-        <h3>Company</h3>
-        <ul>
-          <li><a href="/#platform">About</a></li>
-          <li><a href="/#audience">Who it's for</a></li>
-          <li><a href="/pricing">Pricing</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Get started</h3>
-        <ul>
-          <li><a href="/download">Download — free</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Legal</h3>
-        <ul>
-          <li><a href="/privacy">Privacy Policy</a></li>
-          <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
-        </ul>
-      </div>
+    </section>
+
+  </main>
+</div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+<footer style="border-top:1px solid var(--rule);padding:32px 0;">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="18" height="17" viewBox="0 0 26 24" fill="none"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg>
+      <span style="font-size:13px;font-weight:500;color:var(--ink);">adris.tech</span>
     </div>
-    <div class="footer-bottom">
-      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
-      <span class="meta">Built in Bengaluru · Made for India</span>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <a href="/how-it-works" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">How it works</a>
+      <a href="/privacy" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Privacy</a>
+      <a href="/terms"   style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Terms</a>
+      <a href="/download" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Download</a>
+      <a href="/pricing"  style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Pricing</a>
     </div>
   </div>
 </footer>
 
-<script src="../shared.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const COLLAPSED_COUNT = 8;
-  const filters  = document.querySelectorAll('#agent-filters .role-pill');
-  const cards    = Array.from(document.querySelectorAll('#agent-grid .acard'));
-  const expandEl = document.getElementById('agentExpand');
-  const expandBtn = document.getElementById('agentExpandBtn');
-  let expanded    = false;
-  let activeFilter = 'all';
+// Theme toggle
+(function(){
+  var s=localStorage.getItem('nv-theme')||'paper';
+  if(s==='ink') document.documentElement.setAttribute('data-theme','ink');
+  var b=document.getElementById('themeToggle');
+  if(b) b.setAttribute('aria-pressed',s==='ink'?'true':'false');
+})();
+document.getElementById('themeToggle').addEventListener('click',function(){
+  var c=document.documentElement.getAttribute('data-theme')==='ink'?'paper':'ink';
+  document.documentElement.setAttribute('data-theme',c==='paper'?'':'ink');
+  localStorage.setItem('nv-theme',c);
+  this.setAttribute('aria-pressed',c==='ink'?'true':'false');
+});
 
-  function applyView() {
-    let shown = 0;
-    cards.forEach((c) => {
-      const match = (activeFilter === 'all' || c.dataset.cat === activeFilter);
-      c.classList.toggle('hide', !match);
-      if (match) {
-        if (!expanded && shown >= COLLAPSED_COUNT) {
-          c.classList.add('collapsed');
-        } else {
-          c.classList.remove('collapsed');
-        }
-        shown++;
-      } else {
-        c.classList.remove('collapsed');
+// Mobile nav
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
+document.getElementById('navHam').addEventListener('click',function(){
+  var open=this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open',open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open',open);
+  this.setAttribute('aria-expanded',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+
+// Sidebar scroll-spy
+(function(){
+  var sections=document.querySelectorAll('.hiw-section[id]');
+  var links=document.querySelectorAll('.hiw-nav a');
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){a.classList.remove('active');});
+        var m=document.querySelector('.hiw-nav a[href="#'+e.target.id+'"]');
+        if(m) m.classList.add('active');
       }
     });
-    if (shown <= COLLAPSED_COUNT) {
-      expandEl.style.display = 'none';
-    } else {
+  },{rootMargin:'-20% 0px -70% 0px'});
+  sections.forEach(function(s){obs.observe(s);});
+})();
+
+// Agent grid: filter pills + show all / fewer
+document.addEventListener('DOMContentLoaded', function () {
+  var COLLAPSED_COUNT = 8;
+  var filters  = document.querySelectorAll('#agent-filters .role-pill');
+  var cards    = Array.prototype.slice.call(document.querySelectorAll('#agent-grid .acard'));
+  var expandEl = document.getElementById('agentExpand');
+  var expandBtn = document.getElementById('agentExpandBtn');
+  var expanded = false;
+  var activeFilter = 'all';
+
+  function applyView() {
+    var shown = 0;
+    cards.forEach(function (c) {
+      var match = (activeFilter === 'all' || c.dataset.cat === activeFilter);
+      c.classList.toggle('hide', !match);
+      if (match) {
+        if (!expanded && shown >= COLLAPSED_COUNT) { c.classList.add('collapsed'); }
+        else { c.classList.remove('collapsed'); }
+        shown++;
+      } else { c.classList.remove('collapsed'); }
+    });
+    if (shown <= COLLAPSED_COUNT) { expandEl.style.display = 'none'; }
+    else {
       expandEl.style.display = '';
       expandBtn.dataset.state = expanded ? 'expanded' : 'collapsed';
-      expandBtn.querySelector('.lbl-more').textContent = `Show all ${shown} agents`;
+      expandBtn.querySelector('.lbl-more').textContent = (activeFilter === 'all') ? 'Show all agents' : ('Show all ' + shown + ' agents');
       expandBtn.querySelector('.lbl-more').style.display = expanded ? 'none' : '';
       expandBtn.querySelector('.lbl-less').style.display = expanded ? '' : 'none';
     }
   }
-
-  filters.forEach(f => {
-    f.addEventListener('click', () => {
-      filters.forEach(x => x.classList.remove('on'));
+  filters.forEach(function (f) {
+    f.addEventListener('click', function () {
+      filters.forEach(function (x) { x.classList.remove('on'); });
       f.classList.add('on');
       activeFilter = f.dataset.filter;
       expanded = false;
       applyView();
     });
   });
-
-  if (expandBtn) {
-    expandBtn.addEventListener('click', () => {
-      expanded = !expanded;
-      applyView();
-    });
-  }
-
+  if (expandBtn) { expandBtn.addEventListener('click', function () { expanded = !expanded; applyView(); }); }
   applyView();
 });
 </script>
