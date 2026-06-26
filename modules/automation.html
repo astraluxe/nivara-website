@@ -109,38 +109,6 @@
   </div>
 </div>
 
-<!-- ── SHOWCASE ──────────────────────────────────────────────────── -->
-<div class="krew-showcase">
-  <div class="mstage-head"><span>// A workflow on the canvas</span><span class="right">trigger → agents → your tools</span></div>
-  <div class="studio-canvas">
-    <div class="grid"></div>
-    <svg viewBox="0 0 1200 480" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-      <path d="M180 100 L420 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M180 100 Q300 100 300 240 L420 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M180 100 Q300 100 300 380 L420 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M580 100 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M580 240 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M580 380 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M940 240 L1080 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M940 240 L1080 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <path d="M940 240 L1080 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-      <g><rect x="60" y="68" width="120" height="64" fill="#0E0E0C"/><text x="120" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">TRIGGER</text><text x="120" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9" letter-spacing="0.5">webhook</text></g>
-      <g><rect x="420" y="68" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="100" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CONTENT</text><text x="500" y="118" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">draft outline</text></g>
-      <g><rect x="420" y="208" width="160" height="64" fill="#7C5CFF" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · RESEARCH</text><text x="500" y="258" text-anchor="middle" fill="rgba(242,239,233,0.7)" font-family="JetBrains Mono" font-size="9">gather facts</text></g>
-      <g><rect x="420" y="348" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="380" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CHECK</text><text x="500" y="398" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">brand voice</text></g>
-      <g><rect x="780" y="208" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2" stroke-dasharray="4 3"/><text x="860" y="240" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">PAUSE · APPROVE</text><text x="860" y="258" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">waiting · you</text></g>
-      <g><rect x="1080" y="68" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ NOTION</text><text x="1130" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">save</text></g>
-      <g><rect x="1080" y="208" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ EMAIL</text><text x="1130" y="258" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">send</text></g>
-      <g><rect x="1080" y="348" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="380" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ SLACK</text><text x="1130" y="398" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">notify</text></g>
-      <circle r="5" fill="#7C5CFF"><animateMotion dur="4s" repeatCount="indefinite" path="M180 100 L420 100 L500 240 L780 240 L940 240 L1080 100"/></circle>
-      <circle r="5" fill="#7C5CFF" opacity="0.7"><animateMotion dur="4s" begin="-1.3s" repeatCount="indefinite" path="M180 100 Q300 100 300 240 L420 240 L580 240 L780 240 L940 240 L1080 240"/></circle>
-      <circle r="5" fill="#7C5CFF" opacity="0.5"><animateMotion dur="4s" begin="-2.6s" repeatCount="indefinite" path="M180 100 Q300 100 300 380 L420 380 L580 380 L780 240 L940 240 L1080 380"/></circle>
-    </svg>
-  </div>
-  <div class="hiw-figure" style="margin-top:0;"><div class="figcap">One trigger fires three agents, pauses for your approval, then drops the result into Notion, email and Slack.</div></div>
-</div>
-
-<!-- ── BODY ──────────────────────────────────────────────────────── -->
 <div style="border-top:1px solid var(--rule);">
 <div class="hiw-layout">
   <aside class="hiw-sidebar">
@@ -167,6 +135,35 @@
       <p>Studio is where you build <strong>automations</strong> — sequences of steps that happen automatically, without you clicking anything. You've probably heard of Zapier or Make. Studio does the same job, except your AI agents from Krew are the workers inside each step, and everything runs on your laptop at no extra cost per run.</p>
 
       <p>A workflow is three simple parts: something that <strong>starts</strong> it, an agent that does the <strong>thinking</strong>, and an <strong>action</strong> that delivers the result. You wire them together once on a canvas, and it keeps running every time its trigger fires.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="studio-canvas">
+    <div class="grid"></div>
+    <svg viewBox="0 0 1200 480" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <path d="M180 100 L420 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M180 100 Q300 100 300 240 L420 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M180 100 Q300 100 300 380 L420 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M580 100 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M580 240 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M580 380 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M940 240 L1080 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M940 240 L1080 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M940 240 L1080 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <g><rect x="60" y="68" width="120" height="64" fill="#0E0E0C"/><text x="120" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">TRIGGER</text><text x="120" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9" letter-spacing="0.5">webhook</text></g>
+      <g><rect x="420" y="68" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="100" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CONTENT</text><text x="500" y="118" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">draft outline</text></g>
+      <g><rect x="420" y="208" width="160" height="64" fill="#7C5CFF" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · RESEARCH</text><text x="500" y="258" text-anchor="middle" fill="rgba(242,239,233,0.7)" font-family="JetBrains Mono" font-size="9">gather facts</text></g>
+      <g><rect x="420" y="348" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="380" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CHECK</text><text x="500" y="398" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">brand voice</text></g>
+      <g><rect x="780" y="208" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2" stroke-dasharray="4 3"/><text x="860" y="240" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">PAUSE · APPROVE</text><text x="860" y="258" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">waiting · you</text></g>
+      <g><rect x="1080" y="68" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ NOTION</text><text x="1130" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">save</text></g>
+      <g><rect x="1080" y="208" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ EMAIL</text><text x="1130" y="258" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">send</text></g>
+      <g><rect x="1080" y="348" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="380" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ SLACK</text><text x="1130" y="398" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">notify</text></g>
+      <circle r="5" fill="#7C5CFF"><animateMotion dur="4s" repeatCount="indefinite" path="M180 100 L420 100 L500 240 L780 240 L940 240 L1080 100"/></circle>
+      <circle r="5" fill="#7C5CFF" opacity="0.7"><animateMotion dur="4s" begin="-1.3s" repeatCount="indefinite" path="M180 100 Q300 100 300 240 L420 240 L580 240 L780 240 L940 240 L1080 240"/></circle>
+      <circle r="5" fill="#7C5CFF" opacity="0.5"><animateMotion dur="4s" begin="-2.6s" repeatCount="indefinite" path="M180 100 Q300 100 300 380 L420 380 L580 380 L780 240 L940 240 L1080 380"/></circle>
+    </svg>
+  </div>
+        <div class="figcap">One trigger fires three agents, pauses for your approval, then drops the result into Notion, email and Slack.</div>
+      </div>
 
       <div class="story">
         <div class="story-who">Real story — Freelance recruiter</div>

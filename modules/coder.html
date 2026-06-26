@@ -125,10 +125,35 @@
   </div>
 </div>
 
-<!-- SHOWCASE -->
-<div class="krew-showcase">
-  <div class="mstage-head"><span>// Chat on the left, code on the right</span><span class="right">model: deepseek-v3 · free</span></div>
-  <div class="coder-stage">
+<div style="border-top:1px solid var(--rule);">
+<div class="hiw-layout">
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav">
+      <li><a href="#what" class="active"><span class="hiw-nav-num">00</span>What is Coder?</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#models"><span class="hiw-nav-num">01</span>You pick the model</a></li>
+      <li><a href="#review"><span class="hiw-nav-num">02</span>Senior-level review</a></li>
+      <li><a href="#debug"><span class="hiw-nav-num">03</span>Debug without panic</a></li>
+      <li><a href="#files"><span class="hiw-nav-num">04</span>Edits your files</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#who"><span class="hiw-nav-num">→</span>Who is this for?</a></li>
+    </ul>
+  </aside>
+
+  <main class="hiw-main">
+
+    <section class="hiw-section" id="what">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> What is Coder</div>
+      <h2>AI that understands your <span class="it">whole codebase.</span></h2>
+      <p class="hiw-oneliner">For developers · reads your whole project first · writes straight into your files</p>
+
+      <p>If you write software, you've probably used GitHub Copilot or pasted code into ChatGPT. The catch with both: they don't know your project. Copilot sees one file at a time; ChatGPT doesn't know how your pieces connect. So you get generic answers you still have to adapt — or worse, answers that quietly break something else.</p>
+
+      <p>Coder reads your <strong>entire codebase</strong> when you open a project. Ask it something and it already knows how everything fits together, so the answer is specific to your actual code. And it doesn't just suggest — it <strong>writes the change directly into the file</strong>, with a history you can roll back.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="coder-stage">
     <div class="cleft">
       <div class="chead"><span>chat · session 01</span><span>2.4k tokens</span></div>
       <div class="cbubble you">Build me a REST API in FastAPI with JWT auth. Two routes — POST /signup and GET /me.</div>
@@ -158,36 +183,8 @@
       </div>
     </div>
   </div>
-  <div class="hiw-figure" style="margin-top:0;"><div class="figcap">You chat on the left; Coder writes and edits real code on the right — running here on a free model.</div></div>
-</div>
-
-<!-- BODY -->
-<div style="border-top:1px solid var(--rule);">
-<div class="hiw-layout">
-  <aside class="hiw-sidebar">
-    <div class="hiw-sidebar-label">On this page</div>
-    <ul class="hiw-nav">
-      <li><a href="#what" class="active"><span class="hiw-nav-num">00</span>What is Coder?</a></li>
-      <div class="hiw-nav-sep"></div>
-      <li><a href="#models"><span class="hiw-nav-num">01</span>You pick the model</a></li>
-      <li><a href="#review"><span class="hiw-nav-num">02</span>Senior-level review</a></li>
-      <li><a href="#debug"><span class="hiw-nav-num">03</span>Debug without panic</a></li>
-      <li><a href="#files"><span class="hiw-nav-num">04</span>Edits your files</a></li>
-      <div class="hiw-nav-sep"></div>
-      <li><a href="#who"><span class="hiw-nav-num">→</span>Who is this for?</a></li>
-    </ul>
-  </aside>
-
-  <main class="hiw-main">
-
-    <section class="hiw-section" id="what">
-      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> What is Coder</div>
-      <h2>AI that understands your <span class="it">whole codebase.</span></h2>
-      <p class="hiw-oneliner">For developers · reads your whole project first · writes straight into your files</p>
-
-      <p>If you write software, you've probably used GitHub Copilot or pasted code into ChatGPT. The catch with both: they don't know your project. Copilot sees one file at a time; ChatGPT doesn't know how your pieces connect. So you get generic answers you still have to adapt — or worse, answers that quietly break something else.</p>
-
-      <p>Coder reads your <strong>entire codebase</strong> when you open a project. Ask it something and it already knows how everything fits together, so the answer is specific to your actual code. And it doesn't just suggest — it <strong>writes the change directly into the file</strong>, with a history you can roll back.</p>
+        <div class="figcap">You chat on the left; Coder writes and edits real code on the right — running here on a free model.</div>
+      </div>
 
       <div class="story">
         <div class="story-who">Real story — Solo developer</div>
