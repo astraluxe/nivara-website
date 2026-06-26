@@ -14,8 +14,32 @@
 <style>
 html,body{background:#fff!important;color:#111!important;height:100%}
 .nav{background:#fff!important;border-bottom:1px solid #e5e5e5!important}
-.tw{min-height:calc(100dvh - 64px);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.tw{min-height:calc(100dvh - 64px);display:flex;align-items:center;justify-content:center;padding:48px 20px}
+/* Two-column B2B checkout layout: plan summary (left) + workspace form (right) */
+.team-layout{display:grid;grid-template-columns:330px 520px;gap:28px;align-items:start;max-width:878px;width:100%}
+@media(max-width:880px){.team-layout{grid-template-columns:1fr;max-width:520px;gap:20px}}
 .tbox{width:100%;max-width:520px}
+/* ── Plan summary panel ── */
+.team-summary{background:#111;border-radius:18px;padding:30px 26px;color:#fff;position:sticky;top:88px;border:1px solid rgba(255,255,255,.07)}
+@media(max-width:880px){.team-summary{position:static;top:auto}}
+.ts-brand{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px}
+.ts-name{font-size:26px;font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
+.ts-tag{font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:22px}
+.ts-price{display:flex;align-items:baseline;gap:4px;margin-bottom:2px}
+.ts-price b{font-size:34px;font-weight:700;letter-spacing:-.04em}
+.ts-price sub{font-size:13px;font-weight:400;color:rgba(255,255,255,.45)}
+.ts-price-usd{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:22px}
+.ts-divider{border:none;border-top:1px solid rgba(255,255,255,.1);margin:0 0 18px}
+.ts-incl-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:13px}
+.ts-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:22px}
+.ts-list li{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.82)}
+.ts-check{width:16px;height:16px;border-radius:50%;background:rgba(124,92,255,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ts-check svg{width:9px;height:9px}
+.ts-trust{display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,.4);padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}
+.ts-trust svg{flex-shrink:0;opacity:.6}
+.ts-ent{font-size:11.5px;color:rgba(255,255,255,.4);margin-top:14px;line-height:1.5}
+.ts-ent a{color:#a78bfa;text-decoration:none}
+.ts-ent a:hover{text-decoration:underline}
 .tbox-head{text-align:center;margin-bottom:32px}
 .tbox-icon{width:52px;height:52px;background:#7C5CFF;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
 .tbox-head h1{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
@@ -29,10 +53,13 @@ html,body{background:#fff!important;color:#111!important;height:100%}
 .seats-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .seats-label{font-size:12px;font-weight:600;color:#111;letter-spacing:.02em;text-transform:uppercase}
 .seats-count{font-size:12px;font-weight:600;color:#7C5CFF;font-family:var(--font-mono)}
-.seat-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-.seat-row input{flex:1}
-.seat-remove{width:32px;height:32px;border:1px solid #e5e5e5;border-radius:8px;background:#fafafa;color:#6b6b6b;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:border-color .15s,color .15s;font-family:var(--font-sans)}
-.seat-remove:hover{border-color:#ef4444;color:#ef4444}
+.seat-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;background:#fafafa;border:1px solid #e5e5e5;border-radius:10px;padding:5px 6px 5px 10px;transition:border-color .15s,background .15s}
+.seat-row:focus-within{border-color:#7C5CFF;background:#fff}
+.seat-icon{width:30px;height:30px;border-radius:50%;background:rgba(124,92,255,.12);color:#7C5CFF;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.seat-row input{flex:1;border:none;background:transparent;padding:8px 0;font-size:14px;color:#111;outline:none;min-width:0;font-family:var(--font-sans)}
+.seat-row input:focus{border:none;background:transparent}
+.seat-remove{width:30px;height:30px;border:none;border-radius:7px;background:transparent;color:#bbb;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:color .15s,background .15s;font-family:var(--font-sans);line-height:1}
+.seat-remove:hover{background:rgba(239,68,68,.1);color:#ef4444}
 .add-seat{display:flex;align-items:center;gap:6px;background:none;border:1px dashed #e5e5e5;border-radius:10px;padding:9px 14px;width:100%;cursor:pointer;font-size:13px;color:#6b6b6b;transition:border-color .15s,color .15s;font-family:var(--font-sans)}
 .add-seat:hover{border-color:#7C5CFF;color:#7C5CFF}
 .enterprise-note{font-size:12px;color:#6b6b6b;margin-top:8px;padding:10px 14px;border:1px solid #e5e5e5;border-radius:8px;background:#fafafa;display:none}
@@ -102,7 +129,34 @@ html,body{background:#fff!important;color:#111!important;height:100%}
 </nav>
 
 <div class="tw">
-  <div class="tbox">
+  <div class="team-layout">
+
+    <!-- ── LEFT: Team plan summary ── -->
+    <aside class="team-summary">
+      <div class="ts-brand">adris.tech</div>
+      <div class="ts-name">Team</div>
+      <div class="ts-tag">Everything your team needs to run a full AI office — together, securely, in one workspace.</div>
+      <div class="ts-price"><b>₹19,999</b><sub>/mo</sub></div>
+      <div class="ts-price-usd">$199 / month · billed monthly</div>
+      <hr class="ts-divider"/>
+      <div class="ts-incl-label">// what's included</div>
+      <ul class="ts-list">
+        <li><span class="ts-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1 5l2.5 2.5L9 2" stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Up to <b style="font-weight:600">10 seats</b> in one shared workspace</li>
+        <li><span class="ts-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1 5l2.5 2.5L9 2" stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>All <b style="font-weight:600">48 Krew AI agents</b> for every member</li>
+        <li><span class="ts-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1 5l2.5 2.5L9 2" stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Guard — security &amp; compliance scanning</li>
+        <li><span class="ts-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1 5l2.5 2.5L9 2" stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Unlimited cloud automations <span style="opacity:.5">(fair use)</span></li>
+        <li><span class="ts-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1 5l2.5 2.5L9 2" stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Admin controls &amp; member management</li>
+        <li><span class="ts-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1 5l2.5 2.5L9 2" stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Priority support</li>
+      </ul>
+      <div class="ts-trust">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        Secured by Razorpay · Cancel anytime
+      </div>
+      <div class="ts-ent">Need more than 10 seats? <a href="/enterprise">Talk to us about Enterprise →</a></div>
+    </aside>
+
+    <!-- ── RIGHT: Workspace creation flow ── -->
+    <div class="tbox">
 
     <!-- Loading -->
     <div id="loadingState" style="text-align:center;color:#6b6b6b;font-size:14px">Checking session…</div>
@@ -211,8 +265,10 @@ html,body{background:#fff!important;color:#111!important;height:100%}
       </div>
     </div>
 
-  </div>
-</div>
+    </div><!-- /.tbox -->
+
+  </div><!-- /.team-layout -->
+</div><!-- /.tw -->
 
 <!-- USD modal -->
 <div class="mb" id="usdModal" onclick="if(event.target===this)this.classList.remove('open')">
@@ -267,8 +323,9 @@ function addSeat() {
   row.className = 'seat-row';
   row.id = `seat-${seatCount}`;
   row.innerHTML = `
+    <div class="seat-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
     <input type="email" placeholder="member@company.com" />
-    <button class="seat-remove" onclick="removeSeat(${seatCount})" title="Remove">×</button>
+    <button class="seat-remove" onclick="removeSeat(${seatCount})" title="Remove member">×</button>
   `;
   document.getElementById('seatRows').appendChild(row);
   updateSeatUI();
