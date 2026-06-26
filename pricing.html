@@ -383,7 +383,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     </div>
 
   </div>
-  <p style="font-size:11px;color:var(--mu);margin-top:16px;font-family:var(--font-mono);padding:0 2px">* Unlimited runs on Business are subject to fair use. Task estimates are approximate &mdash; actual usage varies by complexity.</p>
+  <p style="font-size:11px;color:var(--mu);margin-top:16px;font-family:var(--font-mono);padding:0 2px">* Unlimited runs on Team are subject to fair use. Task estimates are approximate &mdash; actual usage varies by complexity.</p>
 </section>
 
 <!-- ── TEAM WIDE CARD ─────────────────────────────────────────── -->
@@ -783,7 +783,7 @@ async function onLoad() {
       .select('active_promo').eq('id', session.user.id).single();
     const ap = userData?.active_promo;
     if (ap?.code) {
-      const PLAN_LABELS = { solo: 'Solo', builder: 'Builder', business: 'Business' };
+      const PLAN_LABELS = { solo: 'Solo', builder: 'Builder', business: 'Team' };
 
       if (ap.offer_type === 'free_plan' && ap.plan) {
         // Check expiry — auto-revert if past
