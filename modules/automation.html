@@ -1,12 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/png" href="/icon.png" />
 <link rel="apple-touch-icon" href="/icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Studio — Automation · adris.tech</title>
-<meta name="description" content="Drag, drop, automate. The no-code workflow builder that runs your business while you sleep." />
+<title>Studio — Automations that run while you sleep · adris.tech</title>
+<meta name="description" content="Studio is a visual workflow builder: connect a trigger, drop in a Krew agent, connect an action — and it runs by itself on a schedule. Explained in plain language, with real examples." />
+<link rel="canonical" href="https://adris.tech/modules/automation" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,170 +16,52 @@
 <link rel="stylesheet" href="../styles.css" />
 <link rel="stylesheet" href="../module-pages.css" />
 <link rel="stylesheet" href="../backgrounds.css" />
+<link rel="stylesheet" href="../module-editorial.css" />
 
 <style>
-  /* Studio-specific visuals */
-  .studio-canvas {
-    aspect-ratio: 16/10;
-    background:
-      radial-gradient(circle at 50% 50%, rgba(124, 92, 255, 0.08) 0%, transparent 60%),
-      #ffffff;
-    position: relative;
-    overflow: hidden;
-  }
-  .studio-canvas .grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(14,14,12,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(14,14,12,0.06) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
+  /* Studio-specific mockups (preserved) */
+  .studio-canvas { aspect-ratio: 16/10; background: radial-gradient(circle at 50% 50%, rgba(124, 92, 255, 0.08) 0%, transparent 60%), #ffffff; position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--rule); }
+  .studio-canvas .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(14,14,12,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(14,14,12,0.06) 1px, transparent 1px); background-size: 24px 24px; }
   .studio-canvas svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-
-  .tpl-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-    margin-top: 32px;
-  }
-  .tpl {
-    background: var(--paper);
-    padding: 28px 24px;
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    transition: background 0.2s ease;
-    cursor: pointer;
-  }
+  .tpl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .tpl { background: var(--paper); padding: 24px 22px; min-height: 200px; display: flex; flex-direction: column; transition: background 0.2s ease; }
   .tpl:hover { background: var(--paper-2); }
-  .tpl .tpl-nodes {
-    display: flex; align-items: center; gap: 6px;
-    margin-bottom: 18px;
-  }
-  .tpl .tpl-nodes .nd {
-    width: 28px; height: 28px;
-    background: var(--ink);
-    color: var(--paper);
-    display: grid; place-items: center;
-    font-size: 11px;
-  }
+  .tpl .tpl-nodes { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; }
+  .tpl .tpl-nodes .nd { width: 28px; height: 28px; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-size: 11px; }
   .tpl .tpl-nodes .nd.acc { background: var(--accent); color: var(--accent-ink); }
   .tpl .tpl-nodes .ln { flex: 1; height: 1px; background: var(--rule-strong); max-width: 22px; }
-  .tpl h5 {
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    margin-bottom: 6px;
-  }
-  .tpl p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.5;
-    margin-bottom: auto;
-  }
-  .tpl .tpl-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 18px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  @media (max-width: 1100px) {
-    .tpl-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 680px) {
-    .tpl-grid { grid-template-columns: 1fr; }
-  }
-
-  /* HITL diagram */
-  .hitl {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0;
-    align-items: stretch;
-    border: 1px solid var(--rule-strong);
-    margin-top: 32px;
-  }
-  .hitl-step {
-    padding: 28px 24px;
-    border-right: 1px solid var(--rule-strong);
-    display: flex; flex-direction: column; gap: 12px;
-  }
+  .tpl h5 { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .tpl p { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-bottom: auto; }
+  .tpl .tpl-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  @media (max-width: 1100px) { .tpl-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 680px) { .tpl-grid { grid-template-columns: 1fr; } }
+  .hitl { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; align-items: stretch; border: 1px solid var(--rule-strong); }
+  .hitl-step { padding: 24px 22px; border-right: 1px solid var(--rule-strong); display: flex; flex-direction: column; gap: 10px; }
   .hitl-step:last-child { border-right: none; }
-  .hitl-step .hnum {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-  }
-  .hitl-step h6 { font-size: 17px; font-weight: 500; letter-spacing: -0.01em; }
+  .hitl-step .hnum { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--muted); }
+  .hitl-step h6 { font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
   .hitl-step p { font-size: 13px; color: var(--muted); line-height: 1.5; }
   .hitl-step.feat { background: var(--accent); color: var(--accent-ink); }
   .hitl-step.feat .hnum { color: color-mix(in oklab, var(--accent-ink) 60%, transparent); }
   .hitl-step.feat p { color: color-mix(in oklab, var(--accent-ink) 80%, transparent); }
-
-  @media (max-width: 1100px) {
-    .hitl { grid-template-columns: 1fr; }
-    .hitl-step { border-right: none; border-bottom: 1px solid var(--rule-strong); }
-    .hitl-step:last-child { border-bottom: none; }
-    .hitl-step::after { display: none; }
-  }
-
-  /* Run history log */
-  .runlog {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    border: 1px solid rgba(242,239,233,0.12);
-  }
-  .runlog .rhead {
-    display: grid;
-    grid-template-columns: 140px 1fr 100px 80px 60px;
-    gap: 16px;
-    padding: 12px 16px;
-    background: #161614;
-    color: rgba(242,239,233,0.5);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-bottom: 1px solid rgba(242,239,233,0.08);
-  }
-  .runlog .rrow {
-    display: grid;
-    grid-template-columns: 140px 1fr 100px 80px 60px;
-    gap: 16px;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(242,239,233,0.06);
-    color: rgba(242,239,233,0.85);
-    transition: background 0.15s ease;
-  }
+  @media (max-width: 760px) { .hitl { grid-template-columns: 1fr; } .hitl-step { border-right: none; border-bottom: 1px solid var(--rule-strong); } .hitl-step:last-child { border-bottom: none; } }
+  .runlog { font-family: var(--font-mono); font-size: 12px; }
+  .runlog .rhead { display: grid; grid-template-columns: 120px 1fr 100px 70px 64px; gap: 14px; padding: 12px 16px; background: #161614; color: rgba(242,239,233,0.5); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid rgba(242,239,233,0.08); }
+  .runlog .rrow { display: grid; grid-template-columns: 120px 1fr 100px 70px 64px; gap: 14px; padding: 13px 16px; border-bottom: 1px solid rgba(242,239,233,0.06); color: rgba(242,239,233,0.85); transition: background 0.15s ease; }
   .runlog .rrow:last-child { border-bottom: none; }
   .runlog .rrow:hover { background: rgba(242,239,233,0.03); }
-  .runlog .rrow .ok { color: var(--accent); }
-  .runlog .rrow .fail { color: #FF6B6B; }
-  .runlog .rrow .ts { color: rgba(242,239,233,0.5); }
-  @media (max-width: 1100px) {
-    .runlog .rhead, .runlog .rrow { grid-template-columns: 1fr; gap: 6px; }
-    .runlog .rhead { display: none; }
-  }
+  .runlog .rrow .ok { color: #7C5CFF; } .runlog .rrow .fail { color: #FF6B6B; } .runlog .rrow .ts { color: rgba(242,239,233,0.5); }
+  @media (max-width: 760px) { .runlog .rhead, .runlog .rrow { grid-template-columns: 1fr; gap: 6px; } .runlog .rhead { display: none; } }
 </style>
 </head>
 <body>
 
-<!-- NAV (relative paths back to root) -->
+<!-- ── NAV ───────────────────────────────────────────────────────── -->
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="nav-mark" aria-label="adris.tech home">
-      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
-        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
-      </svg>
-      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
       <span class="dot"></span>
     </a>
     <ul class="nav-links">
@@ -188,552 +71,277 @@
       <li><a href="/download">Download</a></li>
     </ul>
     <div class="nav-right">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
-        <span class="tt-track">
-          <span class="tt-thumb" aria-hidden="true"></span>
-          <span class="tt-l tt-paper">Paper</span>
-          <span class="tt-l tt-ink">Ink</span>
-        </span>
-      </button>
-      <span class="mono nav-meta">02 · Studio</span>
-      <a href="/download" class="btn">
-        Download
-        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-        </svg>
-      </a>
-      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span></button>
+      <a href="/download" class="btn">Download — free <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
-
-<!-- Mobile nav drawer -->
 <div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-inner">
     <ul>
-      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
-      <li><a href="/#modules"   onclick="closeMobileNav()">Modules</a></li>
-      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
-      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+      <li><a href="/#modules" onclick="closeMobileNav()">Modules</a></li>
+      <li><a href="/pricing" onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download" onclick="closeMobileNav()">Download</a></li>
     </ul>
     <a href="/download" class="btn mobile-nav-cta">Download — free</a>
   </div>
 </div>
 <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
 
-<script>
-function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('mobileNavOverlay').classList.remove('open');
-  document.getElementById('navHam').classList.remove('open');
-  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
-  document.body.style.overflow = '';
-}
-document.getElementById('navHam').addEventListener('click', function() {
-  const open = this.classList.toggle('open');
-  document.getElementById('mobileNav').classList.toggle('open', open);
-  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
-  this.setAttribute('aria-expanded', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-});
-</script>
+<!-- ── HERO ──────────────────────────────────────────────────────── -->
+<div class="hiw-hero">
+  <a href="/#modules" class="hiw-back">
+    <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+    All modules
+  </a>
+  <h1>Your business runs <em>while you sleep.</em></h1>
+  <p class="hiw-hero-sub">Studio is a visual workflow builder: connect a trigger, drop in one of your Krew agents, connect an action — and it runs by itself, on a schedule, forever. Think Zapier, but the workers inside each step are your AI agents, and it all runs on your laptop. <strong>(In beta.)</strong></p>
 
-<!-- BREADCRUMB -->
-
-<section class="crumb">
-  <div class="wrap">
-    <div class="crumb-row">
-      <a href="/"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Modules</a>
-      <span class="sep">/</span>
-      <span class="here">02 · Studio</span>
-    </div>
+  <div class="hiw-jump-grid">
+    <a href="#what" class="hiw-jump"><span class="hiw-jump-num">00</span> What is Studio?</a>
+    <a href="#canvas" class="hiw-jump"><span class="hiw-jump-num">01</span> The canvas</a>
+    <a href="#templates" class="hiw-jump"><span class="hiw-jump-num">02</span> Templates</a>
+    <a href="#approve" class="hiw-jump"><span class="hiw-jump-num">03</span> You stay in control</a>
+    <a href="#history" class="hiw-jump"><span class="hiw-jump-num">04</span> Every run logged</a>
   </div>
-</section>
+</div>
 
-<!-- HERO -->
-<section class="mhero" data-screen-label="01 Hero">
-  <div class="pgbg pgbg-graph" aria-hidden="true">
-    <svg viewBox="0 0 1600 700" fill="none" preserveAspectRatio="xMidYMid slice">
-      <g stroke="currentColor" stroke-width="1.2" fill="none">
-        <path d="M120 140 L320 200 L560 110 L800 220 L1040 130 L1280 220 L1480 130"/>
-        <path d="M120 380 L320 200"/>
-        <path d="M120 380 L320 460"/>
-        <path d="M320 460 L560 540"/>
-        <path d="M560 110 L800 60"/>
-        <path d="M560 540 L800 580"/>
-        <path d="M800 220 L800 580"/>
-        <path d="M800 580 L1040 540"/>
-        <path d="M1040 130 L1040 540"/>
-        <path d="M1040 540 L1280 580"/>
-        <path d="M1280 220 L1280 580"/>
-        <path d="M1280 580 L1480 540"/>
-        <path d="M1480 130 L1480 540"/>
-      </g>
-      <path class="pulse" d="M120 380 L320 460 L560 540 L800 580 L1040 540 L1280 580 L1480 540"/>
-      <g fill="currentColor">
-        <circle cx="120"  cy="140" r="5"/><circle cx="320"  cy="200" r="5"/>
-        <circle cx="560"  cy="110" r="5"/><circle cx="800"  cy="220" r="5"/>
-        <circle cx="1040" cy="130" r="5"/><circle cx="1280" cy="220" r="5"/>
-        <circle cx="1480" cy="130" r="5"/><circle cx="120"  cy="380" r="5"/>
-        <circle cx="320"  cy="460" r="5"/><circle cx="560"  cy="540" r="5"/>
-        <circle cx="800"  cy="60"  r="5"/><circle cx="800"  cy="580" r="5"/>
-        <circle cx="1040" cy="540" r="5"/><circle cx="1280" cy="580" r="5"/>
-        <circle cx="1480" cy="540" r="5"/>
-      </g>
-      <circle class="node-acc" cx="800"  cy="220" r="7" fill="var(--accent)"/>
-      <circle class="node-acc" cx="1040" cy="540" r="7" fill="var(--accent)"/>
+<!-- ── SHOWCASE ──────────────────────────────────────────────────── -->
+<div class="krew-showcase">
+  <div class="mstage-head"><span>// A workflow on the canvas</span><span class="right">trigger → agents → your tools</span></div>
+  <div class="studio-canvas">
+    <div class="grid"></div>
+    <svg viewBox="0 0 1200 480" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <path d="M180 100 L420 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M180 100 Q300 100 300 240 L420 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M180 100 Q300 100 300 380 L420 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M580 100 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M580 240 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M580 380 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M940 240 L1080 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M940 240 L1080 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <path d="M940 240 L1080 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+      <g><rect x="60" y="68" width="120" height="64" fill="#0E0E0C"/><text x="120" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">TRIGGER</text><text x="120" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9" letter-spacing="0.5">webhook</text></g>
+      <g><rect x="420" y="68" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="100" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CONTENT</text><text x="500" y="118" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">draft outline</text></g>
+      <g><rect x="420" y="208" width="160" height="64" fill="#7C5CFF" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · RESEARCH</text><text x="500" y="258" text-anchor="middle" fill="rgba(242,239,233,0.7)" font-family="JetBrains Mono" font-size="9">gather facts</text></g>
+      <g><rect x="420" y="348" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/><text x="500" y="380" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CHECK</text><text x="500" y="398" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">brand voice</text></g>
+      <g><rect x="780" y="208" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2" stroke-dasharray="4 3"/><text x="860" y="240" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">PAUSE · APPROVE</text><text x="860" y="258" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">waiting · you</text></g>
+      <g><rect x="1080" y="68" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ NOTION</text><text x="1130" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">save</text></g>
+      <g><rect x="1080" y="208" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ EMAIL</text><text x="1130" y="258" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">send</text></g>
+      <g><rect x="1080" y="348" width="100" height="64" fill="#0E0E0C"/><text x="1130" y="380" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ SLACK</text><text x="1130" y="398" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">notify</text></g>
+      <circle r="5" fill="#7C5CFF"><animateMotion dur="4s" repeatCount="indefinite" path="M180 100 L420 100 L500 240 L780 240 L940 240 L1080 100"/></circle>
+      <circle r="5" fill="#7C5CFF" opacity="0.7"><animateMotion dur="4s" begin="-1.3s" repeatCount="indefinite" path="M180 100 Q300 100 300 240 L420 240 L580 240 L780 240 L940 240 L1080 240"/></circle>
+      <circle r="5" fill="#7C5CFF" opacity="0.5"><animateMotion dur="4s" begin="-2.6s" repeatCount="indefinite" path="M180 100 Q300 100 300 380 L420 380 L580 380 L780 240 L940 240 L1080 380"/></circle>
     </svg>
   </div>
-  <div class="wrap">
-    <div class="mhero-top">
-      <div>
-        <div class="mhero-tag up"><span class="ind"></span>Live · Beta Q2 2026</div>
-        <h1>Your business<br/>runs while<br/>you <span class="it">sleep.</span></h1>
-      </div>
-    </div>
+  <div class="hiw-figure" style="margin-top:0;"><div class="figcap">One trigger fires three agents, pauses for your approval, then drops the result into Notion, email and Slack.</div></div>
+</div>
 
-    <div class="mhero-foot">
-      <p>
-        Drag. Drop. Automate. <em>Studio</em> is a visual workflow builder that connects your Krew agents to triggers, schedules and 200+ external tools. Build once, trigger forever — no code, no servers, no fragile glue.
-      </p>
-      <div class="mhero-meta">
-        <div class="row"><span class="l">Type</span><span>No-code · Visual</span></div>
-        <div class="row"><span class="l">Triggers</span><span>Webhook · Cron · Email · Form · API</span></div>
-        <div class="row"><span class="l">Integrations</span><span>10 at launch · 200+ planned</span></div>
-        <div class="row"><span class="l">Status</span><span>Closed beta</span></div>
-      </div>
-      <div class="mhero-cta">
-        <a href="/download" class="btn">
-          Download
-          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-            <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          </svg>
-        </a>
-        <span class="note">Build your first workflow free</span>
-      </div>
-    </div>
+<!-- ── BODY ──────────────────────────────────────────────────────── -->
+<div style="border-top:1px solid var(--rule);">
+<div class="hiw-layout">
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav">
+      <li><a href="#what" class="active"><span class="hiw-nav-num">00</span>What is Studio?</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#canvas"><span class="hiw-nav-num">01</span>The canvas</a></li>
+      <li><a href="#templates"><span class="hiw-nav-num">02</span>Templates</a></li>
+      <li><a href="#approve"><span class="hiw-nav-num">03</span>You stay in control</a></li>
+      <li><a href="#history"><span class="hiw-nav-num">04</span>Every run logged</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#who"><span class="hiw-nav-num">→</span>Who is this for?</a></li>
+    </ul>
+  </aside>
 
-    <!-- STAGE: workflow canvas -->
-    <div class="mstage">
-      <div class="mstage-head">
-        <span>// Live preview · workflow canvas</span>
-        <span class="right">∞ runs / second</span>
-      </div>
+  <main class="hiw-main">
 
-      <div class="studio-canvas">
-        <div class="grid"></div>
-        <svg viewBox="0 0 1200 480" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <!-- connector paths -->
-          <path d="M180 100 L420 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M180 100 Q300 100 300 240 L420 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M180 100 Q300 100 300 380 L420 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M580 100 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M580 240 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M580 380 L780 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M940 240 L1080 100" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M940 240 L1080 240" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-          <path d="M940 240 L1080 380" stroke="#0E0E0C" stroke-width="2" fill="none"/>
+    <section class="hiw-section" id="what">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> What is Studio</div>
+      <h2>Workflows that run themselves — <span class="it">even while you sleep.</span></h2>
+      <p class="hiw-oneliner">Connect a trigger → add a Krew agent → connect an action. Runs on a schedule, forever.</p>
 
-          <!-- TRIGGER node -->
-          <g>
-            <rect x="60" y="68" width="120" height="64" fill="#0E0E0C"/>
-            <text x="120" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">TRIGGER</text>
-            <text x="120" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9" letter-spacing="0.5">webhook</text>
-          </g>
+      <p>Studio is where you build <strong>automations</strong> — sequences of steps that happen automatically, without you clicking anything. You've probably heard of Zapier or Make. Studio does the same job, except your AI agents from Krew are the workers inside each step, and everything runs on your laptop at no extra cost per run.</p>
 
-          <!-- AGENT row -->
-          <g>
-            <rect x="420" y="68" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/>
-            <text x="500" y="100" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CONTENT</text>
-            <text x="500" y="118" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">draft outline</text>
-          </g>
-          <g>
-            <rect x="420" y="208" width="160" height="64" fill="#7C5CFF" stroke="#0E0E0C" stroke-width="2"/>
-            <text x="500" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · RESEARCH</text>
-            <text x="500" y="258" text-anchor="middle" fill="rgba(242,239,233,0.7)" font-family="JetBrains Mono" font-size="9">gather facts</text>
-          </g>
-          <g>
-            <rect x="420" y="348" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/>
-            <text x="500" y="380" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">AGENT · CHECK</text>
-            <text x="500" y="398" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">brand voice</text>
-          </g>
+      <p>A workflow is three simple parts: something that <strong>starts</strong> it, an agent that does the <strong>thinking</strong>, and an <strong>action</strong> that delivers the result. You wire them together once on a canvas, and it keeps running every time its trigger fires.</p>
 
-          <!-- HITL pause -->
-          <g>
-            <rect x="780" y="208" width="160" height="64" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2" stroke-dasharray="4 3"/>
-            <text x="860" y="240" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="11" letter-spacing="1">PAUSE · APPROVE</text>
-            <text x="860" y="258" text-anchor="middle" fill="rgba(14,14,12,0.5)" font-family="JetBrains Mono" font-size="9">waiting · you</text>
-          </g>
-
-          <!-- OUTPUTS -->
-          <g>
-            <rect x="1080" y="68" width="100" height="64" fill="#0E0E0C"/>
-            <text x="1130" y="100" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ NOTION</text>
-            <text x="1130" y="118" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">save</text>
-          </g>
-          <g>
-            <rect x="1080" y="208" width="100" height="64" fill="#0E0E0C"/>
-            <text x="1130" y="240" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ EMAIL</text>
-            <text x="1130" y="258" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">send</text>
-          </g>
-          <g>
-            <rect x="1080" y="348" width="100" height="64" fill="#0E0E0C"/>
-            <text x="1130" y="380" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="10" letter-spacing="1">→ SLACK</text>
-            <text x="1130" y="398" text-anchor="middle" fill="rgba(242,239,233,0.5)" font-family="JetBrains Mono" font-size="9">notify</text>
-          </g>
-
-          <!-- pulse dots -->
-          <circle r="5" fill="#7C5CFF">
-            <animateMotion dur="4s" repeatCount="indefinite" path="M180 100 L420 100 L500 240 L780 240 L940 240 L1080 100"/>
-          </circle>
-          <circle r="5" fill="#7C5CFF" opacity="0.7">
-            <animateMotion dur="4s" begin="-1.3s" repeatCount="indefinite" path="M180 100 Q300 100 300 240 L420 240 L580 240 L780 240 L940 240 L1080 240"/>
-          </circle>
-          <circle r="5" fill="#7C5CFF" opacity="0.5">
-            <animateMotion dur="4s" begin="-2.6s" repeatCount="indefinite" path="M180 100 Q300 100 300 380 L420 380 L580 380 L780 240 L940 240 L1080 380"/>
-          </circle>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 1 — THE CANVAS -->
-<section class="fsec" data-screen-label="02 Canvas">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">01</span><span class="label">The canvas</span></div>
-        <h2>Build it once.<br/><span class="it">Watch it run.</span></h2>
-        <p>An infinite canvas where every block is a step in your business. Drag a trigger from the sidebar, drop an agent in the middle, connect it to your tools on the right. That's a workflow.</p>
-        <ul>
-          <li class="acc">5 trigger types — webhook, cron schedule, email received, form submitted, API call</li>
-          <li>Action library — send email, update sheet, post to Slack, run a Krew agent, call any API</li>
-          <li>If / else branching with conditional logic nodes</li>
-          <li>Loops, retries and error handlers built in</li>
-          <li>Variables and shared state across the whole workflow</li>
-        </ul>
+      <div class="story">
+        <div class="story-who">Real story — Freelance recruiter</div>
+        <h4>Arjun does freelance tech recruitment in Pune, juggling 4–5 open roles at a time.</h4>
+        <p>Every new batch of applications meant 3–4 hours reading CVs, deciding who moves forward, writing rejection emails, and making notes on the shortlist — several times a week. It was burning half his working hours.</p>
+        <p>He built one Studio workflow. Every morning at 9 AM it runs on its own: checks his email for new CVs, passes each to a Krew agent that already knows the job brief, scores and sorts each candidate, drafts personal rejections, and creates Notion cards for the shortlist. <strong>Arjun opens his laptop at 9:15 and it's already done</strong> — 15 minutes of review instead of 4 hours of work.</p>
       </div>
 
-      <div class="frame">
-        <div class="frame-top">
-          <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
-          <span class="ftitle">studio.adris.tech · weekly-report</span>
-        </div>
-        <div class="frame-body" style="background: var(--paper-2);">
-          <div style="display: grid; grid-template-columns: 130px 1fr; gap: 16px; min-height: 280px;">
-            <!-- sidebar -->
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; padding: 4px 6px;">TRIGGERS</div>
-              <div style="padding: 8px 10px; background: #FFFFFF; border: 1px solid rgba(14,14,12,0.1); font-family: var(--font-mono); font-size: 10px;">⚡ webhook</div>
-              <div style="padding: 8px 10px; background: #FFFFFF; border: 1px solid rgba(14,14,12,0.1); font-family: var(--font-mono); font-size: 10px;">⏱ schedule</div>
-              <div style="padding: 8px 10px; background: #FFFFFF; border: 1px solid rgba(14,14,12,0.1); font-family: var(--font-mono); font-size: 10px;">✉ email</div>
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">Zapier</span>
+        <span class="chip">Make (Integromat)</span>
+        <span class="chip">n8n</span>
+        <span class="chip">Repetitive manual tasks</span>
+      </div>
+    </section>
 
-              <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; padding: 4px 6px; margin-top: 8px;">ACTIONS</div>
-              <div style="padding: 8px 10px; background: #FFFFFF; border: 1px solid rgba(14,14,12,0.1); font-family: var(--font-mono); font-size: 10px;">▶ run agent</div>
-              <div style="padding: 8px 10px; background: #FFFFFF; border: 1px solid rgba(14,14,12,0.1); font-family: var(--font-mono); font-size: 10px;">∫ if / else</div>
-              <div style="padding: 8px 10px; background: #FFFFFF; border: 1px solid rgba(14,14,12,0.1); font-family: var(--font-mono); font-size: 10px;">→ http call</div>
-            </div>
-            <!-- canvas -->
-            <div style="position: relative; background:
-              linear-gradient(rgba(14,14,12,0.04) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(14,14,12,0.04) 1px, transparent 1px);
-              background-size: 20px 20px;
-              border: 1px dashed rgba(14,14,12,0.15);
-              min-height: 280px;
-              ">
-              <svg viewBox="0 0 320 280" style="position: absolute; inset: 0; width: 100%; height: 100%;">
-                <path d="M40 50 L130 50 L130 140 L220 140" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-                <path d="M220 140 L220 220 L280 220" stroke="#0E0E0C" stroke-width="2" fill="none"/>
-                <rect x="14" y="32" width="52" height="36" fill="#0E0E0C"/>
-                <text x="40" y="55" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">CRON</text>
-                <rect x="100" y="122" width="60" height="36" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/>
-                <text x="130" y="146" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">FETCH</text>
-                <rect x="190" y="122" width="60" height="36" fill="#7C5CFF" stroke="#0E0E0C" stroke-width="2"/>
-                <text x="220" y="146" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">AGENT</text>
-                <rect x="252" y="202" width="60" height="36" fill="#0E0E0C"/>
-                <text x="282" y="226" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">EMAIL</text>
-              </svg>
+    <section class="hiw-section" id="canvas">
+      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> The canvas</div>
+      <h2>Build it once. <span class="it">Watch it run.</span></h2>
+      <p class="hiw-oneliner">An infinite canvas where every block is a step in your business</p>
+
+      <p>Drag a trigger from the sidebar, drop an agent in the middle, connect it to your tools on the right. That's a workflow — no code, no servers, no fragile glue. Add branches, loops, retries and conditions as you need them.</p>
+
+      <div class="hiw-figure">
+        <div class="frame">
+          <div class="frame-top"><span class="ldot"></span><span class="ldot"></span><span class="ldot"></span><span class="ftitle">studio · weekly-report</span></div>
+          <div class="frame-body" style="background: var(--paper-2); padding: 16px;">
+            <div style="display: grid; grid-template-columns: 130px 1fr; gap: 16px; min-height: 240px;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; padding: 4px 6px;">TRIGGERS</div>
+                <div style="padding: 8px 10px; background: var(--paper); border: 1px solid var(--rule); font-family: var(--font-mono); font-size: 10px;">⚡ webhook</div>
+                <div style="padding: 8px 10px; background: var(--paper); border: 1px solid var(--rule); font-family: var(--font-mono); font-size: 10px;">⏱ schedule</div>
+                <div style="padding: 8px 10px; background: var(--paper); border: 1px solid var(--rule); font-family: var(--font-mono); font-size: 10px;">✉ email</div>
+                <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; padding: 4px 6px; margin-top: 8px;">ACTIONS</div>
+                <div style="padding: 8px 10px; background: var(--paper); border: 1px solid var(--rule); font-family: var(--font-mono); font-size: 10px;">▶ run agent</div>
+                <div style="padding: 8px 10px; background: var(--paper); border: 1px solid var(--rule); font-family: var(--font-mono); font-size: 10px;">∫ if / else</div>
+                <div style="padding: 8px 10px; background: var(--paper); border: 1px solid var(--rule); font-family: var(--font-mono); font-size: 10px;">→ http call</div>
+              </div>
+              <div style="position: relative; background: linear-gradient(rgba(124,92,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,92,255,0.04) 1px, transparent 1px); background-size: 20px 20px; border: 1px dashed var(--rule-strong); min-height: 240px;">
+                <svg viewBox="0 0 320 240" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+                  <path d="M40 50 L130 50 L130 120 L220 120" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+                  <path d="M220 120 L220 190 L280 190" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+                  <rect x="14" y="32" width="52" height="36" fill="#0E0E0C"/><text x="40" y="55" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">CRON</text>
+                  <rect x="100" y="102" width="60" height="36" fill="#F7F4ED" stroke="#0E0E0C" stroke-width="2"/><text x="130" y="125" text-anchor="middle" fill="#0E0E0C" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">FETCH</text>
+                  <rect x="190" y="102" width="60" height="36" fill="#7C5CFF" stroke="#0E0E0C" stroke-width="2"/><text x="220" y="125" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">AGENT</text>
+                  <rect x="252" y="172" width="60" height="36" fill="#0E0E0C"/><text x="282" y="195" text-anchor="middle" fill="#F2EFE9" font-family="JetBrains Mono" font-size="8" letter-spacing="0.5">EMAIL</text>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 2 — TEMPLATES -->
-<section class="fsec reverse" data-screen-label="03 Templates">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">02</span><span class="label">Templates</span></div>
-        <h2>Start from a<br/><span class="it">template.</span></h2>
-        <p>You shouldn't have to build everything from zero. Pick a workflow that already works, plug in your accounts, hit go. Templates are pre-wired, pre-tested, ready to ship.</p>
+        <div class="figcap">Drag triggers and actions from the sidebar; wire them on the grid. That's the whole builder.</div>
       </div>
 
-      <div>
+      <ol class="steps">
+        <li><div class="step-text"><strong>A trigger starts it</strong><span>A time ("every day at 9 AM"), a new email, a form submission, a webhook, or an API call — you choose what fires the workflow.</span></div></li>
+        <li><div class="step-text"><strong>A Krew agent does the thinking</strong><span>Read this, summarise that, decide between options, write a reply — the AI handles the judgement in the middle of the flow.</span></div></li>
+        <li><div class="step-text"><strong>An action delivers the result</strong><span>Send an email, update Notion, write to a Google Sheet, post to Slack. Studio drops the finished result where it belongs.</span></div></li>
+      </ol>
+    </section>
+
+    <section class="hiw-section" id="templates">
+      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> Templates</div>
+      <h2>Start from a <span class="it">template.</span></h2>
+      <p class="hiw-oneliner">Pre-wired, pre-tested workflows — plug in your accounts and go</p>
+
+      <p>You shouldn't have to build everything from zero. Pick a workflow that already works, connect your accounts, and hit go.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
         <div class="tpl-grid">
-          <div class="tpl">
-            <div class="tpl-nodes">
-              <span class="nd">@</span><span class="ln"></span>
-              <span class="nd acc">A</span><span class="ln"></span>
-              <span class="nd">→</span>
-            </div>
-            <h5>Auto-reply to leads</h5>
-            <p>Inbound email → research the company → draft a tailored reply → send.</p>
-            <span class="tpl-cta">Use template →</span>
-          </div>
-          <div class="tpl">
-            <div class="tpl-nodes">
-              <span class="nd">⏱</span><span class="ln"></span>
-              <span class="nd acc">A</span><span class="ln"></span>
-              <span class="nd">📄</span>
-            </div>
-            <h5>Weekly client report</h5>
-            <p>Pull data from analytics → summarise → format → ship to Notion or PDF.</p>
-            <span class="tpl-cta">Use template →</span>
-          </div>
-          <div class="tpl">
-            <div class="tpl-nodes">
-              <span class="nd">$</span><span class="ln"></span>
-              <span class="nd acc">A</span><span class="ln"></span>
-              <span class="nd">⊞</span>
-            </div>
-            <h5>Invoice tracker</h5>
-            <p>Watch inbox for invoices → extract data → log to sheet → alert on overdue.</p>
-            <span class="tpl-cta">Use template →</span>
-          </div>
-          <div class="tpl">
-            <div class="tpl-nodes">
-              <span class="nd">⏱</span><span class="ln"></span>
-              <span class="nd acc">A</span><span class="ln"></span>
-              <span class="nd">𝕏</span>
-            </div>
-            <h5>Social post scheduler</h5>
-            <p>Generate post variants → human approval → schedule across X, LinkedIn, IG.</p>
-            <span class="tpl-cta">Use template →</span>
-          </div>
-          <div class="tpl">
-            <div class="tpl-nodes">
-              <span class="nd">!</span><span class="ln"></span>
-              <span class="nd acc">A</span><span class="ln"></span>
-              <span class="nd">#</span>
-            </div>
-            <h5>Support ticket router</h5>
-            <p>New ticket → classify intent → route to the right team or auto-respond.</p>
-            <span class="tpl-cta">Use template →</span>
-          </div>
-          <div class="tpl">
-            <div class="tpl-nodes">
-              <span class="nd">⏱</span><span class="ln"></span>
-              <span class="nd acc">A</span><span class="ln"></span>
-              <span class="nd">→</span>
-            </div>
-            <h5>Daily standup digest</h5>
-            <p>Pull from Linear + GitHub + Slack → summarise → post to your team channel.</p>
-            <span class="tpl-cta">Use template →</span>
+          <div class="tpl"><div class="tpl-nodes"><span class="nd">@</span><span class="ln"></span><span class="nd acc">A</span><span class="ln"></span><span class="nd">→</span></div><h5>Auto-reply to leads</h5><p>Inbound email → research the company → draft a tailored reply → send.</p><span class="tpl-cta">Use template →</span></div>
+          <div class="tpl"><div class="tpl-nodes"><span class="nd">⏱</span><span class="ln"></span><span class="nd acc">A</span><span class="ln"></span><span class="nd">📄</span></div><h5>Weekly client report</h5><p>Pull analytics → summarise → format → ship to Notion or PDF.</p><span class="tpl-cta">Use template →</span></div>
+          <div class="tpl"><div class="tpl-nodes"><span class="nd">$</span><span class="ln"></span><span class="nd acc">A</span><span class="ln"></span><span class="nd">⊞</span></div><h5>Invoice tracker</h5><p>Watch inbox for invoices → extract data → log to sheet → alert on overdue.</p><span class="tpl-cta">Use template →</span></div>
+          <div class="tpl"><div class="tpl-nodes"><span class="nd">⏱</span><span class="ln"></span><span class="nd acc">A</span><span class="ln"></span><span class="nd">𝕏</span></div><h5>Social post scheduler</h5><p>Generate variants → your approval → schedule across X, LinkedIn, IG.</p><span class="tpl-cta">Use template →</span></div>
+          <div class="tpl"><div class="tpl-nodes"><span class="nd">!</span><span class="ln"></span><span class="nd acc">A</span><span class="ln"></span><span class="nd">#</span></div><h5>Support ticket router</h5><p>New ticket → classify intent → route to the right team or auto-respond.</p><span class="tpl-cta">Use template →</span></div>
+          <div class="tpl"><div class="tpl-nodes"><span class="nd">⏱</span><span class="ln"></span><span class="nd acc">A</span><span class="ln"></span><span class="nd">→</span></div><h5>Daily standup digest</h5><p>Pull from Linear + GitHub + Slack → summarise → post to your team channel.</p><span class="tpl-cta">Use template →</span></div>
+        </div>
+        <div class="figcap">A few of the ready-made templates — each one is a complete, working workflow.</div>
+      </div>
+    </section>
+
+    <section class="hiw-section" id="approve">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Human in the loop</div>
+      <h2>It runs itself — <span class="it">but you stay in control.</span></h2>
+      <p class="hiw-oneliner">Pause at any step for your approval before anything irreversible happens</p>
+
+      <p>Some moments need a human. Pause the workflow at any node, get a notification, and wait for your approval — before a client email goes out, before a payment, before anything you can't undo.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="hitl">
+          <div class="hitl-step"><span class="hnum">// step 01</span><h6>Workflow runs</h6><p>An agent drafts a client email based on your brief and brand voice.</p></div>
+          <div class="hitl-step feat"><span class="hnum">// step 02 · paused</span><h6>Pings you to approve</h6><p>A WhatsApp + Slack notification with the draft, and accept / edit / reject.</p></div>
+          <div class="hitl-step"><span class="hnum">// step 03</span><h6>Sends only if approved</h6><p>On accept it ships. On reject it's discarded, with the reason logged.</p></div>
+        </div>
+        <div class="figcap">Approve or reject from Slack, WhatsApp or the web — with a full audit trail of who decided what.</div>
+      </div>
+    </section>
+
+    <section class="hiw-section" id="history">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Run history</div>
+      <h2>Every run. <span class="it">Receipts attached.</span></h2>
+      <p class="hiw-oneliner">A full log of every execution — click any run to see the step-by-step trace</p>
+
+      <p>A complete record of every workflow run. Open any row to see exactly what triggered it, what data flowed through each step, what the AI said, and where it failed if it did — plus the cost of that run in tokens and rupees.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="frame frame-dark">
+          <div class="frame-top"><span class="ldot"></span><span class="ldot"></span><span class="ldot"></span><span class="ftitle">studio · runs</span></div>
+          <div class="runlog">
+            <div class="rhead"><span>Time</span><span>Workflow</span><span>Trigger</span><span>Duration</span><span>Status</span></div>
+            <div class="rrow"><span class="ts">14:32:18</span><span>weekly-report</span><span>cron · 14:30</span><span>2.1s</span><span class="ok">✓ done</span></div>
+            <div class="rrow"><span class="ts">14:28:04</span><span>auto-reply-leads</span><span>email</span><span>4.7s</span><span class="ok">✓ done</span></div>
+            <div class="rrow"><span class="ts">14:25:51</span><span>invoice-tracker</span><span>webhook</span><span>0.9s</span><span class="ok">✓ done</span></div>
+            <div class="rrow"><span class="ts">14:22:33</span><span>standup-digest</span><span>cron · 14:20</span><span>6.2s</span><span class="fail">✗ failed</span></div>
+            <div class="rrow"><span class="ts">14:18:12</span><span>social-scheduler</span><span>manual</span><span>1.4s</span><span class="ok">✓ done</span></div>
+            <div class="rrow"><span class="ts">14:15:00</span><span>support-router</span><span>email</span><span>2.8s</span><span class="ok">✓ done</span></div>
           </div>
         </div>
+        <div class="figcap">Every run, with timing and status — replay any of them with the original inputs to debug.</div>
       </div>
+    </section>
+
+    <section class="hiw-section" id="who">
+      <div class="hiw-section-tag"><span class="hiw-section-num">→</span> Who is this for</div>
+      <h2>If you do the same task on a schedule, <span class="it">Studio does it for you.</span></h2>
+      <p>You don't need to be technical. Studio fits best for:</p>
+      <div class="ba">
+        <div class="ba-box after" style="grid-column:1/-1;">
+          <div class="ba-head">People who benefit most</div>
+          <ul>
+            <li><strong>Solo operators</strong> — the daily/weekly grind (reports, replies, sorting) runs without you.</li>
+            <li><strong>Small teams</strong> — onboard a new lead, route a ticket, or post a digest automatically.</li>
+            <li><strong>Anyone drowning in repetition</strong> — if you've thought "I do this every week," it's a workflow.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hiw-cta">
+        <h2>Build your first workflow <span class="it">free.</span></h2>
+        <p>No credit card. A free tier with running workflows on the house — then unlimited on a paid plan. Studio is in beta; you can start building today.</p>
+        <div class="hiw-cta-btns">
+          <a href="/download" class="cta-btn-main">Download — free <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+          <a href="/how-it-works" class="cta-btn-ghost">See all modules explained</a>
+          <a href="/pricing" class="cta-btn-ghost">Pricing</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+<footer style="border-top:1px solid var(--rule);padding:32px 0;">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="18" height="17" viewBox="0 0 26 24" fill="none"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg>
+      <span style="font-size:13px;font-weight:500;color:var(--ink);">adris.tech</span>
     </div>
-  </div>
-</section>
-
-<!-- SECTION 3 — HITL -->
-<section class="fsec" data-screen-label="04 Human-in-the-loop">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">03</span><span class="label">Human in the loop</span></div>
-        <h2>You stay in<br/><span class="it">control.</span></h2>
-        <p>Some moments need a human. Pause the workflow at any node, send yourself a notification, wait for approval. Before a client email goes out. Before a payment is sent. Before anything irreversible.</p>
-        <ul>
-          <li class="acc">Approve / reject in Slack, WhatsApp or web</li>
-          <li>Set a max wait time — workflow auto-fails if you don't respond</li>
-          <li>Multi-approver flows with quorum rules</li>
-          <li>Full audit log of who approved what, when</li>
-        </ul>
-      </div>
-
-      <div class="hitl">
-        <div class="hitl-step">
-          <span class="hnum">// step 01</span>
-          <h6>Workflow runs</h6>
-          <p>Agent drafts a client email based on your brief and brand voice.</p>
-        </div>
-        <div class="hitl-step feat">
-          <span class="hnum">// step 02 · paused</span>
-          <h6>Pings you to approve</h6>
-          <p>WhatsApp + Slack notification with the draft + accept / edit / reject.</p>
-        </div>
-        <div class="hitl-step">
-          <span class="hnum">// step 03</span>
-          <h6>Sends only if approved</h6>
-          <p>On accept the email ships. On reject it's discarded with reason logged.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 4 — RUN HISTORY -->
-<section class="fsec reverse" data-screen-label="05 Run history">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">04</span><span class="label">Run history</span></div>
-        <h2>Every run.<br/><span class="it">Receipts attached.</span></h2>
-        <p>A complete log of every workflow execution. Click any row to see the full step-by-step trace — what triggered it, what data flowed through each node, what the LLM said, where it failed if it did.</p>
-        <ul>
-          <li>Step-by-step execution timeline with timing</li>
-          <li class="acc">Inspect every variable, every API call, every model output</li>
-          <li>Replay a run with the original inputs to debug</li>
-          <li>Cost breakdown per run — tokens, API calls, total ₹</li>
-        </ul>
-      </div>
-
-      <div class="frame frame-dark">
-        <div class="frame-top">
-          <span class="ldot"></span><span class="ldot"></span><span class="ldot"></span>
-          <span class="ftitle">studio.adris.tech · runs</span>
-        </div>
-        <div class="runlog">
-          <div class="rhead">
-            <span>Time</span>
-            <span>Workflow</span>
-            <span>Trigger</span>
-            <span>Duration</span>
-            <span>Status</span>
-          </div>
-          <div class="rrow">
-            <span class="ts">14:32:18</span>
-            <span>weekly-report</span>
-            <span>cron · 14:30</span>
-            <span>2.1s</span>
-            <span class="ok">✓ done</span>
-          </div>
-          <div class="rrow">
-            <span class="ts">14:28:04</span>
-            <span>auto-reply-leads</span>
-            <span>email</span>
-            <span>4.7s</span>
-            <span class="ok">✓ done</span>
-          </div>
-          <div class="rrow">
-            <span class="ts">14:25:51</span>
-            <span>invoice-tracker</span>
-            <span>webhook</span>
-            <span>0.9s</span>
-            <span class="ok">✓ done</span>
-          </div>
-          <div class="rrow">
-            <span class="ts">14:22:33</span>
-            <span>standup-digest</span>
-            <span>cron · 14:20</span>
-            <span>6.2s</span>
-            <span class="fail">✗ failed</span>
-          </div>
-          <div class="rrow">
-            <span class="ts">14:18:12</span>
-            <span>social-scheduler</span>
-            <span>manual</span>
-            <span>1.4s</span>
-            <span class="ok">✓ done</span>
-          </div>
-          <div class="rrow">
-            <span class="ts">14:15:00</span>
-            <span>support-router</span>
-            <span>email</span>
-            <span>2.8s</span>
-            <span class="ok">✓ done</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CALLOUT -->
-<section class="callout" data-screen-label="06 CTA">
-  <div class="wrap">
-    <h3>Build your first<br/>workflow <span class="it">free.</span></h3>
-    <p>No credit card. Free forever tier. Five running workflows on the house, then ₹799/month for unlimited.</p>
-    <div class="btn-row">
-      <a href="/download" class="btn">
-        Download →
-        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-      </a>
-      <a href="/#modules" class="btn alt">See all modules</a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer data-screen-label="07 Footer">
-  <div class="wrap">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a class="brand-mark" href="/">
-          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
-            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
-          </svg>
-          <span>adris</span><span class="dot"></span>
-        </a>
-        <span class="tag">tech / blr</span>
-      </div>
-      <div>
-        <h3>Platform</h3>
-        <ul>
-          <li><a href="/modules/krew">Krew</a></li>
-          <li><a href="/modules/automation">Studio</a></li>
-          <li><a href="/modules/coder">Coder</a></li>
-          <li><a href="/modules/models">Models</a></li>
-          <li><a href="/modules/vault">Vault</a></li>
-          <li><a href="/modules/guard">Guard</a></li>
-          <li><a href="/modules/mesh">Mesh</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Company</h3>
-        <ul>
-          <li><a href="/#platform">About</a></li>
-          <li><a href="/#audience">Who it's for</a></li>
-          <li><a href="/pricing">Pricing</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Connect</h3>
-        <ul>
-          <li><a href="/download">Download</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Legal</h3>
-        <ul>
-          <li><a href="/privacy">Privacy Policy</a></li>
-          <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
-      <span class="meta">Built in Bengaluru · Made for India</span>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <a href="/how-it-works" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">How it works</a>
+      <a href="/privacy" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Privacy</a>
+      <a href="/terms" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Terms</a>
+      <a href="/download" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Download</a>
+      <a href="/pricing" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Pricing</a>
     </div>
   </div>
 </footer>
 
-<script src="../shared.js"></script>
-<script src="tour.js"></script>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="../tweaks-panel.jsx"></script>
-<script type="text/babel" src="../tweaks-app.jsx"></script>
+<script>
+(function(){var s=localStorage.getItem('nv-theme')||'paper';if(s==='ink')document.documentElement.setAttribute('data-theme','ink');var b=document.getElementById('themeToggle');if(b)b.setAttribute('aria-pressed',s==='ink'?'true':'false');})();
+document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme')==='ink'?'paper':'ink';document.documentElement.setAttribute('data-theme',c==='paper'?'':'ink');localStorage.setItem('nv-theme',c);this.setAttribute('aria-pressed',c==='ink'?'true':'false');});
+function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');document.getElementById('mobileNavOverlay').classList.remove('open');document.getElementById('navHam').classList.remove('open');document.getElementById('navHam').setAttribute('aria-expanded','false');document.body.style.overflow='';}
+document.getElementById('navHam').addEventListener('click',function(){var open=this.classList.toggle('open');document.getElementById('mobileNav').classList.toggle('open',open);document.getElementById('mobileNavOverlay').classList.toggle('open',open);this.setAttribute('aria-expanded',open);document.body.style.overflow=open?'hidden':'';});
+(function(){var sections=document.querySelectorAll('.hiw-section[id]');var links=document.querySelectorAll('.hiw-nav a');var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('active');});var m=document.querySelector('.hiw-nav a[href="#'+e.target.id+'"]');if(m)m.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'});sections.forEach(function(s){obs.observe(s);});})();
+</script>
 </body>
 </html>
-

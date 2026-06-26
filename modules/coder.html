@@ -1,12 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/png" href="/icon.png" />
 <link rel="apple-touch-icon" href="/icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Coder — Dev Tools · adris.tech</title>
-<meta name="description" content="Code faster. Pay less. AI coding assistant powered by open-source models. Free to start, forever." />
+<title>Coder — AI that knows your whole codebase · adris.tech</title>
+<meta name="description" content="Coder is an AI coding tool that reads your entire project, writes changes straight into your files, and runs on free open-source models. Explained in plain language, with a real example." />
+<link rel="canonical" href="https://adris.tech/modules/coder" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,391 +16,70 @@
 <link rel="stylesheet" href="../styles.css" />
 <link rel="stylesheet" href="../module-pages.css" />
 <link rel="stylesheet" href="../backgrounds.css" />
+<link rel="stylesheet" href="../module-editorial.css" />
 
 <style>
-  /* Coder split-screen hero */
-  .coder-stage {
-    aspect-ratio: 16/9;
-    background: #0E0E0C;
-    color: #F2EFE9;
-    border: 1px solid rgba(242,239,233,0.12);
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    overflow: hidden;
-  }
-  .coder-stage .cleft,
-  .coder-stage .cright {
-    padding: 20px;
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    overflow: hidden;
-    display: flex; flex-direction: column;
-  }
+  /* Coder-specific mockups (preserved) */
+  .coder-stage { aspect-ratio: 16/9; background: #0E0E0C; color: #F2EFE9; border: 1px solid rgba(242,239,233,0.12); display: grid; grid-template-columns: 1fr 1.2fr; overflow: hidden; border-radius: 12px; }
+  .coder-stage .cleft, .coder-stage .cright { padding: 20px; font-family: var(--font-mono); font-size: 12.5px; overflow: hidden; display: flex; flex-direction: column; }
   .coder-stage .cleft { border-right: 1px solid rgba(242,239,233,0.1); background: #0E0E0C; }
   .coder-stage .cright { background: #0B0B09; }
-  .coder-stage .chead {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(242,239,233,0.08);
-    margin-bottom: 14px;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(242,239,233,0.5);
-  }
-
-  /* CHAT bubbles */
-  .cbubble {
-    margin-bottom: 12px;
-    font-family: var(--font-sans);
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .cbubble.you {
-    padding: 10px 14px;
-    background: rgba(242,239,233,0.06);
-    border-left: 2px solid var(--accent);
-    color: #F2EFE9;
-  }
-  .cbubble.ai {
-    padding: 10px 0;
-    color: rgba(242,239,233,0.85);
-  }
-  .cbubble.ai .who {
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(242,239,233,0.4);
-    margin-bottom: 6px;
-    display: flex; gap: 8px; align-items: center;
-  }
-  .cbubble.ai .who .badge {
-    background: var(--accent); color: var(--accent-ink);
-    padding: 2px 6px;
-    font-size: 9px;
-  }
-  .ctyping {
-    display: inline-flex; gap: 4px; align-items: center;
-    color: rgba(242,239,233,0.4);
-    font-family: var(--font-mono); font-size: 11px;
-  }
-  .ctyping .d {
-    width: 4px; height: 4px; background: rgba(242,239,233,0.5); border-radius: 50%;
-    animation: typing 1.2s infinite;
-  }
-  .ctyping .d:nth-child(2) { animation-delay: 0.15s; }
-  .ctyping .d:nth-child(3) { animation-delay: 0.3s; }
-  @keyframes typing {
-    0%, 60%, 100% { opacity: 0.3; }
-    30% { opacity: 1; }
-  }
-
-  /* CODE block */
-  .ccode {
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    font-size: 12px;
-    line-height: 1.7;
-  }
-  .ccode .cln {
-    display: grid;
-    grid-template-columns: 28px 1fr;
-    gap: 12px;
-    align-items: baseline;
-  }
+  .coder-stage .chead { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid rgba(242,239,233,0.08); margin-bottom: 14px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,239,233,0.5); }
+  .cbubble { margin-bottom: 12px; font-family: var(--font-sans); font-size: 13px; line-height: 1.5; }
+  .cbubble.you { padding: 10px 14px; background: rgba(242,239,233,0.06); border-left: 2px solid var(--accent); color: #F2EFE9; }
+  .cbubble.ai { padding: 10px 0; color: rgba(242,239,233,0.85); }
+  .cbubble.ai .who { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,239,233,0.4); margin-bottom: 6px; display: flex; gap: 8px; align-items: center; }
+  .cbubble.ai .who .badge { background: var(--accent); color: var(--accent-ink); padding: 2px 6px; font-size: 9px; }
+  .ctyping { display: inline-flex; gap: 4px; align-items: center; color: rgba(242,239,233,0.4); font-family: var(--font-mono); font-size: 11px; }
+  .ctyping .d { width: 4px; height: 4px; background: rgba(242,239,233,0.5); border-radius: 50%; animation: typing 1.2s infinite; }
+  .ctyping .d:nth-child(2) { animation-delay: 0.15s; } .ctyping .d:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typing { 0%, 60%, 100% { opacity: 0.3; } 30% { opacity: 1; } }
+  .ccode { flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 0; font-size: 12px; line-height: 1.7; }
+  .ccode .cln { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: baseline; }
   .ccode .cln .lno { color: rgba(242,239,233,0.25); text-align: right; user-select: none; }
-  .ccode .cln.add { background: rgba(107,255,184,0.08); }
-  .ccode .cln.add .lno { color: #6BFFB8; }
-  .ccode .cln.add::before { content: "+ "; color: #6BFFB8; }
-  .ccode .cln.del { background: rgba(255,107,107,0.08); }
-  .ccode .cln.del .lno { color: #FF6B6B; }
-  .ccode .cln.del::before { content: "- "; color: #FF6B6B; }
-  .tok-k { color: #C792EA; }
-  .tok-s { color: #C3E88D; }
-  .tok-f { color: #82AAFF; }
-  .tok-c { color: rgba(242,239,233,0.4); }
-  .tok-p { color: var(--accent); }
-  .tok-n { color: #F78C6C; }
-
-  .clang {
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    background: rgba(242,239,233,0.08);
-    padding: 2px 6px;
-    margin-left: auto;
-  }
-
-  /* Model selector mock */
-  .modelsel {
-    background: #0E0E0C;
-    color: #F2EFE9;
-    border: 1px solid rgba(242,239,233,0.12);
-    overflow: hidden;
-  }
-  .modelsel .mhdr {
-    padding: 10px 16px;
-    border-bottom: 1px solid rgba(242,239,233,0.08);
-    display: flex; align-items: center; justify-content: space-between;
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
-    color: rgba(242,239,233,0.5); text-transform: uppercase;
-  }
-  .modelsel .mhdr .tog {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--font-mono); font-size: 10px;
-    color: rgba(242,239,233,0.7);
-  }
-  .modelsel .mhdr .tog .sw {
-    width: 24px; height: 14px;
-    background: var(--accent);
-    border-radius: 999px;
-    position: relative;
-  }
-  .modelsel .mhdr .tog .sw::after {
-    content: "";
-    position: absolute;
-    right: 2px; top: 2px;
-    width: 10px; height: 10px;
-    background: var(--accent-ink);
-    border-radius: 50%;
-  }
-  .modelsel .mrow2 {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 16px;
-    padding: 12px 16px;
-    border-bottom: 1px solid rgba(242,239,233,0.05);
-    align-items: center;
-    font-family: var(--font-mono);
-    font-size: 12px;
-  }
+  .ccode .cln.add { background: rgba(107,255,184,0.08); } .ccode .cln.add .lno { color: #6BFFB8; } .ccode .cln.add::before { content: "+ "; color: #6BFFB8; }
+  .tok-k { color: #C792EA; } .tok-s { color: #C3E88D; } .tok-f { color: #82AAFF; } .tok-c { color: rgba(242,239,233,0.4); } .tok-p { color: var(--accent); }
+  .clang { font-size: 9px; letter-spacing: 0.1em; background: rgba(242,239,233,0.08); padding: 2px 6px; margin-left: auto; }
+  .modelsel { background: #0E0E0C; color: #F2EFE9; border: 1px solid rgba(242,239,233,0.12); overflow: hidden; }
+  .modelsel .mhdr { padding: 10px 16px; border-bottom: 1px solid rgba(242,239,233,0.08); display: flex; align-items: center; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(242,239,233,0.5); text-transform: uppercase; }
+  .modelsel .mhdr .tog { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10px; color: rgba(242,239,233,0.7); }
+  .modelsel .mhdr .tog .sw { width: 24px; height: 14px; background: var(--accent); border-radius: 999px; position: relative; }
+  .modelsel .mhdr .tog .sw::after { content: ""; position: absolute; right: 2px; top: 2px; width: 10px; height: 10px; background: var(--accent-ink); border-radius: 50%; }
+  .modelsel .mrow2 { display: grid; grid-template-columns: 1fr auto auto; gap: 16px; padding: 12px 16px; border-bottom: 1px solid rgba(242,239,233,0.05); align-items: center; font-family: var(--font-mono); font-size: 12px; }
   .modelsel .mrow2.on { background: rgba(124,92,255,0.1); border-left: 2px solid var(--accent); padding-left: 14px; }
-  .modelsel .mrow2:last-child { border-bottom: none; }
-  .modelsel .mrow2 .mname { color: #F2EFE9; }
-  .modelsel .mrow2 .mtag {
-    font-size: 9px; letter-spacing: 0.1em; padding: 3px 7px;
-    background: rgba(242,239,233,0.08); color: rgba(242,239,233,0.7);
-    text-transform: uppercase;
-  }
+  .modelsel .mrow2:last-child { border-bottom: none; } .modelsel .mrow2 .mname { color: #F2EFE9; }
+  .modelsel .mrow2 .mtag { font-size: 9px; letter-spacing: 0.1em; padding: 3px 7px; background: rgba(242,239,233,0.08); color: rgba(242,239,233,0.7); text-transform: uppercase; }
   .modelsel .mrow2 .mtag.free { background: var(--accent); color: var(--accent-ink); }
   .modelsel .mrow2 .mtag.paid { background: transparent; border: 1px solid rgba(242,239,233,0.2); color: rgba(242,239,233,0.5); }
   .modelsel .mrow2 .cost { color: rgba(242,239,233,0.45); font-size: 11px; }
-
-  /* PR review mock */
-  .pr {
-    background: #FFFFFF;
-    border: 1px solid var(--rule-strong);
-  }
-  .pr-head {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--rule);
-    display: flex; gap: 16px; align-items: center;
-  }
-  .pr-head .ptag {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
-    padding: 4px 8px; background: var(--accent); color: var(--accent-ink);
-    text-transform: uppercase;
-  }
-  .pr-head .pname { font-size: 14px; font-weight: 500; }
-  .pr-head .pmeta { color: var(--muted); font-size: 11px; margin-left: auto; }
-  .pr-summary {
-    padding: 14px 18px;
-    background: var(--paper-2);
-    border-bottom: 1px solid var(--rule);
-    display: flex; gap: 22px;
-    font-family: var(--font-mono); font-size: 11px;
-  }
-  .pr-summary .s { display: flex; gap: 6px; align-items: center; }
-  .pr-summary .s.bug { color: #C62828; }
-  .pr-summary .s.sec { color: #C68A00; }
-  .pr-summary .s.sug { color: #2D9E5F; }
+  .pr { background: #FFFFFF; border: 1px solid var(--rule-strong); }
+  .pr-head { padding: 14px 18px; border-bottom: 1px solid var(--rule); display: flex; gap: 16px; align-items: center; }
+  .pr-head .ptag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; padding: 4px 8px; background: var(--accent); color: var(--accent-ink); text-transform: uppercase; }
+  .pr-head .pname { font-size: 14px; font-weight: 500; } .pr-head .pmeta { color: var(--muted); font-size: 11px; margin-left: auto; }
+  .pr-summary { padding: 14px 18px; background: var(--paper-2); border-bottom: 1px solid var(--rule); display: flex; gap: 22px; font-family: var(--font-mono); font-size: 11px; }
+  .pr-summary .s { display: flex; gap: 6px; align-items: center; } .pr-summary .s.bug { color: #C62828; } .pr-summary .s.sec { color: #C68A00; } .pr-summary .s.sug { color: #2D9E5F; }
   .pr-summary .s .n { font-family: var(--font-sans); font-size: 16px; font-weight: 500; }
-  .pr-code {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: #0E0E0C;
-    background: #FBFAF5;
-  }
-  .pr-code .ln {
-    display: grid;
-    grid-template-columns: 28px 1fr;
-    gap: 12px;
-    padding: 2px 18px;
-    align-items: baseline;
-  }
-  .pr-code .ln .no { color: rgba(14,14,12,0.3); text-align: right; }
-  .pr-code .ln.del { background: #FFF0F0; }
-  .pr-code .ln.add { background: #F0FFF4; }
-  .pr-code .com {
-    margin: 8px 18px 12px 50px;
-    padding: 10px 12px;
-    background: #FFF9E6;
-    border-left: 3px solid #C68A00;
-    font-family: var(--font-sans);
-    font-size: 12px;
-    color: #5A4A00;
-    line-height: 1.5;
-  }
-  .pr-code .com.err { background: #FFF0F0; border-left-color: #C62828; color: #7A1A1A; }
-  .pr-code .com.ok { background: #F0FFF4; border-left-color: #2D9E5F; color: #1A5530; }
-
-  /* Debug result */
-  .dbg {
-    background: #0E0E0C;
-    color: #F2EFE9;
-    border: 1px solid rgba(242,239,233,0.12);
-    padding: 24px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    line-height: 1.7;
-  }
-  .dbg .err {
-    padding: 12px 14px;
-    background: rgba(255,107,107,0.08);
-    border-left: 2px solid #FF6B6B;
-    color: #FF9B9B;
-    margin-bottom: 20px;
-    font-size: 11px;
-  }
-  .dbg h6 {
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(242,239,233,0.5);
-    margin: 16px 0 8px;
-  }
+  .pr-code { font-family: var(--font-mono); font-size: 12px; color: #0E0E0C; background: #FBFAF5; }
+  .pr-code .ln { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 2px 18px; align-items: baseline; }
+  .pr-code .ln .no { color: rgba(14,14,12,0.3); text-align: right; } .pr-code .ln.del { background: #FFF0F0; } .pr-code .ln.add { background: #F0FFF4; }
+  .pr-code .com { margin: 8px 18px 12px 50px; padding: 10px 12px; background: #FFF9E6; border-left: 3px solid #C68A00; font-family: var(--font-sans); font-size: 12px; color: #5A4A00; line-height: 1.5; }
+  .pr-code .com.err { background: #FFF0F0; border-left-color: #C62828; color: #7A1A1A; } .pr-code .com.ok { background: #F0FFF4; border-left-color: #2D9E5F; color: #1A5530; }
+  [data-theme="ink"] .pr { background: #0E0E0C; } [data-theme="ink"] .pr-code { background: #0B0B09; color: #F2EFE9; } [data-theme="ink"] .pr-code .ln .no { color: rgba(242,239,233,0.3); }
+  .dbg { background: #0E0E0C; color: #F2EFE9; border: 1px solid rgba(242,239,233,0.12); padding: 24px; font-family: var(--font-mono); font-size: 13px; line-height: 1.7; }
+  .dbg .err { padding: 12px 14px; background: rgba(255,107,107,0.08); border-left: 2px solid #FF6B6B; color: #FF9B9B; margin-bottom: 20px; font-size: 11px; }
+  .dbg h6 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,239,233,0.5); margin: 16px 0 8px; }
   .dbg .cause { color: rgba(242,239,233,0.9); font-size: 13px; line-height: 1.55; font-family: var(--font-sans); }
   .dbg .fix { background: rgba(107,255,184,0.08); padding: 10px 14px; border-left: 2px solid #6BFFB8; margin-top: 8px; color: #C8FFE6; font-size: 12px; }
-
-  /* Docs/tests two col */
-  .doctest {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-  @media (max-width: 880px) { .doctest { grid-template-columns: 1fr; } }
-  .dt-card {
-    background: #0E0E0C;
-    color: #F2EFE9;
-    border: 1px solid rgba(242,239,233,0.12);
-    padding: 18px 20px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    line-height: 1.6;
-  }
-  .dt-card h6 {
-    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(242,239,233,0.5);
-    margin-bottom: 12px;
-  }
-  .dt-card .arrow {
-    display: block; text-align: center;
-    color: var(--accent); padding: 8px 0; font-size: 14px;
-  }
-  .dt-card .b { color: rgba(242,239,233,0.55); }
-  .dt-card .a { color: rgba(242,239,233,0.95); }
-  .dt-card .com { color: var(--accent); }
-
-  /* VS Code extension card */
-  .vscx {
-    border: 1px solid var(--rule-strong);
-    background: var(--paper);
-    padding: 24px;
-    display: grid;
-    grid-template-columns: 80px 1fr auto;
-    gap: 20px;
-    align-items: center;
-  }
-  .vscx .vico {
-    width: 64px; height: 64px;
-    background: var(--ink); color: var(--paper);
-    display: grid; place-items: center;
-  }
-  .vscx h6 { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
-  .vscx p { font-size: 13px; color: var(--muted); }
-  .vscx .vtitle { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-  .vscx .vtitle h6 { margin-bottom: 0; }
-  .vscx .cs-soon {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border: 1px solid var(--rule-strong);
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  .vscx .vinstall {
-    background: var(--ink); color: var(--paper);
-    padding: 10px 16px;
-    font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.08em; text-transform: uppercase;
-  }
-  .vscx-cmd {
-    margin-top: 14px;
-    padding: 12px 16px;
-    background: #0E0E0C;
-    color: #F2EFE9;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    border: 1px solid rgba(242,239,233,0.12);
-    display: flex; align-items: center; gap: 12px;
-    grid-column: 1 / -1;
-  }
-  .vscx-cmd .pfx { color: var(--accent); }
-  @media (max-width: 680px) {
-    .vscx { grid-template-columns: 1fr; }
-    .vscx .vinstall { justify-self: start; }
-  }
-
-  /* polished pill button for install option cards */
-  .install-opt .iocta {
-    padding: 13px 22px;
-    text-align: center;
-    font-family: var(--font-sans);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-    text-transform: none;
-    border: 1px solid var(--ink);
-    background: var(--ink); color: var(--paper);
-    margin-top: auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    border-radius: 999px;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  }
-  .install-opt .iocta:hover {
-    background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
-    transform: translateY(-1px);
-  }
-  .install-opt.dark .iocta {
-    background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
-    box-shadow: 0 8px 28px -14px color-mix(in oklab, var(--accent) 70%, transparent);
-  }
-  .install-opt.dark .iocta:hover {
-    background: #F2EFE9; color: #0E0E0C; border-color: #F2EFE9;
-  }
-
+  @media (max-width: 760px) { .coder-stage { grid-template-columns: 1fr; aspect-ratio: auto; } }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="nav-mark" aria-label="adris.tech home">
-      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
-        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
-      </svg>
-      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
-      <span class="dot"></span>
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span><span class="dot"></span>
     </a>
     <ul class="nav-links">
       <li><a href="/#platform">Platform</a></li>
@@ -408,492 +88,278 @@
       <li><a href="/download">Download</a></li>
     </ul>
     <div class="nav-right">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
-        <span class="tt-track">
-          <span class="tt-thumb" aria-hidden="true"></span>
-          <span class="tt-l tt-paper">Paper</span>
-          <span class="tt-l tt-ink">Ink</span>
-        </span>
-      </button>
-      <span class="mono nav-meta">03 · Coder</span>
-      <a href="/download" class="btn">
-        Download
-        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-      </a>
-      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span></button>
+      <a href="/download" class="btn">Download — free <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
-
-<!-- Mobile nav drawer -->
 <div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-inner">
     <ul>
-      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
-      <li><a href="/#modules"   onclick="closeMobileNav()">Modules</a></li>
-      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
-      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+      <li><a href="/#modules" onclick="closeMobileNav()">Modules</a></li>
+      <li><a href="/pricing" onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download" onclick="closeMobileNav()">Download</a></li>
     </ul>
     <a href="/download" class="btn mobile-nav-cta">Download — free</a>
   </div>
 </div>
 <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
 
-<script>
-function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('mobileNavOverlay').classList.remove('open');
-  document.getElementById('navHam').classList.remove('open');
-  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
-  document.body.style.overflow = '';
-}
-document.getElementById('navHam').addEventListener('click', function() {
-  const open = this.classList.toggle('open');
-  document.getElementById('mobileNav').classList.toggle('open', open);
-  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
-  this.setAttribute('aria-expanded', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-});
-</script>
-
-
-<section class="crumb">
-  <div class="wrap">
-    <div class="crumb-row">
-      <a href="/"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Modules</a>
-      <span class="sep">/</span>
-      <span class="here">03 · Coder</span>
-    </div>
-  </div>
-</section>
-
 <!-- HERO -->
-<section class="mhero" data-screen-label="01 Hero">
-  <div class="pgbg pgbg-mesh" aria-hidden="true">
-    <svg viewBox="0 0 1600 900" fill="none" preserveAspectRatio="xMidYMid slice">
-      <g stroke="currentColor" stroke-width="1" fill="none">
-        <path d="M0 100 L160 80 L320 120 L480 70 L640 110 L800 60 L960 120 L1120 80 L1280 120 L1440 70 L1600 110"/>
-        <path d="M0 260 L160 240 L320 280 L480 230 L640 270 L800 220 L960 280 L1120 240 L1280 280 L1440 230 L1600 270"/>
-        <path d="M0 420 L160 400 L320 440 L480 390 L640 430 L800 380 L960 440 L1120 400 L1280 440 L1440 390 L1600 430"/>
-        <path d="M0 580 L160 560 L320 600 L480 550 L640 590 L800 540 L960 600 L1120 560 L1280 600 L1440 550 L1600 590"/>
-        <path d="M0 740 L160 720 L320 760 L480 710 L640 750 L800 700 L960 760 L1120 720 L1280 760 L1440 710 L1600 750"/>
-        <path d="M0 100 L160 240 L320 120 L480 230 L640 110 L800 220 L960 120 L1120 240 L1280 120 L1440 230 L1600 110"/>
-        <path d="M0 260 L160 400 L320 280 L480 390 L640 270 L800 380 L960 280 L1120 400 L1280 280 L1440 390 L1600 270"/>
-        <path d="M0 420 L160 560 L320 440 L480 550 L640 430 L800 540 L960 440 L1120 560 L1280 440 L1440 550 L1600 430"/>
-        <path d="M0 580 L160 720 L320 600 L480 710 L640 590 L800 700 L960 600 L1120 720 L1280 600 L1440 710 L1600 590"/>
-        <path d="M160 80  L320 280 L480 70  L640 270 L800 60  L960 280 L1120 80  L1280 280 L1440 70"/>
-        <path d="M160 240 L320 440 L480 230 L640 430 L800 220 L960 440 L1120 240 L1280 440 L1440 230"/>
-        <path d="M160 400 L320 600 L480 390 L640 590 L800 380 L960 600 L1120 400 L1280 600 L1440 390"/>
-        <path d="M160 560 L320 760 L480 550 L640 750 L800 540 L960 760 L1120 560 L1280 760 L1440 550"/>
-      </g>
-      <circle class="nodepulse" cx="320"  cy="280" r="6" fill="var(--accent)"/>
-      <circle class="nodepulse" cx="800"  cy="380" r="6" fill="var(--accent)" style="animation-delay: 0.9s;"/>
-      <circle class="nodepulse" cx="1280" cy="440" r="6" fill="var(--accent)" style="animation-delay: 1.8s;"/>
-    </svg>
+<div class="hiw-hero">
+  <a href="/#modules" class="hiw-back">
+    <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+    All modules
+  </a>
+  <h1>Code faster. <em>Pay less.</em></h1>
+  <p class="hiw-hero-sub">Coder is an AI coding tool that reads your <em>entire project</em> before it answers, writes changes straight into your files, and runs on free open-source models. Built for developers who want capable AI help without a per-month bill. <strong>Free to start, forever.</strong></p>
+  <div class="hiw-jump-grid">
+    <a href="#what" class="hiw-jump"><span class="hiw-jump-num">00</span> What is Coder?</a>
+    <a href="#models" class="hiw-jump"><span class="hiw-jump-num">01</span> You pick the model</a>
+    <a href="#review" class="hiw-jump"><span class="hiw-jump-num">02</span> Senior-level review</a>
+    <a href="#debug" class="hiw-jump"><span class="hiw-jump-num">03</span> Debug without panic</a>
+    <a href="#files" class="hiw-jump"><span class="hiw-jump-num">04</span> Edits your files</a>
   </div>
-  <div class="wrap">
-    <div class="mhero-top">
-      <div>
-        <div class="mhero-tag up"><span class="ind"></span>Live now · Free to start</div>
-        <h1>Code faster.<br/>Pay <span class="it">less.</span></h1>
-      </div>
+</div>
+
+<!-- SHOWCASE -->
+<div class="krew-showcase">
+  <div class="mstage-head"><span>// Chat on the left, code on the right</span><span class="right">model: deepseek-v3 · free</span></div>
+  <div class="coder-stage">
+    <div class="cleft">
+      <div class="chead"><span>chat · session 01</span><span>2.4k tokens</span></div>
+      <div class="cbubble you">Build me a REST API in FastAPI with JWT auth. Two routes — POST /signup and GET /me.</div>
+      <div class="cbubble ai"><div class="who"><span class="badge">DeepSeek V3</span><span>free · 0.0¢</span></div><div>Here you go. I'll scaffold it with <code>python-jose</code> for JWT and <code>passlib</code> for hashing. <span style="color: var(--accent);">Code on the right →</span></div></div>
+      <div class="cbubble you">Add rate limiting on /signup.</div>
+      <div class="cbubble ai"><div class="who"><span class="badge">DeepSeek V3</span><span>free · 0.0¢</span></div><div class="ctyping">Drafting <span class="d"></span><span class="d"></span><span class="d"></span></div></div>
     </div>
-
-    <div class="mhero-foot">
-      <p>
-        An AI coding environment powered by <em>open-source models</em>. Free to start, forever. Premium models for the moments you need them. The first Indian-built dev tool that respects your wallet.
-      </p>
-      <div class="mhero-meta">
-        <div class="row"><span class="l">Languages</span><span>30+ · JS, TS, Py, Go, Rust, …</span></div>
-        <div class="row"><span class="l">Models</span><span>DeepSeek · Llama · Mistral · Claude · GPT</span></div>
-        <div class="row"><span class="l">Surfaces</span><span>Desktop (Windows) · Web · available now</span></div>
-        <div class="row"><span class="l">Pricing</span><span>Free models · always</span></div>
-      </div>
-      <div class="mhero-cta">
-        <a href="/download" class="btn">
-          Download
-          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-        </a>
-        <span class="note">No card. Free to start.</span>
-      </div>
-    </div>
-
-    <!-- STAGE: chat + code -->
-    <div class="mstage">
-      <div class="mstage-head">
-        <span>// Live preview · chat → code</span>
-        <span class="right">model: deepseek-v3 · free</span>
-      </div>
-
-      <div class="coder-stage">
-        <div class="cleft">
-          <div class="chead">
-            <span>chat · session 01</span>
-            <span>2.4k tokens</span>
-          </div>
-          <div class="cbubble you">
-            Build me a REST API in FastAPI with JWT auth. Two routes — POST /signup and GET /me.
-          </div>
-          <div class="cbubble ai">
-            <div class="who"><span class="badge">DeepSeek V3</span><span>free · 0.0¢</span></div>
-            <div>Here you go. I'll scaffold it with `python-jose` for JWT and `passlib` for password hashing. <span style="color: var(--accent);">Code on the right →</span></div>
-          </div>
-          <div class="cbubble you">
-            Add rate limiting on /signup.
-          </div>
-          <div class="cbubble ai">
-            <div class="who"><span class="badge">DeepSeek V3</span><span>free · 0.0¢</span></div>
-            <div class="ctyping">Drafting <span class="d"></span><span class="d"></span><span class="d"></span></div>
-          </div>
-        </div>
-
-        <div class="cright">
-          <div class="chead">
-            <span>main.py</span>
-            <span class="clang">PYTHON</span>
-          </div>
-          <div class="ccode">
-            <div class="cln"><span class="lno">1</span><span><span class="tok-k">from</span> fastapi <span class="tok-k">import</span> FastAPI, Depends, HTTPException</span></div>
-            <div class="cln"><span class="lno">2</span><span><span class="tok-k">from</span> jose <span class="tok-k">import</span> jwt, JWTError</span></div>
-            <div class="cln"><span class="lno">3</span><span><span class="tok-k">from</span> passlib.context <span class="tok-k">import</span> CryptContext</span></div>
-            <div class="cln"><span class="lno">4</span><span></span></div>
-            <div class="cln"><span class="lno">5</span><span>app = <span class="tok-f">FastAPI</span>()</span></div>
-            <div class="cln"><span class="lno">6</span><span>pwd = <span class="tok-f">CryptContext</span>(schemes=[<span class="tok-s">"bcrypt"</span>])</span></div>
-            <div class="cln"><span class="lno">7</span><span></span></div>
-            <div class="cln add"><span class="lno">8</span><span><span class="tok-k">from</span> slowapi <span class="tok-k">import</span> Limiter</span></div>
-            <div class="cln add"><span class="lno">9</span><span>limiter = <span class="tok-f">Limiter</span>(key_func=<span class="tok-f">get_remote_address</span>)</span></div>
-            <div class="cln"><span class="lno">10</span><span></span></div>
-            <div class="cln"><span class="lno">11</span><span><span class="tok-c"># POST /signup — register a new user</span></span></div>
-            <div class="cln add"><span class="lno">12</span><span><span class="tok-p">@limiter.limit</span>(<span class="tok-s">"5/minute"</span>)</span></div>
-            <div class="cln"><span class="lno">13</span><span><span class="tok-p">@app.post</span>(<span class="tok-s">"/signup"</span>)</span></div>
-            <div class="cln"><span class="lno">14</span><span><span class="tok-k">def</span> <span class="tok-f">signup</span>(req: Request, payload: SignupIn):</span></div>
-            <div class="cln"><span class="lno">15</span><span>&nbsp;&nbsp;&nbsp;&nbsp;hashed = pwd.<span class="tok-f">hash</span>(payload.password)</span></div>
-            <div class="cln"><span class="lno">16</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-k">return</span> {<span class="tok-s">"id"</span>: <span class="tok-f">create_user</span>(payload.email, hashed)}</span></div>
-          </div>
-        </div>
+    <div class="cright">
+      <div class="chead"><span>main.py</span><span class="clang">PYTHON</span></div>
+      <div class="ccode">
+        <div class="cln"><span class="lno">1</span><span><span class="tok-k">from</span> fastapi <span class="tok-k">import</span> FastAPI, Depends, HTTPException</span></div>
+        <div class="cln"><span class="lno">2</span><span><span class="tok-k">from</span> jose <span class="tok-k">import</span> jwt, JWTError</span></div>
+        <div class="cln"><span class="lno">3</span><span><span class="tok-k">from</span> passlib.context <span class="tok-k">import</span> CryptContext</span></div>
+        <div class="cln"><span class="lno">4</span><span></span></div>
+        <div class="cln"><span class="lno">5</span><span>app = <span class="tok-f">FastAPI</span>()</span></div>
+        <div class="cln"><span class="lno">6</span><span>pwd = <span class="tok-f">CryptContext</span>(schemes=[<span class="tok-s">"bcrypt"</span>])</span></div>
+        <div class="cln"><span class="lno">7</span><span></span></div>
+        <div class="cln add"><span class="lno">8</span><span><span class="tok-k">from</span> slowapi <span class="tok-k">import</span> Limiter</span></div>
+        <div class="cln add"><span class="lno">9</span><span>limiter = <span class="tok-f">Limiter</span>(key_func=<span class="tok-f">get_remote_address</span>)</span></div>
+        <div class="cln"><span class="lno">10</span><span></span></div>
+        <div class="cln"><span class="lno">11</span><span><span class="tok-c"># POST /signup — register a new user</span></span></div>
+        <div class="cln add"><span class="lno">12</span><span><span class="tok-p">@limiter.limit</span>(<span class="tok-s">"5/minute"</span>)</span></div>
+        <div class="cln"><span class="lno">13</span><span><span class="tok-p">@app.post</span>(<span class="tok-s">"/signup"</span>)</span></div>
+        <div class="cln"><span class="lno">14</span><span><span class="tok-k">def</span> <span class="tok-f">signup</span>(req: Request, payload: SignupIn):</span></div>
+        <div class="cln"><span class="lno">15</span><span>&nbsp;&nbsp;&nbsp;&nbsp;hashed = pwd.<span class="tok-f">hash</span>(payload.password)</span></div>
+        <div class="cln"><span class="lno">16</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-k">return</span> {<span class="tok-s">"id"</span>: <span class="tok-f">create_user</span>(payload.email, hashed)}</span></div>
       </div>
     </div>
   </div>
-</section>
+  <div class="hiw-figure" style="margin-top:0;"><div class="figcap">You chat on the left; Coder writes and edits real code on the right — running here on a free model.</div></div>
+</div>
 
-<!-- SECTION 1 — MODEL SELECTOR -->
-<section class="fsec" data-screen-label="02 Model selector">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">01</span><span class="label">Model selector</span></div>
-        <h2>You pick the model.<br/><span class="it">You control the cost.</span></h2>
-        <p>Most AI tools pick a model for you and bill what they like. Coder gives you a dropdown. Use free open-source for the boring 80% of tasks. Reach for a premium model only when you need it. The cost difference is real.</p>
-        <ul>
-          <li class="acc">"Free models only" toggle for cost-conscious users</li>
-          <li>DeepSeek V3, Llama 3.3, Mistral, Qwen Coder — all free</li>
-          <li>Claude Sonnet, GPT-5 available at-cost (no markup)</li>
-          <li>Per-task budget caps — never accidentally spend ₹500 on one chat</li>
-        </ul>
+<!-- BODY -->
+<div style="border-top:1px solid var(--rule);">
+<div class="hiw-layout">
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav">
+      <li><a href="#what" class="active"><span class="hiw-nav-num">00</span>What is Coder?</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#models"><span class="hiw-nav-num">01</span>You pick the model</a></li>
+      <li><a href="#review"><span class="hiw-nav-num">02</span>Senior-level review</a></li>
+      <li><a href="#debug"><span class="hiw-nav-num">03</span>Debug without panic</a></li>
+      <li><a href="#files"><span class="hiw-nav-num">04</span>Edits your files</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#who"><span class="hiw-nav-num">→</span>Who is this for?</a></li>
+    </ul>
+  </aside>
+
+  <main class="hiw-main">
+
+    <section class="hiw-section" id="what">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> What is Coder</div>
+      <h2>AI that understands your <span class="it">whole codebase.</span></h2>
+      <p class="hiw-oneliner">For developers · reads your whole project first · writes straight into your files</p>
+
+      <p>If you write software, you've probably used GitHub Copilot or pasted code into ChatGPT. The catch with both: they don't know your project. Copilot sees one file at a time; ChatGPT doesn't know how your pieces connect. So you get generic answers you still have to adapt — or worse, answers that quietly break something else.</p>
+
+      <p>Coder reads your <strong>entire codebase</strong> when you open a project. Ask it something and it already knows how everything fits together, so the answer is specific to your actual code. And it doesn't just suggest — it <strong>writes the change directly into the file</strong>, with a history you can roll back.</p>
+
+      <div class="story">
+        <div class="story-who">Real story — Solo developer</div>
+        <h4>Vikram is building a SaaS product alone in Bengaluru — 80 files and growing every week.</h4>
+        <p>He needed to switch how the app handled background jobs — a change that touched several other parts of the codebase, and he didn't even know how many. With Copilot he'd have traced every file by hand.</p>
+        <p>He opened Coder, which had already indexed the project, and typed: <em>"I want to switch the job processing system. What else will I need to change?"</em> Coder found the 4 affected files, explained each change, and wrote the updated code. Vikram reviewed and accepted — <strong>done in an afternoon instead of a week.</strong></p>
       </div>
 
-      <div class="modelsel">
-        <div class="mhdr">
-          <span>// pick model · task: refactor</span>
-          <span class="tog"><span>Free only</span><span class="sw"></span></span>
+      <div class="ba">
+        <div class="ba-box before">
+          <div class="ba-head">Copilot / ChatGPT</div>
+          <ul>
+            <li>Sees one file, or no project at all</li>
+            <li>Generic answers you must adapt</li>
+            <li>You copy-paste code back and forth</li>
+            <li>A monthly subscription, always</li>
+          </ul>
         </div>
-        <div class="mrow2 on">
-          <span class="mname">DeepSeek V3</span>
-          <span class="mtag free">FREE</span>
-          <span class="cost">∞ tokens · selected</span>
-        </div>
-        <div class="mrow2">
-          <span class="mname">Llama 3.3 · 70B</span>
-          <span class="mtag free">FREE</span>
-          <span class="cost">∞ tokens</span>
-        </div>
-        <div class="mrow2">
-          <span class="mname">Mistral Small · 24B</span>
-          <span class="mtag free">FREE</span>
-          <span class="cost">∞ tokens</span>
-        </div>
-        <div class="mrow2">
-          <span class="mname">Qwen Coder · 32B</span>
-          <span class="mtag free">FREE</span>
-          <span class="cost">∞ tokens</span>
-        </div>
-        <div class="mrow2">
-          <span class="mname">Claude Sonnet 4.5</span>
-          <span class="mtag paid">PAID</span>
-          <span class="cost">₹0.24 / 1k tok</span>
-        </div>
-        <div class="mrow2">
-          <span class="mname">GPT-5 mini</span>
-          <span class="mtag paid">PAID</span>
-          <span class="cost">₹0.08 / 1k tok</span>
+        <div class="ba-box after">
+          <div class="ba-head">Coder</div>
+          <ul>
+            <li>Reads your entire project</li>
+            <li>Answers specific to your code</li>
+            <li>Writes the change into the file — revertable</li>
+            <li>Free open-source models, forever</li>
+          </ul>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- SECTION 2 — CODE REVIEW -->
-<section class="fsec reverse" data-screen-label="03 Review">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">02</span><span class="label">Code review</span></div>
-        <h2>A senior engineer<br/>at every PR.<br/><span class="it">For free.</span></h2>
-        <p>Paste code, drop a file, or connect your GitHub. Coder reviews it like a senior engineer would — spots bugs, flags security issues, suggests cleaner alternatives. Inline comments, plain English, no condescension.</p>
-        <ul>
-          <li>GitHub integration — auto-review on every PR</li>
-          <li class="acc">3 levels: blocking bugs, security, style suggestions</li>
-          <li>Knows your codebase — uses repo context</li>
-          <li>You stay in charge — reviews don't auto-merge anything</li>
-        </ul>
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">GitHub Copilot</span>
+        <span class="chip">Cursor</span>
+        <span class="chip">Pasting code into ChatGPT</span>
       </div>
+    </section>
 
-      <div class="pr">
-        <div class="pr-head">
-          <span class="ptag">PR · 142</span>
-          <span class="pname">feat: user profile API</span>
-          <span class="pmeta">+82 -14 · 3 files</span>
+    <section class="hiw-section" id="models">
+      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> Model selector</div>
+      <h2>You pick the model. <span class="it">You control the cost.</span></h2>
+      <p class="hiw-oneliner">Free open-source for most tasks · premium models only when you actually need them</p>
+
+      <p>Most AI tools pick a model for you and bill what they like. Coder gives you a dropdown. Use a free open-source model for the everyday 80% of tasks; reach for a premium model only when a task really needs it. There's even a "free models only" toggle so you never spend by accident.</p>
+
+      <div class="hiw-figure">
+        <div class="modelsel">
+          <div class="mhdr"><span>// pick model · task: refactor</span><span class="tog"><span>Free only</span><span class="sw"></span></span></div>
+          <div class="mrow2 on"><span class="mname">DeepSeek V3</span><span class="mtag free">FREE</span><span class="cost">∞ tokens · selected</span></div>
+          <div class="mrow2"><span class="mname">Llama 3.3 · 70B</span><span class="mtag free">FREE</span><span class="cost">∞ tokens</span></div>
+          <div class="mrow2"><span class="mname">Mistral Small · 24B</span><span class="mtag free">FREE</span><span class="cost">∞ tokens</span></div>
+          <div class="mrow2"><span class="mname">Qwen Coder · 32B</span><span class="mtag free">FREE</span><span class="cost">∞ tokens</span></div>
+          <div class="mrow2"><span class="mname">Claude Sonnet</span><span class="mtag paid">PAID</span><span class="cost">at-cost · no markup</span></div>
+          <div class="mrow2"><span class="mname">GPT-5 mini</span><span class="mtag paid">PAID</span><span class="cost">at-cost · no markup</span></div>
         </div>
-        <div class="pr-summary">
-          <div class="s bug"><span class="n">3</span><span>bugs</span></div>
-          <div class="s sec"><span class="n">2</span><span>security</span></div>
-          <div class="s sug"><span class="n">5</span><span>suggestions</span></div>
-        </div>
-        <div class="pr-code">
-          <div class="ln del"><span class="no">42</span><span>&nbsp;&nbsp;user = db.query(User).filter(User.id == user_id).first()</span></div>
-          <div class="ln add"><span class="no">42</span><span>&nbsp;&nbsp;user = await db.get(User, user_id)</span></div>
-          <div class="com">Suggestion: use `db.get()` for primary-key lookups — it hits the identity map first and avoids the round trip.</div>
-
-          <div class="ln"><span class="no">43</span><span>&nbsp;&nbsp;<span style="color: #C792EA">if</span> user <span style="color: #C792EA">is None</span>:</span></div>
-          <div class="ln"><span class="no">44</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #C792EA">raise</span> HTTPException(<span style="color: #F78C6C">404</span>)</span></div>
-
-          <div class="ln del"><span class="no">45</span><span>&nbsp;&nbsp;<span style="color: #C792EA">return</span> {<span style="color: #C3E88D">"email"</span>: user.email, <span style="color: #C3E88D">"hash"</span>: user.password_hash}</span></div>
-          <div class="com err">Security: never expose the password hash, even internally. Strip it from the response.</div>
-
-          <div class="ln add"><span class="no">45</span><span>&nbsp;&nbsp;<span style="color: #C792EA">return</span> UserOut.from_orm(user)</span></div>
-          <div class="com ok">Better: use a Pydantic response model so the schema is enforced.</div>
-        </div>
+        <div class="figcap">Free models run unlimited; premium models are billed at-cost with no markup — your choice, every task.</div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- SECTION 3 — DEBUG ASSISTANT -->
-<section class="fsec" data-screen-label="04 Debug">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">03</span><span class="label">Debug assistant</span></div>
-        <h2>Read the error.<br/><span class="it">Skip the panic.</span></h2>
-        <p>Paste a stack trace. Get the root cause in plain English, the exact line to fix, the corrected code, and a one-line explanation of why it broke. No more 45-minute Stack Overflow rabbit holes.</p>
-        <ul>
-          <li class="acc">Plain-English root cause, not "TypeError: cannot read property"</li>
-          <li>Pulls the relevant code line and shows the fix</li>
-          <li>Works on errors from any runtime — Node, Python, Go, Rust, browser</li>
-          <li>Saves your last 50 debugs · search later</li>
-        </ul>
-      </div>
+    <section class="hiw-section" id="review">
+      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> Code review</div>
+      <h2>A senior engineer at every change. <span class="it">For free.</span></h2>
+      <p class="hiw-oneliner">Spots bugs, flags security issues, suggests cleaner code — in plain English</p>
 
-      <div class="dbg">
-        <div class="err">
-          TypeError: Cannot read properties of undefined (reading 'name')<br/>
-          &nbsp;&nbsp;at UserCard (UserCard.tsx:14:21)<br/>
-          &nbsp;&nbsp;at div<br/>
-          &nbsp;&nbsp;at App (App.tsx:8:5)
-        </div>
+      <p>Paste code, drop a file, or point it at a change. Coder reviews it the way a senior engineer would — catches bugs, flags security holes, suggests cleaner alternatives — with inline comments and no condescension. Nothing auto-merges; you stay in charge.</p>
 
-        <h6>// Root cause</h6>
-        <div class="cause">The <code style="color: var(--accent);">user</code> prop is <code style="color: var(--accent);">undefined</code> on the first render because <code style="color: var(--accent);">fetchUser()</code> is async and hasn't resolved yet. Your component is trying to read <code style="color: var(--accent);">user.name</code> before the data has arrived.</div>
-
-        <h6>// Fix · UserCard.tsx:14</h6>
-        <div class="fix">
-          <span style="color: #FF9B9B; text-decoration: line-through;">return &lt;h2&gt;{user.name}&lt;/h2&gt;;</span><br/>
-          return &lt;h2&gt;{user?.name ?? <span style="color: #C3E88D;">'Loading…'</span>}&lt;/h2&gt;;
-        </div>
-
-        <h6>// Why this failed</h6>
-        <div class="cause">React renders synchronously. The optional chain handles the async gap until your fetch resolves.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 4 — DOCS / TESTS -->
-<section class="fsec reverse" data-screen-label="05 Docs & Tests">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">04</span><span class="label">Docs &amp; tests</span></div>
-        <h2>The two things<br/>nobody wants to<br/><span class="it">write.</span></h2>
-        <p>Point Coder at a function, a class or a whole file. It writes the inline comments, the README, the unit tests, the integration tests. The boring parts of your codebase, done while you're getting coffee.</p>
-        <ul>
-          <li>Inline JSDoc / docstrings in the right format for your language</li>
-          <li class="acc">Tests cover happy path + 3 edge cases by default</li>
-          <li>Generates fixtures and mocks from real call patterns</li>
-          <li>Updates docs when you change the signature</li>
-        </ul>
-      </div>
-
-      <div class="doctest">
-        <div class="dt-card">
-          <h6>// docs</h6>
-          <div class="b">function parseAmount(str) {</div>
-          <div class="b">&nbsp;&nbsp;return Number(str.replace(/,/g, ''));</div>
-          <div class="b">}</div>
-          <div class="arrow">↓</div>
-          <div class="com">/** Parses a formatted currency string</div>
-          <div class="com">&nbsp;*  into a Number, stripping thousand</div>
-          <div class="com">&nbsp;*  separators.</div>
-          <div class="com">&nbsp;*  @param str — "1,24,500" | "1500"</div>
-          <div class="com">&nbsp;*  @returns Number (NaN if unparseable)</div>
-          <div class="com">&nbsp;*/</div>
-          <div class="a">function parseAmount(str) { … }</div>
-        </div>
-
-        <div class="dt-card">
-          <h6>// tests</h6>
-          <div class="b">function parseAmount(str) {</div>
-          <div class="b">&nbsp;&nbsp;return Number(str.replace(/,/g, ''));</div>
-          <div class="b">}</div>
-          <div class="arrow">↓</div>
-          <div class="a">test('parses ₹ amount', () =&gt; {</div>
-          <div class="a">&nbsp;&nbsp;expect(parseAmount('1,24,500'))</div>
-          <div class="a">&nbsp;&nbsp;&nbsp;&nbsp;.toBe(124500);</div>
-          <div class="a">});</div>
-          <div class="a">test('handles no commas', () =&gt; {</div>
-          <div class="a">&nbsp;&nbsp;expect(parseAmount('500')).toBe(500);</div>
-          <div class="a">});</div>
-          <div class="a">test('NaN on garbage', () =&gt; {</div>
-          <div class="a">&nbsp;&nbsp;expect(parseAmount('abc')).toBeNaN();</div>
-          <div class="a">});</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 5 — VS CODE -->
-<section class="fsec" data-screen-label="06 VS Code">
-  <div class="wrap">
-    <div class="fsec-grid">
-      <div class="fsec-text">
-        <div class="seyebrow"><span class="num">05</span><span class="label">VS Code extension</span></div>
-        <h2>Stay in your<br/><span class="it">editor.</span></h2>
-        <p>The browser version is full-featured. If you live inside VS Code, the extension brings Coder there — chat panel, inline completion, code actions. Optional, not required.</p>
-        <ul>
-          <li>Inline completion with model of your choice</li>
-          <li class="acc">Right-click → review, explain, refactor, test</li>
-          <li>Chat panel with full repo context</li>
-          <li>Free · forever</li>
-        </ul>
-      </div>
-
-      <div>
-        <div class="vscx">
-          <div class="vico">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <path d="M22 4L8 14 4 11v10l4-3 14 10V4Z" fill="currentColor"/>
-            </svg>
-          </div>
-          <div>
-            <div class="vtitle">
-              <h6>adris.tech Coder · Built-in</h6>
-              <span class="cs-soon">Live Now</span>
-            </div>
-            <p>Full IDE inside adris.tech desktop</p>
-          </div>
-          <span class="vinstall" style="opacity:0.4;cursor:default;" title="Download adris.tech">Get App</span>
-          <div class="vscx-cmd">
-            <span class="pfx">↗</span>
-            <span class="cmd-text">github.com/astraluxe/adris.tech-desktop/releases/latest</span>
-            <button class="copy" style="margin-left: auto;">Copy</button>
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="pr">
+          <div class="pr-head"><span class="ptag">Review</span><span class="pname">feat: user profile API</span><span class="pmeta">+82 -14 · 3 files</span></div>
+          <div class="pr-summary"><div class="s bug"><span class="n">3</span><span>bugs</span></div><div class="s sec"><span class="n">2</span><span>security</span></div><div class="s sug"><span class="n">5</span><span>suggestions</span></div></div>
+          <div class="pr-code">
+            <div class="ln del"><span class="no">42</span><span>&nbsp;&nbsp;user = db.query(User).filter(User.id == user_id).first()</span></div>
+            <div class="ln add"><span class="no">42</span><span>&nbsp;&nbsp;user = await db.get(User, user_id)</span></div>
+            <div class="com">Suggestion: use <code>db.get()</code> for primary-key lookups — it hits the identity map first and avoids the round trip.</div>
+            <div class="ln"><span class="no">43</span><span>&nbsp;&nbsp;<span style="color:#C792EA">if</span> user <span style="color:#C792EA">is None</span>:</span></div>
+            <div class="ln"><span class="no">44</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#C792EA">raise</span> HTTPException(<span style="color:#F78C6C">404</span>)</span></div>
+            <div class="ln del"><span class="no">45</span><span>&nbsp;&nbsp;<span style="color:#C792EA">return</span> {<span style="color:#C3E88D">"email"</span>: user.email, <span style="color:#C3E88D">"hash"</span>: user.password_hash}</span></div>
+            <div class="com err">Security: never expose the password hash, even internally. Strip it from the response.</div>
+            <div class="ln add"><span class="no">45</span><span>&nbsp;&nbsp;<span style="color:#C792EA">return</span> UserOut.from_orm(user)</span></div>
+            <div class="com ok">Better: use a response model so the schema is enforced.</div>
           </div>
         </div>
+        <div class="figcap">Bugs, security and style — separated and explained, with the exact fix shown inline.</div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- CALLOUT -->
-<section class="callout" data-screen-label="07 CTA">
-  <div class="wrap">
-    <h3>Start coding<br/><span class="it">for ₹0.</span></h3>
-    <p>Free models are free forever. No credit card. No trial timer. Open the browser, log in, ship.</p>
-    <div class="btn-row">
-      <a href="/download" class="btn">
-        Download
-        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-      </a>
-      <a href="/modules/models" class="btn alt">Browse models</a>
-    </div>
-  </div>
-</section>
+    <section class="hiw-section" id="debug">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Debug assistant</div>
+      <h2>Read the error. <span class="it">Skip the panic.</span></h2>
+      <p class="hiw-oneliner">Paste a stack trace — get the root cause, the line, and the fix, in plain English</p>
 
-<!-- FOOTER -->
-<footer data-screen-label="08 Footer">
-  <div class="wrap">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a class="brand-mark" href="/">
-          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
-            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
-            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
-          </svg>
-          <span>adris.tech</span><span class="dot"></span>
-        </a>
-        <span class="tag">tech / blr</span>
+      <p>Paste a stack trace and get the real cause in plain English, the exact line to change, the corrected code, and a one-line "why it broke." No more 45-minute Stack Overflow rabbit holes.</p>
+
+      <div class="hiw-figure">
+        <div class="dbg">
+          <div class="err">TypeError: Cannot read properties of undefined (reading 'name')<br/>&nbsp;&nbsp;at UserCard (UserCard.tsx:14:21)<br/>&nbsp;&nbsp;at App (App.tsx:8:5)</div>
+          <h6>// Root cause</h6>
+          <div class="cause">The <code style="color:var(--accent);">user</code> prop is <code style="color:var(--accent);">undefined</code> on the first render because <code style="color:var(--accent);">fetchUser()</code> is async and hasn't resolved yet — so reading <code style="color:var(--accent);">user.name</code> fails before the data arrives.</div>
+          <h6>// Fix · UserCard.tsx:14</h6>
+          <div class="fix"><span style="color:#FF9B9B;text-decoration:line-through;">return &lt;h2&gt;{user.name}&lt;/h2&gt;;</span><br/>return &lt;h2&gt;{user?.name ?? <span style="color:#C3E88D;">'Loading…'</span>}&lt;/h2&gt;;</div>
+          <h6>// Why this failed</h6>
+          <div class="cause">React renders synchronously; the optional chain handles the async gap until the fetch resolves.</div>
+        </div>
+        <div class="figcap">The cause, the fix, and the reason — not just "TypeError: cannot read property."</div>
       </div>
-      <div>
-        <h3>Platform</h3>
-        <ul>
-          <li><a href="/modules/krew">Krew</a></li>
-          <li><a href="/modules/automation">Studio</a></li>
-          <li><a href="/modules/coder">Coder</a></li>
-          <li><a href="/modules/models">Models</a></li>
-          <li><a href="/modules/vault">Vault</a></li>
-          <li><a href="/modules/guard">Guard</a></li>
-          <li><a href="/modules/mesh">Mesh</a></li>
-        </ul>
+    </section>
+
+    <section class="hiw-section" id="files">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Edits + memory</div>
+      <h2>It edits your files — <span class="it">and remembers.</span></h2>
+      <p class="hiw-oneliner">Changes are written straight to disk · revert any time · it remembers the conversation</p>
+
+      <p>Coder isn't a copy-paste assistant. When you accept a change, it's <strong>written directly into your file</strong>. It keeps a history of those edits, so you can simply say <code>revert the last change</code> and it puts the file back. And it remembers the conversation — refer to "that function we just changed" and it knows what you mean.</p>
+
+      <ol class="steps">
+        <li><div class="step-text"><strong>Writes the change into the file</strong><span>Accept a suggestion and it lands on disk, in the right place — no manual copy-paste between a chat window and your editor.</span></div></li>
+        <li><div class="step-text"><strong>Revert with a sentence</strong><span>Every applied change is snapshotted. Say "undo the last change" (or hit Revert) and the file is restored — several steps deep.</span></div></li>
+        <li><div class="step-text"><strong>Remembers the thread</strong><span>It carries the recent conversation, so follow-ups like "now do the same for the other route" just work.</span></div></li>
+        <li><div class="step-text"><strong>Lives in the desktop app</strong><span>A full editor, file tree and terminal are built into adris.tech — Coder works right where your project is.</span></div></li>
+      </ol>
+    </section>
+
+    <section class="hiw-section" id="who">
+      <div class="hiw-section-tag"><span class="hiw-section-num">→</span> Who is this for</div>
+      <h2>If you write code and want AI that actually fits your project — <span class="it">this is it.</span></h2>
+      <p>Coder is built for developers who care about both quality and cost:</p>
+      <div class="ba">
+        <div class="ba-box after" style="grid-column:1/-1;">
+          <div class="ba-head">People who benefit most</div>
+          <ul>
+            <li><strong>Solo developers &amp; indie hackers</strong> — capable AI help on free models, with full project context.</li>
+            <li><strong>Small dev teams</strong> — reviews, tests and docs without another per-seat subscription.</li>
+            <li><strong>Students &amp; learners</strong> — unlimited free models to build and experiment at zero cost.</li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h3>Company</h3>
-        <ul>
-          <li><a href="/#platform">About</a></li>
-          <li><a href="/#audience">Who it's for</a></li>
-          <li><a href="/pricing">Pricing</a></li>
-        </ul>
+      <div class="hiw-cta">
+        <h2>Start coding for <span class="it">₹0.</span></h2>
+        <p>Free models are free forever. No credit card, no trial timer. Open the desktop app, open a project, ship.</p>
+        <div class="hiw-cta-btns">
+          <a href="/download" class="cta-btn-main">Download — free <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+          <a href="/modules/models" class="cta-btn-ghost">Browse models</a>
+          <a href="/pricing" class="cta-btn-ghost">Pricing</a>
+        </div>
       </div>
-      <div>
-        <h3>Connect</h3>
-        <ul>
-          <li><a href="/download">Download</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Legal</h3>
-        <ul>
-          <li><a href="/privacy">Privacy Policy</a></li>
-          <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
-        </ul>
-      </div>
+    </section>
+
+  </main>
+</div>
+</div>
+
+<footer style="border-top:1px solid var(--rule);padding:32px 0;">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="18" height="17" viewBox="0 0 26 24" fill="none"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg>
+      <span style="font-size:13px;font-weight:500;color:var(--ink);">adris.tech</span>
     </div>
-    <div class="footer-bottom">
-      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
-      <span class="meta">Built in Bengaluru · Made for India</span>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <a href="/how-it-works" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">How it works</a>
+      <a href="/privacy" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Privacy</a>
+      <a href="/terms" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Terms</a>
+      <a href="/download" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Download</a>
+      <a href="/pricing" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Pricing</a>
     </div>
   </div>
 </footer>
 
-<script src="../shared.js"></script>
-<script src="tour.js"></script>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="../tweaks-panel.jsx"></script>
-<script type="text/babel" src="../tweaks-app.jsx"></script>
+<script>
+(function(){var s=localStorage.getItem('nv-theme')||'paper';if(s==='ink')document.documentElement.setAttribute('data-theme','ink');var b=document.getElementById('themeToggle');if(b)b.setAttribute('aria-pressed',s==='ink'?'true':'false');})();
+document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme')==='ink'?'paper':'ink';document.documentElement.setAttribute('data-theme',c==='paper'?'':'ink');localStorage.setItem('nv-theme',c);this.setAttribute('aria-pressed',c==='ink'?'true':'false');});
+function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');document.getElementById('mobileNavOverlay').classList.remove('open');document.getElementById('navHam').classList.remove('open');document.getElementById('navHam').setAttribute('aria-expanded','false');document.body.style.overflow='';}
+document.getElementById('navHam').addEventListener('click',function(){var open=this.classList.toggle('open');document.getElementById('mobileNav').classList.toggle('open',open);document.getElementById('mobileNavOverlay').classList.toggle('open',open);this.setAttribute('aria-expanded',open);document.body.style.overflow=open?'hidden':'';});
+(function(){var sections=document.querySelectorAll('.hiw-section[id]');var links=document.querySelectorAll('.hiw-nav a');var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('active');});var m=document.querySelector('.hiw-nav a[href="#'+e.target.id+'"]');if(m)m.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'});sections.forEach(function(s){obs.observe(s);});})();
+</script>
 </body>
 </html>
-
