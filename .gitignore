@@ -14,3 +14,7 @@ PRODUCT-DETAILS.MD
 extra_for_later.md
 tweaks-app.jsx
 tweaks-panel.jsx
+
+# Internal docs — never deploy publicly
+fin.md
+adris-test-results.json
