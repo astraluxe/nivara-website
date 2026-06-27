@@ -991,7 +991,7 @@ document.getElementById('navHam').addEventListener('click', function() {
           <div class="mesh-result-tip" id="meshTip">Planning to run all day? Day pass (₹59) = just 4 hourly sessions</div>
         </div>
 
-        <a href="/download" class="mesh-cta-btn mesh-cta-feat" id="meshJoin" style="display:block; text-align:center; text-decoration:none;">Download to unlock Mesh</a>
+        <a href="#" class="mesh-cta-btn mesh-cta-feat" id="meshJoin" style="display:block; text-align:center; text-decoration:none;">Get this Mesh pass →</a>
       </div>
 
     </div>
@@ -1003,23 +1003,23 @@ document.getElementById('navHam').addEventListener('click', function() {
 <div class="mesh-ticker" aria-hidden="true">
   <div class="mesh-ticker-inner">
     <span class="mtick-item"><span class="mtick-label">Mesh 3</span><span class="mtick-detail">always free · included on every plan</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · 2M tokens · 8 agents</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · thousands of AI tasks · 8 agents</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Extend your mesh</span><span class="mtick-detail">hourly from 5 devices · day+ from 10 devices</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹1,999/month · automation included</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · your hardware, your control</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Monthly mesh</span><span class="mtick-detail">45× cheaper per device-hour than hourly</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Free forever</span><span class="mtick-detail">₹0 · 100K tokens · Mesh 3 included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Free forever</span><span class="mtick-detail">₹0 · free tasks to try · Mesh 3 included</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Business plan</span><span class="mtick-detail">₹19,999/month · Guard AI + SLA</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">10-device mesh</span><span class="mtick-detail">₹399/month · 10 devices · pool 80 GB RAM together</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · zero egress cost</span><span class="mtick-sep"></span></span>
     <!-- duplicate for seamless loop -->
     <span class="mtick-item"><span class="mtick-label">Mesh 3</span><span class="mtick-detail">always free · included on every plan</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · 2M tokens · 8 agents</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · thousands of AI tasks · 8 agents</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Extend your mesh</span><span class="mtick-detail">hourly from 5 devices · day+ from 10 devices</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹1,999/month · automation included</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · your hardware, your control</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Monthly mesh</span><span class="mtick-detail">45× cheaper per device-hour than hourly</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Free forever</span><span class="mtick-detail">₹0 · 100K tokens · Mesh 3 included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Free forever</span><span class="mtick-detail">₹0 · free tasks to try · Mesh 3 included</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Business plan</span><span class="mtick-detail">₹19,999/month · Guard AI + SLA</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">10-device mesh</span><span class="mtick-detail">₹399/month · 10 devices · pool 80 GB RAM together</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · zero egress cost</span><span class="mtick-sep"></span></span>
@@ -1455,6 +1455,86 @@ document.getElementById('navHam').addEventListener('click', function() {
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- Mesh standalone purchase — login-required, server-priced -->
+<script>
+(function () {
+  var SUPA = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+  var ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0';
+  var btn = document.getElementById('meshJoin');
+  if (!btn || !window.supabase) return;
+  var sb = window.supabase.createClient(SUPA, ANON);
+  var DEFAULT_LABEL = 'Get this Mesh pass →';
+
+  // read the user's current selection straight from the calculator DOM
+  function selection() {
+    var devices = parseInt((document.getElementById('meshCount') || {}).textContent, 10) || 5;
+    var activeTab = document.querySelector('.mesh-tab.active');
+    var dur = activeTab ? activeTab.getAttribute('data-dur') : 'hour';
+    var slider = document.getElementById('meshHrSlider');
+    var hours = dur === 'hour' ? (parseInt(slider && slider.value, 10) || 1) : 1;
+    return { devices: devices, dur: dur, hours: hours };
+  }
+
+  btn.addEventListener('click', async function (e) {
+    e.preventDefault();
+    var sessRes = await sb.auth.getSession();
+    var session = sessRes.data.session;
+    if (!session) {                      // must be logged in to pay (no blank-account refunds)
+      try { sessionStorage.setItem('meshIntent', '1'); } catch (_) {}
+      window.location.href = '/signin';
+      return;
+    }
+    var sel = selection();
+    btn.textContent = 'Setting up payment…';
+    try {
+      var res = await fetch(SUPA + '/functions/v1/mesh-create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify(sel),
+      });
+      var ord = await res.json();
+      if (!res.ok || ord.error) { alert('Could not start payment: ' + (ord.error || 'please try again')); btn.textContent = DEFAULT_LABEL; return; }
+
+      var durLabel = sel.dur === 'hour' ? (sel.hours + ' hr' + (sel.hours > 1 ? 's' : '')) : ('1 ' + sel.dur);
+      var rzp = new window.Razorpay({
+        key: ord.key_id, order_id: ord.order_id, amount: ord.amount, currency: 'INR',
+        name: 'adris.tech', image: 'https://adris.tech/icon.png',
+        description: 'Mesh pass · ' + sel.devices + ' devices · ' + durLabel,
+        prefill: { email: session.user.email || '' },
+        theme: { color: '#7C5CFF' },
+        handler: async function (resp) {
+          btn.textContent = 'Activating…';
+          var v = await fetch(SUPA + '/functions/v1/mesh-verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+            body: JSON.stringify({
+              razorpay_order_id: resp.razorpay_order_id,
+              razorpay_payment_id: resp.razorpay_payment_id,
+              razorpay_signature: resp.razorpay_signature,
+              devices: sel.devices, dur: sel.dur, hours: sel.hours,
+            }),
+          });
+          var vr = await v.json().catch(function () { return {}; });
+          if (v.ok && vr.ok) {
+            btn.textContent = '✓ Mesh active — open the app';
+            alert('Payment successful! Your ' + sel.devices + '-device Mesh pass is active until ' +
+              new Date(vr.expires_at).toLocaleString() + '. Open the adris.tech app and start a Mesh session to use it.');
+          } else {
+            alert('Your payment went through, but activating the pass failed (' + (vr.error || 'please contact support') +
+              '). Your pass will be applied — you will not be charged again.');
+            btn.textContent = DEFAULT_LABEL;
+          }
+        },
+        modal: { ondismiss: function () { btn.textContent = DEFAULT_LABEL; } },
+      });
+      rzp.open();
+    } catch (err) {
+      alert('Payment error: ' + err); btn.textContent = DEFAULT_LABEL;
+    }
+  });
+})();
+</script>
 <script>
 (function () {
   // If OAuth tokens land here instead of /signin, forward them there
