@@ -866,7 +866,7 @@ document.getElementById('navHam').addEventListener('click', function() {
         <div class="pamount"><span class="cur">₹</span>1,499<span class="per">/ month</span></div>
         <ul>
           <li>Standard AI included</li>
-          <li>~2,000 AI tasks / month</li>
+          <li>~4,000 AI tasks / month</li>
           <li>Cloud automations — 500/mo</li>
           <li>Mesh — 10 devices</li>
           <li>Everything in Free</li>
@@ -883,7 +883,7 @@ document.getElementById('navHam').addEventListener('click', function() {
         <div class="pamount"><span class="cur">₹</span>4,999<span class="per">/ month</span></div>
         <ul>
           <li>Advanced AI included</li>
-          <li>~8,000 AI tasks / month</li>
+          <li>~16,000 AI tasks / month</li>
           <li>Cloud automations — 5,000/mo</li>
           <li>Mesh — 25 devices</li>
           <li>Everything in Solo</li>
@@ -899,7 +899,7 @@ document.getElementById('navHam').addEventListener('click', function() {
         <div class="pamount"><span class="cur">₹</span>19,999<span class="per">/ month</span></div>
         <ul>
           <li>Priority Advanced AI</li>
-          <li>~30,000 AI tasks / month</li>
+          <li>~50,000 AI tasks / month</li>
           <li>Cloud automations — unlimited</li>
           <li>Mesh — 50 devices</li>
           <li>Guard · Team · Priority SLA</li>
@@ -1003,9 +1003,9 @@ document.getElementById('navHam').addEventListener('click', function() {
 <div class="mesh-ticker" aria-hidden="true">
   <div class="mesh-ticker-inner">
     <span class="mtick-item"><span class="mtick-label">Mesh 3</span><span class="mtick-detail">always free · included on every plan</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · thousands of AI tasks · 8 agents</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹1,499/month · ~4,000 AI tasks · all 45+ agents</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Extend your mesh</span><span class="mtick-detail">hourly from 5 devices · day+ from 10 devices</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹1,999/month · automation included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹4,999/month · ~16,000 AI tasks · automation included</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · your hardware, your control</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Monthly mesh</span><span class="mtick-detail">45× cheaper per device-hour than hourly</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Free forever</span><span class="mtick-detail">₹0 · free tasks to try · Mesh 3 included</span><span class="mtick-sep"></span></span>
@@ -1014,9 +1014,9 @@ document.getElementById('navHam').addEventListener('click', function() {
     <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · zero egress cost</span><span class="mtick-sep"></span></span>
     <!-- duplicate for seamless loop -->
     <span class="mtick-item"><span class="mtick-label">Mesh 3</span><span class="mtick-detail">always free · included on every plan</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹799/month · thousands of AI tasks · 8 agents</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Solo plan</span><span class="mtick-detail">₹1,499/month · ~4,000 AI tasks · all 45+ agents</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Extend your mesh</span><span class="mtick-detail">hourly from 5 devices · day+ from 10 devices</span><span class="mtick-sep"></span></span>
-    <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹1,999/month · automation included</span><span class="mtick-sep"></span></span>
+    <span class="mtick-item"><span class="mtick-label">Builder plan</span><span class="mtick-detail">₹4,999/month · ~16,000 AI tasks · automation included</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">P2P architecture</span><span class="mtick-detail">no central server · your hardware, your control</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Monthly mesh</span><span class="mtick-detail">45× cheaper per device-hour than hourly</span><span class="mtick-sep"></span></span>
     <span class="mtick-item"><span class="mtick-label">Free forever</span><span class="mtick-detail">₹0 · free tasks to try · Mesh 3 included</span><span class="mtick-sep"></span></span>
@@ -1091,7 +1091,7 @@ document.getElementById('navHam').addEventListener('click', function() {
     if (devices > BASE_DEV[dur]) { devices--; update(); }
   });
   document.getElementById('meshPlus').addEventListener('click', function () {
-    if (devices < 30) { devices++; update(); }
+    if (devices < 100) { devices++; update(); }
   });
 
   // Hours slider
