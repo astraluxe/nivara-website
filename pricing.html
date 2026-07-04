@@ -574,42 +574,49 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     });
   });
 
-  function compute() {
-    var reasons = [];
-    var plan = 'free';
-    var wantsTeam     = state.usecase.has('team') || state.feature.has('workspace') || state.feature.has('sla');
-    var wantsHeavyAuto = state.feature.has('cloudauto');
-    var wantsUnlimLead = state.feature.has('unlimlead') || state.usecase.has('leads');
-    var wantsMesh25    = state.feature.has('mesh25');
-    var wantsGuard     = state.feature.has('guard') || state.usecase.has('security');
+  // Tiers: 0 Free · 1 Solo · 2 Builder · 3 Team. Every signal (the usage radio AND each feature
+  // chip) proposes a tier; the FINAL recommendation is the HIGHEST tier proposed by anything the
+  // user picked — so a light user who also wants Team-only features still gets Team, but usage
+  // alone maps 1:1 to a plan: exploring→Free, a few times a week→Solo, daily real work→Builder,
+  // heavy/multiple people→Team.
+  var PLAN_KEYS = ['free', 'solo', 'builder', 'team'];
+  var USAGE_TIER = { trial: 0, light: 1, daily: 2, heavy: 3 };
+  var GENERIC_FALLBACK = {
+    free:    ['Coder, Vault and Models are included too'],
+    solo:    ['Guard security scanning available'],
+    builder: ['5,000 cloud automation runs/month'],
+    team:    ['Admin controls, centralised billing + SSO'],
+  };
 
-    if (wantsTeam) {
-      plan = 'team';
-      reasons.push('Multiple teammates in one shared workspace');
-      reasons.push('Admin controls, centralised billing + SSO');
-      reasons.push('Priority support with an SLA');
-    } else if (state.usage === 'heavy' || wantsMesh25) {
-      plan = 'builder';
-      reasons.push('~16,000 AI tasks/month — built for heavy daily use');
-      reasons.push('5,000 cloud automation runs/month');
-      reasons.push('Mesh — 25 devices');
-      if (wantsGuard) reasons.push('Full Guard security scanning');
-    } else if (state.usage === 'daily' || wantsHeavyAuto || wantsUnlimLead || wantsGuard) {
-      plan = 'solo';
-      if (state.usage === 'daily') reasons.push('~4,000 AI tasks/month for daily real work');
-      if (wantsHeavyAuto) reasons.push('Cloud automations that keep running while your PC is off');
-      if (wantsUnlimLead) reasons.push('Unlimited browser-verified lead searches');
-      if (wantsGuard) reasons.push('Guard security scanning included');
-    } else {
-      plan = 'free';
-      reasons.push('Try the full AI office — no card needed');
-      reasons.push('50 AI tasks to get a real feel for it');
-      if (state.usecase.has('code')) reasons.push('Coder is included on every plan');
-      if (state.usecase.has('localai')) reasons.push('Run local AI models — Mesh included, 3 devices');
-    }
+  function compute() {
+    var reasonsFor = { free: [], solo: [], builder: [], team: [] };
+    var tier = state.usage ? (USAGE_TIER[state.usage] || 0) : 0;
+
+    var USAGE_REASON = {
+      0: 'Try the full AI office — no card needed',
+      1: '~4,000 AI tasks/month — right for a few sessions a week',
+      2: '~16,000 AI tasks/month — built for daily, real work',
+      3: '~50,000 AI tasks/month — built for heavy, always-on use',
+    };
+    reasonsFor[PLAN_KEYS[tier]].push(USAGE_REASON[tier]);
+    if (tier === 0 && !state.usage) reasonsFor.free.push('50 AI tasks to get a real feel for it');
+
+    if (state.feature.has('cloudauto')) { tier = Math.max(tier, 1); reasonsFor.solo.push('Cloud automations that keep running while your PC is off'); }
+    if (state.feature.has('unlimlead') || state.usecase.has('leads')) { tier = Math.max(tier, 1); reasonsFor.solo.push('Unlimited browser-verified lead searches'); }
+    if (state.feature.has('guard') || state.usecase.has('security')) { tier = Math.max(tier, 1); reasonsFor.solo.push('Guard security scanning included'); }
+    if (state.feature.has('mesh25')) { tier = Math.max(tier, 2); reasonsFor.builder.push('Mesh — 25 devices'); }
+    if (state.usecase.has('team') || state.feature.has('workspace')) { tier = Math.max(tier, 3); reasonsFor.team.push('Multiple teammates in one shared workspace'); }
+    if (state.feature.has('sla')) { tier = Math.max(tier, 3); reasonsFor.team.push('Priority support with an SLA'); }
+    if (state.usecase.has('code')) reasonsFor.free.push('Coder is included on every plan');
+    if (state.usecase.has('localai')) reasonsFor.free.push('Run local AI models — Mesh included, 3 devices');
+
+    var planKey = PLAN_KEYS[tier];
+    var reasons = reasonsFor[planKey].slice();
+    var fallback = GENERIC_FALLBACK[planKey].slice();
+    while (reasons.length < 2 && fallback.length) reasons.push(fallback.shift());
     while (reasons.length < 2) reasons.push('Included on every adris.tech plan');
 
-    render(plan, reasons.slice(0, 4));
+    render(planKey, reasons.slice(0, 4));
   }
 
   function render(planKey, reasons) {
