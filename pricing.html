@@ -202,7 +202,47 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 .ap .ab:hover { background:#6a4ee0; }
 .ap .an { margin-top:7px; font-size:10px; color:rgba(255,255,255,.3); text-align:center; font-family:var(--font-mono); }
 
-@media(max-width:640px) { .ps,.team-wrap,.ip,.ss,.fs,.cs { padding-left:16px; padding-right:16px; } }
+/* ── Plan finder (interactive quiz) ─────────────────────────── */
+.pf { padding:72px 32px; border-top:1px solid var(--br); }
+.pf-inner { max-width:1080px; margin:0 auto; }
+.pf-head { text-align:center; max-width:560px; margin:0 auto 40px; }
+.pf-head .ey { font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:12px; }
+.pf-head h2 { font-size:clamp(26px,3.6vw,38px); font-weight:600; letter-spacing:-.03em; line-height:1.05; margin-bottom:10px; }
+.pf-head p { font-size:13px; color:var(--mu); line-height:1.6; }
+.pf-grid { display:grid; grid-template-columns:1.3fr 1fr; gap:36px; align-items:start; }
+.pf-steps { display:flex; flex-direction:column; gap:30px; }
+.pf-step { display:flex; gap:14px; }
+.pf-step-num { width:26px; height:26px; border-radius:50%; background:var(--ac); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; margin-top:1px; }
+.pf-step-body { flex:1; min-width:0; }
+.pf-step-body h4 { font-size:15px; font-weight:600; letter-spacing:-.01em; margin-bottom:2px; }
+.pf-step-sub { font-size:11.5px; color:var(--mu); margin-bottom:12px; }
+.pf-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.pf-chip { padding:8px 14px; border:1px solid var(--br); border-radius:20px; background:var(--pc-bg); font-size:12.5px; font-family:var(--font-sans); color:var(--ink); cursor:pointer; transition:all .15s; }
+.pf-chip:hover { border-color:var(--ac); color:var(--ac); }
+.pf-chip.on { background:var(--ac); border-color:var(--ac); color:#fff; }
+.pf-radios { display:flex; flex-direction:column; gap:8px; }
+.pf-radio { display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--br); border-radius:10px; cursor:pointer; font-size:13px; transition:all .15s; }
+.pf-radio:hover { border-color:var(--ac); }
+.pf-radio.on { border-color:var(--ac); background:rgba(124,92,255,.06); }
+.pf-radio input { accent-color:var(--ac); flex-shrink:0; }
+.pf-radio span { font-weight:600; color:var(--ink); }
+.pf-radio em { font-style:normal; color:var(--mu); font-size:11px; margin-left:auto; white-space:nowrap; }
+.pf-result { position:sticky; top:88px; }
+.pf-result-card { border:1px solid var(--ac); border-radius:16px; padding:28px 24px; background:var(--pc-bg); box-shadow:0 4px 28px rgba(124,92,255,.1); transition:box-shadow .2s; }
+.pf-result-lbl { font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--mu); margin-bottom:8px; }
+.pf-result-plan { font-size:28px; font-weight:700; letter-spacing:-.03em; color:var(--ac); margin-bottom:2px; }
+.pf-result-price { font-size:12.5px; color:var(--mu); margin-bottom:18px; }
+.pf-result-why { list-style:none; display:flex; flex-direction:column; gap:9px; margin-bottom:22px; }
+.pf-result-why li { font-size:12.5px; line-height:1.4; color:var(--ink); display:flex; gap:8px; }
+.pf-result-why li::before { content:"\2713"; color:var(--gr); flex-shrink:0; font-weight:700; }
+.pf-result-cta { width:100%; padding:12px; background:var(--ac); color:#fff; border:none; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--font-sans); transition:background .15s; }
+.pf-result-cta:hover { background:#6a4ee0; }
+.pf-result-note { font-size:10.5px; color:var(--mu); text-align:center; margin-top:12px; line-height:1.5; }
+.pf-flash { animation:pf-glow 1.1s ease; }
+@keyframes pf-glow { 0%{ box-shadow:0 0 0 4px rgba(124,92,255,.45); } 100%{ box-shadow:0 0 0 0 rgba(124,92,255,0); } }
+@media(max-width:820px) { .pf-grid { grid-template-columns:1fr; } .pf-result { position:static; } }
+
+@media(max-width:640px) { .ps,.team-wrap,.ip,.ss,.fs,.cs,.pf { padding-left:16px; padding-right:16px; } }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -305,7 +345,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   <div class="pg">
 
     <!-- FREE -->
-    <div class="pc fr">
+    <div class="pc fr" id="planFree">
       <div class="pb">adris.tech</div>
       <div class="pn">Free</div>
       <div class="pt">Download and start using adris.tech instantly. No card needed.</div>
@@ -330,7 +370,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     </div>
 
     <!-- SOLO -->
-    <div class="pc">
+    <div class="pc" id="planSolo">
       <div class="pb">adris.tech</div>
       <div class="pn">Solo</div>
       <div class="pt">For freelancers, creators and students doing daily AI work.</div>
@@ -357,7 +397,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     </div>
 
     <!-- BUILDER (featured) -->
-    <div class="pc ft">
+    <div class="pc ft" id="planBuilder">
       <div class="badge">&#11088; Most popular</div>
       <div class="pb" style="color:rgba(255,255,255,.45)">adris.tech</div>
       <div class="pn">Builder</div>
@@ -388,7 +428,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 
 <!-- ── TEAM WIDE CARD ─────────────────────────────────────────── -->
 <div class="team-wrap">
-  <div class="tc">
+  <div class="tc" id="planTeam">
     <!-- left: image + plan info -->
     <div class="tc-left">
       <img class="tc-pic" src="/images/plan-team.png" alt="Team plan"/>
@@ -429,6 +469,169 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     </div>
   </div>
 </div>
+
+<!-- ── PLAN FINDER (interactive quiz) ──────────────────────────── -->
+<section class="pf" id="planFinder">
+  <div class="pf-inner">
+    <div class="pf-head">
+      <p class="ey">// personalised pick</p>
+      <h2>Find your plan in 30 seconds</h2>
+      <p>Answer 3 quick questions — no email needed. Updates live as you go.</p>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-steps">
+        <!-- STEP 1 -->
+        <div class="pf-step">
+          <div class="pf-step-num">1</div>
+          <div class="pf-step-body">
+            <h4>What are you here to do?</h4>
+            <p class="pf-step-sub">Pick as many as apply</p>
+            <div class="pf-chips" data-group="usecase">
+              <button type="button" class="pf-chip" data-val="chat">Chat with AI agents</button>
+              <button type="button" class="pf-chip" data-val="automate">Automate tasks &amp; emails</button>
+              <button type="button" class="pf-chip" data-val="leads">Find &amp; verify leads</button>
+              <button type="button" class="pf-chip" data-val="code">Write &amp; review code</button>
+              <button type="button" class="pf-chip" data-val="localai">Run AI models locally</button>
+              <button type="button" class="pf-chip" data-val="security">Security &amp; contract scanning</button>
+              <button type="button" class="pf-chip" data-val="team">Run this with a team</button>
+            </div>
+          </div>
+        </div>
+        <!-- STEP 2 -->
+        <div class="pf-step">
+          <div class="pf-step-num">2</div>
+          <div class="pf-step-body">
+            <h4>How much AI work per month?</h4>
+            <p class="pf-step-sub">Roughly — you can change plans anytime</p>
+            <div class="pf-radios" data-group="usage">
+              <label class="pf-radio"><input type="radio" name="pf-usage" value="trial"><span>Just exploring</span><em>a handful of tasks</em></label>
+              <label class="pf-radio"><input type="radio" name="pf-usage" value="light"><span>A few times a week</span><em>~1,000&ndash;4,000 tasks/mo</em></label>
+              <label class="pf-radio"><input type="radio" name="pf-usage" value="daily"><span>Daily, for real work</span><em>~5,000&ndash;16,000 tasks/mo</em></label>
+              <label class="pf-radio"><input type="radio" name="pf-usage" value="heavy"><span>Heavy, multiple people</span><em>20,000+ tasks/mo</em></label>
+            </div>
+          </div>
+        </div>
+        <!-- STEP 3 -->
+        <div class="pf-step">
+          <div class="pf-step-num">3</div>
+          <div class="pf-step-body">
+            <h4>Anything else you need?</h4>
+            <p class="pf-step-sub">Pick as many as apply</p>
+            <div class="pf-chips" data-group="feature">
+              <button type="button" class="pf-chip" data-val="cloudauto">Automations that run while my PC is off</button>
+              <button type="button" class="pf-chip" data-val="unlimlead">Unlimited lead verification</button>
+              <button type="button" class="pf-chip" data-val="mesh25">25+ devices in my Mesh network</button>
+              <button type="button" class="pf-chip" data-val="guard">Security / contract scanning</button>
+              <button type="button" class="pf-chip" data-val="workspace">Multiple teammates, one workspace</button>
+              <button type="button" class="pf-chip" data-val="sla">Priority support / SLA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT: live recommendation -->
+      <div class="pf-result">
+        <div class="pf-result-card" id="pfResultCard">
+          <div class="pf-result-lbl">We recommend</div>
+          <div class="pf-result-plan" id="pfPlanName">Free</div>
+          <div class="pf-result-price" id="pfPlanPrice">&#8377;0 / month &middot; forever</div>
+          <ul class="pf-result-why" id="pfWhy"></ul>
+          <button class="pf-result-cta" id="pfCta" type="button">Download free &rarr;</button>
+          <div class="pf-result-note">Estimate based on your answers &mdash; you can upgrade or downgrade anytime.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  var state = { usecase: new Set(), usage: null, feature: new Set() };
+  var PLAN_INFO = {
+    free:    { name: 'Free',    price: '₹0 / month · forever',      anchorId: 'planFree' },
+    solo:    { name: 'Solo',    price: '₹1,499 / month · $15',      anchorId: 'planSolo' },
+    builder: { name: 'Builder', price: '₹4,999 / month · $49',      anchorId: 'planBuilder' },
+    team:    { name: 'Team',    price: '₹19,999 / month · $199',    anchorId: 'planTeam' },
+  };
+
+  function bindChips(container, set) {
+    container.querySelectorAll('.pf-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var v = btn.getAttribute('data-val');
+        if (set.has(v)) { set.delete(v); btn.classList.remove('on'); }
+        else { set.add(v); btn.classList.add('on'); }
+        compute();
+      });
+    });
+  }
+  document.querySelectorAll('[data-group="usecase"]').forEach(function (c) { bindChips(c, state.usecase); });
+  document.querySelectorAll('[data-group="feature"]').forEach(function (c) { bindChips(c, state.feature); });
+  document.querySelectorAll('input[name="pf-usage"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      state.usage = r.value;
+      document.querySelectorAll('.pf-radio').forEach(function (lbl) {
+        lbl.classList.toggle('on', lbl.querySelector('input').checked);
+      });
+      compute();
+    });
+  });
+
+  function compute() {
+    var reasons = [];
+    var plan = 'free';
+    var wantsTeam     = state.usecase.has('team') || state.feature.has('workspace') || state.feature.has('sla');
+    var wantsHeavyAuto = state.feature.has('cloudauto');
+    var wantsUnlimLead = state.feature.has('unlimlead') || state.usecase.has('leads');
+    var wantsMesh25    = state.feature.has('mesh25');
+    var wantsGuard     = state.feature.has('guard') || state.usecase.has('security');
+
+    if (wantsTeam) {
+      plan = 'team';
+      reasons.push('Multiple teammates in one shared workspace');
+      reasons.push('Admin controls, centralised billing + SSO');
+      reasons.push('Priority support with an SLA');
+    } else if (state.usage === 'heavy' || wantsMesh25) {
+      plan = 'builder';
+      reasons.push('~16,000 AI tasks/month — built for heavy daily use');
+      reasons.push('5,000 cloud automation runs/month');
+      reasons.push('Mesh — 25 devices');
+      if (wantsGuard) reasons.push('Full Guard security scanning');
+    } else if (state.usage === 'daily' || wantsHeavyAuto || wantsUnlimLead || wantsGuard) {
+      plan = 'solo';
+      if (state.usage === 'daily') reasons.push('~4,000 AI tasks/month for daily real work');
+      if (wantsHeavyAuto) reasons.push('Cloud automations that keep running while your PC is off');
+      if (wantsUnlimLead) reasons.push('Unlimited browser-verified lead searches');
+      if (wantsGuard) reasons.push('Guard security scanning included');
+    } else {
+      plan = 'free';
+      reasons.push('Try the full AI office — no card needed');
+      reasons.push('50 AI tasks to get a real feel for it');
+      if (state.usecase.has('code')) reasons.push('Coder is included on every plan');
+      if (state.usecase.has('localai')) reasons.push('Run local AI models — Mesh included, 3 devices');
+    }
+    while (reasons.length < 2) reasons.push('Included on every adris.tech plan');
+
+    render(plan, reasons.slice(0, 4));
+  }
+
+  function render(planKey, reasons) {
+    var info = PLAN_INFO[planKey];
+    document.getElementById('pfPlanName').textContent = info.name;
+    document.getElementById('pfPlanPrice').textContent = info.price;
+    document.getElementById('pfWhy').innerHTML = reasons.map(function (r) { return '<li>' + r + '</li>'; }).join('');
+    var cta = document.getElementById('pfCta');
+    cta.textContent = planKey === 'free' ? 'Download free →' : 'See ' + info.name + ' plan ↓';
+    cta.onclick = function () {
+      if (planKey === 'free') { window.location.href = '/download'; return; }
+      var target = document.getElementById(info.anchorId);
+      if (!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('pf-flash');
+      setTimeout(function () { target.classList.remove('pf-flash'); }, 1200);
+    };
+  }
+
+  compute(); // show Free by default before any interaction
+})();
+</script>
 
 <!-- ── WHICH PLAN IS RIGHT FOR YOU (plain-English personas) ───── -->
 <section style="padding:72px 32px 8px;max-width:1280px;margin:0 auto">
