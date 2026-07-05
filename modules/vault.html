@@ -79,7 +79,7 @@
         </div>
       </li><li><a href="/pricing">Pricing</a></li><li><a href="/download">Download</a></li></ul>
     <div class="nav-right">
-      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span></button>
       <a href="/download" class="btn">Download — free <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
       <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -287,6 +287,16 @@ document.getElementById('themeToggle').addEventListener('click',function(){var c
 function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');document.getElementById('mobileNavOverlay').classList.remove('open');document.getElementById('navHam').classList.remove('open');document.getElementById('navHam').setAttribute('aria-expanded','false');document.body.style.overflow='';}
 document.getElementById('navHam').addEventListener('click',function(){var open=this.classList.toggle('open');document.getElementById('mobileNav').classList.toggle('open',open);document.getElementById('mobileNavOverlay').classList.toggle('open',open);this.setAttribute('aria-expanded',open);document.body.style.overflow=open?'hidden':'';});
 (function(){var sections=document.querySelectorAll('.hiw-section[id]');var links=document.querySelectorAll('.hiw-nav a');var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('active');});var m=document.querySelector('.hiw-nav a[href="#'+e.target.id+'"]');if(m)m.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'});sections.forEach(function(s){obs.observe(s);});})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var _nb=window.supabase.createClient('https://xkkqcqsacgdrfwbwdqsp.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0');
+  function _nu(s){var el=document.getElementById('navSignIn');if(!el||!s)return;var m=s.user.user_metadata||{};var av=m.avatar_url||m.picture;var nm=m.full_name||m.name||s.user.email;el.removeAttribute('onmouseover');el.removeAttribute('onmouseout');if(av){el.style.cssText='padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';el.innerHTML='<img src="'+av+'" alt="'+nm+'" title="'+nm+'" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';}else{el.style.cssText='width:30px;height:30px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';el.textContent=(nm||'U').charAt(0).toUpperCase();}}
+  try{var st=localStorage.getItem('sb-xkkqcqsacgdrfwbwdqsp-auth-token');if(st){var ss=JSON.parse(st);if(ss&&ss.user)_nu(ss);}}catch(_){}
+  _nb.auth.getSession().then(function(r){_nu(r.data.session);});
+  _nb.auth.onAuthStateChange(function(_,s){_nu(s);});
+})();
 </script>
 </body>
 </html>
