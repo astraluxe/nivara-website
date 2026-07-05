@@ -201,6 +201,25 @@
 @media (max-width: 580px) {
   .bh-who, .bh-price { grid-template-columns: 1fr; }
   .bh-tab { flex: 1 1 100%; }
+  /* Hero: tighter, buttons full-width, stats compact — nothing crowds the globe. */
+  .bh-hero .wrap { min-height: 0; padding-top: 44px; padding-bottom: 44px; }
+  .bh-hero-globe { opacity: .7; }
+  .bh-globe-cap { display: none; }
+  .bh-ctas { gap: 10px; }
+  .bh-hero .btn, .bh-btn-ghost { width: 100%; justify-content: center; }
+  .bh-stats { margin-top: 30px; }
+  .bh-stat { padding: 12px 14px; }
+  .bh-eyebrow { font-size: 10px; letter-spacing: .12em; }
+  /* Explorer panel: smaller frame + watermark number on phones. */
+  .bh-panel { padding: 22px 18px; min-height: 0; }
+  .bh-panel::after { font-size: 72px; right: 14px; }
+  .bh-panel h3 { font-size: 23px; }
+  .bh-panel .p-cta { width: 100%; justify-content: center; }
+  /* Replaces marquee: slightly smaller chips. */
+  .bh-chip { font-size: 12px; padding: 8px 14px; }
+  /* Trust visual breathes on small screens. */
+  .bh-trust-vis { padding: 18px; }
+  .bh-final .row a { width: 100%; justify-content: center; }
 }
 </style>
 </head>

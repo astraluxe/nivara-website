@@ -33,6 +33,7 @@ html,body{background:#fff!important;color:#111!important;height:100%}
 .field input::placeholder,.field textarea::placeholder{color:#9a9a9a}
 .field textarea{resize:vertical;min-height:100px;line-height:1.6}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}}
 .submit-btn{width:100%;padding:13px;background:#7C5CFF;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;margin-top:8px;font-family:var(--font-sans)}
 .submit-btn:hover{opacity:.85}
 .submit-btn:disabled{opacity:.5;cursor:default}

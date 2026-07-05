@@ -2120,3 +2120,41 @@ body.tour-open { overflow: hidden; }
   .footer-brand { font-size: 40px; }
   .footer-brand .flogo { width: 28px; height: 26px; }
 }
+
+/* ============================================
+   MOBILE HARDENING — site-wide (2026-07)
+   Fixes the "doesn't fit on phone" class of bugs
+   without changing the desktop design.
+============================================ */
+
+/* No horizontal scroll, ever. `clip` (modern browsers) doesn't create a
+   scroll container, so position:sticky keeps working; `hidden` is the
+   fallback and matches the old body behaviour. */
+html { overflow-x: hidden; }
+@supports (overflow-x: clip) {
+  html, body { overflow-x: clip; }
+}
+
+/* Any embedded media scales down instead of pushing the page wider. */
+canvas, video, iframe { max-width: 100%; }
+
+/* Form fields can never force a wider layout than their container. */
+input, select, textarea { max-width: 100%; }
+
+/* Long unbroken strings (URLs, emails in copy) wrap instead of overflowing. */
+p, li, td { overflow-wrap: break-word; }
+
+/* Inline-styled two-column splits (e.g. the classic home's Story and Guard
+   sections use style="grid-template-columns:1fr 2fr") stack on small
+   screens. Inline styles can only be beaten with !important. */
+@media (max-width: 820px) {
+  [style*="grid-template-columns:1fr 2fr"],
+  [style*="grid-template-columns: 1fr 2fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Very small phones: slightly tighter global gutter. */
+@media (max-width: 400px) {
+  :root { --pad-x: 16px; }
+}
