@@ -3,7 +3,8 @@
   "installCommand": "echo done",
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/",                    "destination": "/NIVARA.html" },
+    { "source": "/",                    "destination": "/home.html" },
+    { "source": "/classic",             "destination": "/NIVARA.html" },
     { "source": "/pricing",             "destination": "/pricing.html" },
     { "source": "/download",            "destination": "/download.html" },
     { "source": "/affiliates",          "destination": "/affiliates.html" },

@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>adris.tech — The AI operating system for business</title>
+<meta name="description" content="One platform replaces your AI stack — agents, automation, code, security. Runs locally, your data never leaves your machines. Built in Bengaluru. Free to start." />
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type"        content="website" />
+<meta property="og:title"       content="adris.tech — The AI operating system for business" />
+<meta property="og:description" content="Agents · Automation · Coder · Models · Vault · Guard · Mesh · Brain. One login, runs locally on Windows and Linux. Free to start." />
+<meta property="og:url"         content="https://adris.tech/" />
+<meta property="og:image"       content="https://adris.tech/og-cover.png" />
+<meta name="twitter:card"       content="summary_large_image" />
+<meta name="twitter:creator"    content="@Amogh_Misra_" />
+<meta name="twitter:title"      content="adris.tech — The AI operating system for business" />
+<meta name="twitter:description" content="One platform replaces your AI stack. Runs locally. Free to start." />
+<meta name="twitter:image"      content="https://adris.tech/og-cover.png" />
+
+<link rel="canonical" href="https://adris.tech/" />
+<meta name="robots" content="index, follow" />
+<meta name="keywords" content="AI operating system, business AI platform, AI agents, local AI, automation, Bengaluru, India" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+<script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   Business home — page-local styles (prefix .bh- to avoid clashes)
+   Reuses site tokens: --paper --ink --rule --muted --accent etc.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Scroll-reveal (self-contained; doesn't depend on tour/tweaks JS) ── */
+.bh-rv { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.bh-rv.in { opacity: 1; transform: none; }
+.bh-rv.d1 { transition-delay: .08s; } .bh-rv.d2 { transition-delay: .16s; }
+.bh-rv.d3 { transition-delay: .24s; } .bh-rv.d4 { transition-delay: .32s; }
+@media (prefers-reduced-motion: reduce) {
+  .bh-rv { opacity: 1; transform: none; transition: none; }
+  .bh-marquee-inner { animation: none !important; }
+}
+
+/* ── HERO ─────────────────────────────────────────────────────── */
+.bh-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule); }
+.bh-hero .wrap { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 4vw, 64px); align-items: center; padding-top: clamp(56px, 8vh, 108px); padding-bottom: clamp(44px, 6vh, 84px); min-height: min(88vh, 860px); }
+.bh-hero-globe { position: relative; height: clamp(340px, 52vh, 620px); }
+.bh-hero-globe canvas { position: absolute; inset: 0; }
+.bh-hero-globe .bh-globe-cap { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); white-space: nowrap; }
+
+.bh-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
+.bh-eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.5); animation: bh-pulse 2.2s infinite; }
+@keyframes bh-pulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.45);} 70% { box-shadow: 0 0 0 9px rgba(34,197,94,0);} 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0);} }
+
+.bh-h1 { font-size: clamp(40px, 5.4vw, 76px); font-weight: 500; letter-spacing: -.035em; line-height: 1.02; }
+.bh-h1 .it { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+.bh-h1 .acc { color: var(--accent); }
+.bh-sub { margin-top: 22px; max-width: 56ch; font-size: clamp(15px, 1.35vw, 17.5px); line-height: 1.7; color: var(--muted); }
+.bh-sub b { color: var(--ink); font-weight: 600; }
+
+.bh-ctas { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+.bh-btn-ghost { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 20px; border: 1px solid var(--rule-strong, rgba(14,14,12,.2)); border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--ink); text-decoration: none; transition: all .15s; }
+.bh-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.bh-hero .btn { height: 40px; padding: 0 22px; font-size: 13.5px; }
+.bh-cta-note { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-2); width: 100%; margin-top: 2px; }
+
+/* Stat bar — the "important info first" strip */
+.bh-stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--rule); border-radius: 12px; margin-top: 40px; overflow: hidden; background: color-mix(in srgb, var(--paper) 82%, transparent); backdrop-filter: blur(6px); }
+.bh-stat { padding: 16px 18px; border-right: 1px solid var(--rule); }
+.bh-stat:last-child { border-right: none; }
+.bh-stat .v { font-size: clamp(19px, 2vw, 26px); font-weight: 600; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.bh-stat .v em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
+.bh-stat .k { margin-top: 3px; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-2); }
+
+/* ── REPLACES band ────────────────────────────────────────────── */
+.bh-replaces { border-bottom: 1px solid var(--rule); padding: 26px 0; overflow: hidden; }
+.bh-replaces .lede { text-align: center; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 18px; }
+.bh-marquee { position: relative; }
+.bh-marquee::before, .bh-marquee::after { content: ""; position: absolute; top: 0; bottom: 0; width: 90px; z-index: 2; pointer-events: none; }
+.bh-marquee::before { left: 0;  background: linear-gradient(90deg, var(--paper), transparent); }
+.bh-marquee::after  { right: 0; background: linear-gradient(-90deg, var(--paper), transparent); }
+.bh-marquee-inner { display: flex; gap: 14px; width: max-content; animation: bh-scroll 36s linear infinite; }
+.bh-marquee:hover .bh-marquee-inner { animation-play-state: paused; }
+@keyframes bh-scroll { to { transform: translateX(-50%); } }
+.bh-chip { display: inline-flex; align-items: baseline; gap: 9px; border: 1px solid var(--rule); border-radius: 999px; padding: 9px 18px; white-space: nowrap; font-size: 13px; color: var(--muted); }
+.bh-chip s { color: var(--muted-2); font-family: var(--font-mono); font-size: 11.5px; }
+.bh-chip.one { border-color: var(--accent); color: var(--accent); font-weight: 600; background: color-mix(in srgb, var(--accent) 7%, transparent); }
+
+/* ── Section heads ────────────────────────────────────────────── */
+.bh-sec { padding: clamp(64px, 8vw, 112px) 0; border-bottom: 1px solid var(--rule); }
+.bh-head { margin-bottom: clamp(36px, 4vw, 56px); }
+.bh-head .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 14px; }
+.bh-head h2 { font-size: clamp(30px, 3.8vw, 50px); font-weight: 500; letter-spacing: -.03em; line-height: 1.08; }
+.bh-head h2 .it { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+.bh-head p.sub { margin-top: 14px; max-width: 62ch; font-size: 15px; line-height: 1.7; color: var(--muted); }
+
+/* ── PLATFORM EXPLORER (tabs — the clickability fix) ──────────── */
+.bh-explorer { display: grid; grid-template-columns: 300px 1fr; gap: clamp(20px, 3vw, 40px); align-items: stretch; }
+.bh-rail { display: flex; flex-direction: column; gap: 6px; }
+.bh-tab { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 13px 16px; border: 1px solid var(--rule); border-radius: 10px; background: transparent; color: var(--ink); font-family: var(--font-sans, 'Space Grotesk'); font-size: 14px; font-weight: 500; cursor: pointer; transition: all .18s; }
+.bh-tab .n { font-family: var(--font-mono); font-size: 10px; color: var(--muted-2); width: 20px; flex-shrink: 0; }
+.bh-tab .role { margin-left: auto; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-2); }
+.bh-tab .arr { opacity: 0; transform: translateX(-4px); transition: all .18s; color: var(--accent); font-weight: 600; }
+.bh-tab:hover { border-color: var(--accent); transform: translateX(3px); }
+.bh-tab:hover .arr { opacity: 1; transform: none; }
+.bh-tab.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.bh-tab.on .n { color: var(--accent); }
+.bh-tab.on .arr { opacity: 1; transform: none; }
+.bh-rail-hint { margin-top: 10px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); display: flex; align-items: center; gap: 8px; }
+.bh-rail-hint .cur { display: inline-block; animation: bh-nudge 1.6s ease-in-out infinite; }
+@keyframes bh-nudge { 0%,100% { transform: translateX(0);} 50% { transform: translateX(4px);} }
+
+.bh-panel { position: relative; border: 1px solid var(--rule); border-radius: 14px; padding: clamp(26px, 3.4vw, 46px); overflow: hidden; min-height: 380px; }
+.bh-panel::after { content: attr(data-idx); position: absolute; right: 22px; bottom: 2px; font-family: 'Instrument Serif', serif; font-style: italic; font-size: clamp(90px, 12vw, 170px); line-height: 1; color: color-mix(in srgb, var(--accent) 9%, transparent); pointer-events: none; }
+.bh-panel-inner { position: relative; z-index: 1; animation: bh-fadein .35s cubic-bezier(.16,1,.3,1); }
+@keyframes bh-fadein { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none;} }
+.bh-panel .p-top { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.bh-panel .p-status { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: inline-flex; align-items: center; gap: 7px; }
+.bh-panel .p-status .ind { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+.bh-panel h3 { font-size: clamp(26px, 3vw, 38px); font-weight: 500; letter-spacing: -.025em; }
+.bh-panel h3 .role { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--muted); font-size: .72em; }
+.bh-panel .p-desc { margin-top: 12px; max-width: 58ch; font-size: 15px; line-height: 1.7; color: var(--muted); }
+.bh-panel .p-outs { margin-top: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.bh-panel .p-out { border: 1px solid var(--rule); border-radius: 10px; padding: 13px 14px; font-size: 12.5px; line-height: 1.5; color: var(--ink); }
+.bh-panel .p-out .t { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 5px; }
+.bh-panel .p-cta { margin-top: 26px; display: inline-flex; align-items: center; gap: 9px; background: var(--accent); color: #fff; padding: 11px 22px; border-radius: 9px; font-size: 13.5px; font-weight: 600; text-decoration: none; transition: all .15s; }
+.bh-panel .p-cta:hover { opacity: .88; gap: 13px; }
+
+/* ── WHO IT'S FOR ─────────────────────────────────────────────── */
+.bh-who { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.bh-who-card { border: 1px solid var(--rule); border-radius: 14px; padding: 26px 24px; display: flex; flex-direction: column; transition: all .2s; position: relative; }
+.bh-who-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.bh-who-card .wtag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+.bh-who-card h3 { font-size: 21px; font-weight: 600; letter-spacing: -.02em; margin-bottom: 10px; }
+.bh-who-card p { font-size: 13.5px; line-height: 1.65; color: var(--muted); margin-bottom: 18px; }
+.bh-who-card ul { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 22px; }
+.bh-who-card li { font-size: 13px; line-height: 1.5; color: var(--ink); display: flex; gap: 9px; }
+.bh-who-card li::before { content: "→"; color: var(--accent); flex-shrink: 0; }
+.bh-who-card .wlink { margin-top: auto; font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; display: inline-flex; gap: 8px; align-items: center; transition: all .15s; }
+.bh-who-card .wlink:hover { color: var(--accent); gap: 12px; }
+
+/* ── TRUST / SECURITY ─────────────────────────────────────────── */
+.bh-trust { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+.bh-trust-vis { position: relative; border: 1px solid var(--rule); border-radius: 16px; padding: 30px; background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.bh-trust-vis .machine { border: 1.5px solid var(--accent); border-radius: 12px; padding: 22px 20px; position: relative; }
+.bh-trust-vis .machine .mlabel { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+.bh-trust-vis .drow { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--rule); border-radius: 8px; font-size: 12.5px; color: var(--ink); margin-bottom: 8px; background: var(--paper); }
+.bh-trust-vis .drow:last-child { margin-bottom: 0; }
+.bh-trust-vis .drow .lock { color: var(--accent); font-size: 11px; }
+.bh-trust-vis .noexit { position: absolute; top: 50%; right: -13px; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 50%; background: var(--paper); border: 1.5px solid var(--rule-strong, rgba(14,14,12,.25)); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--muted); }
+.bh-trust-vis .cloud { margin-top: 18px; text-align: center; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); }
+.bh-trust-vis .cloud s { opacity: .7; }
+.bh-trust-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.bh-trust-list li { display: flex; gap: 16px; padding: 17px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+.bh-trust-list li:last-child { border-bottom: none; }
+.bh-trust-list li b { color: var(--ink); font-weight: 600; }
+.bh-trust-list .tick { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 2px; }
+
+/* ── PRICING teaser ───────────────────────────────────────────── */
+.bh-price { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.bh-price-card { border: 1px solid var(--rule); border-radius: 13px; padding: 22px 20px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; transition: all .2s; position: relative; }
+.bh-price-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.bh-price-card .pn { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.bh-price-card .pp { font-size: 24px; font-weight: 700; letter-spacing: -.03em; margin: 8px 0 2px; }
+.bh-price-card .pp sub { font-size: 11px; font-weight: 400; color: var(--muted-2); }
+.bh-price-card .pd { font-size: 12px; line-height: 1.55; color: var(--muted); margin-bottom: 14px; }
+.bh-price-card .pgo { margin-top: auto; font-size: 12.5px; font-weight: 600; color: var(--accent); }
+.bh-price-card.star { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.bh-price-card.star .badge { position: absolute; top: -10px; left: 18px; background: var(--accent); color: #fff; font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+
+/* ── FINAL CTA ────────────────────────────────────────────────── */
+.bh-final { padding: clamp(72px, 9vw, 130px) 0; text-align: center; position: relative; overflow: hidden; }
+.bh-final h2 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 500; letter-spacing: -.035em; line-height: 1.05; }
+.bh-final h2 .it { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--accent); }
+.bh-final p { margin: 18px auto 30px; max-width: 52ch; font-size: 15px; line-height: 1.7; color: var(--muted); }
+.bh-final .row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 1020px) {
+  .bh-hero .wrap { grid-template-columns: 1fr; min-height: 0; }
+  .bh-hero-globe { order: -1; height: clamp(240px, 34vh, 360px); margin-top: 8px; }
+  .bh-explorer { grid-template-columns: 1fr; }
+  .bh-rail { flex-direction: row; flex-wrap: wrap; }
+  .bh-tab { width: auto; flex: 1 1 45%; }
+  .bh-panel .p-outs { grid-template-columns: 1fr; }
+  .bh-who, .bh-price { grid-template-columns: repeat(2, 1fr); }
+  .bh-trust { grid-template-columns: 1fr; }
+  .bh-stats { grid-template-columns: repeat(2, 1fr); }
+  .bh-stat:nth-child(2) { border-right: none; }
+  .bh-stat:nth-child(1), .bh-stat:nth-child(2) { border-bottom: 1px solid var(--rule); }
+}
+@media (max-width: 580px) {
+  .bh-who, .bh-price { grid-template-columns: 1fr; }
+  .bh-tab { flex: 1 1 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAV (shared with the rest of the site)
+============================================ -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#platform">Platform</a></li>
+      <li class="has-dropdown">
+        <a href="#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
+            <a href="/modules/automation"><span class="nav-dd-tag">02</span>Automation</a>
+            <a href="/modules/coder"><span class="nav-dd-tag">03</span>Coder</a>
+            <a href="/modules/models"><span class="nav-dd-tag">04</span>Models</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
+            <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
+            <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+          </div>
+        </div>
+      </li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/download">Download</a></li>
+      <li><a href="/why-adris">Why adris</a></li>
+      <li><a href="/partner">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="/download" class="btn">
+        Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/krew"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Krew — AI Agents</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/automation"  onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Automation</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/coder"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Coder</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/models"      onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Models</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/vault"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Vault</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/guard"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Guard</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/mesh"        onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Mesh</a></li>
+      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
+      <li><a href="/partner"    onclick="closeMobileNav()">Contact</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+document.getElementById('themeToggle').addEventListener('click', function () {
+  var next = (document.documentElement.getAttribute('data-theme') || 'paper') === 'paper' ? 'ink' : 'paper';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (_) {}
+});
+</script>
+
+<!-- ============================================
+     HERO — business message first, globe kept
+============================================ -->
+<section class="bh-hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="bh-eyebrow bh-rv"><span class="pulse"></span>Live · v1.0.70 &nbsp;·&nbsp; Windows &amp; Linux &nbsp;·&nbsp; Bengaluru, IN</div>
+      <h1 class="bh-h1 bh-rv d1">Run your business<br/>on <span class="it acc">one</span> AI platform.</h1>
+      <p class="bh-sub bh-rv d2">
+        AI agents that find leads and write outreach. Automations that run 24/7. A code editor, security scanning, and local AI models — <b>eight products in one desktop app</b>, replacing <b>₹2–3 lakh/month</b> of tools and hiring. Everything runs on your machines. Nothing leaves them.
+      </p>
+      <div class="bh-ctas bh-rv d3">
+        <a href="/download" class="btn">
+          Download — free
+          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+        <a href="/why-adris" class="bh-btn-ghost">See the ROI case →</a>
+        <a href="/partner" class="bh-btn-ghost">Talk to us</a>
+        <span class="bh-cta-note">~10 MB · No credit card · Free forever tier</span>
+      </div>
+
+      <div class="bh-stats bh-rv d4">
+        <div class="bh-stat"><div class="v"><span data-count="8">0</span> <em>products</em></div><div class="k">One login</div></div>
+        <div class="bh-stat"><div class="v">₹<span data-count="3" data-prefix="2–">0</span><em>L/mo</em></div><div class="k">Stack it replaces</div></div>
+        <div class="bh-stat"><div class="v"><span data-count="48">0</span> <em>agents</em></div><div class="k">Your AI workforce</div></div>
+        <div class="bh-stat"><div class="v"><span data-count="100">0</span><em>%</em></div><div class="k">Runs on your device</div></div>
+      </div>
+    </div>
+
+    <div class="bh-hero-globe" aria-hidden="true">
+      <canvas id="globe-cv"></canvas>
+      <span class="bh-globe-cap">// built in Bengaluru · working worldwide</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     REPLACES BAND — the B2B hook
+============================================ -->
+<section class="bh-replaces" aria-label="What adris.tech replaces">
+  <div class="lede">One subscription replaces the whole stack</div>
+  <div class="bh-marquee">
+    <div class="bh-marquee-inner">
+      <!-- set is duplicated once for a seamless loop -->
+      <span class="bh-chip">AI chat assistant <s>₹2,000/mo</s></span>
+      <span class="bh-chip">Automation platform <s>₹4,500/mo</s></span>
+      <span class="bh-chip">Coding copilot <s>₹1,700/mo</s></span>
+      <span class="bh-chip">Lead-gen tool <s>₹8,000/mo</s></span>
+      <span class="bh-chip">VPN / DNS security <s>₹2,200/mo</s></span>
+      <span class="bh-chip">Contract review <s>₹15,000/doc</s></span>
+      <span class="bh-chip">Social media exec <s>₹25,000/mo</s></span>
+      <span class="bh-chip">Model playground <s>₹1,600/mo</s></span>
+      <span class="bh-chip one">adris.tech — from ₹0</span>
+      <span class="bh-chip">AI chat assistant <s>₹2,000/mo</s></span>
+      <span class="bh-chip">Automation platform <s>₹4,500/mo</s></span>
+      <span class="bh-chip">Coding copilot <s>₹1,700/mo</s></span>
+      <span class="bh-chip">Lead-gen tool <s>₹8,000/mo</s></span>
+      <span class="bh-chip">VPN / DNS security <s>₹2,200/mo</s></span>
+      <span class="bh-chip">Contract review <s>₹15,000/doc</s></span>
+      <span class="bh-chip">Social media exec <s>₹25,000/mo</s></span>
+      <span class="bh-chip">Model playground <s>₹1,600/mo</s></span>
+      <span class="bh-chip one">adris.tech — from ₹0</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PLATFORM EXPLORER — obviously clickable
+============================================ -->
+<section class="bh-sec" id="platform">
+  <div class="wrap">
+    <div class="bh-head bh-rv">
+      <div class="idx">// 01 — The platform</div>
+      <h2>Eight products. <span class="it">One ecosystem.</span></h2>
+      <p class="sub">Every module is a full product on its own. Together, they share one login, one credential store, and one knowledge graph — so your agents, automations and data all work as a single system.</p>
+    </div>
+
+    <div class="bh-explorer bh-rv d1">
+      <div class="bh-rail" role="tablist" aria-label="Platform modules" id="bhRail"></div>
+      <div>
+        <div class="bh-panel" id="bhPanel" data-idx="01"></div>
+        <div class="bh-rail-hint">Click any module to explore <span class="cur">→</span> every one opens a full page</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     WHO IT'S FOR — B2B segments
+============================================ -->
+<section class="bh-sec" id="audience">
+  <div class="wrap">
+    <div class="bh-head bh-rv">
+      <div class="idx">// 02 — Built for teams that ship</div>
+      <h2>Who runs on <span class="it">adris.</span></h2>
+    </div>
+    <div class="bh-who">
+      <div class="bh-who-card bh-rv">
+        <div class="wtag">Agencies &amp; consultancies</div>
+        <h3>Deliver more clients without hiring more people.</h3>
+        <p>Your team's output is the product. adris multiplies it.</p>
+        <ul>
+          <li>Agents research prospects &amp; verify contacts in a live browser</li>
+          <li>Client reports, content and outreach drafted automatically</li>
+          <li>Automations deliver to Slack, Sheets, Notion — on schedule</li>
+        </ul>
+        <a class="wlink" href="/modules/krew">See Krew in action →</a>
+      </div>
+      <div class="bh-who-card bh-rv d1">
+        <div class="wtag">Founders &amp; SMBs</div>
+        <h3>An AI office for the price of a phone bill.</h3>
+        <p>Everything a first hire would do — before your first hire.</p>
+        <ul>
+          <li>Lead lists built, verified and saved to a shared Brain</li>
+          <li>Contracts scanned for risky clauses — in plain language</li>
+          <li>UPI billing · Hindi + 9 languages · ₹0 to start</li>
+        </ul>
+        <a class="wlink" href="/why-adris">See the ROI numbers →</a>
+      </div>
+      <div class="bh-who-card bh-rv d2">
+        <div class="wtag">Engineering teams</div>
+        <h3>Code, models and compute — all local.</h3>
+        <p>A dev environment that respects how engineers work.</p>
+        <ul>
+          <li>AI code editor with a real terminal — 9 providers or Ollama</li>
+          <li>51 open models, from 0.7 GB to frontier scale</li>
+          <li>Mesh pools RAM across machines for big models</li>
+        </ul>
+        <a class="wlink" href="/modules/coder">Explore the dev tools →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     TRUST — the B2B buying criterion
+============================================ -->
+<section class="bh-sec" id="trust">
+  <div class="wrap">
+    <div class="bh-head bh-rv">
+      <div class="idx">// 03 — Private by architecture</div>
+      <h2>Your data never <span class="it">leaves the building.</span></h2>
+      <p class="sub">Most AI platforms run your business through their cloud. adris runs on your hardware — the same guarantee you'd demand from any system that touches client data.</p>
+    </div>
+    <div class="bh-trust">
+      <div class="bh-trust-vis bh-rv" aria-hidden="true">
+        <div class="machine">
+          <div class="mlabel">■ Your machine</div>
+          <div class="drow"><span class="lock">🔒</span> Conversations — local SQLite database</div>
+          <div class="drow"><span class="lock">🔒</span> Credentials — encrypted on-device store</div>
+          <div class="drow"><span class="lock">🔒</span> Lead lists &amp; documents — local knowledge graph</div>
+          <div class="drow"><span class="lock">🔒</span> AI models — run offline via Ollama</div>
+          <div class="noexit">✕</div>
+        </div>
+        <div class="cloud">cloud sync — off by default · only what you explicitly enable</div>
+      </div>
+      <ul class="bh-trust-list bh-rv d1">
+        <li><span class="tick">✓</span><span><b>Local-first storage.</b> Chat history, automations and your knowledge graph live in SQLite files on your disk — not on our servers.</span></li>
+        <li><span class="tick">✓</span><span><b>Credentials stay on-device.</b> Gmail, Notion, Slack tokens are stored in an encrypted local store. API calls go directly from your machine to the service.</span></li>
+        <li><span class="tick">✓</span><span><b>Bring your own key.</b> Connect your own Gemini, OpenAI or Claude key — AI calls go straight from your device to the provider.</span></li>
+        <li><span class="tick">✓</span><span><b>Network-level protection included.</b> Vault blocks trackers and malicious domains at the DNS level; Guard scans contracts and monitors threats — all computed locally.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PRICING teaser
+============================================ -->
+<section class="bh-sec" id="pricing">
+  <div class="wrap">
+    <div class="bh-head bh-rv">
+      <div class="idx">// 04 — Pricing that makes sense here</div>
+      <h2>Start free. <span class="it">Scale when it pays for itself.</span></h2>
+    </div>
+    <div class="bh-price bh-rv d1">
+      <a class="bh-price-card" href="/pricing">
+        <div class="pn">Free</div>
+        <div class="pp">₹0<sub> forever</sub></div>
+        <div class="pd">All 8 modules · 50 AI tasks to try · run local models · Mesh 3 devices.</div>
+        <div class="pgo">Start free →</div>
+      </a>
+      <a class="bh-price-card" href="/pricing">
+        <div class="pn">Solo</div>
+        <div class="pp">₹1,499<sub>/mo</sub></div>
+        <div class="pd">~4,000 AI tasks/mo · cloud automations · security scans. For one person doing real work.</div>
+        <div class="pgo">See details →</div>
+      </a>
+      <a class="bh-price-card star" href="/pricing">
+        <span class="badge">Most popular</span>
+        <div class="pn">Builder</div>
+        <div class="pp">₹4,999<sub>/mo</sub></div>
+        <div class="pd">~16,000 AI tasks/mo · 5,000 automation runs · full Guard. For agencies &amp; power users.</div>
+        <div class="pgo">See details →</div>
+      </a>
+      <a class="bh-price-card" href="/pricing">
+        <div class="pn">Team</div>
+        <div class="pp">₹19,999<sub>/mo</sub></div>
+        <div class="pd">Shared workspace · admin controls · SSO · priority support with SLA.</div>
+        <div class="pgo">See details →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FINAL CTA
+============================================ -->
+<section class="bh-final">
+  <div class="wrap">
+    <h2 class="bh-rv">Your AI office is <span class="it">one download away.</span></h2>
+    <p class="bh-rv d1">Install in under a minute. No credit card, no sales call — unless you want one.</p>
+    <div class="row bh-rv d2">
+      <a href="/download" class="btn" style="height:44px;padding:0 26px;font-size:14px;">
+        Download for Windows — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </a>
+      <a href="/partner" class="bh-btn-ghost" style="height:44px;padding:0 26px;font-size:14px;">Book a walkthrough</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER (shared with the rest of the site)
+============================================ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="#top">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris.tech</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="/modules/krew">Krew · agents</a></li>
+          <li><a href="/modules/automation">Studio · automation</a></li>
+          <li><a href="/modules/coder">Coder · dev tools</a></li>
+          <li><a href="/modules/models">Models · open hub</a></li>
+          <li><a href="/modules/vault">Vault · DNS</a></li>
+          <li><a href="/modules/guard">Guard · security</a></li>
+          <li><a href="/modules/mesh">Mesh · devices</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/why-adris">Why adris</a></li>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/download">Download app</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/affiliates">Affiliate program</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="/download">Download — free</a></li>
+          <li><a href="/partner">Contact / Partner</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================
+     SCRIPTS
+============================================ -->
+
+<!-- Module explorer data + tabs -->
+<script>
+(function () {
+  var MODULES = [
+    { key: 'krew', n: '01', name: 'Krew', role: '/ AI agents', status: 'Live · Desktop', href: '/modules/krew', cta: 'Explore Krew',
+      desc: 'A 48-agent AI workforce led by a boss agent that delegates. It researches companies, finds and browser-verifies leads, drafts outreach, reads your inbox, and saves everything it learns to a shared Brain.',
+      outs: [
+        ['Sales', 'Verified lead lists with real LinkedIn, phone & email — never invented'],
+        ['Marketing', 'Content, campaigns and outreach drafted in your voice'],
+        ['Ops', 'Inbox triage, reports and research delivered on schedule'],
+      ] },
+    { key: 'automation', n: '02', name: 'Automation', role: '/ workflows', status: 'Live · Desktop', href: '/modules/automation', cta: 'Explore Automation',
+      desc: 'A visual canvas where you drag triggers, AI steps, conditions and loops into workflows — or just describe the automation in plain English and the AI builds it. 9 triggers, 14 output destinations.',
+      outs: [
+        ['Trigger', 'Schedules, email, webhooks, file drops, GitHub, Stripe'],
+        ['Process', 'Summarise, classify, extract, draft — with your company context'],
+        ['Deliver', 'Slack, Sheets, Notion, email, SMS — even while your PC is off'],
+      ] },
+    { key: 'coder', n: '03', name: 'Coder', role: '/ dev tools', status: 'Live · Desktop', href: '/modules/coder', cta: 'Explore Coder',
+      desc: 'A full development environment: Monaco editor, a real terminal, file tree and an AI assistant that reads your open file and terminal output. Works with 9 AI providers or fully offline via Ollama.',
+      outs: [
+        ['Write', 'AI edits applied live in the editor — revertable, auditable'],
+        ['Run', 'A real PTY terminal — git, npm, cargo, anything'],
+        ['Private', 'Chat history stays in a local database, per project'],
+      ] },
+    { key: 'models', n: '04', name: 'Models', role: '/ open hub', status: 'Free forever', href: '/modules/models', cta: 'Explore Models',
+      desc: 'Browse 51 curated open-source models — Llama, Mistral, Phi, Gemma, Indian-language models — see what your hardware can run, pull them locally, and compare models side by side.',
+      outs: [
+        ['Local', 'Runs on your machine — zero cloud cost, zero data out'],
+        ['Compare', '2–4 models answer the same prompt, timed, side by side'],
+        ['India', 'Indic models & LoRA adapters — Hindi, Tamil and more'],
+      ] },
+    { key: 'vault', n: '05', name: 'Vault', role: '/ DNS security', status: 'Always free', href: '/modules/vault', cta: 'Explore Vault',
+      desc: 'One-click DNS protection for the whole machine. Blocks ads, trackers, malware and phishing domains at the network level — across every app, with zero configuration after a one-time setup.',
+      outs: [
+        ['Block', 'Ads & trackers stopped before any connection is made'],
+        ['Modes', 'Speed, blocking, malware, family — switch any time'],
+        ['Quiet', 'Toggles from the system tray, survives restarts'],
+      ] },
+    { key: 'guard', n: '06', name: 'Guard', role: '/ security', status: 'Live · Paid plans', href: '/modules/guard', cta: 'Explore Guard',
+      desc: 'Reads agreements and flags risky clauses, missing terms and liabilities in plain language — including scanned PDFs and Hindi documents. Plus local threat monitoring for your machine.',
+      outs: [
+        ['Contracts', '200-page agreements reviewed in minutes, not billable hours'],
+        ['Risk', 'Section-by-section findings with a clear risk score'],
+        ['Local', 'Documents are analysed on-device — never uploaded'],
+      ] },
+    { key: 'mesh', n: '07', name: 'Mesh', role: '/ compute', status: 'Live · All plans', href: '/modules/mesh', cta: 'Explore Mesh',
+      desc: 'Pool RAM across the machines you already own to run AI models no single laptop could handle. One machine creates a room, others join with a code — the model runs across all of them.',
+      outs: [
+        ['Scale', 'Run frontier-size open models on consumer hardware'],
+        ['Simple', 'Room codes — no networking degree required'],
+        ['Flexible', 'Passes from ₹15/hour when you need extra devices'],
+      ] },
+    { key: 'brain', n: '08', name: 'Brain', role: '/ knowledge', status: 'Live · In-app', href: '/download', cta: 'Get the app',
+      desc: 'A shared knowledge graph you and your agents both use. Lead lists, research, drafts and files are saved as connected nodes — agents recall instead of re-researching, so context survives and tokens go further.',
+      outs: [
+        ['Memory', 'Agents remember your business across conversations'],
+        ['Visual', 'Pan, zoom and edit the graph — nothing is hidden'],
+        ['Local', 'The entire graph lives on your machine'],
+      ] },
+  ];
+
+  var rail  = document.getElementById('bhRail');
+  var panel = document.getElementById('bhPanel');
+  if (!rail || !panel) return;
+
+  function renderPanel(m) {
+    panel.setAttribute('data-idx', m.n);
+    panel.innerHTML =
+      '<div class="bh-panel-inner">' +
+        '<div class="p-top"><span class="p-status"><span class="ind"></span>' + m.status + '</span></div>' +
+        '<h3>' + m.name + ' <span class="role">' + m.role + '</span></h3>' +
+        '<p class="p-desc">' + m.desc + '</p>' +
+        '<div class="p-outs">' + m.outs.map(function (o) {
+          return '<div class="p-out"><span class="t">' + o[0] + '</span>' + o[1] + '</div>';
+        }).join('') + '</div>' +
+        '<a class="p-cta" href="' + m.href + '">' + m.cta + ' <span aria-hidden="true">→</span></a>' +
+      '</div>';
+  }
+
+  MODULES.forEach(function (m, i) {
+    var b = document.createElement('button');
+    b.className = 'bh-tab' + (i === 0 ? ' on' : '');
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    b.innerHTML = '<span class="n">' + m.n + '</span>' + m.name +
+                  '<span class="role">' + m.role.replace('/ ', '') + '</span><span class="arr">→</span>';
+    b.addEventListener('click', function () {
+      rail.querySelectorAll('.bh-tab').forEach(function (t) { t.classList.remove('on'); t.setAttribute('aria-selected', 'false'); });
+      b.classList.add('on');
+      b.setAttribute('aria-selected', 'true');
+      renderPanel(m);
+    });
+    rail.appendChild(b);
+  });
+
+  renderPanel(MODULES[0]);
+
+  // Gentle auto-advance until the user interacts — shows visitors the tabs DO something.
+  var idx = 0, touched = false;
+  rail.addEventListener('click', function () { touched = true; }, { once: true });
+  var timer = setInterval(function () {
+    if (touched) { clearInterval(timer); return; }
+    idx = (idx + 1) % MODULES.length;
+    var tabs = rail.querySelectorAll('.bh-tab');
+    tabs.forEach(function (t) { t.classList.remove('on'); t.setAttribute('aria-selected', 'false'); });
+    tabs[idx].classList.add('on');
+    tabs[idx].setAttribute('aria-selected', 'true');
+    renderPanel(MODULES[idx]);
+  }, 5000);
+})();
+</script>
+
+<!-- Scroll reveal + count-up stats -->
+<script>
+(function () {
+  // Reveal on scroll
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.bh-rv').forEach(function (el) { io.observe(el); });
+
+  // Count-up numbers
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cio = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      cio.unobserve(e.target);
+      var el = e.target, target = parseInt(el.getAttribute('data-count'), 10) || 0;
+      var prefix = el.getAttribute('data-prefix') || '';
+      if (reduce) { el.textContent = prefix + target; return; }
+      var t0 = null, DUR = 1100;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min((ts - t0) / DUR, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach(function (el) { cio.observe(el); });
+})();
+</script>
+
+<!-- Globe (same beloved globe as before) -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+(function () {
+  const canvas = document.getElementById('globe-cv');
+  if (!canvas || !window.d3 || !window.topojson) return;
+
+  const ctx = canvas.getContext('2d');
+  const BLR    = [77.6, 12.97];
+  const CITIES = [
+    [77.21, 28.61], // Delhi
+    [72.88, 19.07], // Mumbai
+    [88.36, 22.57], // Kolkata
+    [78.48, 17.38], // Hyderabad
+    [80.27, 13.08], // Chennai
+  ];
+  const ROUTES = [
+    [BLR, [-0.12,  51.50]],   // London
+    [BLR, [139.69, 35.68]],   // Tokyo
+    [BLR, [-74.01, 40.71]],   // New York
+    [BLR, [151.21,-33.87]],   // Sydney
+  ];
+
+  let w, h, proj, pathFn, world, lon = -78;
+
+  function clr() {
+    const ink = document.documentElement.getAttribute('data-theme') === 'ink';
+    return {
+      sphere:  ink ? 'rgba(124,92,255,.03)'  : 'rgba(124,92,255,.02)',
+      grat:    ink ? 'rgba(242,239,233,.09)' : 'rgba(14,14,12,.07)',
+      land:    ink ? 'rgba(242,239,233,.07)' : 'rgba(14,14,12,.06)',
+      border:  ink ? 'rgba(242,239,233,.24)' : 'rgba(14,14,12,.18)',
+      outline: ink ? 'rgba(242,239,233,.32)' : 'rgba(14,14,12,.24)',
+      city:    ink ? 'rgba(242,239,233,.6)'  : 'rgba(14,14,12,.5)',
+    };
+  }
+
+  function resize() {
+    const par = canvas.parentElement;
+    w = par.offsetWidth;
+    h = par.offsetHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    proj = d3.geoOrthographic()
+      .scale(Math.min(w * 0.46, h * 0.47))
+      .translate([w * 0.5, h * 0.5])
+      .clipAngle(90)
+      .precision(0.3);
+    pathFn = d3.geoPath(proj, ctx);
+  }
+
+  function onFront(ll) {
+    return d3.geoDistance(ll, [-lon, 15]) < Math.PI / 2 + 0.01;
+  }
+
+  function draw() {
+    lon += 0.022;
+    proj.rotate([lon, -15]);
+    ctx.clearRect(0, 0, w, h);
+    const c = clr();
+
+    ctx.beginPath(); pathFn({ type: 'Sphere' });
+    ctx.fillStyle = c.sphere; ctx.fill();
+
+    if (world) {
+      ctx.beginPath(); pathFn(d3.geoGraticule()());
+      ctx.strokeStyle = c.grat; ctx.lineWidth = 0.4; ctx.stroke();
+
+      ctx.beginPath();
+      pathFn(topojson.feature(world, world.objects.land));
+      ctx.fillStyle = c.land; ctx.fill();
+
+      ctx.beginPath();
+      pathFn(topojson.mesh(world, world.objects.countries, (a, b) => a !== b));
+      ctx.strokeStyle = c.border; ctx.lineWidth = 0.55; ctx.stroke();
+
+      if (onFront(BLR)) {
+        ROUTES.forEach(([from, to]) => {
+          ctx.beginPath();
+          pathFn({ type: 'LineString', coordinates: [from, to] });
+          ctx.strokeStyle = 'rgba(124,92,255,.3)';
+          ctx.lineWidth = 0.9; ctx.stroke();
+        });
+      }
+    }
+
+    ctx.beginPath(); pathFn({ type: 'Sphere' });
+    ctx.strokeStyle = c.outline; ctx.lineWidth = 1; ctx.stroke();
+
+    CITIES.forEach(ll => {
+      if (!onFront(ll)) return;
+      const p = proj(ll);
+      if (!p) return;
+      ctx.beginPath(); ctx.arc(p[0], p[1], 2, 0, 2 * Math.PI);
+      ctx.fillStyle = c.city; ctx.fill();
+    });
+
+    if (onFront(BLR)) {
+      const p = proj(BLR);
+      if (p) {
+        const t = (Date.now() % 2400) / 2400;
+        [0, 0.33, 0.66].forEach(off => {
+          const ph = (t + off) % 1;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 5 + ph * 22, 0, 2 * Math.PI);
+          ctx.strokeStyle = `rgba(124,92,255,${(1 - ph) * 0.7})`;
+          ctx.lineWidth = 1.5; ctx.stroke();
+        });
+        ctx.beginPath(); ctx.arc(p[0], p[1], 4.5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(124,92,255,.92)'; ctx.fill();
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  new ResizeObserver(resize).observe(canvas.parentElement);
+
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+    .then(r => r.json())
+    .then(data => { world = data; draw(); })
+    .catch(() => draw());
+})();
+</script>
+
+<!-- Affiliate ref tracking (same as old home) -->
+<script>
+(function () {
+  var SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
+  var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0';
+
+  var ref = new URLSearchParams(window.location.search).get('ref');
+  if (!ref) return;
+
+  try { localStorage.setItem('aff_ref', ref); } catch (_) {}
+
+  fetch(SUPA_URL + '/rest/v1/affiliates?ref_code=eq.' + encodeURIComponent(ref) + '&select=id&limit=1', {
+    headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON }
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (rows) {
+    var id = rows && rows[0] && rows[0].id;
+    if (!id) return;
+    fetch(SUPA_URL + '/rest/v1/affiliate_clicks', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_ANON,
+        'Authorization': 'Bearer ' + SUPA_ANON,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ affiliate_id: id, source_url: location.href })
+    });
+  })
+  .catch(function () {});
+})();
+</script>
+
+<!-- Signed-in avatar in nav + OAuth token forwarding (same as old home) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function () {
+  if (window.location.hash.indexOf('access_token=') > -1 || window.location.search.indexOf('code=') > -1) {
+    window.location.replace('/signin' + window.location.search + window.location.hash);
+    return;
+  }
+  var sb = window.supabase.createClient(
+    'https://xkkqcqsacgdrfwbwdqsp.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0'
+  );
+  function updateNav(session) {
+    var el = document.getElementById('navSignIn');
+    if (!el || !session) return;
+    var meta = session.user.user_metadata || {};
+    var avatar = meta.avatar_url || meta.picture;
+    var name = meta.full_name || meta.name || session.user.email;
+    el.removeAttribute('onmouseover');
+    el.removeAttribute('onmouseout');
+    if (avatar) {
+      el.style.cssText = 'padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';
+      el.innerHTML = '<img src="' + avatar + '" alt="' + name + '" title="' + name + '" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';
+    } else {
+      el.style.cssText = 'width:30px;height:30px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';
+      el.textContent = (name || 'U').charAt(0).toUpperCase();
+    }
+  }
+  try {
+    var stored = localStorage.getItem('sb-xkkqcqsacgdrfwbwdqsp-auth-token');
+    if (stored) { var sess = JSON.parse(stored); if (sess && sess.user) updateNav(sess); }
+  } catch (_) {}
+  sb.auth.getSession().then(function (r) { updateNav(r.data.session); });
+  sb.auth.onAuthStateChange(function (_e, s) { updateNav(s); });
+})();
+</script>
+</body>
+</html>
