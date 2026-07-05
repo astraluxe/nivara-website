@@ -48,12 +48,13 @@
   .bh-marquee-inner { animation: none !important; }
 }
 
-/* ── HERO ─────────────────────────────────────────────────────── */
+/* ── HERO — big globe as full background, text in front ───────── */
 .bh-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule); }
-.bh-hero .wrap { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 4vw, 64px); align-items: center; padding-top: clamp(56px, 8vh, 108px); padding-bottom: clamp(44px, 6vh, 84px); min-height: min(88vh, 860px); }
-.bh-hero-globe { position: relative; height: clamp(340px, 52vh, 620px); }
+.bh-hero-globe { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .bh-hero-globe canvas { position: absolute; inset: 0; }
-.bh-hero-globe .bh-globe-cap { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); white-space: nowrap; }
+.bh-hero-globe .bh-globe-cap { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-2); white-space: nowrap; }
+.bh-hero .wrap { position: relative; z-index: 2; padding-top: clamp(56px, 9vh, 118px); padding-bottom: clamp(56px, 8vh, 96px); min-height: min(90vh, 880px); display: flex; flex-direction: column; justify-content: center; }
+.bh-hero-copy { max-width: 780px; }
 
 .bh-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
 .bh-eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.5); animation: bh-pulse 2.2s infinite; }
@@ -184,8 +185,8 @@
 
 /* ── Responsive ───────────────────────────────────────────────── */
 @media (max-width: 1020px) {
-  .bh-hero .wrap { grid-template-columns: 1fr; min-height: 0; }
-  .bh-hero-globe { order: -1; height: clamp(240px, 34vh, 360px); margin-top: 8px; }
+  .bh-hero .wrap { min-height: min(84vh, 760px); }
+  .bh-hero-globe { opacity: .85; }
   .bh-explorer { grid-template-columns: 1fr; }
   .bh-rail { flex-direction: row; flex-wrap: wrap; }
   .bh-tab { width: auto; flex: 1 1 45%; }
@@ -309,8 +310,12 @@ document.getElementById('themeToggle').addEventListener('click', function () {
      HERO — business message first, globe kept
 ============================================ -->
 <section class="bh-hero" id="top">
+  <div class="bh-hero-globe" aria-hidden="true">
+    <canvas id="globe-cv"></canvas>
+    <span class="bh-globe-cap">// built in Bengaluru · working worldwide</span>
+  </div>
   <div class="wrap">
-    <div>
+    <div class="bh-hero-copy">
       <div class="bh-eyebrow bh-rv"><span class="pulse"></span>Live · v1.0.70 &nbsp;·&nbsp; Windows &amp; Linux &nbsp;·&nbsp; Bengaluru, IN</div>
       <h1 class="bh-h1 bh-rv d1">Run your business<br/>on <span class="it acc">one</span> AI platform.</h1>
       <p class="bh-sub bh-rv d2">
@@ -332,11 +337,6 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <div class="bh-stat"><div class="v"><span data-count="48">0</span> <em>agents</em></div><div class="k">Your AI workforce</div></div>
         <div class="bh-stat"><div class="v"><span data-count="100">0</span><em>%</em></div><div class="k">Runs on your device</div></div>
       </div>
-    </div>
-
-    <div class="bh-hero-globe" aria-hidden="true">
-      <canvas id="globe-cv"></canvas>
-      <span class="bh-globe-cap">// built in Bengaluru · working worldwide</span>
     </div>
   </div>
 </section>
@@ -788,8 +788,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     proj = d3.geoOrthographic()
-      .scale(Math.min(w * 0.46, h * 0.47))
-      .translate([w * 0.5, h * 0.5])
+      .scale(Math.min(w * 0.44, h * 0.84))     // bigger than the classic page (0.38 / 0.72)
+      .translate([w * 0.55, h * 0.54])          // slightly right of center — text sits left
       .clipAngle(90)
       .precision(0.3);
     pathFn = d3.geoPath(proj, ctx);
