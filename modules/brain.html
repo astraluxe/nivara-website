@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brain — The shared memory you and your AI agents both use · adris.tech</title>
+<meta name="description" content="Brain is a visual knowledge graph inside adris.tech. Lead lists, research, drafts and files are saved as connected nodes — agents recall instead of re-researching, so nothing is forgotten and tokens go further. Everything stays on your machine." />
+<link rel="canonical" href="https://adris.tech/modules/brain" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../module-pages.css" />
+<link rel="stylesheet" href="../backgrounds.css" />
+<link rel="stylesheet" href="../module-editorial.css" />
+
+<style>
+  .brain-stage-body { display: grid; grid-template-columns: 1fr 260px; background: #0E0E0C; }
+  .brain-graph-area { padding: 36px 28px; border-right: 1px solid rgba(242,239,233,0.08); display: flex; align-items: center; justify-content: center; }
+  .brain-graph-svg { width: 100%; max-width: 480px; height: auto; }
+  .brain-info-area { padding: 28px 22px; display: flex; flex-direction: column; gap: 22px; }
+  .bi-row { display: flex; flex-direction: column; gap: 4px; }
+  .bi-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,239,233,0.35); }
+  .bi-val { font-family: var(--font-mono); font-size: 12px; color: rgba(242,239,233,0.88); }
+  .bi-log { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; }
+  .bi-line { display: flex; justify-content: space-between; gap: 10px; font-family: var(--font-mono); font-size: 9px; color: rgba(242,239,233,0.35); padding: 4px 0; border-bottom: 1px solid rgba(242,239,233,0.04); }
+  .bi-line .bi-act { color: var(--accent); white-space: nowrap; }
+  @media (max-width: 760px) { .brain-stage-body { grid-template-columns: 1fr; } .brain-info-area { border-top: 1px solid rgba(242,239,233,0.08); } .brain-graph-area { border-right: none; } }
+  /* Use cases */
+  .buse { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .bucard { background: var(--paper); padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .bucard .bun { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-2); }
+  .bucard h6 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .bucard p { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+  @media (max-width: 760px) { .buse { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home"><svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg><span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span><span class="dot"></span></a>
+    <ul class="nav-links"><li><a href="/#platform">Platform</a></li><li class="has-dropdown">
+        <a href="/#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
+            <a href="/modules/automation"><span class="nav-dd-tag">02</span>Automation</a>
+            <a href="/modules/coder"><span class="nav-dd-tag">03</span>Coder</a>
+            <a href="/modules/models"><span class="nav-dd-tag">04</span>Models</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
+            <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
+            <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+            <a href="/modules/brain"><span class="nav-dd-tag">08</span>Brain — Knowledge</a>
+          </div>
+        </div>
+      </li><li><a href="/pricing">Pricing</a></li><li><a href="/download">Download</a></li></ul>
+    <div class="nav-right">
+      <a href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span></button>
+      <a href="/download" class="btn">Download — free <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true"><div class="mobile-nav-inner"><ul><li><a href="/" onclick="closeMobileNav()">Home</a></li><li><a href="/#platform" onclick="closeMobileNav()">Modules</a></li><li><a href="/pricing" onclick="closeMobileNav()">Pricing</a></li><li><a href="/download" onclick="closeMobileNav()">Download</a></li></ul><a href="/download" class="btn mobile-nav-cta">Download — free</a></div></div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+
+<!-- HERO -->
+<div class="hiw-hero">
+  <a href="/#platform" class="hiw-back"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg> All modules</a>
+  <h1>The memory <em>your AI never loses.</em></h1>
+  <p class="hiw-hero-sub">Every other AI tool forgets you between conversations. Brain is a visual knowledge graph inside adris.tech that you <strong>and</strong> your agents share — lead lists, research, outreach drafts and files saved as connected nodes. Agents recall instead of re-researching, so context survives, work never repeats, and your AI budget goes further. <strong>All of it stays on your machine.</strong></p>
+  <div class="hiw-jump-grid">
+    <a href="#what" class="hiw-jump"><span class="hiw-jump-num">00</span> What is Brain?</a>
+    <a href="#how" class="hiw-jump"><span class="hiw-jump-num">01</span> How it works</a>
+    <a href="#why" class="hiw-jump"><span class="hiw-jump-num">02</span> Why it matters</a>
+    <a href="#uses" class="hiw-jump"><span class="hiw-jump-num">03</span> Three ways to use it</a>
+  </div>
+</div>
+
+<div style="border-top:1px solid var(--rule);">
+<div class="hiw-layout">
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav">
+      <li><a href="#what" class="active"><span class="hiw-nav-num">00</span>What is Brain?</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#how"><span class="hiw-nav-num">01</span>How it works</a></li>
+      <li><a href="#why"><span class="hiw-nav-num">02</span>Why it matters</a></li>
+      <li><a href="#uses"><span class="hiw-nav-num">03</span>Three ways to use it</a></li>
+      <div class="hiw-nav-sep"></div>
+      <li><a href="#who"><span class="hiw-nav-num">→</span>Who is this for?</a></li>
+    </ul>
+  </aside>
+
+  <main class="hiw-main">
+
+    <section class="hiw-section" id="what">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> What is Brain</div>
+      <h2>Your business, <span class="it">as a living graph.</span></h2>
+      <p class="hiw-oneliner">One shared memory for you and your agents · saved as connected nodes · stored on your machine</p>
+
+      <p>Ask an AI to find leads today, and tomorrow it has no idea it ever did. Brain fixes that. Everything your Krew agents produce — company lists, verified contacts, research findings, outreach drafts — is saved as a node in a visual graph and <strong>connected to the files it came from</strong>. Attach your product doc, ask for buyers, and the resulting lead list is linked to that exact document. Next week, when you say "draft outreach for those companies," the agents recall the saved list instead of researching it all over again.</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="frame frame-dark">
+          <div class="frame-top"><span class="ldot"></span><span class="ldot"></span><span class="ldot"></span><span class="ftitle">adris.tech BRAIN · KNOWLEDGE GRAPH</span></div>
+          <div class="brain-stage-body">
+            <div class="brain-graph-area">
+              <svg class="brain-graph-svg" viewBox="0 0 480 300" fill="none">
+                <!-- edges -->
+                <line x1="240" y1="150" x2="110" y2="70"  stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <line x1="240" y1="150" x2="380" y2="70"  stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <line x1="240" y1="150" x2="110" y2="235" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <line x1="240" y1="150" x2="380" y2="235" stroke="rgba(124,92,255,0.45)" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <line x1="110" y1="70"  x2="380" y2="70"  stroke="rgba(242,239,233,0.08)" stroke-width="1"/>
+                <line x1="380" y1="70"  x2="380" y2="235" stroke="rgba(242,239,233,0.08)" stroke-width="1"/>
+                <!-- travelling dots: knowledge being recalled -->
+                <circle r="3.5" fill="var(--accent)" opacity="0.85"><animateMotion dur="2s"   repeatCount="indefinite"><mpath href="#bpA"/></animateMotion></circle>
+                <circle r="3.5" fill="var(--accent)" opacity="0.85"><animateMotion dur="2.2s" repeatCount="indefinite" begin="0.5s"><mpath href="#bpB"/></animateMotion></circle>
+                <circle r="3.5" fill="var(--accent)" opacity="0.85"><animateMotion dur="1.8s" repeatCount="indefinite" begin="1s"><mpath href="#bpC"/></animateMotion></circle>
+                <defs>
+                  <path id="bpA" d="M110,70 L240,150"/>
+                  <path id="bpB" d="M240,150 L380,235"/>
+                  <path id="bpC" d="M110,235 L240,150"/>
+                </defs>
+                <!-- centre node: PRODUCT.md -->
+                <circle cx="240" cy="150" r="42" fill="rgba(124,92,255,0.12)" stroke="rgba(124,92,255,0.75)" stroke-width="2"/>
+                <text x="240" y="146" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="500" fill="rgba(124,92,255,1)">PRODUCT.md</text>
+                <text x="240" y="162" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="rgba(242,239,233,0.38)">your file</text>
+                <!-- satellite nodes -->
+                <circle cx="110" cy="70" r="36" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/>
+                <text x="110" y="66"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="500" fill="rgba(242,239,233,0.92)">Lead list</text>
+                <text x="110" y="81"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="rgba(242,239,233,0.38)">27 verified</text>
+                <circle cx="380" cy="70" r="36" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/>
+                <text x="380" y="66"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="500" fill="rgba(242,239,233,0.92)">Outreach</text>
+                <text x="380" y="81"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="rgba(242,239,233,0.38)">6 drafts</text>
+                <circle cx="110" cy="235" r="36" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/>
+                <text x="110" y="231" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="500" fill="rgba(242,239,233,0.92)">Research</text>
+                <text x="110" y="246" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="rgba(242,239,233,0.38)">3 reports</text>
+                <circle cx="380" cy="235" r="36" fill="rgba(14,14,12,0.85)" stroke="rgba(124,92,255,0.6)" stroke-width="1.5"/>
+                <text x="380" y="231" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="500" fill="rgba(242,239,233,0.92)">Contacts</text>
+                <text x="380" y="246" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="8.5" fill="rgba(242,239,233,0.38)">progress notes</text>
+              </svg>
+            </div>
+            <div class="brain-info-area">
+              <div class="bi-row"><span class="bi-label">Graph</span><span class="bi-val">5 nodes · 6 links</span></div>
+              <div class="bi-row"><span class="bi-label">Stored</span><span class="bi-val">Locally · your machine</span></div>
+              <div class="bi-row" style="margin-top:auto;"><span class="bi-label">Agent activity</span>
+                <div class="bi-log">
+                  <div class="bi-line"><span>Nyx · lead research</span><span class="bi-act">saved → Lead list</span></div>
+                  <div class="bi-line"><span>Kabir · cold outreach</span><span class="bi-act">recalled ← Lead list</span></div>
+                  <div class="bi-line"><span>Kabir · cold outreach</span><span class="bi-act">saved → Outreach</span></div>
+                  <div class="bi-line"><span>You</span><span class="bi-act">edited → Contacts</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="figcap">Attach a file, and everything the agents produce is saved and linked to it — recalled later instead of re-researched.</div>
+      </div>
+
+      <div class="story">
+        <div class="story-who">Real story — Solo founder in Bengaluru</div>
+        <h4>A founder asked Krew to find buyers for his product, then came back three days later.</h4>
+        <p>Before Brain, day two meant starting over: the agent had no memory of the list, so it researched the same companies again — spending the same time and the same AI budget twice.</p>
+        <p>With Brain, the verified lead list was already a node linked to his product file. When he said <em>"draft outreach for these companies,"</em> the agents pulled the saved list, wrote the messages, and saved those as a connected node too. <strong>Follow-up work now starts from where the last session ended</strong> — not from zero.</p>
+      </div>
+
+      <div class="replaces">
+        <span class="replaces-label">Replaces</span>
+        <span class="chip">Re-explaining context every chat</span>
+        <span class="chip">Scattered docs &amp; spreadsheets</span>
+        <span class="chip">Paying twice for the same research</span>
+      </div>
+    </section>
+
+    <section class="hiw-section" id="how">
+      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> How it works</div>
+      <h2>Save. Link. <span class="it">Recall.</span></h2>
+      <p class="hiw-oneliner">Agents write to the graph automatically · you can see and edit everything</p>
+
+      <p>You don't have to manage any of this. When agents do real work — building a lead list, drafting outreach, researching a company — the result is saved to the Brain automatically and linked to the files involved. You can also add your own notes and files, connect any two items, or edit what's stored. What the agents "remember" is visible to you, not hidden in a black box.</p>
+
+      <ol class="steps">
+        <li><div class="step-text"><strong>Work gets captured</strong><span>Attach a file or ask for research — the outputs are saved as nodes, automatically linked to their source.</span></div></li>
+        <li><div class="step-text"><strong>Knowledge gets connected</strong><span>Lead lists link to your product doc, outreach drafts link to the lead list — a real map of your business.</span></div></li>
+        <li><div class="step-text"><strong>Agents recall before they research</strong><span>Next request, agents check the Brain first. Found it? They reuse it — no repeated searching, no repeated cost.</span></div></li>
+        <li><div class="step-text"><strong>You stay in control</strong><span>Pan, zoom, search and edit the graph. Add notes, connect items, or delete anything — it's your data, on your disk.</span></div></li>
+      </ol>
+    </section>
+
+    <section class="hiw-section" id="why">
+      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> Why it matters</div>
+      <h2>Memory is what turns a chatbot <span class="it">into a colleague.</span></h2>
+      <p class="hiw-oneliner">Context survives · work compounds · tokens go further</p>
+
+      <p>The hidden cost of AI tools isn't the subscription — it's repetition. Re-explaining your business every session, re-running research the tool already did, re-building lists that existed last week. Brain removes that tax. Because agents recall saved knowledge instead of re-fetching it, the same monthly AI budget covers meaningfully more work — and long-running efforts like a sales pipeline actually accumulate progress per contact instead of resetting.</p>
+
+      <div class="result-box">
+        <strong>The bottom line:</strong> with Brain, your AI gets more useful the longer you use it — because it's building a private, editable memory of your business on your own machine, not starting fresh every conversation.
+      </div>
+    </section>
+
+    <section class="hiw-section" id="uses">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> In practice</div>
+      <h2>Three ways people <span class="it">use Brain.</span></h2>
+      <p class="hiw-oneliner">Sales pipelines · client knowledge · personal research</p>
+
+      <div class="hiw-figure hiw-figure--wide">
+        <div class="buse">
+          <div class="bucard"><span class="bun">01 · Sales</span><h6>A pipeline that remembers</h6><p>Lead lists, verified contacts and per-contact progress notes live as connected nodes — every follow-up starts from the latest state, not from scratch.</p></div>
+          <div class="bucard"><span class="bun">02 · Agencies</span><h6>Per-client knowledge</h6><p>Each client's brief, research and drafts stay linked together. Switch clients without losing the thread — or the context.</p></div>
+          <div class="bucard"><span class="bun">03 · Personal</span><h6>Research that compounds</h6><p>Attach papers, notes and files; let agents summarise and link them. Over time you get a private map of everything you know.</p></div>
+        </div>
+        <div class="figcap">Same graph, three jobs — anywhere repeated context matters, Brain pays for itself.</div>
+      </div>
+    </section>
+
+    <section class="hiw-section" id="who">
+      <div class="hiw-section-tag"><span class="hiw-section-num">→</span> Who is this for</div>
+      <h2>If you've ever re-explained yourself to an AI, <span class="it">Brain is for you.</span></h2>
+      <p>Brain fits best for:</p>
+      <div class="ba">
+        <div class="ba-box after" style="grid-column:1/-1;">
+          <div class="ba-head">People who benefit most</div>
+          <ul>
+            <li><strong>Founders &amp; sales teams</strong> — pipelines, lead lists and outreach that accumulate instead of resetting.</li>
+            <li><strong>Agencies</strong> — every client's context stays connected and instantly recallable.</li>
+            <li><strong>Anyone doing ongoing work with AI</strong> — research, writing, planning that carries over between sessions.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hiw-cta">
+        <h2>Give your AI <span class="it">a memory.</span></h2>
+        <p>Brain is built into the adris.tech app and works with every Krew agent automatically — included on all plans, stored entirely on your machine.</p>
+        <div class="hiw-cta-btns">
+          <a href="/download" class="cta-btn-main">Download — free <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+          <a href="/modules/krew" class="cta-btn-ghost">Meet the agents</a>
+          <a href="/pricing" class="cta-btn-ghost">Pricing</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</div>
+
+<footer style="border-top:1px solid var(--rule);padding:32px 0;">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;"><svg width="18" height="17" viewBox="0 0 26 24" fill="none"><path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/><path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/></svg><span style="font-size:13px;font-weight:500;color:var(--ink);">adris.tech</span></div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <a href="/how-it-works" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">How it works</a>
+      <a href="/privacy" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Privacy</a>
+      <a href="/terms" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Terms</a>
+      <a href="/download" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Download</a>
+      <a href="/pricing" style="font-size:12px;color:var(--muted-2);text-decoration:none;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted-2)'">Pricing</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){var s=localStorage.getItem('nv-theme')||'paper';if(s==='ink')document.documentElement.setAttribute('data-theme','ink');var b=document.getElementById('themeToggle');if(b)b.setAttribute('aria-pressed',s==='ink'?'true':'false');})();
+document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme')==='ink'?'paper':'ink';document.documentElement.setAttribute('data-theme',c==='paper'?'':'ink');localStorage.setItem('nv-theme',c);this.setAttribute('aria-pressed',c==='ink'?'true':'false');});
+function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');document.getElementById('mobileNavOverlay').classList.remove('open');document.getElementById('navHam').classList.remove('open');document.getElementById('navHam').setAttribute('aria-expanded','false');document.body.style.overflow='';}
+document.getElementById('navHam').addEventListener('click',function(){var open=this.classList.toggle('open');document.getElementById('mobileNav').classList.toggle('open',open);document.getElementById('mobileNavOverlay').classList.toggle('open',open);this.setAttribute('aria-expanded',open);document.body.style.overflow=open?'hidden':'';});
+(function(){var sections=document.querySelectorAll('.hiw-section[id]');var links=document.querySelectorAll('.hiw-nav a');var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.remove('active');});var m=document.querySelector('.hiw-nav a[href="#'+e.target.id+'"]');if(m)m.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'});sections.forEach(function(s){obs.observe(s);});})();
+</script>
+</body>
+</html>

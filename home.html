@@ -233,6 +233,7 @@
             <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
             <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
             <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+            <a href="/modules/brain"><span class="nav-dd-tag">08</span>Brain — Knowledge</a>
           </div>
         </div>
       </li>
@@ -275,6 +276,7 @@
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/vault"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Vault</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/guard"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Guard</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/mesh"        onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Mesh</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/brain"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Brain</a></li>
       <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
       <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
@@ -557,6 +559,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
           <li><a href="/modules/vault">Vault · DNS</a></li>
           <li><a href="/modules/guard">Guard · security</a></li>
           <li><a href="/modules/mesh">Mesh · devices</a></li>
+          <li><a href="/modules/brain">Brain · knowledge</a></li>
         </ul>
       </div>
       <div>
@@ -648,7 +651,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         ['Simple', 'Room codes — no networking degree required'],
         ['Flexible', 'Passes from ₹15/hour when you need extra devices'],
       ] },
-    { key: 'brain', n: '08', name: 'Brain', role: '/ knowledge', status: 'Live · In-app', href: '/download', cta: 'Get the app',
+    { key: 'brain', n: '08', name: 'Brain', role: '/ knowledge', status: 'Live · All plans', href: '/modules/brain', cta: 'Explore Brain',
       desc: 'A shared knowledge graph you and your agents both use. Lead lists, research, drafts and files are saved as connected nodes — agents recall instead of re-researching, so context survives and tokens go further.',
       outs: [
         ['Memory', 'Agents remember your business across conversations'],

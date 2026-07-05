@@ -24,6 +24,7 @@
     { "source": "/modules/vault",       "destination": "/modules/vault.html" },
     { "source": "/modules/guard",       "destination": "/modules/guard.html" },
     { "source": "/modules/mesh",        "destination": "/modules/mesh.html" },
+    { "source": "/modules/brain",       "destination": "/modules/brain.html" },
     { "source": "/team",               "destination": "/team.html" },
     { "source": "/team-dashboard",     "destination": "/team-dashboard.html" },
     { "source": "/enterprise",         "destination": "/enterprise.html" },
