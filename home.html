@@ -716,8 +716,17 @@ document.getElementById('themeToggle').addEventListener('click', function () {
   renderPanel(MODULES[0]);
 
   // Gentle auto-advance until the user interacts — shows visitors the tabs DO something.
+  // CRITICAL: stop on pointerdown/touchstart (NOT click) and on the PANEL too, not just the
+  // rail. A tap on mobile is touchstart → …gap… → click; if the 5s rotation fired in that gap
+  // it replaced the panel's innerHTML — including the "Explore →" link mid-tap — so the click
+  // landed on a dead element and nothing opened. pointerdown fires before the click resolves,
+  // freezing the DOM the instant a finger touches anywhere in the explorer.
   var idx = 0, touched = false;
-  rail.addEventListener('click', function () { touched = true; }, { once: true });
+  function stopAuto() { touched = true; clearInterval(timer); }
+  ['pointerdown', 'touchstart', 'keydown'].forEach(function (ev) {
+    rail.addEventListener(ev, stopAuto, { passive: true, once: true });
+    panel.addEventListener(ev, stopAuto, { passive: true, once: true });
+  });
   var timer = setInterval(function () {
     if (touched) { clearInterval(timer); return; }
     idx = (idx + 1) % MODULES.length;
