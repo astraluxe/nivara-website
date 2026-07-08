@@ -13,6 +13,16 @@ module.exports = function handler(req, res) {
   const found = REGISTRY.models.find(m => m.id === model);
   if (!found) return res.status(404).json({ error: `Model "${model}" not found` });
 
+  if (found.download_available === false) {
+    return res.status(200).json({
+      gated: false,
+      download_available: false,
+      model_id: found.id,
+      name: found.name,
+      message: `${found.name} is too large for a single-file download and needs Mesh (multiple machines pooling RAM). Open the Mesh tab to join or build a Mesh session.`,
+    });
+  }
+
   if (found.gated) {
     return res.status(200).json({
       gated: true,
