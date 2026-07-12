@@ -726,10 +726,12 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 @media(max-width:520px){.persona-grid{grid-template-columns:1fr!important}}
 /* Hover-to-explain technical terms in the comparison table */
 .ttm{border-bottom:1px dotted var(--mu);cursor:help}
-.tokx{cursor:pointer;color:var(--ac);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;transition:color .12s}
-.tokx .tx-t{display:none}
-.tokx:hover .tx-m{display:none}
-.tokx:hover .tx-t{display:inline}
+.tokx{position:relative;cursor:help;color:var(--ac);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;transition:color .12s}
+/* Show the token total as an absolutely-positioned bubble so the number stays put
+   and the line never reflows/wraps on hover (that reflow was the flicker glitch). */
+.tokx .tx-t{position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);opacity:0;visibility:hidden;pointer-events:none;background:var(--ink);color:var(--paper);padding:4px 9px;border-radius:6px;font-size:11px;font-weight:600;line-height:1.2;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.22);z-index:30;transition:opacity .12s}
+.tokx .tx-t::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.tokx:hover .tx-t{opacity:1;visibility:visible}
 .tip-row td:first-child{position:relative}
 </style>
 
