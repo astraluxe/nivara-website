@@ -79,11 +79,9 @@
 .pc ul { list-style:none; display:flex; flex-direction:column; gap:9px; flex:1; }
 .pc ul li { display:flex; align-items:flex-start; gap:8px; font-size:12px; line-height:1.4; color:var(--ink); }
 .pc.ft ul li { color:rgba(255,255,255,.8); }
-.iy,.in { width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; font-size:8px; }
-.iy { background:rgba(22,163,74,.15); color:var(--gr); }
-.pc.ft .iy { background:rgba(255,255,255,.1); color:#4ade80; }
-.in { background:rgba(0,0,0,.06); color:#ccc; }
-.pc.ft .in { background:rgba(255,255,255,.07); color:rgba(255,255,255,.3); }
+.iy,.in { width:17px; height:17px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; font-size:0; background-repeat:no-repeat; background-position:center; background-size:17px 17px; }
+.iy, .pc.ft .iy { background-color:transparent; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><circle cx='10' cy='10' r='10' fill='%2316a34a'/><path d='M5.8 10.3l2.6 2.6 5.8-6.1' fill='none' stroke='white' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/></svg>"); }
+.in, .pc.ft .in { background-color:transparent; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><circle cx='10' cy='10' r='10' fill='%23dc2626'/><path d='M6.6 6.6l6.8 6.8M13.4 6.6l-6.8 6.8' fill='none' stroke='white' stroke-width='2.1' stroke-linecap='round'/></svg>"); }
 .dm { color:var(--mu); }
 .pc.ft .dm { color:rgba(255,255,255,.4); }
 .ch { font-family:var(--font-mono); font-size:10px; background:rgba(124,92,255,.1); color:var(--ac); padding:1px 5px; border-radius:4px; margin-left:auto; flex-shrink:0; white-space:nowrap; }
@@ -420,6 +418,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <ul>
         <li><span class="iy">&#10003;</span>Everything in Solo</li>
         <li><span class="iy">&#10003;</span>~16,000 AI tasks / month<span class="ch tokx" title="hover to see tokens"><span class="tx-m">160×</span><span class="tx-t">≈16M tokens / mo</span></span></li>
+        <li><span class="iy">&#10003;</span>Advanced AI-image decks &middot; Social scheduling</li>
         <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">5,000/mo</span></li>
         <li><span class="iy">&#10003;</span>Mesh &mdash; 25 devices</li>
         <li><span class="iy">&#10003;</span>Guard &middot; security scanner</li>
@@ -458,6 +457,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <h5>AI &amp; Power</h5>
         <ul>
           <li>~50,000 AI tasks / month <span class="ch tokx" title="hover to see tokens"><span class="tx-m">500×</span><span class="tx-t">≈50M tokens / mo</span></span></li>
+          <li>Advanced AI-image decks + social scheduling</li>
           <li>Cloud automations <span class="ch">Unlimited*</span></li>
           <li>Guard (security scanner)</li>
           <li>Mesh &mdash; 50 devices</li>
