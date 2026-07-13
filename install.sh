@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 set -e
 
-VERSION="1.0.67"
-TAG="v1.0.67-linux"
-BASE="https://github.com/astraluxe/nivara-desktop/releases/download/$TAG"
+# adris.tech Linux installer.
+# Linux builds are published under v<version>-linux release tags. That tag is never GitHub's
+# "latest" (the latest slot belongs to the Windows release), so we resolve the newest
+# v*-linux tag from the GitHub API automatically — and fall back to a pinned version if the
+# API can't be reached. This keeps `curl … | sh` pointing at the right release every time.
+FALLBACK_VERSION="1.0.95"
+REPO="astraluxe/nivara-desktop"
+
+TAG=$(curl -fsSL "https://api.github.com/repos/$REPO/releases?per_page=30" 2>/dev/null \
+        | grep -oE '"tag_name": *"v[0-9.]+-linux"' \
+        | grep -oE 'v[0-9.]+-linux' \
+        | head -n1)
+if [ -z "$TAG" ]; then TAG="v${FALLBACK_VERSION}-linux"; fi
+VERSION="${TAG#v}"; VERSION="${VERSION%-linux}"
+
+BASE="https://github.com/$REPO/releases/download/$TAG"
 DEB_URL="$BASE/adris-setup-linux-$VERSION.deb"
 APPIMAGE_URL="$BASE/adris-setup-linux-$VERSION.AppImage"
 
@@ -16,7 +29,7 @@ if command -v apt-get &>/dev/null; then
   TMP=$(mktemp -d)
   curl -fsSL --progress-bar "$DEB_URL" -o "$TMP/adris.deb"
   echo "Installing..."
-  sudo dpkg -i "$TMP/adris.deb"
+  sudo dpkg -i "$TMP/adris.deb" || sudo apt-get install -f -y
   rm -rf "$TMP"
   echo ""
   echo "Done! Open adris.tech from your application launcher."
