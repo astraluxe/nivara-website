@@ -6,7 +6,7 @@ set -e
 # "latest" (the latest slot belongs to the Windows release), so we resolve the newest
 # v*-linux tag from the GitHub API automatically — and fall back to a pinned version if the
 # API can't be reached. This keeps `curl … | sh` pointing at the right release every time.
-FALLBACK_VERSION="1.0.95"
+FALLBACK_VERSION="1.0.96"
 REPO="astraluxe/nivara-desktop"
 
 TAG=$(curl -fsSL "https://api.github.com/repos/$REPO/releases?per_page=30" 2>/dev/null \
