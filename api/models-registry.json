@@ -633,7 +633,7 @@
         "indic"
       ],
       "license": "Gemma",
-      "gated": true,
+      "gated": false,
       "description": "Google mid-size Gemma 3. Excellent Indian language support.",
       "benchmark_mmlu": 76,
       "hf_repo": "bartowski/gemma-3-12b-it-GGUF",
@@ -802,7 +802,7 @@
         "reasoning"
       ],
       "license": "Llama 3.1",
-      "gated": true,
+      "gated": false,
       "description": "Meta flagship small model. 128K context, 8-language support.",
       "cpu_only": true,
       "benchmark_mmlu": 73,
@@ -846,7 +846,7 @@
         "indic"
       ],
       "license": "Gemma",
-      "gated": true,
+      "gated": false,
       "description": "Google compact model. Strong multilingual and reasoning per GB of RAM.",
       "cpu_only": true,
       "benchmark_mmlu": 72,
