@@ -403,7 +403,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <li><span class="iy">&#10003;</span>Advanced AI-image decks &mdash; pro images, custom colours</li>
         <li><span class="iy">&#10003;</span>Social scheduling &amp; auto-publish</li>
         <li><span class="iy">&#10003;</span>Mesh &mdash; 10 devices</li>
-        <li><span class="iy">&#10003;</span>Guard &middot; security scanner<span class="ch">10 scans/mo</span></li>
+        <li><span class="iy">&#10003;</span>Guard &middot; security scanner<span class="ch">10 contract scans &middot; 50 inbox checks/mo</span></li>
         <li><span class="in">&#10007;</span><span class="dm">Team workspace</span></li>
       </ul>
     </div>
@@ -597,7 +597,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   var USAGE_TIER = { trial: 0, light: 1, daily: 2, heavy: 3 };
   var GENERIC_FALLBACK = {
     free:    ['Coder, Vault and Models are included too'],
-    solo:    ['Guard security scanning available'],
+    solo:    ['Guard: 10 contract scans + 50 inbox checks a month'],
     builder: ['5,000 cloud automation runs/month'],
     team:    ['Admin controls, centralised billing + SSO'],
   };
@@ -617,7 +617,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 
     if (state.feature.has('cloudauto')) { tier = Math.max(tier, 1); reasonsFor.solo.push('Cloud automations that keep running while your PC is off'); }
     if (state.feature.has('unlimlead') || state.usecase.has('leads')) { tier = Math.max(tier, 1); reasonsFor.solo.push('Unlimited browser-verified lead searches'); }
-    if (state.feature.has('guard') || state.usecase.has('security')) { tier = Math.max(tier, 1); reasonsFor.solo.push('Guard security scanning included'); }
+    if (state.feature.has('guard') || state.usecase.has('security')) { tier = Math.max(tier, 1); reasonsFor.solo.push('Guard included — 10 contract scans + 50 inbox checks a month'); }
     if (state.feature.has('mesh25')) { tier = Math.max(tier, 2); reasonsFor.builder.push('Mesh — 25 devices'); }
     if (state.usecase.has('team') || state.feature.has('workspace')) { tier = Math.max(tier, 3); reasonsFor.team.push('Multiple teammates in one shared workspace'); }
     if (state.feature.has('sla')) { tier = Math.max(tier, 3); reasonsFor.team.push('Priority support with an SLA'); }
@@ -825,7 +825,9 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <tr><td><span class="ttm" title="A saved automation firing in the cloud — on a schedule, an email, or a file drop — so it runs even when your computer is off.">Cloud automation runs</span></td><td class="c"><span class="cross">&#8212;</span></td><td class="c"><span class="chip">500/mo</span></td><td class="c"><span class="chip">5,000/mo</span></td><td class="c"><span class="chip">Unlimited*</span></td></tr>
           <tr><td><span class="ttm" title="Advanced mode opens a real browser to verify each LinkedIn and enrich contacts (phone/email) — slower and more thorough than Fast mode. Metered because it does heavy live browsing.">Advanced browser-verified searches</span></td><td class="c"><span class="chip">5/mo</span></td><td class="c"><span class="chip">Unlimited</span></td><td class="c"><span class="chip">Unlimited</span></td><td class="c"><span class="chip">Unlimited</span></td></tr>
           <tr><td><span class="ttm" title="Mesh links your own devices (PC, laptop, phone) over an encrypted tunnel so they share AI tasks and files — no cloud storage needed.">Mesh devices</span></td><td class="c"><span class="chip">3</span></td><td class="c"><span class="chip">10</span></td><td class="c"><span class="chip">25</span></td><td class="c"><span class="chip">50</span></td></tr>
-          <tr><td><span class="ttm" title="Guard scans your code, documents and contracts for security risks and compliance issues, and explains what to fix in plain language.">Guard (security scanner)</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="chip">10/mo</span></td><td class="c"><span class="tick">&#10003;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
+          <tr><td><span class="ttm" title="Guard reviews contracts in plain English, watches your inbox for phishing, tracks vulnerabilities in your dependencies and checks compliance. Vulnerability and compliance checks are unmetered on every plan that includes Guard.">Guard &middot; contract scanning</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="chip">10/mo</span></td><td class="c"><span class="tick">&#10003;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
+          <tr><td><span class="ttm" title="Guard checks new mail for phishing, spoofed senders and payment fraud. Most mail is judged by rules on your own machine at no cost — only genuinely suspicious messages count against this allowance.">Guard &middot; inbox phishing watch</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="chip">50/mo</span></td><td class="c"><span class="tick">&#10003;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
+          <tr><td><span class="ttm" title="Known vulnerabilities in your GitHub dependencies, and compliance checks against GDPR, DPDP and PCI requirements.">Guard &middot; vulnerabilities &amp; compliance</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="tick">&#10003;</span></td><td class="c"><span class="tick">&#10003;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
           <tr><td><span class="ttm" title="A shared workspace where your whole team uses the same AI office, with one bill and admin controls over who can do what.">Team workspace</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
           <tr><td><span class="ttm" title="Faster, dedicated support with a guaranteed response time (SLA) for teams that depend on adris.tech daily.">Priority support + SLA</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="cross">&#10007;</span></td><td class="c"><span class="tick">&#10003;</span></td></tr>
           <tr class="grp"><td colspan="5">Price</td></tr>
