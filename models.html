@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Local AI models &mdash; adris.tech</title>
+<meta name="description" content="Every local AI model adris.tech can run: what free plans get, what paid plans add, and which one suits your laptop." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Local AI models — adris.tech" />
+<meta property="og:description" content="Run AI on your own machine. See which models are free, which are paid, and what each is good for." />
+<meta property="og:url" content="https://adris.tech/models" />
+<meta property="og:image" content="https://adris.tech/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="https://adris.tech/models" />
+<meta name="robots" content="index, follow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+
+.mw{max-width:1000px;margin:0 auto;padding:0 24px}
+.mhero{padding:140px 0 40px;text-align:center}
+.mhero h1{font-family:'Instrument Serif',serif;font-size:clamp(38px,6vw,62px);line-height:1.05;margin:0 0 14px}
+.mhero p{max-width:640px;margin:0 auto;color:var(--muted,#666);font-size:16px;line-height:1.7}
+.mnote{max-width:760px;margin:26px auto 0;padding:16px 20px;border:1px solid var(--rule,#e6e6e6);border-radius:14px;background:rgba(124,92,255,.05);font-size:14.5px;line-height:1.75;text-align:left}
+.msec{margin:52px 0 0}
+.msec h2{font-family:'Instrument Serif',serif;font-size:30px;margin:0 0 6px}
+.msec .sub{color:var(--muted,#666);font-size:14.5px;margin:0 0 18px}
+.mtable{width:100%;border-collapse:collapse;border:1px solid var(--rule,#e6e6e6);border-radius:14px;overflow:hidden}
+.mtable th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#666);padding:12px 16px;background:rgba(0,0,0,.03);font-weight:600}
+.mtable td{padding:13px 16px;border-top:1px solid var(--rule,#eee);font-size:14px;vertical-align:top}
+.mname{font-weight:600}
+.muse{color:var(--muted,#666)}
+.mtag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:600;vertical-align:middle}
+.mtag-free{background:rgba(16,185,129,.12);color:#0f9d6e;border:1px solid rgba(16,185,129,.3)}
+.mtag-paid{background:rgba(124,92,255,.12);color:#7C5CFF;border:1px solid rgba(124,92,255,.32)}
+.mcta{margin:56px 0 100px;text-align:center}
+.mcta a{display:inline-block;padding:13px 26px;border-radius:999px;background:#7C5CFF;color:#fff;text-decoration:none;font-weight:600;font-size:15px}
+.mcta a.alt{background:transparent;color:inherit;border:1px solid var(--rule,#ddd);margin-left:10px}
+.mfit{margin-top:14px;font-size:13.5px;color:var(--muted,#666)}
+@media(max-width:640px){
+  .mtable thead{display:none}
+  .mtable tr{display:block;border-top:1px solid var(--rule,#eee)}
+  .mtable td{display:flex;justify-content:space-between;gap:14px;border:0;padding:8px 14px}
+  .mtable td::before{content:attr(data-l);color:var(--muted,#888);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  .mhero{padding:110px 0 30px}
+  .mcta a.alt{margin:10px 0 0}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#platform">Platform</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/download" style="color: var(--accent);">Download</a></li>
+      <li><a href="/affiliates">Affiliates</a></li>
+    </ul>
+    <div class="nav-right">
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="#download-now" class="btn">
+        Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="mw">
+  <section class="mhero">
+    <h1>Run AI on your own machine</h1>
+    <p>adris.tech can use a model that lives on your computer instead of the cloud. Nothing leaves your laptop, there is no usage meter to watch, and it keeps working offline.</p>
+    <div class="mnote">
+      <strong>A local model can do everything the hosted AI does.</strong> Web lookups, Google Maps, LinkedIn scanning and file handling are performed by <em>the app</em>, not by the cloud &mdash; a local model drives exactly the same tools. What changes is size: writing and summaries run happily on a small model, while lookups, multi&#8209;step jobs and research need a larger one. adris.tech checks your memory and free disk, then tells you which model fits.
+    </div>
+  </section>
+
+  <section class="msec">
+    <h2>On every plan, including Free</h2>
+    <p class="sub">Twelve models, free to download and run. No limits and no usage meter &mdash; they run on your hardware.</p>
+    <table class="mtable">
+      <thead><tr><th>Model</th><th>Download</th><th>Memory needed</th><th>Best for</th></tr></thead>
+      <tbody>
+<tr><td class="mname" data-l="Model">Qwen2.5 3B <span class="mtag mtag-free">Free</span></td><td data-l="Download">2.0 GB</td><td data-l="Memory">6 GB</td><td class="muse" data-l="Best for">Writing, rewriting, summaries</td></tr>
+<tr><td class="mname" data-l="Model">Llama 3.2 3B <span class="mtag mtag-free">Free</span></td><td data-l="Download">2.0 GB</td><td data-l="Memory">6 GB</td><td class="muse" data-l="Best for">Everyday writing and Q&amp;A</td></tr>
+<tr><td class="mname" data-l="Model">Phi-3 Mini <span class="mtag mtag-free">Free</span></td><td data-l="Download">2.3 GB</td><td data-l="Memory">6 GB</td><td class="muse" data-l="Best for">Quick answers, light reasoning</td></tr>
+<tr><td class="mname" data-l="Model">Gemma 2 2B <span class="mtag mtag-free">Free</span></td><td data-l="Download">1.6 GB</td><td data-l="Memory">4 GB</td><td class="muse" data-l="Best for">Smallest option &mdash; older laptops</td></tr>
+<tr><td class="mname" data-l="Model">Mistral 7B <span class="mtag mtag-free">Free</span></td><td data-l="Download">4.1 GB</td><td data-l="Memory">10 GB</td><td class="muse" data-l="Best for">Solid general-purpose writing</td></tr>
+<tr><td class="mname" data-l="Model">Llama 3.1 8B <span class="mtag mtag-free">Free</span></td><td data-l="Download">4.7 GB</td><td data-l="Memory">12 GB</td><td class="muse" data-l="Best for">The sweet spot &mdash; better writing, simple tool steps</td></tr>
+<tr><td class="mname" data-l="Model">Qwen2.5 7B <span class="mtag mtag-free">Free</span></td><td data-l="Download">4.4 GB</td><td data-l="Memory">12 GB</td><td class="muse" data-l="Best for">Strong at structured output</td></tr>
+<tr><td class="mname" data-l="Model">CodeLlama 7B <span class="mtag mtag-free">Free</span></td><td data-l="Download">3.8 GB</td><td data-l="Memory">10 GB</td><td class="muse" data-l="Best for">Code, inside Coder</td></tr>
+<tr><td class="mname" data-l="Model">DeepSeek-Coder 6.7B <span class="mtag mtag-free">Free</span></td><td data-l="Download">3.8 GB</td><td data-l="Memory">10 GB</td><td class="muse" data-l="Best for">Code completion and review</td></tr>
+<tr><td class="mname" data-l="Model">Nomic Embed <span class="mtag mtag-free">Free</span></td><td data-l="Download">0.3 GB</td><td data-l="Memory">2 GB</td><td class="muse" data-l="Best for">Powers Brain search</td></tr>
+<tr><td class="mname" data-l="Model">LLaVA 7B <span class="mtag mtag-free">Free</span></td><td data-l="Download">4.5 GB</td><td data-l="Memory">10 GB</td><td class="muse" data-l="Best for">Reads images and screenshots</td></tr>
+<tr><td class="mname" data-l="Model">Whisper Small <span class="mtag mtag-free">Free</span></td><td data-l="Download">0.5 GB</td><td data-l="Memory">4 GB</td><td class="muse" data-l="Best for">Voice to text</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="msec">
+    <h2>Paid plans add the large models</h2>
+    <p class="sub">The bigger models handle tool-driven work &mdash; web lookups, multi-step runs and research &mdash; entirely on your own machine. Paid plans can also import any model file you already have.</p>
+    <table class="mtable">
+      <thead><tr><th>Model</th><th>Download</th><th>Memory needed</th><th>Best for</th></tr></thead>
+      <tbody>
+<tr><td class="mname" data-l="Model">Qwen2.5 14B <span class="mtag mtag-paid">Paid</span></td><td data-l="Download">9.0 GB</td><td data-l="Memory">24 GB</td><td class="muse" data-l="Best for">The full job locally &mdash; web lookups, multi-step runs, research</td></tr>
+<tr><td class="mname" data-l="Model">Llama 3.3 70B (Q4) <span class="mtag mtag-paid">Paid</span></td><td data-l="Download">40 GB</td><td data-l="Memory">64 GB</td><td class="muse" data-l="Best for">Closest to hosted quality, for workstations</td></tr>
+<tr><td class="mname" data-l="Model">Mixtral 8x7B <span class="mtag mtag-paid">Paid</span></td><td data-l="Download">26 GB</td><td data-l="Memory">48 GB</td><td class="muse" data-l="Best for">Long documents and deeper reasoning</td></tr>
+<tr><td class="mname" data-l="Model">Qwen2.5-Coder 32B <span class="mtag mtag-paid">Paid</span></td><td data-l="Download">19 GB</td><td data-l="Memory">32 GB</td><td class="muse" data-l="Best for">Serious code work offline</td></tr>
+<tr><td class="mname" data-l="Model">DeepSeek-R1 32B <span class="mtag mtag-paid">Paid</span></td><td data-l="Download">19 GB</td><td data-l="Memory">32 GB</td><td class="muse" data-l="Best for">Step-by-step reasoning</td></tr>
+<tr><td class="mname" data-l="Model">Your own .gguf file <span class="mtag mtag-paid">Paid</span></td><td data-l="Download">any</td><td data-l="Memory">&mdash;</td><td class="muse" data-l="Best for">Import a model you already have</td></tr>
+      </tbody>
+    </table>
+    <p class="mfit">Sizes are the quantised downloads adris.tech uses. The app never suggests a model your machine cannot comfortably run &mdash; it checks free disk and memory first.</p>
+  </section>
+
+  <section class="mcta">
+    <a href="/download">Download adris.tech</a>
+    <a href="/pricing" class="alt">See plans</a>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="/">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="/modules/krew">Krew · agents</a></li>
+          <li><a href="/modules/automation">Studio · automation</a></li>
+          <li><a href="/modules/coder">Coder · dev tools</a></li>
+          <li><a href="/modules/models">Models · open hub</a></li>
+          <li><a href="/modules/vault">Vault · DNS Protection</a></li>
+          <li><a href="/modules/guard">Guard · security</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/affiliates">Affiliate Terms</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/#platform">About</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/why-adris">ROI case</a></li>
+          <li><a href="/download">Download app</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="/partner">Contact / Partner</a></li>
+          <li><a href="/affiliates">Affiliate program</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var _nb=window.supabase.createClient('https://xkkqcqsacgdrfwbwdqsp.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0');
+  function _nu(s){var el=document.getElementById('navSignIn');if(!el||!s)return;var m=s.user.user_metadata||{};var av=m.avatar_url||m.picture;var nm=m.full_name||m.name||s.user.email;el.removeAttribute('onmouseover');el.removeAttribute('onmouseout');if(av){el.style.cssText='padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';el.innerHTML='<img src="'+av+'" alt="'+nm+'" title="'+nm+'" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';}else{el.style.cssText='width:30px;height:30px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';el.textContent=(nm||'U').charAt(0).toUpperCase();}}
+  _nb.auth.getSession().then(function(r){_nu(r.data.session);});
+  _nb.auth.onAuthStateChange(function(_,s){_nu(s);});
+})();
+</script>
+</body>
+</html>

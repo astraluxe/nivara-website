@@ -6,6 +6,7 @@
     { "source": "/",                    "destination": "/home.html" },
     { "source": "/classic",             "destination": "/NIVARA.html" },
     { "source": "/pricing",             "destination": "/pricing.html" },
+    { "source": "/models",              "destination": "/models.html" },
     { "source": "/download",            "destination": "/download.html" },
     { "source": "/affiliates",          "destination": "/affiliates.html" },
     { "source": "/partner",             "destination": "/partner.html" },

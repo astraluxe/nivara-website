@@ -369,7 +369,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <li><span class="iy">&#10003;</span>50 AI tasks to try<span class="ch tokx" title="hover to see tokens"><span class="tx-m">1×</span><span class="tx-t">≈100K tokens · lifetime</span></span></li>
         <li><span class="iy">&#10003;</span>All 45+ Krew AI agents</li>
         <li><span class="iy">&#10003;</span>Coder &middot; Studio &middot; Vault &middot; Models</li>
-        <li><span class="iy">&#10003;</span>Download &amp; run local AI models</li>
+        <li><span class="iy">&#10003;</span>Local AI models &mdash; <strong>12 free models</strong> <a href="/models" class="mdl-link">which ones?</a></li>
         <li><span class="iy">&#10003;</span>Deck &amp; PPT maker &mdash; 10 templates, PDF &amp; PowerPoint export</li>
         <li><span class="iy">&#10003;</span>Social post writer &mdash; all 15+ platforms</li>
         <li><span class="iy">&#10003;</span>Mesh &mdash; 3 devices</li>
@@ -399,6 +399,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <ul>
         <li><span class="iy">&#10003;</span>Everything in Free</li>
         <li><span class="iy">&#10003;</span>~4,000 AI tasks / month<span class="ch tokx" title="hover to see tokens"><span class="tx-m">40×</span><span class="tx-t">≈4M tokens / mo</span></span></li>
+        <li><span class="iy">&#10003;</span><strong>All local models</strong> + import your own <a href="/models" class="mdl-link">see list</a></li>
         <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">500/mo</span></li>
         <li><span class="iy">&#10003;</span>Advanced AI-image decks &mdash; pro images, custom colours</li>
         <li><span class="iy">&#10003;</span>Social scheduling &amp; auto-publish</li>
@@ -427,6 +428,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <ul>
         <li><span class="iy">&#10003;</span>Everything in Solo</li>
         <li><span class="iy">&#10003;</span>~16,000 AI tasks / month<span class="ch tokx" title="hover to see tokens"><span class="tx-m">160×</span><span class="tx-t">≈16M tokens / mo</span></span></li>
+        <li><span class="iy">&#10003;</span>All local models + import your own <a href="/models" class="mdl-link">see list</a></li>
         <li><span class="iy">&#10003;</span>Advanced AI-image decks &middot; Social scheduling</li>
         <li><span class="iy">&#10003;</span>Cloud automations<span class="ch">5,000/mo</span></li>
         <li><span class="iy">&#10003;</span>Mesh &mdash; 25 devices</li>
@@ -733,7 +735,11 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 .tokx .tx-t::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
 .tokx:hover .tx-t{opacity:1;visibility:visible}
 .tip-row td:first-child{position:relative}
-</style>
+
+    .mdl-link{color:var(--acc,#7C5CFF);text-decoration:none;font-size:.82em;margin-left:6px;border-bottom:1px dotted currentColor}
+    .mdl-link:hover{opacity:.75}
+    .plan-now{display:inline-block;margin:10px auto 0;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(124,92,255,.12);color:#7C5CFF;border:1px solid rgba(124,92,255,.35)}
+  </style>
 
 
 <!-- ── ALL PLANS INCLUDE ──────────────────────────────────────── -->
@@ -952,6 +958,36 @@ async function signInWithGoogle(pendingPlan) {
     options: { redirectTo: window.location.origin + '/pricing' }
   });
 }
+
+// ── Show the plan the signed-in user is ALREADY on ──────────────────────────
+// Someone who has just paid lands back here and sees the same Pay buttons, which invites a second
+// payment for something they already have. Mark their current plan and disable its button.
+(async function markCurrentPlan() {
+  try {
+    const { data: { session } } = await _supa.auth.getSession();
+    if (!session) return;
+    const { data } = await _supa.from('users').select('plan').eq('id', session.user.id).single();
+    const plan = (data && data.plan) || 'free';
+    if (!plan || plan === 'free' || plan === 'explore') return;
+    // DB plan values do not all match the card ids (business is the 'Team' card).
+    const CARD_ID = { solo: 'planSolo', builder: 'planBuilder', business: 'planTeam', custom: 'planFinder' };
+    const card = document.getElementById(CARD_ID[plan] || ('plan' + plan.charAt(0).toUpperCase() + plan.slice(1)));
+    if (!card) return;
+    const tag = document.createElement('div');
+    tag.className = 'plan-now';
+    tag.textContent = 'Your current plan';
+    const btns = card.querySelector('.bts');
+    if (btns) {
+      btns.parentNode.insertBefore(tag, btns);
+      btns.querySelectorAll('button').forEach(function (b) {
+        b.disabled = true;
+        b.style.opacity = '.45';
+        b.style.cursor = 'not-allowed';
+        b.title = "You're already on this plan";
+      });
+    }
+  } catch (e) { /* not signed in, or offline — leave the page exactly as it is */ }
+})();
 
 async function payWithINR(planKey) {
   const { data: { session } } = await _supa.auth.getSession();
