@@ -1041,6 +1041,44 @@
       "cpu_only": true,
       "hf_repo": "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF",
       "hf_filename": "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
+    },
+    {
+      "id": "llama32-11b-vision-q4",
+      "name": "Llama 3.2 11B Vision",
+      "creator": "Meta",
+      "params": "11B",
+      "quantization": "Q4_K_M",
+      "size_gb": 7.0,
+      "ram_min_gb": 10,
+      "ram_recommended_gb": 12,
+      "context_length": 131072,
+      "best_for": [
+        "chat",
+        "reasoning"
+      ],
+      "license": "Llama 3.2",
+      "gated": false,
+      "description": "Meta multimodal model — understands images alongside text."
+    },
+    {
+      "id": "gemma3-9b-q4",
+      "name": "Gemma 3 9B",
+      "creator": "Google",
+      "params": "9B",
+      "quantization": "Q4_K_M",
+      "size_gb": 5.7,
+      "ram_min_gb": 8,
+      "ram_recommended_gb": 10,
+      "context_length": 131072,
+      "best_for": [
+        "chat",
+        "writing",
+        "indic"
+      ],
+      "benchmark_mmlu": 72,
+      "license": "Gemma",
+      "gated": false,
+      "description": "Google compact mid-size. Excellent multilingual instruction following."
     }
   ]
 }
