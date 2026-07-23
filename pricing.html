@@ -333,6 +333,21 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   <p>Free to start. Upgrade when you need more AI power, automation, or devices.</p>
 </section>
 
+<!-- ── CHECKOUT-LOCKED NOTICE (temporary) ─────────────────────── -->
+<div id="payLockBanner" style="max-width:760px;margin:20px auto 0;padding:0 32px;scroll-margin-top:90px">
+  <div style="background:rgba(124,92,255,.07);border:1px solid rgba(124,92,255,.28);border-radius:14px;padding:16px 20px;display:flex;align-items:flex-start;gap:14px;transition:box-shadow .25s,border-color .25s">
+    <div style="width:36px;height:36px;background:rgba(124,92,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2.5" stroke="#7C5CFF" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#7C5CFF" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;font-weight:600;color:#7C5CFF;margin-bottom:3px">Checkout is briefly paused — and that's a good thing</div>
+      <div style="font-size:12.5px;color:var(--ink);line-height:1.6">
+        We're putting our new checkout through final testing so your very first payment is flawless — smooth, secure, and right the first time. The prices below are final and won't change; upgrading simply reopens shortly. We expect it live by <strong>Monday, 27&nbsp;July&nbsp;2026 (IST)</strong>. Thanks for your patience — it's a short wait for a payment experience we're proud of. Meanwhile, <a href="/download" style="color:#7C5CFF;text-decoration:none;font-weight:500">the app is free to download and use</a>.
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── PROMO BANNER (shown only when user has active promo) ─── -->
 <div id="promoBanner" style="display:none;max-width:680px;margin:0 auto;padding:0 32px 0;margin-top:24px">
   <div style="background:rgba(124,92,255,.08);border:1px solid rgba(124,92,255,.25);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:14px;">
@@ -989,7 +1004,39 @@ async function signInWithGoogle(pendingPlan) {
   } catch (e) { /* not signed in, or offline — leave the page exactly as it is */ }
 })();
 
+// ── Temporary checkout lock ──────────────────────────────────────────────────
+// Payments are paused while the new checkout finishes testing (so nobody hits the
+// earlier gateway hiccup again). This is the single hard gate — every payment path
+// (INR, USD, and the resume-after-login path) checks it, so Razorpay is never
+// reached while true. Flip to false to reopen checkout.
+window.PAYMENTS_LOCKED = true;
+window.PAY_UNLOCK_DATE = 'Monday, 27 July 2026 (IST)';
+function showPayLock() {
+  var b = document.getElementById('payLockBanner');
+  if (!b) return;
+  b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  var card = b.firstElementChild;
+  if (card) {
+    card.style.boxShadow = '0 0 0 4px rgba(124,92,255,.18)';
+    card.style.borderColor = 'rgba(124,92,255,.6)';
+    setTimeout(function () { card.style.boxShadow = ''; card.style.borderColor = 'rgba(124,92,255,.28)'; }, 1400);
+  }
+}
+// Turn every "Pay …" button into a calm locked button that points at the notice.
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.PAYMENTS_LOCKED) return;
+  document.querySelectorAll('.bts .bi, .bts .bu').forEach(function (btn) {
+    btn.setAttribute('data-orig', btn.innerHTML);
+    btn.innerHTML = '&#128274; Reopens Mon 27 Jul';
+    btn.style.opacity = '.75';
+    btn.style.cursor = 'not-allowed';
+    btn.onclick = function (e) { e.preventDefault(); showPayLock(); };
+    btn.title = 'Checkout reopens ' + window.PAY_UNLOCK_DATE;
+  });
+});
+
 async function payWithINR(planKey) {
+  if (window.PAYMENTS_LOCKED) { showPayLock(); return; }
   const { data: { session } } = await _supa.auth.getSession();
   if (!session) {
     openLogin(planKey);
@@ -1005,10 +1052,13 @@ async function payWithINR(planKey) {
 }
 
 function payWithUSD() {
+  if (window.PAYMENTS_LOCKED) { showPayLock(); return; }
   document.getElementById('usdModal').classList.add('open');
 }
 
 async function startRazorpayPayment(planKey, session, activePromo) {
+  // Hard gate — covers the resume-after-login path too, so no locked state can slip through.
+  if (window.PAYMENTS_LOCKED) { showPayLock(); return; }
   try {
     const body = activePromo
       ? { plan: planKey, promo_code: activePromo.code, discount_pct: activePromo.discount_pct }
