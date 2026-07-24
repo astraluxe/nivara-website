@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>adris.tech — Product Brief</title>
+<meta name="description" content="The adris.tech product brief for business — what it does, the hours it gives back, what's included, how it works with your tools, and what it costs. Read it or download the PDF." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="module-pages.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+<style>
+/* ── Product brief — local styles ───────────────────────────── */
+.br-wrap { max-width: 940px; margin: 0 auto; }
+
+.br-wrap h2 {
+  font-size: clamp(19px,2.2vw,26px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.br-wrap h3 { font-size: 15px; font-weight: 600; margin: 26px 0 8px; color: var(--ink); }
+.br-wrap p  { font-size: 14.5px; line-height: 1.75; color: var(--muted); margin: 0 0 14px; }
+.br-wrap ul { margin: 0 0 14px 20px; }
+.br-wrap ul li { font-size: 14.5px; line-height: 1.7; color: var(--muted); margin-bottom: 6px; }
+.br-wrap a { color: var(--accent); }
+.hl { color: var(--ink); font-weight: 600; }
+
+/* Numbered section headers */
+.br-sec { margin: 0 0 46px; }
+.br-sec-head {
+  display: flex; align-items: baseline; gap: 12px;
+  padding-bottom: 12px; margin-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.br-num {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .14em;
+  color: var(--accent); flex-shrink: 0;
+}
+.br-lede { font-size: 15px; line-height: 1.75; color: var(--muted); margin: 0 0 18px; }
+
+/* Action bar */
+.br-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 26px 0 8px; }
+.br-dl {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 9px;
+  background: var(--accent); color: #fff; border: 1px solid var(--accent);
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  transition: opacity .15s;
+}
+/* Beat the generic `.br-wrap a` colour rule — otherwise the label goes accent-on-accent. */
+.br-wrap a.br-dl, .br-wrap a.br-dl:hover { color: #fff; }
+.br-dl:hover { opacity: .85; }
+.br-alt {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 16px; border-radius: 9px;
+  border: 1px solid var(--rule-strong); background: none;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+  color: var(--muted); text-decoration: none; cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.br-wrap a.br-alt { color: var(--muted); }
+.br-alt:hover, .br-wrap a.br-alt:hover { border-color: var(--accent); color: var(--accent); }
+.br-meta { font-family: var(--font-mono); font-size: 11px; color: var(--muted-2); letter-spacing: .03em; }
+
+/* At-a-glance panel */
+.glance {
+  border: 1px solid var(--rule); border-radius: 16px;
+  background: var(--paper-2, #f5f5f2);
+  padding: 28px 30px; margin: 0 0 48px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 22px 28px;
+}
+[data-theme="ink"] .glance { background: #1a1a17; }
+.glance-k {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--muted-2); margin-bottom: 5px;
+}
+.glance-v { font-size: 14px; line-height: 1.5; color: var(--ink); font-weight: 500; }
+
+/* Generic table */
+.br-table { width: 100%; border-collapse: collapse; margin: 6px 0 20px; font-size: 13.5px; }
+.br-table th {
+  text-align: left; font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted-2);
+  font-weight: 500; padding: 0 14px 10px 0; border-bottom: 1px solid var(--rule);
+}
+.br-table td {
+  padding: 12px 14px 12px 0; border-bottom: 1px solid var(--rule);
+  color: var(--muted); line-height: 1.6; vertical-align: top;
+}
+.br-table td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.br-table td.wrapc:first-child { white-space: normal; }
+.br-table tr:last-child td { border-bottom: none; }
+.yes { color: #16a34a; font-weight: 600; }
+.no  { color: #b91c1c; font-weight: 600; }
+
+/* Module cards */
+.mod-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin: 6px 0 14px; }
+.mod-card {
+  border: 1px solid var(--rule); border-radius: 12px;
+  padding: 20px 22px; background: var(--paper-1, #fff);
+}
+[data-theme="ink"] .mod-card { background: #131310; }
+.mod-card h4 { font-size: 14.5px; font-weight: 600; color: var(--ink); margin: 0 0 7px; }
+.mod-card p { font-size: 13px; line-height: 1.65; color: var(--muted); margin: 0 0 10px; }
+.mod-tag {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em;
+  color: var(--muted-2); background: var(--paper-2, #f5f5f2);
+  padding: 5px 9px; border-radius: 6px; display: inline-block; line-height: 1.4;
+}
+[data-theme="ink"] .mod-tag { background: #1a1a17; }
+
+/* Callout */
+.br-note {
+  border-left: 3px solid var(--accent);
+  background: var(--paper-2, #f5f5f2);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px; margin: 4px 0 20px;
+}
+[data-theme="ink"] .br-note { background: #1a1a17; }
+.br-note p { margin: 0; font-size: 13.5px; line-height: 1.7; }
+
+/* Checklist */
+.check { list-style: none; margin: 0 0 14px; padding: 0; counter-reset: ck; }
+.check li {
+  position: relative; padding-left: 30px; margin-bottom: 10px;
+  font-size: 14px; line-height: 1.65; color: var(--muted);
+}
+.check li::before {
+  counter-increment: ck; content: counter(ck);
+  position: absolute; left: 0; top: 1px;
+  width: 19px; height: 19px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Job cards — what you ask for → what you get back */
+.job {
+  border: 1px solid var(--rule); border-radius: 13px;
+  padding: 22px 24px; margin-bottom: 14px;
+  background: var(--paper-1, #fff);
+}
+[data-theme="ink"] .job { background: #131310; }
+.job-h { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+.job-h h4 { font-size: 15.5px; font-weight: 600; color: var(--ink); margin: 0; letter-spacing: -.01em; }
+.job-time {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em;
+  color: var(--accent); white-space: nowrap; flex-shrink: 0; font-weight: 500;
+}
+.say {
+  font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6;
+  color: var(--ink); background: var(--paper-2, #f5f5f2);
+  border-left: 2px solid var(--accent);
+  padding: 10px 14px; border-radius: 0 7px 7px 0; margin: 0 0 12px;
+}
+[data-theme="ink"] .say { background: #1a1a17; }
+.say b { color: var(--accent); font-weight: 500; }
+.job p { font-size: 13.5px; line-height: 1.7; color: var(--muted); margin: 0; }
+.job p + p { margin-top: 9px; }
+
+/* Time-back numbers */
+.tb-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px; border: 1px solid var(--rule); border-radius: 14px;
+  padding: 26px 28px; margin: 4px 0 22px; background: var(--paper-2, #f5f5f2);
+}
+[data-theme="ink"] .tb-grid { background: #1a1a17; }
+.tb-num {
+  font-family: var(--font-mono); font-size: clamp(24px,3.2vw,34px); font-weight: 700;
+  color: var(--accent); line-height: 1; letter-spacing: -.03em; margin-bottom: 7px;
+}
+.tb-lbl { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+
+/* Before / after columns */
+.ba { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 6px 0 18px; }
+.ba-col { border: 1px solid var(--rule); border-radius: 12px; padding: 20px 22px; }
+.ba-col.after { border-color: var(--accent); }
+.ba-col h4 {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; margin: 0 0 12px; color: var(--muted-2); font-weight: 500;
+}
+.ba-col.after h4 { color: var(--accent); }
+.ba-col ul { margin: 0; padding: 0; list-style: none; }
+.ba-col li {
+  font-size: 13px; line-height: 1.6; color: var(--muted);
+  padding-left: 16px; position: relative; margin-bottom: 9px;
+}
+.ba-col li::before { content: '·'; position: absolute; left: 3px; color: var(--muted-2); }
+.ba-col.after li::before { content: '→'; font-size: 10px; left: 0; top: 1px; color: var(--accent); }
+.ba-foot { font-size: 12.5px; color: var(--ink); font-weight: 600; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--rule); }
+@media (max-width: 640px) { .ba { grid-template-columns: 1fr; } }
+
+/* Contact block */
+.br-contact {
+  border: 1px solid var(--rule); border-radius: 14px;
+  padding: 26px 28px; margin: 8px 0 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 20px;
+}
+.br-contact .glance-v a { text-decoration: none; }
+
+.br-foot-note {
+  font-size: 11.5px; line-height: 1.65; color: var(--muted-2);
+  border-top: 1px solid var(--rule); padding-top: 14px; margin-top: 40px;
+}
+
+/* Print-only header (appears in the PDF, hidden on the web) */
+.print-head { display: none; }
+
+@media (max-width: 640px) {
+  .glance { padding: 22px; }
+  .br-table { font-size: 12.5px; }
+  .br-table td:first-child { white-space: normal; }
+}
+
+/* ── Print / PDF styles ────────────────────────────────────── */
+@media print {
+  @page { size: A4; margin: 14mm 14mm 15mm; }
+  html, body { background: #fff !important; color: #111 !important; }
+  nav, .mobile-nav-drawer, .mobile-nav-overlay, .crumb, footer,
+  .br-actions, .theme-toggle, .br-cta { display: none !important; }
+  .mhero { padding: 0 !important; }
+  .wrap { padding: 0 !important; max-width: 100% !important; }
+  .br-wrap { max-width: 100%; }
+  .br-sec { margin-bottom: 26px; break-inside: auto; }
+  .br-sec-head { break-after: avoid; }
+  h2, h3, h4 { break-after: avoid; color: #111 !important; }
+  .glance, .mod-card, .br-note, .br-contact,
+  .job, .tb-grid, .ba, .ba-col { break-inside: avoid; }
+  .glance, .tb-grid { background: #f5f5f2 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .mod-card, .br-note, .mod-tag, .job, .say { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .job { padding: 16px 18px; margin-bottom: 10px; }
+  .job p { font-size: 11.5px; }
+  .say { font-size: 11px; padding: 8px 11px; background: #f5f5f2 !important; }
+  .tb-num, .job-time, .ba-col.after h4 { color: #7C5CFF !important; }
+  .ba-col.after { border-color: #7C5CFF !important; }
+  .ba-col li { font-size: 11.5px; }
+  .br-table { font-size: 11px; }
+  .br-table td { padding: 8px 10px 8px 0; }
+  .br-num, .br-wrap a { color: #7C5CFF !important; }
+  .check li::before { background: #7C5CFF !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .mod-grid { grid-template-columns: repeat(2, 1fr); }
+  .print-head {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1.5px solid #111; padding-bottom: 10px; margin-bottom: 22px;
+  }
+  .print-head .ph-brand { font-size: 16px; font-weight: 700; letter-spacing: -.02em; color: #111; }
+  .print-head .ph-meta { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: #666; }
+  .print-title { font-size: 26px !important; }
+  .pb { break-before: page; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#platform">Platform</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/download">Download</a></li>
+      <li><a href="/brief">Product brief</a></li>
+    </ul>
+    <div class="nav-right">
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="/download" class="btn">Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="/#platform" onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="/pricing"   onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"  onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/brief"     onclick="closeMobileNav()">Product brief</a></li>
+      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+</script>
+
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="/"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Home</a>
+      <span class="sep">/</span>
+      <span class="here">Product brief</span>
+    </div>
+  </div>
+</section>
+
+<section class="mhero" style="padding-bottom:clamp(28px,3vw,44px);">
+  <div class="wrap">
+    <div class="br-wrap">
+      <!-- Shown only in the printed/PDF version -->
+      <div class="print-head">
+        <div class="ph-brand">adris.tech</div>
+        <div class="ph-meta">Product Brief · July 2026 · adris.tech</div>
+      </div>
+
+      <div class="mono" style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;">// Product brief</div>
+      <h1 class="print-title">Ask for the outcome. <span class="it">Get your week back.</span></h1>
+      <p style="font-size:clamp(15px,1.6vw,18px);line-height:1.7;color:var(--muted);max-width:680px;margin-top:16px;">
+        adris.tech is an AI workspace that does the work, not just the talking. It finds your next
+        customers, writes and sends the outreach, builds the deck, reads the contract before you sign
+        it, and keeps running on a schedule while your laptop is shut — from one app, on your own
+        machine, for one subscription.
+      </p>
+
+      <div class="br-actions">
+        <a class="br-dl" href="/adris-tech-product-brief.pdf" download>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 1.5v7"/><path d="M4 6l3 3 3-3"/><path d="M2 10.5v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1"/>
+          </svg>
+          Download the brief (PDF)
+        </a>
+        <button class="br-alt" onclick="window.print()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="5" width="9" height="6" rx="1"/><path d="M4 5V2h5v3"/><path d="M4 9h5"/>
+          </svg>
+          Print this page
+        </button>
+        <a class="br-alt" href="/partner">Book a walkthrough →</a>
+      </div>
+      <div class="br-meta" style="margin-top:10px;">Updated July 2026 · Free to share</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 0 clamp(72px,8vw,120px);">
+  <div class="wrap">
+    <div class="br-wrap">
+
+      <!-- ── AT A GLANCE ────────────────────────────────────── -->
+      <div class="glance">
+        <div>
+          <div class="glance-k">What it is</div>
+          <div class="glance-v">An AI workspace that carries out real work end to end — not a chatbot you copy answers out of</div>
+        </div>
+        <div>
+          <div class="glance-k">What it replaces</div>
+          <div class="glance-v">A chat AI, a writing tool, a lead-research tool, an automation platform, a code assistant — and hours of manual work</div>
+        </div>
+        <div>
+          <div class="glance-k">Who it's for</div>
+          <div class="glance-v">Founders, agencies, sales and ops teams, and non-technical businesses</div>
+        </div>
+        <div>
+          <div class="glance-k">How you use it</div>
+          <div class="glance-v">Say what you want in plain English. A team of 48 specialist agents does it and hands back the finished thing</div>
+        </div>
+        <div>
+          <div class="glance-k">Where it runs</div>
+          <div class="glance-v">A desktop app on your own Windows machine. Your work stays on it</div>
+        </div>
+        <div>
+          <div class="glance-k">Pricing</div>
+          <div class="glance-v">Free forever tier · ₹1,499 – ₹19,999 per month (≈ $15 – $199)</div>
+        </div>
+      </div>
+
+      <!-- ── 1. THE PROMISE ─────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">01</span>
+          <h2>What you're actually buying</h2>
+        </div>
+        <p class="br-lede">
+          Not software features. Time — and the ability to do the work of a team of five without hiring
+          one.
+        </p>
+
+        <div class="tb-grid">
+          <div>
+            <div class="tb-num">1 day</div>
+            <div class="tb-lbl">a week, typically handed back per person once outreach, research, reporting and drafting move across</div>
+          </div>
+          <div>
+            <div class="tb-num">6 → 1</div>
+            <div class="tb-lbl">subscriptions collapsed into one app and one bill</div>
+          </div>
+          <div>
+            <div class="tb-num">24 / 7</div>
+            <div class="tb-lbl">work that keeps running on a schedule after you close the laptop</div>
+          </div>
+          <div>
+            <div class="tb-num">₹0</div>
+            <div class="tb-lbl">of your work leaves your machine when you run it on your own key or a local model</div>
+          </div>
+        </div>
+
+        <p>
+          The difference between adris.tech and a chat assistant is what happens after the answer. A chat
+          assistant tells you how to find leads. adris.tech opens a browser, searches Maps and the web,
+          collects the real companies, verifies the contact details, writes a different message for each
+          one, opens the conversation on LinkedIn with the message ready to send, and remembers who
+          replied — then does the follow-ups next Monday whether you're at the desk or not.
+        </p>
+      </div>
+
+      <!-- ── 2. WHAT IT DOES ────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">02</span>
+          <h2>What it does for you</h2>
+        </div>
+        <p class="br-lede">
+          Everything below is one instruction typed in plain English. The time noted is what the same job
+          costs a person doing it by hand.
+        </p>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Find your next 50 customers</h4>
+            <span class="job-time">≈ 6 hrs → 10 min</span>
+          </div>
+          <div class="say"><b>You say:</b> "Find interior design studios in Pune who'd need our service, with founder names and contact details."</div>
+          <p>
+            It runs live searches across Google Maps and the open web, pulls real businesses — never
+            invented ones — and matches them to your size and city, so a solo founder gets reachable local
+            firms rather than a list of unreachable enterprises. It then fills in the missing pieces:
+            website, LinkedIn profile, phone, email.
+          </p>
+          <p>
+            The list is saved to your knowledge graph, so next month it builds on that list instead of
+            starting over.
+          </p>
+        </div>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Run LinkedIn outreach without the grind</h4>
+            <span class="job-time">≈ 4 hrs → 15 min</span>
+          </div>
+          <div class="say"><b>You say:</b> "Scan my LinkedIn connections, then write each of them a message about what we do."</div>
+          <p>
+            It reads your actual connection list from your own logged-in browser, drafts a distinct
+            message per person based on their role and background — not one template with a name swapped
+            in — and then opens each person's chat window with the message copied and ready. You read it,
+            you press send. Nothing goes out without you.
+          </p>
+          <p>
+            Replies and progress are tracked per contact, so a week later you can say "continue where we
+            left off" and it picks up the campaign rather than restarting it.
+          </p>
+        </div>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Turn a request into a finished deck</h4>
+            <span class="job-time">≈ 5 hrs → 20 min</span>
+          </div>
+          <div class="say"><b>You say:</b> "Make a 12-slide investor deck for us. Put our logo on every slide and use the product screenshots I attached."</div>
+          <p>
+            You get a complete, designed presentation — structure, copy, visuals, your branding — built
+            from what it already knows about your business. Generated imagery is available where you want
+            it, and your own pictures always take priority over anything the AI makes.
+          </p>
+          <p>
+            Editing stays in the conversation: "make slide 4 about pricing", "use the darker blue",
+            "drop the last slide". No re-export, no going back to a design tool.
+          </p>
+        </div>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Read the contract before you sign it</h4>
+            <span class="job-time">≈ 3 hrs or a legal bill → 5 min</span>
+          </div>
+          <div class="say"><b>You say:</b> "Read this vendor agreement and tell me what I should be worried about."</div>
+          <p>
+            It returns risky clauses, one-sided terms, missing protections and liabilities in plain
+            language, with a risk score and section-by-section findings — enough to negotiate with, or to
+            decide the document needs a lawyer's eye after all.
+          </p>
+          <p>
+            It handles scanned and photographed documents, files running to hundreds of pages, and Hindi
+            and regional Indian languages. The document is read entirely on your own machine — it is
+            never uploaded anywhere.
+          </p>
+        </div>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Walk into the meeting already briefed</h4>
+            <span class="job-time">≈ 90 min → 3 min</span>
+          </div>
+          <div class="say"><b>You say:</b> "Brief me on this company and the person I'm meeting there tomorrow."</div>
+          <p>
+            It runs live research and comes back with a structured picture: what the company does and
+            sells, market position, funding and financial signals, leadership, recent news — and a
+            separate read on the individual: their role, background and what they're likely to care
+            about. Ready before your coffee is.
+          </p>
+        </div>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Clear the inbox and the content calendar</h4>
+            <span class="job-time">≈ 2 hrs a day → 20 min</span>
+          </div>
+          <div class="say"><b>You say:</b> "Summarise everything unread, draft replies to the ones that need one, and write this week's posts."</div>
+          <p>
+            Email triaged and answers drafted in your tone. Posts written for each platform in that
+            platform's format, with character counts respected. Newsletters, blog posts, ad copy, captions
+            and support replies come from named specialists who each do one thing well — and when you need
+            options, you get several and pick one.
+          </p>
+        </div>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Have it happen without you</h4>
+            <span class="job-time">Recurring work → zero</span>
+          </div>
+          <div class="say"><b>You say:</b> "Every Monday at 9, pull last week's numbers, write the client report and email it to them."</div>
+          <p>
+            Describe the routine once and it becomes a live workflow. Triggers include a schedule, an
+            incoming email, a new file in a folder, a payment, a calendar event, a GitHub event or a
+            mention of you online. Results are delivered where your team already is — email, Slack,
+            Notion, WhatsApp-length SMS, a spreadsheet, a document on your disk, or several at once.
+          </p>
+          <p>
+            On paid plans these keep running in the cloud when your computer is off — the report still
+            lands on Monday if you're on a flight.
+          </p>
+        </div>
+
+        <div class="job">
+          <div class="job-h">
+            <h4>Build and ship the product too</h4>
+            <span class="job-time">≈ 30–50% off delivery time</span>
+          </div>
+          <div class="say"><b>You say:</b> "Find the bug in this file, write the tests, and explain what you changed."</div>
+          <p>
+            A full code editor and real terminal sit inside the same app, with an assistant that already
+            sees the open file and what you just ran. Useful whether you have engineers or you're the
+            founder holding the codebase together on weekends.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── 3. TIME BACK ───────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">03</span>
+          <h2>Where the week goes today</h2>
+        </div>
+        <p class="br-lede">
+          A representative week for a five-person business, before and after. Times are typical rather
+          than guaranteed — your own first week will tell you more than our table will.
+        </p>
+
+        <table class="br-table">
+          <thead>
+            <tr>
+              <th style="width:30%">Recurring job</th>
+              <th style="width:24%">By hand</th>
+              <th style="width:22%">With adris.tech</th>
+              <th>Back to you</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="wrapc">Prospect research &amp; list building</td><td>6 hrs / week</td><td>10 min</td><td>~6 hrs</td></tr>
+            <tr><td class="wrapc">Personalised outreach &amp; follow-ups</td><td>4 hrs / week</td><td>15 min</td><td>~4 hrs</td></tr>
+            <tr><td class="wrapc">Content: posts, emails, captions</td><td>5 hrs / week</td><td>45 min</td><td>~4 hrs</td></tr>
+            <tr><td class="wrapc">Client &amp; internal reporting</td><td>3 hrs / week</td><td>Automated</td><td>~3 hrs</td></tr>
+            <tr><td class="wrapc">Inbox triage and replies</td><td>5 hrs / week</td><td>1.5 hrs</td><td>~3.5 hrs</td></tr>
+            <tr><td class="wrapc">Reading contracts &amp; documents</td><td>3 hrs / month</td><td>15 min</td><td>~2.5 hrs</td></tr>
+            <tr><td class="wrapc">Pre-meeting research</td><td>2 hrs / week</td><td>10 min</td><td>~2 hrs</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;">
+          That is roughly <span class="hl">22 hours a week</span> of routine work reduced to about three —
+          the output of an extra person and a half, on a subscription that starts at ₹1,499. The detailed
+          cost comparison against hiring and against the equivalent SaaS stack, with sources, is at
+          <a href="https://adris.tech/why-adris">adris.tech/why-adris</a>.
+        </p>
+      </div>
+
+      <!-- ── 4. A MONDAY ────────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">04</span>
+          <h2>One Monday morning</h2>
+        </div>
+        <div class="ba">
+          <div class="ba-col">
+            <h4>Without it</h4>
+            <ul>
+              <li>9:00 — open six tabs, start hunting for leads</li>
+              <li>10:30 — copy names into a sheet, look up emails one by one</li>
+              <li>12:00 — write the same message thirty times, changing the name</li>
+              <li>14:00 — build last week's client report by hand</li>
+              <li>16:00 — skim a vendor agreement you don't fully understand</li>
+              <li>18:00 — the deck for Thursday hasn't been started</li>
+            </ul>
+            <div class="ba-foot">A full day gone. Nothing shipped.</div>
+          </div>
+          <div class="ba-col after">
+            <h4>With adris.tech</h4>
+            <ul>
+              <li>9:00 — the client report is already in their inbox; it ran at 8</li>
+              <li>9:05 — "find 40 studios in Pune and draft outreach for each"</li>
+              <li>9:20 — you read the drafts, adjust two, send</li>
+              <li>9:35 — "read this vendor agreement" — six clauses flagged</li>
+              <li>9:50 — "build the Thursday deck from our product notes"</li>
+              <li>10:15 — deck reviewed, tweaked in chat, done</li>
+            </ul>
+            <div class="ba-foot">Before 10:30. The rest of the day is yours.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 5. WHAT'S INCLUDED ─────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">05</span>
+          <h2>What's included</h2>
+        </div>
+        <p class="br-lede">
+          Eight modules, one install, one login. Every module is on every plan including Free — the plan
+          governs how much you use, not what you can touch.
+        </p>
+
+        <div class="mod-grid">
+          <div class="mod-card">
+            <h4>Krew — your AI team</h4>
+            <p>
+              48 specialists across sales, content, marketing, support, research, design, product and
+              engineering, led by a chief of staff who assigns the work. You describe the outcome; the
+              right people are put on it.
+            </p>
+            <div class="mod-tag">Instead of: five hires, or a chat AI you babysit</div>
+          </div>
+
+          <div class="mod-card">
+            <h4>Automation — work that repeats itself</h4>
+            <p>
+              Turn any routine into a workflow that fires on a schedule or an event and delivers the
+              result where your team already works. Describe it in a sentence, or draw it on a canvas.
+            </p>
+            <div class="mod-tag">Instead of: Zapier or Make, plus the person who maintains them</div>
+          </div>
+
+          <div class="mod-card">
+            <h4>Guard — documents &amp; safety</h4>
+            <p>
+              Contracts and agreements read and risk-flagged in plain language, including scanned files
+              and Indian languages. Plus quiet monitoring of the machine itself.
+            </p>
+            <div class="mod-tag">Instead of: a legal first-pass bill on every document</div>
+          </div>
+
+          <div class="mod-card">
+            <h4>Brain — one shared memory</h4>
+            <p>
+              Everything the agents find and produce is stored as a visible, linked knowledge graph —
+              lead lists, research, drafts, files, per-contact progress. Work is never re-done or
+              re-billed, and you can see and edit what the AI remembers.
+            </p>
+            <div class="mod-tag">Instead of: scattered notes and repeated research</div>
+          </div>
+
+          <div class="mod-card">
+            <h4>Coder — build and fix things</h4>
+            <p>
+              A real editor and terminal with an assistant that has your code in context. Works with
+              cloud models or entirely offline.
+            </p>
+            <div class="mod-tag">Instead of: a separate code-assistant seat</div>
+          </div>
+
+          <div class="mod-card">
+            <h4>Models — AI that runs on your laptop</h4>
+            <p>
+              51 open models from tiny to frontier scale, filtered to what your machine can actually run.
+              Free to use, offline, and never counted against your plan.
+            </p>
+            <div class="mod-tag">Instead of: per-token API bills for routine work</div>
+          </div>
+
+          <div class="mod-card">
+            <h4>Vault — privacy across the machine</h4>
+            <p>
+              One switch blocks ads, trackers, malware and phishing for every browser and app at once —
+              not just one browser with an extension.
+            </p>
+            <div class="mod-tag">Instead of: a per-device blocker subscription</div>
+          </div>
+
+          <div class="mod-card">
+            <h4>Mesh — pool your computers</h4>
+            <p>
+              Combine the memory of several machines you already own to run models none of them could run
+              alone.
+            </p>
+            <div class="mod-tag">Instead of: renting GPU time</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 6. WORKS WITH ──────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">06</span>
+          <h2>It works where you already work</h2>
+        </div>
+        <p class="br-lede">
+          Connect an account once and both your agents and your automations can use it. Nothing is
+          re-keyed, and no data is migrated into a new system.
+        </p>
+        <table class="br-table">
+          <thead><tr><th style="width:28%">Category</th><th>Connects to</th></tr></thead>
+          <tbody>
+            <tr><td class="wrapc">Email &amp; documents</td><td>Gmail · Google Calendar, Sheets, Drive, Slides · Notion</td></tr>
+            <tr><td class="wrapc">Team communication</td><td>Slack · Discord · Telegram · SMS via Twilio</td></tr>
+            <tr><td class="wrapc">Sales &amp; customers</td><td>HubSpot · Airtable · LinkedIn</td></tr>
+            <tr><td class="wrapc">Engineering</td><td>GitHub · Linear</td></tr>
+            <tr><td class="wrapc">Web &amp; social</td><td>Google Maps and live web research · X · Reddit · Brave Search</td></tr>
+            <tr><td class="wrapc">Everything else</td><td>Any Model Context Protocol (MCP) server, added by URL — including your own internal tools. Hundreds are publicly available.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── 7. YOUR WORK STAYS YOURS ───────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">07</span>
+          <h2>Your work stays yours</h2>
+        </div>
+        <p class="br-lede">
+          adris.tech is a desktop application, not a website. Your conversations, contracts, research and
+          credentials sit on your own machine — which is the point, not a footnote.
+        </p>
+        <table class="br-table">
+          <thead><tr><th style="width:42%">What</th><th>Where it lives</th></tr></thead>
+          <tbody>
+            <tr><td class="wrapc">Conversations with your agents</td><td>On your machine. Never synced to us, never used to train anything.</td></tr>
+            <tr><td class="wrapc">Contracts and documents you scan</td><td>Read on your machine. They are never uploaded.</td></tr>
+            <tr><td class="wrapc">Passwords, tokens and API keys</td><td>In an encrypted store on your machine. Calls go from your computer straight to the service.</td></tr>
+            <tr><td class="wrapc">Your knowledge graph and files</td><td>On your machine.</td></tr>
+            <tr><td class="wrapc">Your account and plan</td><td>With us — email, plan and usage counts only. Hosted in Mumbai.</td></tr>
+          </tbody>
+        </table>
+        <div class="br-note">
+          <p>
+            <span class="hl">If you want nothing at all to leave:</span> connect your own AI key — free
+            tiers are available and it takes two minutes — or run one of the local models. Requests then
+            go from your machine directly to the provider, or nowhere at all. Either way your usage
+            becomes unlimited from our side, on every plan including Free.
+          </p>
+        </div>
+        <p style="font-size:13px;">
+          Practical safeguards, too: agents treat anything they read from the web or an inbox as
+          untrusted, so a malicious page can't give them instructions; terminal commands need your
+          approval; and when an agent is driving a browser window, it says so on screen.
+        </p>
+      </div>
+
+      <!-- ── 8. PLANS ───────────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">08</span>
+          <h2>Plans</h2>
+        </div>
+        <table class="br-table">
+          <thead>
+            <tr>
+              <th style="width:20%">Plan</th><th style="width:20%">Per month</th>
+              <th>Included AI work</th><th>Runs while PC is off</th><th>Best for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Free</td><td>₹0 · forever</td><td>50 tasks to try it properly</td><td>—</td><td>Seeing it work on your own job</td></tr>
+            <tr><td>Solo</td><td>₹1,499 · ≈$15</td><td>~4,000 tasks</td><td>500 runs</td><td>One person doing daily real work</td></tr>
+            <tr><td>Builder</td><td>₹4,999 · ≈$49</td><td>~16,000 tasks</td><td>5,000 runs</td><td>Agencies and power users</td></tr>
+            <tr><td>Team</td><td>₹19,999 · ≈$199</td><td>~50,000 tasks</td><td>Unlimited</td><td>Up to 10 people, one workspace</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;">
+          Team adds shared workspaces, admin controls, centralised billing, SSO and priority support with
+          an SLA. <span class="hl">Using your own AI key is free on every plan</span> — including Free —
+          and makes usage unlimited from our side. Local models are always free and never counted.
+          Payment by UPI, card or net banking in INR, or card in USD. Monthly, cancel anytime.
+        </p>
+      </div>
+
+      <!-- ── 9. TRY IT ──────────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">09</span>
+          <h2>Judge it in 30 minutes</h2>
+        </div>
+        <p class="br-lede">
+          The Free plan is a real evaluation, not a teaser. No card, no sales call, no demo booking
+          required. Install it and give it something that actually matters this week.
+        </p>
+        <ol class="check">
+          <li>Install from <a href="https://adris.tech/download">adris.tech/download</a> and sign in — about two minutes, roughly a 10 MB download.</li>
+          <li>Ask it to find twenty real prospects in your city and check the names against reality. This is the fastest test of whether it invents things.</li>
+          <li>Drop in a contract you've already read, and see whether it flags what you flagged.</li>
+          <li>Ask for a deck or a week of content and judge the first draft on its merits.</li>
+          <li>Set one recurring job — a Monday report, a daily digest — and let it run without you.</li>
+        </ol>
+        <div class="br-note">
+          <p>
+            <span class="hl">Stated plainly:</span> adris.tech runs on Windows today. macOS and Linux
+            builds are coming, and there is no mobile app or browser version. If your evaluation depends
+            on those, it's worth waiting — we'd rather say so here than after you've spent the afternoon.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── 10. NEXT ───────────────────────────────────────── -->
+      <div class="br-sec">
+        <div class="br-sec-head">
+          <span class="br-num">10</span>
+          <h2>What's next, and where to reach us</h2>
+        </div>
+        <p><span class="hl">Coming soon:</span> macOS and Linux builds · deeper team administration · more of the research and outreach loop captured automatically, so even less of it needs you.</p>
+
+        <div class="br-contact">
+          <div>
+            <div class="glance-k">Website</div>
+            <div class="glance-v"><a href="https://adris.tech">adris.tech</a></div>
+          </div>
+          <div>
+            <div class="glance-k">Download</div>
+            <div class="glance-v"><a href="https://adris.tech/download">adris.tech/download</a></div>
+          </div>
+          <div>
+            <div class="glance-k">Pricing &amp; the cost case</div>
+            <div class="glance-v"><a href="https://adris.tech/pricing">/pricing</a> · <a href="https://adris.tech/why-adris">/why-adris</a></div>
+          </div>
+          <div>
+            <div class="glance-k">Talk to us</div>
+            <div class="glance-v"><a href="https://adris.tech/partner">adris.tech/partner</a></div>
+          </div>
+        </div>
+
+        <div class="br-foot-note">
+          adris.tech · Bengaluru, India · Product brief, July 2026. Describes the shipped Windows build at
+          the time of writing. Time savings are typical figures for the jobs described, not guarantees —
+          they depend on your workload and how much of it you move across. Task counts are approximate and
+          vary with the length of each request. INR pricing is inclusive of GST where applicable; USD
+          figures are indicative.
+        </div>
+      </div>
+
+      <!-- ── CTA (web only) ─────────────────────────────────── -->
+      <div class="br-cta" style="text-align:center;border:1px solid var(--rule);border-radius:16px;padding:40px 32px;margin-top:48px;">
+        <h2 style="margin:0 0 12px;">Want this as a document?</h2>
+        <p style="color:var(--muted);max-width:520px;margin:0 auto 24px;">
+          Download the brief as a PDF to forward, attach or print — same content, laid out for a document.
+        </p>
+        <div class="br-actions" style="justify-content:center;">
+          <a class="br-dl" href="/adris-tech-product-brief.pdf" download>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 1.5v7"/><path d="M4 6l3 3 3-3"/><path d="M2 10.5v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1"/>
+            </svg>
+            Download the brief (PDF)
+          </a>
+          <a href="/download" class="br-alt">Download the app — free</a>
+          <a href="/partner" class="br-alt">Book a walkthrough →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="/">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/affiliates">Affiliate Terms</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="/#platform">About</a></li>
+          <li><a href="/#modules">Modules</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/download">Download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="/partner">Contact us</a></li>
+          <li><a href="/brief" style="color:var(--accent);">Product brief (PDF)</a></li>
+          <li><a href="/why-adris">ROI case</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  if (!window.supabase) return;
+  var _nb=window.supabase.createClient('https://xkkqcqsacgdrfwbwdqsp.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0');
+  function _nu(s){var el=document.getElementById('navSignIn');if(!el||!s)return;var m=s.user.user_metadata||{};var av=m.avatar_url||m.picture;var nm=m.full_name||m.name||s.user.email;el.removeAttribute('onmouseover');el.removeAttribute('onmouseout');if(av){el.style.cssText='padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';el.innerHTML='<img src="'+av+'" alt="'+nm+'" title="'+nm+'" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';}else{el.style.cssText='width:30px;height:30px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';el.textContent=(nm||'U').charAt(0).toUpperCase();}}
+  _nb.auth.getSession().then(function(r){_nu(r.data.session);});
+  _nb.auth.onAuthStateChange(function(_,s){_nu(s);});
+})();
+</script>
+</body>
+</html>

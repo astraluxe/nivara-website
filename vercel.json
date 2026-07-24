@@ -31,6 +31,7 @@
     { "source": "/enterprise",         "destination": "/enterprise.html" },
     { "source": "/promo",              "destination": "/promo.html" },
     { "source": "/why-adris",          "destination": "/why-adris.html" },
+    { "source": "/brief",              "destination": "/brief.html" },
     { "source": "/how-it-works",       "destination": "/how-it-works.html" },
     { "source": "/docs",                "destination": "/docs.html" }
   ]
