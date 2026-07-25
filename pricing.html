@@ -903,6 +903,12 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     <h3>You&rsquo;re on <span id="successPlan" style="color:var(--ac)"></span>!</h3>
     <p style="margin-bottom:14px">Your plan is live. Here&rsquo;s how to activate it in the app:</p>
 
+    <!-- The plan is granted by Razorpay's server-to-server webhook, not by this page, so "payment
+         succeeded" and "plan is active" are two different facts. Saying the second when only the
+         first is true is what turns a slow webhook into a support ticket. This line watches the
+         account and reports what is actually true. -->
+    <div id="activationStatus" style="margin:0 0 14px;padding:10px 12px;border-radius:10px;font-size:12.5px;line-height:1.55;text-align:left;display:none"></div>
+
     <div class="email-badge"><span class="dot"></span><span id="successEmail">your account</span></div>
 
     <div class="step-head">// next steps</div>
@@ -956,7 +962,10 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0';
 const _supa = window.supabase.createClient(SUPA_URL, SUPA_ANON);
-const PLAN_NAMES = { solo:'Solo', builder:'Builder', pro:'Team' };
+// 'business' is the real plan key in the database ('pro' is a stale alias kept so older links
+// still render a name). The activation watcher reads the plan straight from the account, so the
+// real key has to be in here or it shows the raw string back to a paying customer.
+const PLAN_NAMES = { solo:'Solo', builder:'Builder', business:'Team', pro:'Team', custom:'Custom' };
 
 function openLogin(planKey) {
   window._pendingPlan = planKey;
@@ -1089,12 +1098,52 @@ async function startRazorpayPayment(planKey, session, activePromo) {
         document.getElementById('successEmail').textContent = userEmail || 'your Google account';
         document.getElementById('successEmail2').textContent = userEmail || 'the same Google account';
         document.getElementById('successModal').classList.add('open');
+        watchActivation(planKey, session);
       },
     });
     rzp.open();
   } catch (err) {
     alert('Something went wrong: ' + err.message);
   }
+}
+
+// ── Confirm the plan actually landed, don't just assume it ──────────────────
+// Razorpay charges the card, then its webhook tells our server to grant the plan. Those are
+// seconds apart on a good day and can be longer. This page used to declare "Your plan is live"
+// the instant the card cleared, so if the webhook was slow or failed the user was told everything
+// was fine while their account still said Free — which is exactly how someone ends up paying
+// twice or opening a ticket. Watch the account and say what is true.
+async function watchActivation(planKey, session) {
+  const el = document.getElementById('activationStatus');
+  if (!el || !session?.user?.id) return;
+  const show = (bg, fg, html) => {
+    el.style.display = 'block';
+    el.style.background = bg; el.style.color = fg;
+    el.innerHTML = html;
+  };
+  show('rgba(124,92,255,.10)', 'var(--ink)',
+    '<b style="color:#7C5CFF">Activating your plan…</b><br>Payment received. Confirming it on your account — this usually takes a few seconds.');
+
+  const started = Date.now();
+  while (Date.now() - started < 120000) {
+    try {
+      const { data } = await _supa.from('users').select('plan').eq('id', session.user.id).single();
+      const p = String(data?.plan || '');
+      if (p && p !== 'free' && p !== 'explore') {
+        show('rgba(16,185,129,.12)', 'var(--ink)',
+          '<b style="color:#10B981">&#10003; Plan active</b><br>Your account is on <b>' + (PLAN_NAMES[p] || p) +
+          '</b>. If the desktop app is open it updates within a few seconds — no restart needed.');
+        return;
+      }
+    } catch (e) { /* offline blip — keep waiting */ }
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  // Two minutes is well past normal. Say so honestly, and make the next step obvious — the money
+  // is safe and the webhook retries, so the one thing they must NOT do is pay again.
+  show('rgba(245,158,11,.12)', 'var(--ink)',
+    '<b style="color:#F59E0B">Taking longer than usual</b><br>Your payment went through and is safe &mdash; ' +
+    '<b>please don\'t pay again</b>. Activation is retried automatically. If it isn\'t showing in a few minutes, ' +
+    'email <a href="mailto:support@adris.tech" style="color:#7C5CFF">support@adris.tech</a> with the email you paid with and we\'ll switch it on straight away.');
 }
 
 async function onLoad() {

@@ -108,6 +108,23 @@ Deno.serve(async (req) => {
     });
     if (!insRes.ok) {
       const t = await insRes.text();
+      // A repeated submission of the SAME payment id is not an error — the user paid once and may
+      // simply have double-clicked or retried after a dropped response. The unique index on
+      // razorpay_payment_id is what stops one payment being replayed into unlimited passes; here we
+      // just hand back the pass that payment already bought.
+      if (insRes.status === 409 || /duplicate key|23505/i.test(t)) {
+        const existing = await fetch(
+          `${Deno.env.get("SUPABASE_URL")}/rest/v1/mesh_passes?razorpay_payment_id=eq.${encodeURIComponent(razorpay_payment_id)}&select=devices,expires_at`,
+          { headers: {
+              apikey: Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+              Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!}`,
+            } },
+        );
+        const rows = existing.ok ? await existing.json() : [];
+        if (Array.isArray(rows) && rows[0]) {
+          return json({ ok: true, devices: rows[0].devices, expires_at: rows[0].expires_at, already: true }, 200);
+        }
+      }
       return json({ error: "Payment verified but granting the pass failed: " + t }, 500);
     }
 
