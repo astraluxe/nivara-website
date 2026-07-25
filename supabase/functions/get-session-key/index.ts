@@ -17,7 +17,13 @@ const PLAN_LIMITS: Record<string, number> = {
 // Free tiers are capped for the LIFETIME of the account, not per month — the desktop app has always
 // treated them that way, but this function used a monthly window, so a free account quietly earned a
 // fresh 100k every month.
-const LIFETIME_PLANS = new Set<string>([]);
+//
+// This set was left EMPTY, which made the fix above inert: every caller of getMonthlyUsage() in the
+// app passes isLifetime=true for free/explore (AccountPanel, HomeModule, KrewChat, coder/AIChat), and
+// the website sells the tier as "50 tasks · lifetime" — but this function kept counting from the 1st
+// of the month and kept handing out keys after the lifetime cap was spent. Client-side said "done",
+// server-side said "carry on", and the server is the one holding the API key.
+const LIFETIME_PLANS = new Set<string>(["free", "explore"]);
 
 function toHex(bytes: Uint8Array): string {
   return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
@@ -75,18 +81,36 @@ Deno.serve(async (req) => {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
     const [planRes, usageRes] = await Promise.all([
-      supabase.from("users").select("plan").eq("id", userId).single(),
+      supabase.from("users").select("plan, is_blocked, usage_period_start, extra_credits").eq("id", userId).single(),
       supabase.from("token_usage")
         .select("tokens_consumed, created_at")
         .eq("user_id", userId),
     ]);
 
+    // A blocked account was still handed a working key — the block only ever affected the UI.
+    if (planRes.data?.is_blocked === true) {
+      return new Response(JSON.stringify({ error: "This account is suspended. Contact support." }), {
+        status: 403, headers: { ...cors, "Content-Type": "application/json" }
+      });
+    }
+
     const plan = (planRes.data?.plan as string) ?? "free";
-    const limit = PLAN_LIMITS[plan] ?? PLAN_LIMITS.free;
+    // users.extra_credits existed but was never read anywhere — a goodwill top-up had no effect.
+    // It is now added on top of the plan allowance, so support can hand someone more tokens with
+    // one UPDATE instead of moving them to a paid plan they didn't buy.
+    const bonus = Math.max(0, Number(planRes.data?.extra_credits ?? 0) || 0);
+    const limit = (PLAN_LIMITS[plan] ?? PLAN_LIMITS.free) + bonus;
     const isLifetime = LIFETIME_PLANS.has(plan);
+    // Paid plans count from the BILLING period, not the 1st of the calendar month — which is what
+    // the app's tokenTracker.getMonthlyUsage() has always done. With the two using different
+    // windows, a subscription that renews mid-month had the app and the server disagreeing about
+    // how much was left, in both directions.
+    const periodStart = planRes.data?.usage_period_start
+      ? new Date(String(planRes.data.usage_period_start)).getTime()
+      : monthStart;
     const rows = (usageRes.data ?? []) as { tokens_consumed: number; created_at: string }[];
     const used = rows.reduce((s, r) => {
-      if (!isLifetime && new Date(r.created_at).getTime() < monthStart) return s;
+      if (!isLifetime && new Date(r.created_at).getTime() < periodStart) return s;
       return s + (r.tokens_consumed ?? 0);
     }, 0);
     const remaining = Math.max(0, limit - used);
