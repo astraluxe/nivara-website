@@ -342,7 +342,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     <div style="flex:1;min-width:0">
       <div style="font-size:13px;font-weight:600;color:#7C5CFF;margin-bottom:3px">Checkout is briefly paused — and that's a good thing</div>
       <div style="font-size:12.5px;color:var(--ink);line-height:1.6">
-        We're putting our new checkout through final testing so your very first payment is flawless — smooth, secure, and right the first time. The prices below are final and won't change; upgrading simply reopens shortly. We expect it live by <strong>Monday, 27&nbsp;July&nbsp;2026 (IST)</strong>. Thanks for your patience — it's a short wait for a payment experience we're proud of. Meanwhile, <a href="/download" style="color:#7C5CFF;text-decoration:none;font-weight:500">the app is free to download and use</a>.
+        We're putting our new checkout through final testing so your very first payment is flawless — smooth, secure, and right the first time. The prices below are final and won't change; upgrading simply reopens shortly. We expect it live by <strong>Wednesday, 29&nbsp;July&nbsp;2026 (IST)</strong>. Thanks for your patience — it's a short wait for a payment experience we're proud of. Meanwhile, <a href="/download" style="color:#7C5CFF;text-decoration:none;font-weight:500">the app is free to download and use</a>.
       </div>
     </div>
   </div>
@@ -1019,7 +1019,7 @@ async function signInWithGoogle(pendingPlan) {
 // (INR, USD, and the resume-after-login path) checks it, so Razorpay is never
 // reached while true. Flip to false to reopen checkout.
 window.PAYMENTS_LOCKED = true;
-window.PAY_UNLOCK_DATE = 'Monday, 27 July 2026 (IST)';
+window.PAY_UNLOCK_DATE = 'Wednesday, 29 July 2026 (IST)';
 function showPayLock() {
   var b = document.getElementById('payLockBanner');
   if (!b) return;
@@ -1036,7 +1036,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!window.PAYMENTS_LOCKED) return;
   document.querySelectorAll('.bts .bi, .bts .bu').forEach(function (btn) {
     btn.setAttribute('data-orig', btn.innerHTML);
-    btn.innerHTML = '&#128274; Reopens Mon 27 Jul';
+    btn.innerHTML = '&#128274; Reopens Wed 29 Jul';
     btn.style.opacity = '.75';
     btn.style.cursor = 'not-allowed';
     btn.onclick = function (e) { e.preventDefault(); showPayLock(); };
