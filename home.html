@@ -165,6 +165,20 @@
 .bh-trust-list li b { color: var(--ink); font-weight: 600; }
 .bh-trust-list .tick { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 2px; }
 
+/* ── VOICES — a real review, sat just before the price ────────── */
+.bh-quote { border: 1px solid var(--rule); border-radius: 16px; background: var(--paper-2); padding: clamp(26px, 3.4vw, 46px); max-width: 900px; }
+.bh-quote .mark { display: block; font-family: var(--font-serif); font-size: 64px; line-height: .62; color: var(--accent); opacity: .3; margin-bottom: 10px; }
+.bh-quote blockquote { font-size: clamp(16.5px, 1.75vw, 22px); line-height: 1.62; letter-spacing: -.014em; color: var(--ink); }
+.bh-quote blockquote .it { font-family: var(--font-serif); font-style: italic; }
+.bh-cite { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.bh-cite .av { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 14.5px; font-weight: 600; letter-spacing: -.02em; }
+.bh-cite .who { display: flex; flex-direction: column; gap: 3px; }
+.bh-cite .nm { font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.bh-cite .rl { font-size: 12.5px; color: var(--muted); }
+.bh-cite .li { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px; border: 1px solid var(--rule); border-radius: 9px; font-size: 12.5px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .18s, border-color .18s; }
+.bh-cite .li:hover { color: var(--accent); border-color: var(--accent); }
+@media (max-width: 620px) { .bh-cite .li { margin-left: 0; width: 100%; justify-content: center; } }
+
 /* ── PRICING teaser ───────────────────────────────────────────── */
 .bh-price { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .bh-price-card { border: 1px solid var(--rule); border-radius: 13px; padding: 22px 20px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; transition: all .2s; position: relative; }
@@ -502,12 +516,41 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 </section>
 
 <!-- ============================================
+     VOICES — a real review, published with permission
+============================================ -->
+<section class="bh-sec" id="voices">
+  <div class="wrap">
+    <div class="bh-head bh-rv">
+      <div class="idx">// 04 — From someone who has used it</div>
+      <h2>Not a demo. <span class="it">A working session.</span></h2>
+    </div>
+    <figure class="bh-quote bh-rv d1">
+      <span class="mark" aria-hidden="true">&ldquo;</span>
+      <blockquote>
+        Had a chance to see Adris in action today. What impressed me most wasn't the AI itself, but how naturally the research, automation, and local-first workflow fit together. <span class="it">It feels like it's designed to help people think and work better, not just generate answers.</span> It's building a practical workspace where AI, research, automation, and knowledge come together seamlessly. Looking forward to seeing where Amogh and the team take it.
+      </blockquote>
+      <figcaption class="bh-cite">
+        <span class="av" aria-hidden="true">KS</span>
+        <span class="who">
+          <span class="nm">Keshav Sharma</span>
+          <span class="rl">Founder, Syntropy Intel</span>
+        </span>
+        <a class="li" href="https://www.linkedin.com/in/keshav-sharma-927022415/" target="_blank" rel="noopener noreferrer">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.45-2.2 2.96V21h-4z"/></svg>
+          View on LinkedIn
+        </a>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================================
      PRICING teaser
 ============================================ -->
 <section class="bh-sec" id="pricing">
   <div class="wrap">
     <div class="bh-head bh-rv">
-      <div class="idx">// 04 — Pricing that makes sense here</div>
+      <div class="idx">// 05 — Pricing that makes sense here</div>
       <h2>Start free. <span class="it">Scale when it pays for itself.</span></h2>
     </div>
     <div class="bh-price bh-rv d1">
