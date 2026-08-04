@@ -2042,8 +2042,12 @@ body.tour-open { overflow: hidden; }
   transform: translateY(-110%);
   transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
   display: none;
+  /* Same guard as the overlay. The drawer is parked off-screen, but it is a fixed, full-width
+     element that sweeps across the page while the transition runs — and any tap landing on it
+     mid-animation goes to the menu instead of the thing under it. */
+  pointer-events: none;
 }
-.mobile-nav-drawer.open { transform: translateY(0); }
+.mobile-nav-drawer.open { transform: translateY(0); pointer-events: auto; }
 .mobile-nav-inner {
   padding: 24px var(--pad-x) 28px;
   display: flex;
@@ -2067,17 +2071,32 @@ body.tour-open { overflow: hidden; }
 .mobile-nav-inner ul li:first-child a { border-top: 1px solid var(--rule); }
 .mobile-nav-inner ul li a:hover { color: var(--accent); }
 .mobile-nav-cta { width: 100%; justify-content: center; }
+/* THE INVISIBLE LAYER THAT WAS EATING EVERY TAP ON MOBILE.
+   Below 1100px this becomes display:block (see the media query further down), so on every phone it
+   is a fixed, full-viewport element sitting over the whole page. It is opacity:0 when the menu is
+   closed — but opacity 0 does NOT stop an element receiving pointer events, so it intercepted every
+   tap on the site. Above 1100px it is display:none, which is exactly why everything worked on a
+   laptop and nothing worked on an iPhone.
+
+   pointer-events is the fix: transparent to input while closed, interactive only when open (so
+   tapping the backdrop still dismisses the menu). The blur moves onto .open too — a full-screen
+   backdrop-filter on an invisible layer is composited on every frame, which is a real cost on a
+   phone and a likely reason animations felt sluggish. */
 .mobile-nav-overlay {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 48;
   background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(2px);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.25s ease;
 }
-.mobile-nav-overlay.open { opacity: 1; }
+.mobile-nav-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+  backdrop-filter: blur(2px);
+}
 
 @media (max-width: 1100px) {
   .modules-grid { grid-template-columns: repeat(6, 1fr); }

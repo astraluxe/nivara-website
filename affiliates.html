@@ -390,16 +390,35 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
+  /* THE SLIDER HAS TO BE GRABBABLE WITH A THUMB, NOT A MOUSE POINTER.
+     The input itself used to be 6px tall — the track height — so the whole touch target was six
+     pixels. With a mouse you can hit that; on a phone you almost never can, which is why these
+     worked on a laptop and felt broken on iPhone. The element is now 44px (Apple's minimum target)
+     with the visible 6px track drawn by ::-webkit-slider-runnable-track, so it LOOKS identical and
+     the entire height is draggable. touch-action stops iOS treating the drag as a page pan. */
   .estim input[type="range"] {
     -webkit-appearance: none; appearance: none;
-    width: 100%; height: 6px;
-    background: rgba(242,239,233,0.1);
+    width: 100%;
+    height: 44px;
+    background: transparent;
     outline: none; cursor: pointer;
-    margin: 4px 0;
+    margin: 0;
+    touch-action: pan-y;
+  }
+  .estim input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(242,239,233,0.1);
+  }
+  .estim input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(242,239,233,0.1);
   }
   .estim input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;
     width: 22px; height: 22px;
+    margin-top: -8px;            /* centre the 22px thumb on the 6px track */
     background: var(--accent);
     border-radius: 50%;
     cursor: pointer;
@@ -413,6 +432,8 @@
     cursor: pointer;
     border: 3px solid var(--paper);
   }
+  /* A visible focus ring for keyboard users, now that the element is bigger than its track. */
+  .estim input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--accent); }
   .estim .ticks {
     position: relative;
     height: 1.3em;
