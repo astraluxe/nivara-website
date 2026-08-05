@@ -970,13 +970,18 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 
   try { localStorage.setItem('aff_ref', ref); } catch (_) {}
 
-  fetch(SUPA_URL + '/rest/v1/affiliates?ref_code=eq.' + encodeURIComponent(ref) + '&select=id&limit=1', {
-    headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON }
+  // Resolve the ref code through a function that returns ONLY the affiliate id. Reading the
+  // affiliates table directly used to work here, which meant the same anon key could also read
+  // every affiliate's email, earnings and bank details — a referral link is not a reason to
+  // expose any of that.
+  fetch(SUPA_URL + '/rest/v1/rpc/resolve_ref_code', {
+    method: 'POST',
+    headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + SUPA_ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code: ref })
   })
   .then(function (r) { return r.json(); })
-  .then(function (rows) {
-    var id = rows && rows[0] && rows[0].id;
-    if (!id) return;
+  .then(function (id) {
+    if (!id || typeof id !== 'string') return;
     fetch(SUPA_URL + '/rest/v1/affiliate_clicks', {
       method: 'POST',
       headers: {
