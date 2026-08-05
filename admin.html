@@ -693,7 +693,7 @@ async function loadPilot() {
       + '<td style="font-size:11px">' + (g.expires_at ? new Date(g.expires_at).toLocaleDateString() : 'No expiry') + '</td>'
       + '<td style="font-size:11px;opacity:.75">' + esc(g.note || '') + '</td>'
       + '<td style="font-size:11px;opacity:.6">' + new Date(g.granted_at).toLocaleDateString() + '</td>'
-      + '<td>' + (g.revoked_at ? '' : '<button class="btn" style="font-size:11px;padding:3px 8px" onclick="revokePilot('' + g.id + '')">Revoke</button>') + '</td>'
+      + '<td>' + (g.revoked_at ? '' : '<button class="btn" style="font-size:11px;padding:3px 8px" onclick="revokePilot(&quot;' + g.id + '&quot;)">Revoke</button>') + '</td>'
       + '</tr>';
   }).join('');
 }
