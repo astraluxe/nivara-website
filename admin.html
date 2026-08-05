@@ -230,6 +230,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <button class="tab" onclick="switchTab('feedback')">Feedback</button>
       <button class="tab" onclick="switchTab('revenue')">Revenue</button>
       <button class="tab" onclick="switchTab('offers')">Offers</button>
+      <button class="tab" onclick="switchTab('pilot')">Pilot</button>
     </div>
 
     <!-- OVERVIEW TAB -->
@@ -293,6 +294,37 @@ tr:hover td { background:rgba(124,92,255,.03); }
         <table>
           <thead><tr><th>Email</th><th>Plan</th><th>Status</th><th>Admin</th><th>Tokens (month)</th><th>Tokens (all time)</th><th>Joined</th></tr></thead>
           <tbody id="allUsers"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PILOT TAB -->
+    <!-- Put an email on the pilot list and that person gets the plan, whether they already have an
+         account or sign up next month. Before this the only way to grant a plan was editing the
+         users table by hand, which does nothing at all for someone who has not signed up yet. -->
+    <div id="tab-pilot" class="tab-panel">
+      <div class="ann-form">
+        <h3 style="margin:0 0 4px">Grant a pilot plan</h3>
+        <p style="font-size:12px;opacity:.7;margin:0 0 12px">
+          The plan is applied the moment they sign in — or automatically at signup if they do not have an account yet.
+          One active grant per email.
+        </p>
+        <input id="pgEmail" type="email" placeholder="their@email.com" style="width:100%;margin-bottom:8px" />
+        <select id="pgPlan" style="width:100%;margin-bottom:8px">
+          <option value="solo">Solo</option>
+          <option value="builder" selected>Builder</option>
+          <option value="business">Business</option>
+          <option value="custom">Custom</option>
+        </select>
+        <input id="pgExpires" type="date" style="width:100%;margin-bottom:8px" title="Optional — leave blank for a pilot that does not expire" />
+        <input id="pgNote" type="text" placeholder="Note (why — e.g. 'design partner, Bengaluru')" style="width:100%;margin-bottom:8px" />
+        <button class="btn" onclick="grantPilot()">Grant pilot plan</button>
+        <p id="pgMsg" style="font-size:12px;margin-top:8px"></p>
+      </div>
+      <div class="tbl-wrap" style="margin-top:16px">
+        <table>
+          <thead><tr><th>Email</th><th>Plan</th><th>Status</th><th>Expires</th><th>Note</th><th>Granted</th><th></th></tr></thead>
+          <tbody id="pilotRows"></tbody>
         </table>
       </div>
     </div>
@@ -629,7 +661,7 @@ function checkPin() {
 
 // ── Tabs ─────────────────────────────────────────────────────────────────────
 function switchTab(name) {
-  const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers'];
+  const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers','pilot'];
   document.querySelectorAll('.tab').forEach((t,i) => {
     t.classList.toggle('active', tabs[i]===name);
   });
@@ -637,6 +669,76 @@ function switchTab(name) {
   document.getElementById('tab-'+name).classList.add('active');
   if (name === 'affiliates') loadAffiliates();
   if (name === 'offers') loadOffers();
+  if (name === 'pilot') loadPilot();
+}
+
+// ── Pilot program ─────────────────────────────────────────────────────────────
+// Grants live in pilot_grants and are keyed by EMAIL, so a plan can be promised to someone who has
+// not signed up yet — the signup trigger applies it for them. Head-admin only, enforced by RLS on
+// the table itself rather than by hiding this tab.
+async function loadPilot() {
+  const rows = await _supa.from('pilot_grants').select('*').order('granted_at', { ascending: false });
+  const tb = document.getElementById('pilotRows');
+  const list = rows.data || [];
+  if (!list.length) { tb.innerHTML = '<tr><td colspan="7" style="opacity:.6">No pilot grants yet.</td></tr>'; return; }
+  tb.innerHTML = list.map(function (g) {
+    var status = g.revoked_at ? 'Revoked'
+      : g.claimed_at ? 'Active — claimed ' + new Date(g.claimed_at).toLocaleDateString()
+      : 'Waiting for them to sign in';
+    var colour = g.revoked_at ? 'opacity:.5' : g.claimed_at ? 'color:var(--ok,#16a34a)' : 'color:var(--accent)';
+    return '<tr>'
+      + '<td class="mono">' + esc(g.email) + '</td>'
+      + '<td>' + esc(g.plan) + '</td>'
+      + '<td style="font-size:11px;' + colour + '">' + status + '</td>'
+      + '<td style="font-size:11px">' + (g.expires_at ? new Date(g.expires_at).toLocaleDateString() : 'No expiry') + '</td>'
+      + '<td style="font-size:11px;opacity:.75">' + esc(g.note || '') + '</td>'
+      + '<td style="font-size:11px;opacity:.6">' + new Date(g.granted_at).toLocaleDateString() + '</td>'
+      + '<td>' + (g.revoked_at ? '' : '<button class="btn" style="font-size:11px;padding:3px 8px" onclick="revokePilot('' + g.id + '')">Revoke</button>') + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+function esc(v) {
+  return String(v == null ? '' : v).replace(/[&<>"]/g, function (c) {
+    return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' })[c];
+  });
+}
+
+async function grantPilot() {
+  const msg   = document.getElementById('pgMsg');
+  const email = document.getElementById('pgEmail').value.trim();
+  const plan  = document.getElementById('pgPlan').value;
+  const exp   = document.getElementById('pgExpires').value;
+  const note  = document.getElementById('pgNote').value.trim();
+  if (!email || email.indexOf('@') < 0) { msg.style.color = 'crimson'; msg.textContent = 'Enter a valid email.'; return; }
+
+  const { error } = await _supa.from('pilot_grants').insert({
+    email: email,
+    plan: plan,
+    expires_at: exp ? new Date(exp + 'T23:59:59').toISOString() : null,
+    note: note || null,
+    granted_by: _session.user.id
+  });
+  if (error) {
+    // The unique index means one ACTIVE grant per address — say that plainly instead of showing
+    // a Postgres constraint name.
+    msg.style.color = 'crimson';
+    msg.textContent = /duplicate|unique/i.test(error.message)
+      ? 'That email already has an active pilot grant. Revoke it first to change the plan.'
+      : error.message;
+    return;
+  }
+  msg.style.color = 'var(--ok,#16a34a)';
+  msg.textContent = 'Granted. If they already have an account it applies next time they sign in; if not, it applies the moment they sign up.';
+  document.getElementById('pgEmail').value = '';
+  document.getElementById('pgNote').value  = '';
+  loadPilot();
+}
+
+async function revokePilot(id) {
+  if (!confirm('Revoke this pilot grant? If it was already claimed, their plan is NOT changed back — do that on the Users tab.')) return;
+  await _supa.from('pilot_grants').update({ revoked_at: new Date().toISOString() }).eq('id', id);
+  loadPilot();
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
