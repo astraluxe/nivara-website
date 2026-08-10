@@ -1581,7 +1581,12 @@ document.getElementById('navHam').addEventListener('click', function() {
   }
 
   // ── Download URLs
-  const WIN_INSTALLER = 'https://github.com/astraluxe/nivara-desktop/releases/latest/download/adris-setup.exe';
+  // NOT THE GITHUB RELEASE URL. It redirects to release-assets.githubusercontent.com, which on a
+  // real Indian ISP accepts the TCP connection and never finishes the TLS handshake — measured:
+  // the 302 arrives in under a second and the download that follows moves 0 bytes. Every visitor
+  // on one of those networks pressed Download and got nothing. /dl/ streams the same asset from
+  // this domain (api/dl.js), which is the same route the in-app updater now uses.
+  const WIN_INSTALLER = 'https://www.adris.tech/dl/adris-setup.exe';
 
   function _isWindowsUser() {
     const ua = navigator.userAgent.toLowerCase();
