@@ -8,6 +8,7 @@
     { "source": "/pricing",             "destination": "/pricing.html" },
     { "source": "/models",              "destination": "/models.html" },
     { "source": "/download",            "destination": "/download.html" },
+    { "source": "/dl/:file",            "destination": "/api/dl?file=:file" },
     { "source": "/affiliates",          "destination": "/affiliates.html" },
     { "source": "/partner",             "destination": "/partner.html" },
     { "source": "/terms",               "destination": "/terms.html" },
