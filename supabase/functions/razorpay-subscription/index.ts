@@ -22,9 +22,16 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 //    The webhook's ENDING branch writes those same two fields, so whichever lands first, they agree.
 // ─────────────────────────────────────────────────────────────────────────────
 
+// `apikey` and `x-client-info` are NOT optional here.
+//
+// supabase-js and the pricing page both send an apikey header alongside the bearer token, so the
+// browser's preflight asks for "authorization, apikey, content-type". Allowing only two of those
+// three fails the preflight, the fetch rejects before it ever reaches this function, and the page
+// simply hangs — which is exactly what "Manage subscription" did: stuck on "Loading your
+// subscription…" with nothing in the network tab but a red OPTIONS.
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, content-type",
+  "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
