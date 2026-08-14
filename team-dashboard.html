@@ -91,6 +91,11 @@ html,body{background:#f5f5f5!important;color:#111!important;min-height:100%}
       <span class="dot"></span>
     </a>
     <div class="nav-right">
+      <!-- THE ONLY WAY OUT OF THIS PAGE WAS SIGN OUT. The logo links home, but nothing looked like
+           navigation, so leaving the workspace meant logging out of it. -->
+      <a href="/" style="font-size:13px;color:#6b6b6b;text-decoration:none">Home</a>
+      <a href="/pricing" style="font-size:13px;color:#6b6b6b;text-decoration:none">Pricing</a>
+      <a href="/download" style="font-size:13px;color:#6b6b6b;text-decoration:none">Download</a>
       <span id="navUser" style="font-size:13px;color:#6b6b6b"></span>
       <button onclick="signOut()" style="padding:6px 14px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;font-size:12px;cursor:pointer;color:#111;font-family:var(--font-sans)">Sign out</button>
     </div>
@@ -150,9 +155,17 @@ html,body{background:#f5f5f5!important;color:#111!important;min-height:100%}
 
     <div class="invite-section" id="inviteSection" style="display:none">
       <h3>Invite a new member</h3>
+      <!-- "Send invite" implied an email went out. None does — there is no mail provider on this
+           project — so the button now describes what actually happens: a link is created for you
+           to send. Work and personal addresses are equally fine. -->
+      <p style="font-size:12.5px;color:#6b6b6b;margin:0 0 10px;line-height:1.55">
+        This creates a join link for you to send them yourself — we don't email it.
+        Any address works, personal or work. The link expires in 48 hours.
+      </p>
       <div class="invite-row">
-        <input type="email" id="inviteEmail" placeholder="member@company.com" />
-        <button onclick="sendInvite()">Send invite</button>
+        <input type="email" id="inviteEmail" placeholder="name@example.com" autocomplete="off"
+               onkeydown="if(event.key==='Enter')sendInvite()" />
+        <button onclick="sendInvite()">Create invite link</button>
       </div>
       <div class="inv-result" id="invResult"></div>
     </div>
@@ -332,6 +345,20 @@ function renderUsage() {
 }
 
 async function sendInvite() {
+  // Reject anything that is not an email BEFORE it reaches the server. There was no check at
+  // either end, so "4" and "5" became members, each holding a seat, each with a join link that
+  // could never work. The server validates too — this is only so the answer is instant.
+  {
+    const raw = (document.getElementById('inviteEmail').value || '').trim();
+    const res_el = document.getElementById('invResult');
+    const EMAIL_RE = /^[^\s@"'<>,;:\\]+@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i;
+    if (!EMAIL_RE.test(raw)) {
+      res_el.className = 'inv-result err';
+      res_el.textContent = raw ? '"' + raw + '" is not an email address.' : 'Enter an email address.';
+      return;
+    }
+  }
+
   const email = document.getElementById('inviteEmail').value.trim().toLowerCase();
   const res_el = document.getElementById('invResult');
   if (!email) return;
@@ -371,8 +398,45 @@ async function sendInvite() {
   }
 }
 
+// The browser's confirm() box carries the domain name and its own styling, which reads as a
+// security prompt rather than part of the product — and it cannot say what actually happens to the
+// person being removed. This one can.
+function askConfirm(title, body, confirmLabel, danger) {
+  return new Promise(function (resolve) {
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;'
+      + 'justify-content:center;background:rgba(17,17,17,.45);padding:20px;';
+    wrap.innerHTML =
+      '<div style="max-width:420px;width:100%;background:#fff;border:1px solid #e5e5e5;'
+      + 'border-radius:14px;padding:22px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.18);'
+      + 'font-family:var(--font-sans)">'
+      +   '<h3 style="margin:0 0 8px;font-size:17px;color:#111">' + title + '</h3>'
+      +   '<p style="margin:0 0 18px;font-size:13.5px;line-height:1.6;color:#6b6b6b">' + body + '</p>'
+      +   '<div style="display:flex;gap:10px;justify-content:flex-end">'
+      +     '<button data-no style="padding:8px 16px;border:1px solid #e5e5e5;border-radius:8px;'
+      +       'background:#fff;font-size:13px;cursor:pointer;color:#111">Cancel</button>'
+      +     '<button data-yes style="padding:8px 16px;border:none;border-radius:8px;cursor:pointer;'
+      +       'font-size:13px;color:#fff;background:' + (danger ? '#DC2626' : '#7C5CFF') + '">'
+      +       confirmLabel + '</button>'
+      +   '</div>'
+      + '</div>';
+    function done(v) { wrap.remove(); document.removeEventListener('keydown', onKey); resolve(v); }
+    function onKey(e) { if (e.key === 'Escape') done(false); }
+    wrap.querySelector('[data-no]').onclick = function () { done(false); };
+    wrap.querySelector('[data-yes]').onclick = function () { done(true); };
+    wrap.onclick = function (e) { if (e.target === wrap) done(false); };
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(wrap);
+  });
+}
+
 async function removeMember(memberId, email) {
-  if (!confirm(`Remove ${email} from the workspace?`)) return;
+  const ok = await askConfirm(
+    'Remove ' + email + '?',
+    'They lose access to the workspace and their plan returns to Free. The seat is freed up '
+      + 'immediately, and you can invite them again at any time.',
+    'Remove', true);
+  if (!ok) return;
   const { error } = await _supa.from('team_members').delete().eq('id', memberId);
   if (!error) { await loadMembers(); renderDashboard(); }
   else alert('Could not remove member: ' + error.message);
@@ -402,8 +466,16 @@ async function saveName() {
 }
 
 async function deleteWorkspace() {
-  if (!confirm('Delete the workspace? This removes all members and cannot be undone.')) return;
-  if (!confirm('Are you sure? All team members lose access.')) return;
+  const ok1 = await askConfirm(
+    'Delete this workspace?',
+    'Every member loses access and returns to Free. This cannot be undone.',
+    'Delete workspace', true);
+  if (!ok1) return;
+  const ok2 = await askConfirm(
+    'Are you certain?',
+    'This is the last check. All members lose access as soon as you confirm.',
+    'Yes, delete it', true);
+  if (!ok2) return;
   const { error } = await _supa.from('teams').delete().eq('id', _team.id);
   if (!error) window.location.href = '/pricing';
   else alert('Could not delete workspace: ' + error.message);

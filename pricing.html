@@ -513,7 +513,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     <div class="tc-right">
       <div class="tc-right-lbl">Get started</div>
       <div class="tc-right-sub">Set up your workspace and invite your team in minutes.</div>
-      <button class="tc-btn-p" onclick="location.href='/team'">Create workspace &rarr;</button>
+      <button class="tc-btn-p" id="teamCtaBtn" onclick="location.href='/team'">Create workspace &rarr;</button>
       <button class="tc-btn-s" onclick="location.href='/enterprise'">Need 10+ seats?</button>
       <div class="tc-badge">&#11088; Most complete</div>
     </div>
@@ -1025,6 +1025,35 @@ async function signInWithGoogle(pendingPlan) {
     options: { redirectTo: window.location.origin + '/pricing' }
   });
 }
+
+// ── One workspace per owner ─────────────────────────────────────────────────
+//
+// The Team panel offered "Create workspace" to everybody, including someone already running one.
+// Following it a second time makes a second workspace against the same subscription, splits the
+// seats across two places, and leaves the owner unsure which one their people joined. If they
+// already have one, the button should take them TO it.
+(async function teamCtaState() {
+  try {
+    const btn = document.getElementById('teamCtaBtn');
+    if (!btn) return;
+    const { data: { session } } = await _supa.auth.getSession();
+    if (!session) return;
+    const { data: owned } = await _supa.from('teams')
+      .select('id').eq('owner_id', session.user.id).maybeSingle();
+    if (owned) {
+      btn.innerHTML = 'Open your workspace &rarr;';
+      btn.onclick = function () { location.href = '/team-dashboard'; };
+      return;
+    }
+    // A member of somebody else's workspace should not be invited to start their own either.
+    const { data: me } = await _supa.from('users')
+      .select('team_id').eq('id', session.user.id).maybeSingle();
+    if (me && me.team_id) {
+      btn.innerHTML = 'Go to your workspace &rarr;';
+      btn.onclick = function () { location.href = '/team-dashboard'; };
+    }
+  } catch (e) { /* signed out or offline — leave the default call to action */ }
+})();
 
 // ── Show the plan the signed-in user is ALREADY on ──────────────────────────
 // Someone who has just paid lands back here and sees the same Pay buttons, which invites a second

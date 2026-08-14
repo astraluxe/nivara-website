@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
     const [planRes, usageRes] = await Promise.all([
-      supabase.from("users").select("plan, is_blocked, usage_period_start, extra_credits").eq("id", userId).single(),
+      supabase.from("users").select("plan, is_blocked, usage_period_start, extra_credits, team_id").eq("id", userId).single(),
       supabase.from("token_usage")
         .select("tokens_consumed, created_at")
         .eq("user_id", userId),
@@ -99,7 +99,31 @@ Deno.serve(async (req) => {
     // It is now added on top of the plan allowance, so support can hand someone more tokens with
     // one UPDATE instead of moving them to a paid plan they didn't buy.
     const bonus = Math.max(0, Number(planRes.data?.extra_credits ?? 0) || 0);
-    const limit = (PLAN_LIMITS[plan] ?? PLAN_LIMITS.free) + bonus;
+
+    // ── ONE TEAM, ONE ALLOWANCE, SHARED ──────────────────────────────────────────────────────
+    //
+    // A Team subscription buys 50M tokens. Every member was being given that figure in full, so a
+    // ten-seat workspace drew 500M tokens against a single ₹19,999 payment — ten times what was
+    // sold. The allowance belongs to the TEAM, so it is divided across the seats actually in use.
+    //
+    // Counted from active members only: a pending invite has nobody spending against it, and
+    // letting invitations shrink everyone's allowance before they are even accepted would make the
+    // number jump around for no visible reason. The owner is an active member too (the webhook
+    // inserts that row), so a solo workspace divides by one and nothing changes for them.
+    //
+    // extra_credits is added AFTER the division: a goodwill top-up is granted to one person and
+    // should not be quietly shared out among their colleagues.
+    let teamSize = 1;
+    const teamId = planRes.data?.team_id ? String(planRes.data.team_id) : "";
+    if (teamId) {
+      const { count } = await supabase.from("team_members")
+        .select("id", { count: "exact", head: true })
+        .eq("team_id", teamId).eq("status", "active");
+      teamSize = Math.max(1, Number(count ?? 1) || 1);
+    }
+    const planAllowance = PLAN_LIMITS[plan] ?? PLAN_LIMITS.free;
+    const share = plan === "custom" ? planAllowance : Math.floor(planAllowance / teamSize);
+    const limit = share + bonus;
     const isLifetime = LIFETIME_PLANS.has(plan);
     // Paid plans count from the BILLING period, not the 1st of the calendar month — which is what
     // the app's tokenTracker.getMonthlyUsage() has always done. With the two using different
@@ -149,6 +173,12 @@ Deno.serve(async (req) => {
       nonce,
       plan,
       remaining: plan === "custom" ? 999_999_999 : remaining,
+      // The app shows an allowance next to the usage, and it has to be the REAL one. Without these
+      // a team member's screen read "x / 50,000,000" while the server cut them off at a tenth of
+      // it — the client and the server disagreeing about the same number, which is exactly the
+      // class of bug that makes people think they have been robbed.
+      limit: plan === "custom" ? 999_999_999 : limit,
+      team_size: teamSize,
       expires_at: expiresAt,
     }), {
       headers: { ...cors, "Content-Type": "application/json" }

@@ -296,7 +296,7 @@ async function showAccount(session) {
   // Fetch plan — try direct Bearer fetch first, fall back to Supabase client
   let data = null;
   try {
-    const resp = await fetch(SUPA_URL + '/rest/v1/users?id=eq.' + encodeURIComponent(session.user.id) + '&select=plan,subscription_status,admin_level&limit=1', {
+    const resp = await fetch(SUPA_URL + '/rest/v1/users?id=eq.' + encodeURIComponent(session.user.id) + '&select=plan,subscription_status,admin_level,team_id&limit=1', {
       headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + session.access_token }
     });
     if (resp.ok) {
@@ -309,7 +309,7 @@ async function showAccount(session) {
   if (!data) {
     try {
       const { data: rows } = await _supa.from('users')
-        .select('plan,subscription_status,admin_level')
+        .select('plan,subscription_status,admin_level,team_id')
         .eq('id', session.user.id)
         .limit(1);
       data = rows && rows[0];
@@ -323,6 +323,20 @@ async function showAccount(session) {
   document.getElementById('planBadge').textContent  = planLabel;
   document.getElementById('planName').textContent   = planLabel;
   document.getElementById('planStatus').textContent = planStatus.charAt(0).toUpperCase() + planStatus.slice(1);
+
+  // A WORKSPACE WITH NO DOOR. Someone who owns or belongs to a team had no route to
+  // /team-dashboard from anywhere in the site — the only way in was to know the URL and type it.
+  // Anyone with a team_id gets the link; the dashboard itself decides what they may do there.
+  if (!document.getElementById('teamDashBtn') && data?.team_id) {
+    const teamLink = document.createElement('a');
+    teamLink.id = 'teamDashBtn';
+    teamLink.href = '/team-dashboard';
+    teamLink.className = 'app-btn';
+    teamLink.style.cssText = 'text-align:center;justify-content:center;';
+    teamLink.textContent = 'Team workspace →';
+    const signOutBtn2 = document.querySelector('#signedIn button[onclick="signOut()"]');
+    if (signOutBtn2) signOutBtn2.parentNode.insertBefore(teamLink, signOutBtn2);
+  }
 
   // Show head dashboard button — DB check OR email fallback; guard against duplicate insertion
   if (!document.getElementById('headDashBtn')) {
