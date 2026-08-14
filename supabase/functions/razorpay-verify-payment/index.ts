@@ -135,12 +135,43 @@ Deno.serve(async (req: Request) => {
     return json({ error: "Could not reach Razorpay. Your payment is safe and will be applied shortly." }, 502);
   }
 
-  // "created" means the mandate exists but nothing has been paid. Only these mean money has moved
-  // or is committed for this cycle.
-  const subStatus = String(sub.status ?? "");
-  if (!["active", "authenticated", "charged", "completed"].includes(subStatus)) {
-    await log("not_active", `subscription status is "${subStatus}"`);
-    return json({ error: `Payment is not complete yet (status: ${subStatus}).` }, 409);
+  // ── Check 3: DID MONEY ACTUALLY MOVE? ─────────────────────────────────────
+  //
+  // The subscription's status is not proof of payment. "authenticated" means the mandate was
+  // approved and nothing has been charged yet — razorpay-webhook deliberately ignores
+  // subscription.authenticated for precisely this reason, because granting on it hands out paid
+  // plans for free. An earlier version of this file accepted it and would have done exactly that.
+  //
+  // So the payment is checked directly, and "captured" is the only answer that means the money is
+  // ours. "authorized" is a hold, not a payment, and can still be voided.
+  let pay: Rec;
+  try {
+    const r = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
+      headers: { Authorization: "Basic " + btoa(`${keyId}:${keySecret}`) },
+    });
+    if (!r.ok) {
+      await log("payment_lookup_failed", `payment lookup returned ${r.status}`);
+      return json({ error: "Could not confirm the payment with Razorpay. It will be applied shortly." }, 502);
+    }
+    pay = await r.json() as Rec;
+  } catch (e) {
+    console.error("payment lookup failed", e);
+    await log("payment_lookup_error", String(e));
+    return json({ error: "Could not reach Razorpay. Your payment is safe and will be applied shortly." }, 502);
+  }
+
+  const payStatus = String(pay.status ?? "");
+  if (payStatus !== "captured") {
+    await log("not_captured", `payment status is "${payStatus}"`);
+    return json({ error: `Payment is not complete yet (status: ${payStatus}).` }, 409);
+  }
+
+  // The receipt must tie the payment to THIS subscription. Without this, a captured payment from
+  // anywhere could be presented alongside somebody's subscription id.
+  const paySub = String(pay.subscription_id ?? "");
+  if (paySub && paySub !== subscriptionId) {
+    await log("payment_mismatch", `payment belongs to ${paySub}`);
+    return json({ error: "This payment does not match the subscription." }, 400);
   }
 
   const notes = (sub.notes as Record<string, string> | undefined) ?? {};
