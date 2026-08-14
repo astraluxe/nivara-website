@@ -161,9 +161,21 @@ Deno.serve(async (req: Request) => {
     const r = await fetch(`https://api.razorpay.com/v1/subscriptions/${subId}/cancel`, {
       method: "POST",
       headers: { Authorization: "Basic " + btoa(`${id}:${secret}`), "Content-Type": "application/json" },
-      // 1 = stop at the end of the cycle already paid for. NEVER 0 — that ends it on the spot and
-      // takes back the remainder of a month the customer has already been charged for.
-      body: JSON.stringify({ cancel_at_cycle_end: 1 }),
+      // CANCEL AT RAZORPAY IMMEDIATELY. ACCESS IS HELD OPEN BY US, NOT BY THEM.
+      //
+      // The obvious choice is cancel_at_cycle_end=1 — "stop after the month they paid for" — and it
+      // is what this used to send. Measured against the live API on a real subscription, Razorpay
+      // answers 200 and then does NOTHING: status stays "active", has_scheduled_changes stays
+      // false, remaining_count stays 119. The customer is told they have cancelled and is charged
+      // again next month. A silent no-op on the one call that stops taking someone's money is the
+      // worst possible failure here.
+      //
+      // 0 genuinely cancels — verified: status becomes "cancelled" and ended_at is set, so no
+      // further charge can happen. Their paid month is then protected on OUR side instead:
+      // grace_period_end below is set to the period end, the plan keeps working until then, and
+      // expire_billing_grants() downgrades afterwards. Billing is Razorpay's to stop; access is
+      // ours to grant, so each is handled where it can actually be guaranteed.
+      body: JSON.stringify({ cancel_at_cycle_end: 0 }),
     });
     const out = await r.json() as Rec;
     if (!r.ok) {
