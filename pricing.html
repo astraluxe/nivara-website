@@ -1200,6 +1200,19 @@ async function openSubPanel() {
       + 'No further payments will be taken. Everything on ' + name + ' keeps working until the date above, '
       + 'then the account moves to Free.</p>'
       + '<button class="bi" onclick="closeSubPanel()">Close</button>';
+  } else if (d.team_member) {
+    // A MEMBER IS NOT A BUYER. Their plan comes from the team's subscription, so there is no
+    // renewal date of theirs to show and nothing for them to cancel. Before this they were told
+    // the plan "was set up manually - email support", which is alarming and untrue for someone
+    // whose team is paying perfectly normally.
+    html += row('Billing', 'Paid by your team');
+    if (d.team_name) html += row('Team', d.team_name);
+    if (d.team_owner_email) html += row('Managed by', d.team_owner_email);
+    html += '</div>';
+    html += '<p style="margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.65;">'
+      + 'You have full ' + name + ' access through your team. Billing and cancellation are handled '
+      + 'by the team owner.</p>'
+      + '<button class="bi" onclick="closeSubPanel()">Close</button>';
   } else if (!d.has_subscription) {
     html += row('Billing', 'Not through Razorpay');
     html += '</div>';
@@ -1213,7 +1226,9 @@ async function openSubPanel() {
     html += '</div>';
     html += '<p style="margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.65;">'
       + 'Cancelling stops future payments. You keep ' + name + ' until the end of the period you have '
-      + 'already paid for \u2014 nothing is taken away early.</p>'
+      + 'already paid for \u2014 nothing is taken away early.'
+      + (d.team_owner ? ' Everyone on your team keeps access until that date too, then moves to Free.' : '')
+      + '</p>'
       + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
       +   '<button class="bi" style="flex:1;min-width:150px;" onclick="closeSubPanel()">Keep my plan</button>'
       +   '<button class="bu" style="flex:1;min-width:150px;" id="subCancelBtn">Cancel subscription</button>'

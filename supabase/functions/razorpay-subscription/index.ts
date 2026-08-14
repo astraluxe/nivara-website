@@ -10,16 +10,15 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 //
 // TWO RULES SHAPE THIS FILE.
 //
-// 1. A CANCELLED MONTH IS STILL A PAID MONTH. Cancelling goes to Razorpay with
-//    cancel_at_cycle_end=1, so the card is not charged again and the plan runs to the end of the
-//    period already bought. Anything else takes back time someone has paid for.
+// 1. A CANCELLED MONTH IS STILL A PAID MONTH — but the promise is kept HERE, not at Razorpay. See
+//    the cancel call below: Razorpay is told to stop billing immediately, because its
+//    cancel_at_cycle_end option was measured doing nothing at all, and we hold access open
+//    ourselves via grace_period_end instead.
 //
-// 2. THE ANSWER MUST NOT DEPEND ON A WEBHOOK ARRIVING. With cancel_at_cycle_end, Razorpay does not
-//    send subscription.cancelled until the cycle actually ends, which can be weeks away. If the UI
-//    waited for that, a customer would press Cancel, see nothing change, and press it again. So the
-//    local row is written immediately — subscription_status='cancelled' with grace_period_end at
-//    the period end — and expire_billing_grants() (cron, hourly) does the downgrade when it lapses.
-//    The webhook's ENDING branch writes those same two fields, so whichever lands first, they agree.
+// 2. THE ANSWER MUST NOT DEPEND ON A WEBHOOK ARRIVING. The local row is written immediately —
+//    subscription_status='cancelled' with grace_period_end at the period end — and
+//    expire_billing_grants() (cron, hourly) does the downgrade when it lapses. The webhook's ENDING
+//    branch writes those same two fields, so whichever lands first, they agree.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // `apikey` and `x-client-info` are NOT optional here.
@@ -77,9 +76,30 @@ Deno.serve(async (req: Request) => {
 
   const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   const { data: row, error: rowErr } = await admin.from("users")
-    .select("plan, subscription_status, grace_period_end, razorpay_subscription_id, billing_mode")
+    .select("plan, subscription_status, grace_period_end, razorpay_subscription_id, billing_mode, team_id")
     .eq("id", user.id).maybeSingle();
   if (rowErr || !row) return json({ error: "Account not found" }, 404);
+
+  // ── Is this person on someone else's team? ────────────────────────────────
+  //
+  // A member has plan='business' and no subscription of their own, which is indistinguishable from
+  // a hand-granted plan unless we look. Without this the panel told them "this plan was set up
+  // manually, email support if you want it changed" — wrong, and alarming for someone whose team
+  // is paying perfectly normally. They cannot cancel it either: it is not their subscription.
+  let team: { name: string; ownerEmail: string; isOwner: boolean } | null = null;
+  if (row.team_id) {
+    const { data: t } = await admin.from("teams")
+      .select("name, owner_id").eq("id", String(row.team_id)).maybeSingle();
+    if (t) {
+      const isOwner = String(t.owner_id) === user.id;
+      let ownerEmail = "";
+      if (!isOwner) {
+        const { data: o } = await admin.from("users").select("email").eq("id", String(t.owner_id)).maybeSingle();
+        ownerEmail = String(o?.email ?? "");
+      }
+      team = { name: String(t.name ?? "your team"), ownerEmail, isOwner };
+    }
+  }
 
   const plan = String(row.plan ?? "free");
   const subId = String(row.razorpay_subscription_id ?? "");
@@ -107,6 +127,7 @@ Deno.serve(async (req: Request) => {
   };
 
   const localCancelled = String(row.subscription_status ?? "") === "cancelled";
+  const rzpCancelled = rzp ? String(rzp.status ?? "") === "cancelled" || !!rzp.ended_at : false;
 
   const status = () => json({
     plan,
@@ -117,8 +138,9 @@ Deno.serve(async (req: Request) => {
     test_mode: testMode,
     /** Razorpay's own view, when there is a subscription to look at. */
     razorpay_status: rzp ? String(rzp.status ?? "") : null,
-    /** When the card gets charged next. Meaningless once cancellation is scheduled. */
-    next_charge_at: rzp ? iso(rzp.charge_at) : null,
+    /** When the card gets charged next. Null once cancelled — there is no next payment, and
+     *  showing one was the date the panel kept insisting on after a cancellation. */
+    next_charge_at: (localCancelled || rzpCancelled) ? null : (rzp ? iso(rzp.charge_at) : null),
     /** End of the period already paid for — the date access really runs to. */
     current_end: rzp ? iso(rzp.current_end) : null,
     /**
@@ -133,7 +155,12 @@ Deno.serve(async (req: Request) => {
      * our own row: cancel writes subscription_status='cancelled' at the moment of the request,
      * because with cancel_at_cycle_end Razorpay keeps the status 'active' until the cycle runs out.
      */
-    cancel_scheduled: localCancelled || (rzp ? String(rzp.status ?? "") === "cancelled" || !!rzp.ended_at : false),
+    cancel_scheduled: localCancelled || rzpCancelled,
+    /** Set when the plan comes from a team rather than the caller's own purchase. */
+    team_member: !!team && !team.isOwner,
+    team_owner: !!team && team.isOwner,
+    team_name: team ? team.name : null,
+    team_owner_email: team && !team.isOwner ? team.ownerEmail : null,
   });
 
   if (action === "status") return status();
@@ -141,6 +168,14 @@ Deno.serve(async (req: Request) => {
 
   // ── Cancel ────────────────────────────────────────────────────────────────
   if (!PAID_PLANS.has(plan)) return json({ error: "You are not on a paid plan." }, 400);
+  if (team && !team.isOwner) {
+    // Their access is derived from the team's subscription. Cancelling it is the owner's decision
+    // and the owner's billing; there is nothing here for a member to stop.
+    return json({
+      error: `Your plan comes from ${team.name}. Only the team owner${team.ownerEmail ? ` (${team.ownerEmail})` : ""} can change or cancel it.`,
+      team_member: true,
+    }, 403);
+  }
   // Already done. Say so rather than calling Razorpay a second time.
   if (localCancelled) return status();
   if (!subId) {
