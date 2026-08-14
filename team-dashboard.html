@@ -193,10 +193,16 @@ html,body{background:#f5f5f5!important;color:#111!important;min-height:100%}
       <span id="saveMsg" style="font-size:12px;color:#16a34a;margin-left:12px"></span>
     </div>
 
-    <div class="danger-zone">
-      <h3>Danger zone</h3>
-      <p>Deleting the workspace removes all members and cannot be undone. Their plans revert to Free.</p>
-      <button class="danger-btn" onclick="deleteWorkspace()">Delete workspace</button>
+    <!-- CANCELLING THE PLAN IS THE REAL ACTION; DELETING THE WORKSPACE WAS NOT.
+         "Delete workspace" removed the seats and left the subscription running, so the admin lost
+         their team and kept being charged for it every month. There was no cancel button anywhere.
+         One button now, and it does the thing that stops the money. -->
+    <div class="danger-zone" id="dangerZone">
+      <h3>Cancel the Team plan</h3>
+      <div id="cancelState" style="font-size:13px;color:#6b6b6b;line-height:1.65;margin-bottom:16px">
+        Loading your subscription…
+      </div>
+      <button class="danger-btn" id="cancelPlanBtn" style="display:none" onclick="cancelTeamPlan()">Cancel Team plan</button>
     </div>
   </div>
 
@@ -250,6 +256,7 @@ async function init() {
 
   await loadMembers();
   renderDashboard();
+  loadCancelState();   // not awaited: the dashboard should not wait on a Razorpay round trip
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
 }
@@ -337,6 +344,135 @@ function memberRow(label, value) {
     + 'border-bottom:1px solid #f0f0f0;font-size:13.5px">'
     + '<span style="color:#6b6b6b">' + label + '</span>'
     + '<span style="color:#111;text-align:right">' + value + '</span></div>';
+}
+
+// Everything the admin needs before ending a subscription: what stops, what keeps working, and
+// until when. Read live from Razorpay through razorpay-subscription, so the date is the real one.
+let _subState = null;
+
+async function callSub(action) {
+  try {
+    const res = await fetch(SUPA_URL + '/functions/v1/razorpay-subscription', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + _session.access_token,
+        'apikey': SUPA_ANON
+      },
+      body: JSON.stringify({ action: action })
+    });
+    let body = {};
+    try { body = await res.json(); } catch (e) {}
+    return { ok: res.ok, body: body };
+  } catch (e) {
+    return { ok: false, body: { error: 'Could not reach the server. Check your connection and try again.' } };
+  }
+}
+
+function fmtDate(iso) {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return null;
+  return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+async function loadCancelState() {
+  const box = document.getElementById('cancelState');
+  const btn = document.getElementById('cancelPlanBtn');
+  if (!box) return;
+
+  const r = await callSub('status');
+  if (!r || !r.ok) {
+    box.textContent = (r && r.body && r.body.error) || 'Could not load your subscription.';
+    return;
+  }
+  _subState = r.body;
+  const d = r.body;
+  const seats = _members.filter(function (m) { return m.status === 'active'; }).length || 1;
+  const cancelled = d.cancel_scheduled || d.subscription_status === 'cancelled';
+  const endDate = fmtDate(d.grace_period_end || d.current_end);
+  const nextDate = fmtDate(d.next_charge_at || d.current_end);
+
+  // THE DATES ARE THE POINT. Someone deciding whether to cancel is asking three questions -- when
+  // does it renew, how long do we keep working, and when does the workspace actually disappear --
+  // and burying those in a paragraph makes them hunt. Labelled rows, read straight off Razorpay.
+  function row(label, value, strong) {
+    return '<div style="display:flex;justify-content:space-between;gap:16px;padding:9px 0;'
+      + 'border-bottom:1px solid #f5f5f5;font-size:13px">'
+      + '<span style="color:#6b6b6b">' + label + '</span>'
+      + '<span style="text-align:right;color:#111' + (strong ? ';font-weight:600' : '') + '">' + value + '</span>'
+      + '</div>';
+  }
+
+  const pill = function (text, colour, bg) {
+    return '<span style="display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;'
+      + 'font-weight:600;color:' + colour + ';background:' + bg + '">' + text + '</span>';
+  };
+
+  if (cancelled) {
+    box.innerHTML =
+      '<div style="margin-bottom:12px">'
+      +   row('Status', pill('Cancelled', '#DC2626', 'rgba(220,38,38,.12)'), false)
+      +   row('Future payments', 'Stopped \u2014 you will not be charged again')
+      +   row('Team access until', endDate || 'end of the paid period', true)
+      +   row('Workspace closes on', endDate || 'end of the paid period', true)
+      +   row('People affected', seats + ' member' + (seats === 1 ? '' : 's') + ' return to Free')
+      + '</div>'
+      + '<span style="color:#6b6b6b">Nothing changes before that date. When it passes, the workspace '
+      + 'and its member list are removed automatically and every account returns to the Free plan. '
+      + 'Work already saved stays on each person\u2019s own machine.</span>';
+    btn.style.display = 'none';
+    return;
+  }
+
+  if (!d.has_subscription) {
+    // A workspace granted by hand has no Razorpay subscription behind it, so there is nothing here
+    // to stop. Offering a cancel button that can only fail would be worse than saying so.
+    box.innerHTML = 'This workspace was set up manually rather than through Razorpay, so there is no '
+      + 'automatic billing to cancel. Email support if you want it closed.';
+    btn.style.display = 'none';
+    return;
+  }
+
+  box.innerHTML =
+    '<div style="margin-bottom:12px">'
+    +   row('Status', pill('Active', '#16A34A', 'rgba(22,163,74,.12)'), false)
+    +   row('Plan', 'Team \u2014 \u20b919,999 / month')
+    +   row('Renews automatically', nextDate || 'monthly', true)
+    +   row('Seats in use', seats + ' of ' + (_team && _team.max_seats ? _team.max_seats : 10))
+    + '</div>'
+    + '<span style="color:#6b6b6b"><strong style="color:#111">If you cancel:</strong> nothing is taken '
+    + 'away today. You and your ' + (seats - 1 >= 0 ? seats - 1 : 0) + ' member'
+    + ((seats - 1) === 1 ? '' : 's') + ' keep full Team access until '
+    + (endDate ? '<strong style="color:#111">' + endDate + '</strong>' : 'the end of the month already paid for')
+    + ' \u2014 the month you have already paid for. On that date the workspace is closed automatically, '
+    + 'the member list is removed, and everyone returns to the Free plan. '
+    + (nextDate ? 'You would not be charged on ' + nextDate + '. ' : '')
+    + 'You can subscribe again later, but the workspace is not restored.</span>';
+  btn.style.display = 'inline-block';
+}
+
+async function cancelTeamPlan() {
+  const seats = _members.filter(function (m) { return m.status === 'active'; }).length || 1;
+  const endDate = fmtDate((_subState && (_subState.grace_period_end || _subState.current_end)) || null);
+  const ok = await askConfirm(
+    'Cancel the Team plan?',
+    'No further payments will be taken. '
+      + seats + ' member' + (seats === 1 ? '' : 's') + ' keep full access until '
+      + (endDate ? '<strong>' + endDate + '</strong>' : 'the end of the period you have paid for')
+      + ', then the workspace closes and everyone returns to Free.',
+    'Cancel the plan', true);
+  if (!ok) return;
+
+  const btn = document.getElementById('cancelPlanBtn');
+  btn.disabled = true; btn.textContent = 'Cancelling…';
+  const r = await callSub('cancel');
+  btn.disabled = false; btn.textContent = 'Cancel Team plan';
+  if (!r.ok) {
+    await askConfirm('Could not cancel', (r.body && r.body.error) || 'Please try again.', 'Close', false);
+    return;
+  }
+  await loadCancelState();
 }
 
 async function loadMembers() {
@@ -587,21 +723,14 @@ async function saveName() {
   }
 }
 
-async function deleteWorkspace() {
-  const ok1 = await askConfirm(
-    'Delete this workspace?',
-    'Every member loses access and returns to Free. This cannot be undone.',
-    'Delete workspace', true);
-  if (!ok1) return;
-  const ok2 = await askConfirm(
-    'Are you certain?',
-    'This is the last check. All members lose access as soon as you confirm.',
-    'Yes, delete it', true);
-  if (!ok2) return;
-  const { error } = await _supa.from('teams').delete().eq('id', _team.id);
-  if (!error) window.location.href = '/pricing';
-  else alert('Could not delete workspace: ' + error.message);
-}
+// deleteWorkspace() lived here and has been removed rather than left unreachable.
+//
+// It dropped the teams row and nothing else, so the subscription carried on billing every month
+// for a workspace that no longer existed — the admin lost their team AND kept paying for it. The
+// members' plans were never reset either, since a browser cannot write another user's billing
+// columns (protect_billing_columns). Ending a Team plan is a billing action, so it goes through
+// cancelTeamPlan() above, and expire_billing_grants() closes the workspace once the paid period
+// actually runs out. A destructive function with no caller is an accident waiting for a wire-up.
 
 function switchTab(name) {
   ['members','usage','settings'].forEach(t => {
