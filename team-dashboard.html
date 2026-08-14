@@ -228,7 +228,16 @@ async function init() {
   document.getElementById('navUser').textContent = session.user.email || '';
 
   const { data: team } = await _supa.from('teams').select('*').eq('owner_id', session.user.id).maybeSingle();
-  if (!team) { window.location.href = '/team'; return; }
+  if (!team) {
+    // NOT AN OWNER. Everyone who did not own a workspace was redirected to /team — the page that
+    // SELLS a Team plan and offers to create one. A member of somebody else's workspace, whose seat
+    // is already paid for, was therefore shown a pitch to buy a second subscription and set up a
+    // rival workspace. They need to see the workspace they are in, not an invitation to leave it.
+    const { data: me } = await _supa.from('users').select('team_id').eq('id', session.user.id).maybeSingle();
+    if (me && me.team_id) { await renderMemberView(me.team_id); return; }
+    window.location.href = '/team';
+    return;
+  }
   _team = team;
 
   // Check if subscription is active; show payment banner if not
@@ -242,6 +251,91 @@ async function init() {
   renderDashboard();
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+}
+
+// What a member sees: the workspace they are in, who runs it, and — the part they actually need
+// — how much of the shared allowance is theirs. Read-only by design; the seat is not theirs to
+// administer. The one action they do own is leaving.
+async function renderMemberView(teamId) {
+  const { data: team } = await _supa.from('teams').select('id, name, owner_id, max_seats').eq('id', teamId).maybeSingle();
+  if (!team) { window.location.href = '/team'; return; }
+
+  const { data: seats } = await _supa.from('team_members')
+    .select('email, status').eq('team_id', teamId);
+  const active = (seats || []).filter(function (m) { return m.status === 'active'; });
+  const size = Math.max(1, active.length);
+
+  let ownerEmail = '';
+  try {
+    const { data: owner } = await _supa.from('users').select('email').eq('id', team.owner_id).maybeSingle();
+    ownerEmail = (owner && owner.email) || '';
+  } catch (e) {}
+
+  // Mirrors the division in get-session-key: one Team allowance, split across active seats.
+  const TEAM_TOKENS = 50000000;
+  const share = Math.floor(TEAM_TOKENS / size);
+  const fmt = function (n) { return n.toLocaleString('en-IN'); };
+
+  document.getElementById('loadingState').style.display = 'none';
+  const host = document.getElementById('dashboard');
+  host.style.display = 'block';
+  host.innerHTML =
+    '<div style="max-width:640px;margin:0 auto;padding:8px 0 40px">'
+    + '<h1 style="font-size:26px;margin:0 0 6px;color:#111">' + (team.name || 'Your workspace') + '</h1>'
+    + '<p style="font-size:13.5px;color:#6b6b6b;margin:0 0 24px">'
+    +   'You are a member of this workspace. Your Team plan is paid for by the admin.</p>'
+    + '<div style="border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;background:#fff">'
+    +   memberRow('Your plan', 'Team')
+    +   memberRow('Workspace', team.name || '—')
+    +   memberRow('Admin', ownerEmail || '—')
+    +   memberRow('Members', size + ' of ' + team.max_seats + ' seats in use')
+    +   memberRow('Your monthly tokens', fmt(share)
+        + (size > 1 ? ' <span style="color:#6b6b6b">(' + fmt(TEAM_TOKENS) + ' shared by ' + size + ')</span>' : ''))
+    + '</div>'
+    + '<p style="font-size:12.5px;color:#6b6b6b;margin:18px 0 10px;line-height:1.6">'
+    +   'Billing, seats and member management are handled by the admin. '
+    +   'Leaving returns your account to the Free plan.</p>'
+    + '<div style="display:flex;gap:10px;flex-wrap:wrap">'
+    +   '<a href="/download" class="app-btn" style="padding:9px 16px;border:1px solid #e5e5e5;'
+    +     'border-radius:8px;text-decoration:none;color:#111;font-size:13px">Open the app</a>'
+    +   '<button id="leaveTeamBtn" style="padding:9px 16px;border:1px solid #e5e5e5;border-radius:8px;'
+    +     'background:#fff;font-size:13px;cursor:pointer;color:#DC2626">Leave workspace</button>'
+    + '</div>'
+    + '</div>';
+
+  document.getElementById('leaveTeamBtn').onclick = async function () {
+    const ok = await askConfirm(
+      'Leave ' + (team.name || 'this workspace') + '?',
+      'You lose Team access and your account returns to the Free plan. The admin would have to '
+        + 'invite you again.',
+      'Leave workspace', true);
+    if (!ok) return;
+    this.disabled = true; this.textContent = 'Leaving\u2026';
+    try {
+      const res = await fetch(SUPA_URL + '/functions/v1/team-remove', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + _session.access_token,
+          'apikey': SUPA_ANON
+        },
+        body: JSON.stringify({ leave: true, email: _session.user.email })
+      });
+      const d = await res.json().catch(function () { return {}; });
+      if (!res.ok) { alert(d.error || 'Could not leave the workspace.'); this.disabled = false; this.textContent = 'Leave workspace'; return; }
+      window.location.href = '/signin';
+    } catch (e) {
+      alert('Could not reach the server. Please try again.');
+      this.disabled = false; this.textContent = 'Leave workspace';
+    }
+  };
+}
+
+function memberRow(label, value) {
+  return '<div style="display:flex;justify-content:space-between;gap:16px;padding:14px 18px;'
+    + 'border-bottom:1px solid #f0f0f0;font-size:13.5px">'
+    + '<span style="color:#6b6b6b">' + label + '</span>'
+    + '<span style="color:#111;text-align:right">' + value + '</span></div>';
 }
 
 async function loadMembers() {
@@ -437,9 +531,27 @@ async function removeMember(memberId, email) {
       + 'immediately, and you can invite them again at any time.',
     'Remove', true);
   if (!ok) return;
-  const { error } = await _supa.from('team_members').delete().eq('id', memberId);
-  if (!error) { await loadMembers(); renderDashboard(); }
-  else alert('Could not remove member: ' + error.message);
+  // Through the server, not straight at the table. Deleting the row from here removed the member
+  // from the list and left their account on the Team plan for good: protect_billing_columns stops a
+  // browser touching another user's billing columns, so the plan reset could never have happened
+  // client-side. team-remove does both halves with the service role.
+  try {
+    const res = await fetch(SUPA_URL + '/functions/v1/team-remove', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + _session.access_token,
+        'apikey': SUPA_ANON
+      },
+      body: JSON.stringify({ member_id: memberId, email: email })
+    });
+    const d = await res.json().catch(function () { return {}; });
+    if (!res.ok) { alert(d.error || 'Could not remove member.'); return; }
+    await loadMembers();
+    renderDashboard();
+  } catch (e) {
+    alert('Could not reach the server. Please try again.');
+  }
 }
 
 function copyInvite(btn, url) {
