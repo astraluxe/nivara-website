@@ -159,8 +159,9 @@ html,body{background:#f5f5f5!important;color:#111!important;min-height:100%}
            project — so the button now describes what actually happens: a link is created for you
            to send. Work and personal addresses are equally fine. -->
       <p style="font-size:12.5px;color:#6b6b6b;margin:0 0 10px;line-height:1.55">
-        This creates a join link for you to send them yourself — we don't email it.
-        Any address works, personal or work. The link expires in 48 hours.
+        If they already have an adris.tech account they're added straight away — nothing to send.
+        If they don't, you get a join link to pass on yourself; we don't email it, and it expires
+        in 48 hours. Any address works, personal or work.
       </p>
       <div class="invite-row">
         <input type="email" id="inviteEmail" placeholder="name@example.com" autocomplete="off"
@@ -475,11 +476,20 @@ async function sendInvite() {
       const inv = d.results?.[0];
       if (inv?.ok) {
         res_el.className = 'inv-result ok';
-        res_el.textContent = `Invite link for ${email}: `;
-        const link = document.createElement('a');
-        link.href = inv.url; link.textContent = 'Copy'; link.style.cssText = 'color:#7C5CFF';
-        link.onclick = e => { e.preventDefault(); navigator.clipboard.writeText(inv.url); link.textContent = 'Copied!'; };
-        res_el.appendChild(link);
+        if (inv.added) {
+          // ALREADY AN adris.tech USER — THERE IS NO LINK, AND OFFERING ONE IS A LIE. They were
+          // added on the spot and the seat is taken; showing "Invite link: Copy" here sent the
+          // admin off to deliver something that did not exist and left them unsure whether the
+          // person was actually in.
+          res_el.textContent = email + ' was added to the workspace — they already have an '
+            + 'adris.tech account, so it appears next time they open the app. No link needed.';
+        } else {
+          res_el.textContent = 'Invite link for ' + email + ' (send it to them yourself): ';
+          const link = document.createElement('a');
+          link.href = inv.url; link.textContent = 'Copy'; link.style.cssText = 'color:#7C5CFF';
+          link.onclick = e => { e.preventDefault(); navigator.clipboard.writeText(inv.url); link.textContent = 'Copied!'; };
+          res_el.appendChild(link);
+        }
         document.getElementById('inviteEmail').value = '';
         await loadMembers();
         renderDashboard();
