@@ -1377,12 +1377,52 @@ async function startRazorpayPayment(planKey, session, activePromo) {
       description: PLAN_NAMES[planKey] + ' Plan — Monthly' + promoNote,
       prefill:     { email: userEmail, name: session.user.user_metadata?.full_name || '' },
       theme:       { color: '#7C5CFF' },
-      handler: function() {
+      // RAZORPAY HANDS US A SIGNED RECEIPT AND WE USED TO THROW IT AWAY.
+      //
+      // This callback took no arguments, so the three fields Razorpay passes -- payment id,
+      // subscription id, and an HMAC over the pair -- went straight in the bin. The page then
+      // showed a success screen and sat waiting for a webhook to grant the plan. When that webhook
+      // could not be verified, nothing ever came: a customer paid, saw "success", and stayed on
+      // Free. That is the exact failure a real paying customer hit here.
+      //
+      // The receipt is proof of payment in its own right, signed with the API key secret. Sending
+      // it to razorpay-verify-payment grants the plan in about a second, while the success screen
+      // is still on the display, and needs no webhook at all.
+      //
+      // watchActivation still runs underneath: if verification is slow or the network drops, the
+      // poll picks the plan up as soon as it lands by any route. Belt and braces, because the one
+      // thing that must not happen again is a payment that quietly grants nothing.
+      handler: async function (resp) {
         const planLabel = PLAN_NAMES[planKey] || planKey;
         document.getElementById('successPlan').textContent = planLabel;
         document.getElementById('successEmail').textContent = userEmail || 'your Google account';
         document.getElementById('successEmail2').textContent = userEmail || 'the same Google account';
         document.getElementById('successModal').classList.add('open');
+
+        try {
+          const vr = await fetch(SUPA_URL + '/functions/v1/razorpay-verify-payment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + session.access_token,
+              'apikey': SUPA_ANON
+            },
+            body: JSON.stringify({
+              razorpay_payment_id:      resp && resp.razorpay_payment_id,
+              razorpay_subscription_id: (resp && resp.razorpay_subscription_id) || sub.subscription_id,
+              razorpay_signature:       resp && resp.razorpay_signature
+            })
+          });
+          const vb = await vr.json().catch(function () { return {}; });
+          if (!vr.ok) {
+            // Never alarm someone who has just paid: the money is safe either way, and the poll
+            // below may still land it. Record it where it can be read rather than shouting.
+            console.warn('verify-payment:', vr.status, vb && vb.error);
+          }
+        } catch (e) {
+          console.warn('verify-payment failed', e);
+        }
+
         watchActivation(planKey, session);
       },
     });
