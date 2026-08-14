@@ -1287,6 +1287,17 @@ window.PAY_TESTERS = [
 
     var banner = document.getElementById('payLockBanner');
     if (banner) banner.style.display = 'none';
+
+    // SAY WHY THIS PAGE LOOKS DIFFERENT. An unlocked checkout on an account that should see the
+    // lock reads as the lock having broken -- it was reported as exactly that. A tester needs to
+    // know the buttons are live for them and nobody else, and that the charge is not real.
+    var note = document.createElement('div');
+    note.id = 'payTesterNote';
+    note.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:9998;'
+      + 'background:var(--accent);color:var(--accent-ink);font-family:var(--font-mono);font-size:11.5px;'
+      + 'letter-spacing:.03em;padding:9px 16px;border-radius:999px;box-shadow:0 8px 28px rgba(124,92,255,.35);';
+    note.textContent = 'Test checkout enabled for ' + email + ' - checkout is still locked for everyone else';
+    document.body.appendChild(note);
   } catch (e) { /* not signed in, or offline — the lock simply stays on */ }
 })();
 function showPayLock() {
