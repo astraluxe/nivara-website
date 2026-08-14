@@ -61,13 +61,19 @@
 /* Buttons */
 .bts { display:flex; flex-direction:column; gap:7px; margin-bottom:22px; }
 .bi,.bu,.bf { display:block; width:100%; padding:10px 0; border-radius:8px; font-size:13px; font-weight:600; text-align:center; cursor:pointer; text-decoration:none; transition:all .15s; font-family:var(--font-sans); border:none; }
-.bi { background:#111; color:#fff; }
-.bi:hover { background:var(--ac); }
-.bu { background:transparent; color:#111; border:1px solid var(--br); }
+/* THESE WERE PAINTED IN INK-ON-PAPER AND NEVER TOLD ABOUT THE OTHER THEME.
+   #111 text on a #0E0E0C page is invisible, which is exactly what happened: in ink mode
+   "Manage subscription" and the outline buttons could only be found by hovering, because the
+   hover rule was the first thing that set a visible colour. --ink and --paper swap with the
+   theme, so filled buttons stay inverted against the page and outline buttons stay legible in
+   both. The featured card below is a deliberately always-dark surface and keeps its own colours. */
+.bi { background:var(--ink); color:var(--paper); }
+.bi:hover { background:var(--ac); color:#fff; }
+.bu { background:transparent; color:var(--ink); border:1px solid var(--br); }
 .bu:hover { border-color:var(--ac); color:var(--ac); }
-.bf { background:#111; color:#fff; }
-.bf:hover { background:var(--ac); }
-.pc.fr .bf { background:rgba(0,0,0,.09); color:var(--mu); }
+.bf { background:var(--ink); color:var(--paper); }
+.bf:hover { background:var(--ac); color:#fff; }
+.pc.fr .bf { background:var(--paper-3); color:var(--mu); }
 .pc.ft .bi { background:#fff; color:#111; }
 .pc.ft .bi:hover { background:var(--ac); color:#fff; }
 .pc.ft .bu { background:transparent; color:rgba(255,255,255,.65); border:1px solid rgba(255,255,255,.2); }
@@ -126,8 +132,8 @@
 .ip .ey { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:10px; }
 .ip h2 { font-size:clamp(22px,3vw,30px); font-weight:600; letter-spacing:-.03em; margin-bottom:28px; }
 .ig { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
-.ii { background:#fff; border:1px solid var(--br); border-radius:10px; padding:16px; }
-.ii .ico { width:20px; height:20px; margin-bottom:10px; color:#111; }
+.ii { background:var(--pc-bg, var(--paper)); border:1px solid var(--br); border-radius:10px; padding:16px; }
+.ii .ico { width:20px; height:20px; margin-bottom:10px; color:var(--ink); }
 .ii .nm { font-size:13px; font-weight:600; color:#1A1A18; }
 .ii .ds { font-size:11px; color:#6B6963; margin-top:3px; line-height:1.4; }
 
@@ -172,28 +178,28 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 .cs .cx:hover { border-color:rgba(255,255,255,.5); color:#fff; }
 
 /* ── Sign-in button in nav ───────────────────────────────────── */
-.sib { padding:8px 18px; border:1px solid #e5e5e5; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; background:transparent; color:#111; font-family:var(--font-sans); transition:all .15s; }
+.sib { padding:8px 18px; border:1px solid var(--br); border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; background:transparent; color:var(--ink); font-family:var(--font-sans); transition:all .15s; }
 .sib:hover { border-color:var(--ac); color:var(--ac); }
 
 /* ── Modals ──────────────────────────────────────────────────── */
 .mb { position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:blur(6px); z-index:300; display:none; align-items:center; justify-content:center; }
 .mb.open { display:flex; }
-.mbx { background:#fff; border:1px solid #e5e5e5; border-radius:16px; width:380px; max-width:95vw; padding:32px 28px 24px; position:relative; }
+.mbx { background:var(--paper); border:1px solid var(--br); border-radius:16px; width:380px; max-width:95vw; padding:32px 28px 24px; position:relative; }
 .mbx .mx { position:absolute; top:14px; right:16px; background:none; border:none; font-size:20px; cursor:pointer; color:#bbb; }
 .mbx h3 { font-size:20px; font-weight:600; letter-spacing:-.02em; margin-bottom:6px; }
 .mbx p { font-size:13px; color:var(--mu); margin-bottom:20px; line-height:1.55; }
-.mbx .dl { display:block; width:100%; padding:12px; background:#111; color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:600; text-align:center; cursor:pointer; text-decoration:none; transition:background .15s; font-family:var(--font-sans); }
-.mbx .dl:hover { background:var(--ac); }
-.mbx .dl.google { background:#fff; color:#111; border:1px solid #e5e5e5; display:flex; align-items:center; justify-content:center; gap:10px; }
+.mbx .dl { display:block; width:100%; padding:12px; background:var(--ink); color:var(--paper); border:none; border-radius:10px; font-size:14px; font-weight:600; text-align:center; cursor:pointer; text-decoration:none; transition:background .15s; font-family:var(--font-sans); }
+.mbx .dl:hover { background:var(--ac); color:#fff; }
+.mbx .dl.google { background:#fff; color:#111; border:1px solid var(--br); display:flex; align-items:center; justify-content:center; gap:10px; }
 .mbx .dl.google:hover { border-color:var(--ac); color:var(--ac); background:#fff; }
 .mbx .sep { text-align:center; font-size:11px; color:#ccc; margin:12px 0; font-family:var(--font-mono); }
-.mbx .oa { display:block; width:100%; padding:10px; border:1px solid #e5e5e5; border-radius:10px; font-size:13px; font-weight:500; text-align:center; cursor:pointer; color:#111; background:none; font-family:var(--font-sans); transition:all .15s; }
+.mbx .oa { display:block; width:100%; padding:10px; border:1px solid var(--br); border-radius:10px; font-size:13px; font-weight:500; text-align:center; cursor:pointer; color:var(--ink); background:none; font-family:var(--font-sans); transition:all .15s; }
 .mbx .oa:hover { border-color:var(--ac); color:var(--ac); }
 /* Success email callout */
-.mbx .email-badge { display:inline-flex; align-items:center; gap:6px; background:#f5f5f5; border:1px solid #e5e5e5; border-radius:8px; padding:7px 12px; font-family:var(--font-mono); font-size:12px; color:#111; margin-bottom:14px; width:100%; box-sizing:border-box; }
+.mbx .email-badge { display:inline-flex; align-items:center; gap:6px; background:var(--paper-2); border:1px solid var(--br); border-radius:8px; padding:7px 12px; font-family:var(--font-mono); font-size:12px; color:var(--ink); margin-bottom:14px; width:100%; box-sizing:border-box; }
 .mbx .email-badge .dot { width:8px; height:8px; background:var(--gr); border-radius:50%; flex-shrink:0; }
 .mbx .step { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#333; line-height:1.5; margin-bottom:10px; }
-.mbx .step .num { background:#111; color:#fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px; }
+.mbx .step .num { background:var(--ink); color:var(--paper); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px; }
 .mbx .step-head { font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--mu); margin-bottom:10px; }
 
 /* ── Affiliate popup ─────────────────────────────────────────── */
@@ -306,7 +312,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <li><a href="/promo">Offers</a></li>
     </ul>
     <div class="nav-right">
-      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid #e5e5e5;border-radius:8px;font-size:12px;font-weight:500;color:#111;text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='#7C5CFF';this.style.color='#7C5CFF'" onmouseout="this.style.borderColor='#e5e5e5';this.style.color='#111'">Sign in</a>
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <span class="tt-track"><span class="tt-thumb"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span>
       </button>
@@ -1661,7 +1667,7 @@ initAffiliate();
 <script>
 (function(){
   var _nb=window.supabase.createClient('https://xkkqcqsacgdrfwbwdqsp.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0');
-  function _nu(s){var el=document.getElementById('navSignIn');if(!el||!s)return;var m=s.user.user_metadata||{};var av=m.avatar_url||m.picture;var nm=m.full_name||m.name||s.user.email;el.removeAttribute('onmouseover');el.removeAttribute('onmouseout');if(av){el.style.cssText='padding:2px;border:2px solid #e5e5e5;border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';el.innerHTML='<img src="'+av+'" alt="'+nm+'" title="'+nm+'" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';}else{el.style.cssText='width:30px;height:30px;border:2px solid #e5e5e5;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:#111;';el.textContent=(nm||'U').charAt(0).toUpperCase();}}
+  function _nu(s){var el=document.getElementById('navSignIn');if(!el||!s)return;var m=s.user.user_metadata||{};var av=m.avatar_url||m.picture;var nm=m.full_name||m.name||s.user.email;el.removeAttribute('onmouseover');el.removeAttribute('onmouseout');if(av){el.style.cssText='padding:2px;border:2px solid var(--rule-strong);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';el.innerHTML='<img src="'+av+'" alt="'+nm+'" title="'+nm+'" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';}else{el.style.cssText='width:30px;height:30px;border:2px solid var(--rule-strong);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';el.textContent=(nm||'U').charAt(0).toUpperCase();}}
   _nb.auth.getSession().then(function(r){_nu(r.data.session);});
   _nb.auth.onAuthStateChange(function(_,s){_nu(s);});
 })();
