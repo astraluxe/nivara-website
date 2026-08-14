@@ -121,8 +121,19 @@ Deno.serve(async (req: Request) => {
     next_charge_at: rzp ? iso(rzp.charge_at) : null,
     /** End of the period already paid for — the date access really runs to. */
     current_end: rzp ? iso(rzp.current_end) : null,
-    /** True when billing has been told to stop at the end of this cycle. */
-    cancel_scheduled: localCancelled || (rzp ? String(rzp.status ?? "") === "cancelled" || !!rzp.end_at : false),
+    /**
+     * True when billing has been told to stop at the end of this cycle.
+     *
+     * NOT `end_at`. That field is the date the subscription would finish naturally after its
+     * total_count cycles — checkout requests 120 months, so end_at sits in 2036 on a perfectly
+     * healthy subscription. Reading it as a cancellation marker made the panel announce
+     * "Cancelled — no further payments will be taken" to someone who had merely opened it to look.
+     *
+     * `ended_at` (past tense) is the one that means it actually stopped. Otherwise the authority is
+     * our own row: cancel writes subscription_status='cancelled' at the moment of the request,
+     * because with cancel_at_cycle_end Razorpay keeps the status 'active' until the cycle runs out.
+     */
+    cancel_scheduled: localCancelled || (rzp ? String(rzp.status ?? "") === "cancelled" || !!rzp.ended_at : false),
   });
 
   if (action === "status") return status();

@@ -1145,82 +1145,119 @@ async function openSubPanel() {
   const el = subPanelEl();
   const body = el.querySelector('#subPanelBody');
   el.style.display = 'flex';
-  body.innerHTML = 'Loading your subscription...';
+  body.innerHTML = '<p style="margin:0;color:var(--muted);">Loading your subscription\u2026</p>';
 
   const r = await callSub('status');
   if (!r) { closeSubPanel(); return; }
   if (!r.ok) {
-    body.innerHTML = '<p style="margin:0 0 14px;">' + (r.body.error || 'Could not load your subscription.') + '</p>' +
-      '<button class="bu" onclick="closeSubPanel()">Close</button>';
+    body.innerHTML = '<p style="margin:0 0 16px;">' + (r.body.error || 'Could not load your subscription.') + '</p>'
+      + '<button class="bu" onclick="closeSubPanel()">Close</button>';
     return;
   }
 
   const d = r.body;
   const PLAN_NAME = { solo: 'Solo', builder: 'Builder', business: 'Team', custom: 'Custom' };
+  const PLAN_PRICE = { solo: '\u20b91,499', builder: '\u20b94,999', business: '\u20b919,999' };
   const name = PLAN_NAME[d.plan] || d.plan;
   const cancelled = d.cancel_scheduled || d.subscription_status === 'cancelled';
-  // When cancelled, the date that matters is when access STOPS. Otherwise it is the next charge.
   const endDate = fmtDate(d.grace_period_end || d.current_end);
   const nextDate = fmtDate(d.next_charge_at || d.current_end);
 
-  let html = '<h3 style="margin:0 0 4px;font-size:18px;">' + name + ' plan</h3>';
-  if (d.test_mode) {
-    html += '<p style="margin:0 0 10px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);">Test mode</p>';
+  // One row of the detail list. Label left, value right, hairline between — so the dates can be
+  // read at a glance instead of being hunted for inside a paragraph.
+  function row(label, value, strong) {
+    return '<div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;'
+      + 'border-bottom:1px solid var(--rule);font-size:13.5px;">'
+      + '<span style="color:var(--muted);">' + label + '</span>'
+      + '<span style="text-align:right;' + (strong ? 'font-weight:600;' : '') + '">' + value + '</span>'
+      + '</div>';
   }
 
+  const pill = cancelled
+    ? '<span style="display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;'
+      + 'background:rgba(220,38,38,.12);color:#DC2626;">Cancelled</span>'
+    : '<span style="display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;'
+      + 'background:rgba(22,163,74,.12);color:#16A34A;">Active</span>';
+
+  let html = ''
+    + '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:2px;">'
+    +   '<h3 style="margin:0;font-size:19px;letter-spacing:-.01em;">' + name + '</h3>'
+    +   pill
+    + '</div>'
+    + (d.test_mode
+        ? '<p style="margin:0 0 14px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;'
+          + 'text-transform:uppercase;color:var(--muted-2);">Test mode \u2014 no real payment</p>'
+        : '<div style="height:14px;"></div>');
+
+  html += '<div style="border-top:1px solid var(--rule);margin-bottom:18px;">';
+  if (PLAN_PRICE[d.plan]) html += row('Price', PLAN_PRICE[d.plan] + ' / month');
+
   if (cancelled) {
-    html += '<p style="margin:0 0 14px;color:var(--muted);">Cancelled -- no further payments will be taken.</p>';
-    html += endDate
-      ? '<p style="margin:0 0 16px;">You keep everything on ' + name + ' until <strong>' + endDate + '</strong>. After that the account moves to Free.</p>'
-      : '<p style="margin:0 0 16px;">You keep your current plan until the end of the period you have already paid for.</p>';
-    html += '<button class="bi" onclick="closeSubPanel()">Close</button>';
+    html += row('Renews', 'No \u2014 billing stopped');
+    if (endDate) html += row('Access until', endDate, true);
+    html += '</div>';
+    html += '<p style="margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.65;">'
+      + 'No further payments will be taken. Everything on ' + name + ' keeps working until the date above, '
+      + 'then the account moves to Free.</p>'
+      + '<button class="bi" onclick="closeSubPanel()">Close</button>';
+  } else if (!d.has_subscription) {
+    html += row('Billing', 'Not through Razorpay');
+    html += '</div>';
+    html += '<p style="margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.65;">'
+      + 'This plan was set up manually, so there is no automatic billing to cancel. '
+      + 'Email support if you want it changed.</p>'
+      + '<button class="bi" onclick="closeSubPanel()">Close</button>';
   } else {
-    html += '<p style="margin:0 0 14px;color:var(--muted);">Active' + (d.has_subscription ? ' - renews automatically' : '') + '</p>';
-    if (nextDate) {
-      html += '<p style="margin:0 0 6px;">Next payment: <strong>' + nextDate + '</strong></p>';
-    }
-    if (!d.has_subscription) {
-      // A plan granted by hand has no Razorpay subscription, so there is no date and nothing to
-      // stop. Say that plainly instead of showing a Cancel button that can only fail.
-      html += '<p style="margin:0 0 16px;color:var(--muted);font-size:13px;">This plan was set up manually rather than through Razorpay, so there is no automatic billing to cancel. Email support if you want it changed.</p>';
-      html += '<button class="bi" onclick="closeSubPanel()">Close</button>';
-    } else {
-      html += '<p style="margin:14px 0 16px;font-size:13px;color:var(--muted);">Cancelling stops future payments. You keep ' + name +
-              ' until the end of the period you have already paid for -- nothing is taken away early.</p>' +
-              '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-              '<button class="bi" onclick="closeSubPanel()">Keep my plan</button>' +
-              '<button class="bu" id="subCancelBtn">Cancel subscription</button>' +
-              '</div>';
-    }
+    html += row('Renews', 'Automatically, every month');
+    if (nextDate) html += row('Next payment', nextDate, true);
+    html += '</div>';
+    html += '<p style="margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.65;">'
+      + 'Cancelling stops future payments. You keep ' + name + ' until the end of the period you have '
+      + 'already paid for \u2014 nothing is taken away early.</p>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
+      +   '<button class="bi" style="flex:1;min-width:150px;" onclick="closeSubPanel()">Keep my plan</button>'
+      +   '<button class="bu" style="flex:1;min-width:150px;" id="subCancelBtn">Cancel subscription</button>'
+      + '</div>';
   }
   body.innerHTML = html;
 
   const cancelBtn = document.getElementById('subCancelBtn');
   if (cancelBtn) {
     cancelBtn.onclick = function () {
-      // One confirmation, in the panel rather than a browser dialog, so the consequence is on
-      // screen while the decision is being made.
-      body.innerHTML = '<h3 style="margin:0 0 10px;font-size:17px;">Cancel your ' + name + ' subscription?</h3>' +
-        '<p style="margin:0 0 16px;font-size:13.5px;color:var(--muted);">No further payments will be taken. You keep ' + name +
-        ' until the end of the period you have already paid for.</p>' +
-        '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-        '<button class="bi" onclick="closeSubPanel()">Keep my plan</button>' +
-        '<button class="bu" id="subCancelYes">Yes, cancel</button></div>';
+      // The consequence stays on screen while the decision is made, rather than in a browser dialog
+      // that says nothing about what is lost and when.
+      body.innerHTML = ''
+        + '<h3 style="margin:0 0 12px;font-size:18px;">Cancel ' + name + '?</h3>'
+        + '<div style="border-top:1px solid var(--rule);margin-bottom:16px;">'
+        +   row('Future payments', 'Stopped')
+        +   (nextDate ? row('You will NOT be charged on', nextDate) : '')
+        +   (endDate || nextDate ? row('Keeps working until', endDate || nextDate, true) : '')
+        + '</div>'
+        + '<p style="margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.65;">'
+        +   'You can resubscribe at any time.</p>'
+        + '<div style="display:flex;gap:10px;flex-wrap:wrap;">'
+        +   '<button class="bi" style="flex:1;min-width:150px;" onclick="closeSubPanel()">Keep my plan</button>'
+        +   '<button class="bu" style="flex:1;min-width:150px;" id="subCancelYes">Yes, cancel</button>'
+        + '</div>';
       document.getElementById('subCancelYes').onclick = async function () {
-        this.disabled = true; this.textContent = 'Cancelling...';
+        this.disabled = true; this.textContent = 'Cancelling\u2026';
         const c = await callSub('cancel');
         if (!c) return;
         if (!c.ok) {
-          body.innerHTML = '<p style="margin:0 0 14px;">' + (c.body.error || 'Could not cancel. Please try again.') + '</p>' +
-            '<button class="bu" onclick="closeSubPanel()">Close</button>';
+          body.innerHTML = '<p style="margin:0 0 16px;">' + (c.body.error || 'Could not cancel. Please try again.') + '</p>'
+            + '<button class="bu" onclick="closeSubPanel()">Close</button>';
           return;
         }
         const until = fmtDate(c.body.access_until || c.body.grace_period_end);
-        body.innerHTML = '<h3 style="margin:0 0 10px;font-size:17px;">Cancelled</h3>' +
-          '<p style="margin:0 0 16px;font-size:13.5px;color:var(--muted);">' +
-          (until ? 'You keep ' + name + ' until <strong>' + until + '</strong>. After that your account moves to Free.'
-                 : 'You keep your plan until the end of the period you have already paid for.') +
-          '</p><button class="bi" onclick="location.reload()">Done</button>';
+        body.innerHTML = ''
+          + '<h3 style="margin:0 0 12px;font-size:18px;">Cancelled</h3>'
+          + '<div style="border-top:1px solid var(--rule);margin-bottom:16px;">'
+          +   row('Future payments', 'Stopped')
+          +   (until ? row('Access until', until, true) : '')
+          + '</div>'
+          + '<p style="margin:0 0 18px;font-size:13px;color:var(--muted);line-height:1.65;">'
+          +   'Nothing changes today. After that date the account moves to Free.</p>'
+          + '<button class="bi" onclick="location.reload()">Done</button>';
       };
     };
   }
