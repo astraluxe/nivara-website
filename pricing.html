@@ -1233,6 +1233,62 @@ async function openSubPanel() {
 // reached while true. Flip to false to reopen checkout.
 window.PAYMENTS_LOCKED = true;
 window.PAY_UNLOCK_DATE = 'Friday, 31 July 2026 (IST)';
+
+// ── Who may reach checkout while it is locked ────────────────────────────────
+//
+// THIS EXISTS BECAUSE TEST MODE AND AN OPEN CHECKOUT ARE DANGEROUS TOGETHER.
+//
+// With RAZORPAY_MODE=test on the server, a Razorpay test card costs nothing and still produces a
+// webhook with a valid test signature — which grants a real plan on a real account. Unlocking the
+// public page during a test run would therefore hand a free Team plan to anyone who wandered in
+// and typed 4111 1111 1111 1111.
+//
+// So the lock stays ON for the world, and only these addresses get through it. Empty the list and
+// everyone is locked out again; set PAYMENTS_LOCKED=false when checkout genuinely opens to all.
+window.PAY_TESTERS = [
+  'astraluxe.tech@gmail.com',
+];
+
+// Lift the lock for a signed-in tester, and put the real Pay buttons back. Runs after the handler
+// below has stashed each button's original label in data-orig, and is a no-op for everyone else.
+(async function applyTesterUnlock() {
+  try {
+    if (!window.PAYMENTS_LOCKED) return;
+    // WAIT FOR THE LOCK HANDLER TO HAVE RUN. It stashes each button label in data-orig on
+    // DOMContentLoaded; this function reads that back. Racing it means orig is null, every button
+    // is skipped, and the tester stays locked out with no sign of why.
+    if (document.readyState === 'loading') {
+      await new Promise(function (r) { document.addEventListener('DOMContentLoaded', r, { once: true }); });
+    }
+    const { data: { session } } = await _supa.auth.getSession();
+    const email = (session && session.user && session.user.email || '').toLowerCase();
+    if (!email) return;
+    const allowed = (window.PAY_TESTERS || []).map(function (e) { return String(e).toLowerCase(); });
+    if (allowed.indexOf(email) === -1) return;
+
+    window.PAYMENTS_LOCKED = false;
+    document.querySelectorAll('.bts .bi, .bts .bu').forEach(function (btn) {
+      var pc = btn.closest('.pc');
+      if (pc && pc.dataset.currentPlan === '1') return;   // leave the owned plan's card alone
+      var orig = btn.getAttribute('data-orig');
+      if (!orig) return;
+      btn.innerHTML = orig;
+      btn.style.opacity = '';
+      btn.style.cursor = '';
+      btn.title = 'Test checkout — you are on the tester list';
+      btn.onclick = null;
+      var m = orig.match(/Pay in \$/) ? 'usd' : 'inr';
+      var card = btn.closest('.pc');
+      var key = card && card.id ? card.id.replace(/^plan/, '').toLowerCase() : '';
+      if (key === 'team') key = 'business';
+      if (m === 'usd') btn.onclick = function () { payWithUSD(); };
+      else if (key) btn.onclick = function () { payWithINR(key); };
+    });
+
+    var banner = document.getElementById('payLockBanner');
+    if (banner) banner.style.display = 'none';
+  } catch (e) { /* not signed in, or offline — the lock simply stays on */ }
+})();
 function showPayLock() {
   var b = document.getElementById('payLockBanner');
   if (!b) return;
