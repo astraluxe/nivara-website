@@ -163,6 +163,52 @@ tr:hover td { background:rgba(124,92,255,.03); }
 
 /* Announcement form */
 .ann-form { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:20px; }
+
+/* THE INPUTS WERE NEVER STYLED. Not one rule targeted input, select or textarea, so every field on
+   this page fell back to the browser's own control — a grey chrome box that matched nothing around
+   it. It was tolerable against the old hardcoded dark; against the site's paper background it is
+   simply wrong. These follow the same shape as the cards they sit inside. */
+.ann-form input,
+.ann-form select,
+.ann-form textarea,
+#dashboard input[type="text"],
+#dashboard input[type="email"],
+#dashboard input[type="date"],
+#dashboard input[type="number"],
+#dashboard select,
+#dashboard textarea {
+  appearance:none; -webkit-appearance:none;
+  background:var(--paper); color:var(--text);
+  border:1px solid var(--border); border-radius:9px;
+  padding:9px 12px; font-size:13px; font-family:var(--sans);
+  line-height:1.4; transition:border-color .15s, box-shadow .15s;
+}
+.ann-form input:focus,
+.ann-form select:focus,
+.ann-form textarea:focus,
+#dashboard input:focus, #dashboard select:focus, #dashboard textarea:focus {
+  outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,92,255,.14);
+}
+.ann-form input::placeholder, #dashboard input::placeholder, #dashboard textarea::placeholder {
+  color:var(--muted);
+}
+/* A native select keeps the OS arrow, which does not follow the theme — draw our own. */
+.ann-form select, #dashboard select {
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%236b6b78' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat; background-position:right 12px center; padding-right:34px;
+}
+.btn { background:var(--accent); color:#fff; border:none; border-radius:9px; padding:9px 16px;
+       font-size:13px; font-weight:600; font-family:var(--sans); cursor:pointer;
+       transition:opacity .15s; }
+.btn:hover { opacity:.88; }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+
+/* Feedback cards + their delete control */
+.fb-card { position:relative; }
+.fb-del { position:absolute; top:10px; right:10px; background:transparent; border:1px solid var(--border);
+          color:var(--muted); border-radius:7px; padding:3px 9px; font-size:11px; cursor:pointer;
+          font-family:var(--sans); transition:color .15s, border-color .15s; }
+.fb-del:hover { color:var(--red); border-color:var(--red); }
 .ann-form h3 { font-size:13px; font-weight:600; margin-bottom:16px; }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
 .form-row.single { grid-template-columns:1fr; }
@@ -722,6 +768,31 @@ function checkPin() {
   }).observe(src, { childList: true, characterData: true, subtree: true });
 })();
 
+// Deleting feedback removes the ROW, not just the card. There was no DELETE policy on the table at
+// all until now, so nothing could ever be cleared: a duplicate, a test submission or an abusive
+// message stayed in this list for good. Removing the row is what makes it gone everywhere that
+// reads the table, rather than hidden on one screen and still present in the next export.
+async function deleteFeedback(id, btn) {
+  if (!confirm('Delete this feedback permanently?\n\nIt is removed from the database, not just this list.')) return;
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  const { error } = await _supa.from('feedback').delete().eq('id', id);
+  if (error) {
+    btn.disabled = false; btn.textContent = 'Delete';
+    alert('Could not delete: ' + error.message);
+    return;
+  }
+  // Drop it from the cached payload too, so switching tabs does not bring it back from _data.
+  try {
+    if (_data && Array.isArray(_data.feedback)) {
+      _data.feedback = _data.feedback.filter(function (f) { return f.id !== id; });
+    }
+  } catch (e) {}
+  const card = document.querySelector('[data-fb="' + id + '"]');
+  if (card) card.remove();
+  const list = document.getElementById('feedbackList');
+  if (list && !list.querySelector('.fb-card')) list.innerHTML = '<div class="empty">No feedback yet</div>';
+}
+
 function switchTab(name) {
   const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers','pilot'];
   document.querySelectorAll('.tab').forEach((t,i) => {
@@ -888,7 +959,8 @@ function renderDashboard() {
   // Feedback
   document.getElementById('feedbackList').innerHTML = feedback.length
     ? feedback.map(f=>`
-        <div class="fb-card">
+        <div class="fb-card" data-fb="${f.id}">
+          <button class="fb-del" onclick="deleteFeedback('${f.id}', this)">Delete</button>
           <div class="fb-meta">${emailMap[f.user_id]||f.user_id?.slice(0,8)||'anon'} · ${fmtDateTime(f.created_at)}</div>
           <div class="fb-body">${f.message||'(no message)'}</div>
         </div>`).join('')
