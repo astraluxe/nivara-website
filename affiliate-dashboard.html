@@ -436,6 +436,20 @@ tr:last-child td { border-bottom:none; }
           <span class="sval"><span style="font-size:0.45em;opacity:0.6;vertical-align:super;">₹</span><span id="statUnpaid">0</span></span>
           <span class="ssub">Pays out 7th of next month</span>
         </div>
+        <!-- CLICKS AND SIGNUPS WERE NEVER SHOWN. Only paid conversions had a tile, so an affiliate
+             whose link had been clicked three times and produced a signup saw zero everywhere and
+             reasonably concluded nothing worked. The steps before payment are the ones they can
+             actually influence, so they are the ones worth showing. -->
+        <div class="stat-cell">
+          <span class="slbl">// Link clicks</span>
+          <span class="sval" id="statClicks">0</span>
+          <span class="ssub">Visits from your link</span>
+        </div>
+        <div class="stat-cell">
+          <span class="slbl">// Signed up</span>
+          <span class="sval" id="statSignups">0</span>
+          <span class="ssub">Accounts created</span>
+        </div>
         <div class="stat-cell">
           <span class="slbl">// Active referrals</span>
           <span class="sval" id="statActive">0</span>
@@ -481,7 +495,7 @@ tr:last-child td { border-bottom:none; }
               </tr>
             </thead>
             <tbody id="refTableBody">
-              <tr><td colspan="4" style="text-align:center;color:var(--muted-2);padding:32px 20px;">No referrals yet — share your link to get started.</td></tr>
+              <tr><td colspan="4" style="text-align:center;color:var(--muted-2);padding:32px 20px;"><span id="funnelLine">No paid referrals yet — share your link to get started.</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -622,6 +636,41 @@ async function loadClicks() {
   if (!affiliateData) return [];
   const id = affiliateData._affiliates_id || affiliateData.id;
   return supaFetch(`/rest/v1/affiliate_clicks?affiliate_id=eq.${id}&select=*&order=created_at.desc&limit=50`).catch(() => []);
+}
+
+// Three numbers, and deliberately only three. The function behind this returns counts and nothing
+// else — no emails, no ids — so an affiliate can see the shape of their funnel without ever being
+// shown who is in it. Signups in particular cannot be counted from the browser: RLS on users
+// rightly refuses to let one person read another's row.
+async function loadFunnel() {
+  try {
+    const rows = await supaFetch('/rest/v1/rpc/affiliate_funnel', { method: 'POST', body: '{}' });
+    const f = Array.isArray(rows) ? rows[0] : rows;
+    return f || { clicks: 0, signups: 0, paying: 0 };
+  } catch (e) { return { clicks: 0, signups: 0, paying: 0 }; }
+}
+
+function paintFunnel(f) {
+  const set = function (id, v) { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('statClicks', f.clicks || 0);
+  set('statSignups', f.signups || 0);
+
+  // An empty table that only says "nothing yet" reads as broken when the link IS working. Say what
+  // has actually happened so far.
+  const line = document.getElementById('funnelLine');
+  if (line) {
+    if ((f.paying || 0) > 0) {
+      line.textContent = '';
+    } else if ((f.signups || 0) > 0) {
+      line.textContent = f.signups + (f.signups === 1 ? ' person has' : ' people have')
+        + ' signed up through your link and not started a paid plan yet — you earn when they do.';
+    } else if ((f.clicks || 0) > 0) {
+      line.textContent = f.clicks + (f.clicks === 1 ? ' visit' : ' visits') + ' from your link so far. '
+        + 'You earn once someone signs up and starts a paid plan.';
+    } else {
+      line.textContent = 'No paid referrals yet — share your link to get started.';
+    }
+  }
 }
 
 async function loadCommissions() {
@@ -801,6 +850,7 @@ async function tryRestoreSession() {
       affiliateData = aff;
       const comms = await loadCommissions();
       populateDash(aff, comms);
+      loadFunnel().then(paintFunnel);
       showDash();
       return true;
     }
@@ -821,6 +871,7 @@ async function tryRestoreSession() {
           affiliateData = aff;
           const comms = await loadCommissions();
           populateDash(aff, comms);
+      loadFunnel().then(paintFunnel);
           showDash();
           return true;
         }
@@ -834,6 +885,7 @@ async function tryRestoreSession() {
     affiliateData = aff;
     const comms = await loadCommissions();
     populateDash(aff, comms);
+      loadFunnel().then(paintFunnel);
     showDash();
     return true;
   } catch { localStorage.removeItem('aff_session'); return false; }
@@ -896,6 +948,7 @@ async function handleMagicLinkCallback() {
     await linkAffiliateUser();
     const comms = await loadCommissions();
     populateDash(aff, comms);
+      loadFunnel().then(paintFunnel);
     showDash();
     return true;
   } catch (e) {
