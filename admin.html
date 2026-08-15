@@ -8,22 +8,57 @@
 <title>Admin · adris.tech</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* THIS PAGE WAS THE ONLY DARK ONE, AND IT WAS DARK BY HAND.
+   Every colour was a fixed hex, so the admin screen ignored the ink/paper toggle entirely and
+   looked like a different product from the rest of the site. Its own names are kept — hundreds of
+   rules below use them — but each now points at the shared token, so the page follows the theme
+   and matches the affiliate dashboard without rewriting every rule. */
 :root {
-  --bg:      #0d0d0f;
-  --surface: #16161a;
-  --surface2:#1e1e24;
-  --border:  #2a2a30;
-  --text:    #e8e8ed;
-  --muted:   #6b6b78;
-  --accent:  #7C5CFF;
-  --green:   #22c55e;
-  --red:     #ef4444;
-  --yellow:  #f59e0b;
+  --bg:      var(--paper);
+  --surface: var(--paper);
+  --surface2:var(--paper-2);
+  --border:  var(--rule);
+  --text:    var(--ink);
+  --green:   #16a34a;
+  --red:     #dc2626;
+  --yellow:  #d97706;
   --mono:    'JetBrains Mono', monospace;
   --sans:    'Space Grotesk', sans-serif;
+}
+/* --muted and --accent are deliberately NOT redefined here: styles.css already supplies both and
+   flips --muted with the theme, which a fixed grey could not do. */
+
+/* ── Sidebar shell, matching the affiliate dashboard ─────────────────────── */
+.adm-shell { display:grid; grid-template-columns:216px 1fr; min-height:100dvh; }
+.adm-side {
+  border-right:1px solid var(--border); background:var(--surface2);
+  display:flex; flex-direction:column; position:sticky; top:0; height:100dvh;
+}
+.adm-side-brand {
+  display:flex; align-items:center; gap:9px; padding:20px 18px 18px;
+  font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--text);
+}
+.adm-side-brand span { color:var(--muted); font-weight:400; }
+.adm-side-nav { list-style:none; padding:4px 10px; flex:1; display:flex; flex-direction:column; gap:2px; }
+.adm-side-nav .tab {
+  display:block; width:100%; text-align:left; padding:9px 12px; border:none; border-radius:9px;
+  background:transparent; color:var(--muted); font-family:var(--sans); font-size:13px;
+  font-weight:500; cursor:pointer; transition:background .15s, color .15s;
+}
+.adm-side-nav .tab:hover { background:var(--paper-3); color:var(--text); }
+.adm-side-nav .tab.active { background:var(--accent); color:#fff; }
+.adm-side-foot { padding:14px 18px 18px; border-top:1px solid var(--border); }
+.adm-side-foot .lbl { font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+@media (max-width:900px) {
+  .adm-shell { grid-template-columns:1fr; }
+  .adm-side { position:static; height:auto; border-right:none; border-bottom:1px solid var(--border); }
+  .adm-side-nav { flex-direction:row; flex-wrap:wrap; }
+  .adm-side-nav .tab { width:auto; }
 }
 body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100dvh; }
 
@@ -81,7 +116,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); min-
 .adm-main { padding:24px 28px; max-width:1280px; margin:0 auto; }
 
 /* Tabs */
-.tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:24px; }
+.tabs { display:none; }  /* replaced by .adm-side-nav */
 .tab {
   padding:8px 16px; font-size:13px; font-weight:500; color:var(--muted);
   background:none; border:none; cursor:pointer; border-bottom:2px solid transparent;
@@ -203,14 +238,36 @@ tr:hover td { background:rgba(124,92,255,.03); }
 
 <!-- Dashboard -->
 <div id="dashboard">
-  <header class="adm-header">
-    <div class="adm-logo">
-      <svg viewBox="0 0 26 24" fill="none" width="22" height="20">
-        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="#7C5CFF"/>
-        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="#7C5CFF" opacity="0.5"/>
+ <div class="adm-shell">
+  <aside class="adm-side">
+    <div class="adm-side-brand">
+      <svg viewBox="0 0 26 24" fill="none" width="20" height="18">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor" opacity="0.5"/>
       </svg>
       adris.tech <span>/ admin</span>
     </div>
+    <!-- The same buttons that were in the horizontal strip, in the same order and still calling
+         switchTab(), which matches them to panels by index — so moving them changes nothing about
+         how the page works. -->
+    <ul class="adm-side-nav">
+      <li><button class="tab active" onclick="switchTab('overview')">Overview</button></li>
+      <li><button class="tab" onclick="switchTab('users')">Users</button></li>
+      <li><button class="tab" onclick="switchTab('affiliates')">Affiliates</button></li>
+      <li><button class="tab" onclick="switchTab('announcements')">Announcements</button></li>
+      <li><button class="tab" onclick="switchTab('feedback')">Feedback</button></li>
+      <li><button class="tab" onclick="switchTab('revenue')">Revenue</button></li>
+      <li><button class="tab" onclick="switchTab('offers')">Offers</button></li>
+      <li><button class="tab" onclick="switchTab('pilot')">Pilot</button></li>
+    </ul>
+    <div class="adm-side-foot">
+      <div class="lbl">Signed in as</div>
+      <div class="adm-user" id="adminEmailSide"></div>
+    </div>
+  </aside>
+  <div>
+  <header class="adm-header">
+    <div class="adm-logo" style="font-size:14px">Head dashboard</div>
     <div style="display:flex;align-items:center;gap:10px">
       <span class="adm-badge">HEAD</span>
       <span class="adm-user" id="adminEmail"></span>
@@ -221,17 +278,9 @@ tr:hover td { background:rgba(124,92,255,.03); }
 
   <main class="adm-main">
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('overview')">Overview</button>
-      <button class="tab" onclick="switchTab('users')">Users</button>
-      <button class="tab" onclick="switchTab('affiliates')">Affiliates</button>
-      <button class="tab" onclick="switchTab('announcements')">Announcements</button>
-      <button class="tab" onclick="switchTab('feedback')">Feedback</button>
-      <button class="tab" onclick="switchTab('revenue')">Revenue</button>
-      <button class="tab" onclick="switchTab('offers')">Offers</button>
-      <button class="tab" onclick="switchTab('pilot')">Pilot</button>
-    </div>
+    <!-- The tab strip moved into the sidebar. It is REMOVED rather than hidden: switchTab matches
+         buttons to panels by index against an eight-item list, so leaving a hidden copy behind
+         would have made sixteen .tab elements and the sidebar's eight would never have lit up. -->
 
     <!-- OVERVIEW TAB -->
     <div id="tab-overview" class="tab-panel active">
@@ -592,6 +641,8 @@ tr:hover td { background:rgba(124,92,255,.03); }
     </div>
 
   </main>
+  </div>
+ </div>
 </div>
 
 <script>
@@ -660,6 +711,17 @@ function checkPin() {
 }
 
 // ── Tabs ─────────────────────────────────────────────────────────────────────
+// The sidebar shows the signed-in address too, so mirror whatever the header was given rather
+// than fetching it a second time.
+(function () {
+  var src = document.getElementById('adminEmail');
+  if (!src) return;
+  new MutationObserver(function () {
+    var dst = document.getElementById('adminEmailSide');
+    if (dst) dst.textContent = src.textContent;
+  }).observe(src, { childList: true, characterData: true, subtree: true });
+})();
+
 function switchTab(name) {
   const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers','pilot'];
   document.querySelectorAll('.tab').forEach((t,i) => {

@@ -398,7 +398,12 @@ async function showAccount(session) {
     try {
       const { data: appRows } = await _supa.from('affiliate_applications')
         .select('status').eq('email', email).eq('status', 'accepted').limit(1);
-      if (appRows && appRows.length) {
+      // RE-CHECK AFTER THE AWAIT. showAccount() runs more than once on a reload (getSession and
+      // onAuthStateChange both call it), and the guard above is evaluated BEFORE this query
+      // resolves — so both passes saw no button, both waited, and both then inserted one. The
+      // duplicate only appeared on reload because a fresh visit has just one call in flight.
+      // Checking again here closes the gap, since inserting into the DOM is synchronous.
+      if (appRows && appRows.length && !document.getElementById('affDashBtn')) {
         const affLink = document.createElement('a');
         affLink.id = 'affDashBtn';
         affLink.href = '/affiliate-dashboard';
