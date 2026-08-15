@@ -338,6 +338,58 @@ async function showAccount(session) {
     if (signOutBtn2) signOutBtn2.parentNode.insertBefore(teamLink, signOutBtn2);
   }
 
+  // ── Claim the referral, once, as soon as we know who this is ──────────────
+  //
+  // The ref code has been sitting in localStorage since the visit that brought them (see the
+  // capture block on home.html and download.html), and until now nothing ever spent it: clicks
+  // were counted and no account was ever tied to the affiliate who sent them, so a payment could
+  // not be traced back and no commission could ever be earned. This is the moment the person stops
+  // being anonymous, so this is where the link is made.
+  //
+  // The server decides whether it counts — first touch wins, unknown or inactive codes are
+  // ignored, and self-referral is refused. Nothing here is trusted; the code is only carried.
+  try {
+    const refCode = localStorage.getItem('aff_ref');
+    if (refCode) {
+      fetch(SUPA_URL + '/functions/v1/affiliate-attribute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + session.access_token,
+          'apikey': SUPA_ANON
+        },
+        body: JSON.stringify({ ref_code: refCode })
+      }).then(function (r) { return r.json(); })
+        .then(function (d) {
+          // Clear it once it has been decided either way, so a stale code cannot be re-offered on
+          // every future sign-in.
+          if (d && d.ok) { try { localStorage.removeItem('aff_ref'); } catch (_) {} }
+        })
+        .catch(function () { /* offline — the code stays for next time */ });
+    }
+  } catch (_) { /* storage unavailable */ }
+
+  // ── A route to the affiliate dashboard ────────────────────────────────────
+  //
+  // Accepted affiliates had no way in from anywhere on the site: the page existed, and finding it
+  // meant knowing the URL. Head and Team both surface here, so this belongs alongside them.
+  if (!document.getElementById('affDashBtn')) {
+    try {
+      const { data: appRows } = await _supa.from('affiliate_applications')
+        .select('status').eq('email', email).eq('status', 'accepted').limit(1);
+      if (appRows && appRows.length) {
+        const affLink = document.createElement('a');
+        affLink.id = 'affDashBtn';
+        affLink.href = '/affiliate-dashboard';
+        affLink.className = 'app-btn';
+        affLink.style.cssText = 'text-align:center;justify-content:center;';
+        affLink.textContent = 'Affiliate dashboard →';
+        const signOutBtn3 = document.querySelector('#signedIn button[onclick="signOut()"]');
+        if (signOutBtn3) signOutBtn3.parentNode.insertBefore(affLink, signOutBtn3);
+      }
+    } catch (_) { /* not an affiliate, or offline */ }
+  }
+
   // Show head dashboard button — DB check OR email fallback; guard against duplicate insertion
   if (!document.getElementById('headDashBtn')) {
     if (data?.admin_level === 'head' || email === 'amoghm2005@gmail.com') {

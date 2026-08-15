@@ -214,6 +214,24 @@ Deno.serve(async (req: Request) => {
   }
 
   await log("upgraded", `${row?.plan ?? "unknown"} -> ${plan} (verified from browser receipt)`, plan);
+
+  // ── Affiliate credit ──────────────────────────────────────────────────────────
+  //
+  // Nothing anywhere marked a click converted or wrote a commission, so an affiliate dashboard was
+  // always going to show visits and permanently zero earnings. The whole calculation lives in one
+  // database function because the webhook grants plans too, and two copies of this reasoning would
+  // eventually disagree about whether a charge had already been counted.
+  //
+  // Deliberately after the plan is safely written and never allowed to fail the payment: a
+  // commission that did not record is a bookkeeping problem, and a customer who paid and did not
+  // get their plan is a much worse one.
+  try {
+    await admin.rpc("record_affiliate_conversion", {
+      p_user_id: user.id,
+      p_plan: plan,
+      p_amount_paise: Number(pay.amount ?? 0) || 0,
+    });
+  } catch (e) { console.error("affiliate conversion failed", e); }
   console.log(`PLAN GRANTED (verify) user=${user.id} ${row?.plan} -> ${plan} sub=${subscriptionId}`);
 
   // Business buys a team. Same as the webhook, and guarded the same way so two routes to the grant
