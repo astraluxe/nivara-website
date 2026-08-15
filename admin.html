@@ -772,6 +772,101 @@ function checkPin() {
 // all until now, so nothing could ever be cleared: a duplicate, a test submission or an abusive
 // message stayed in this list for good. Removing the row is what makes it gone everywhere that
 // reads the table, rather than hidden on one screen and still present in the next export.
+// EVERYTHING ABOUT ONE AFFILIATE, IN ONE PLACE.
+//
+// The table can only carry a dozen columns before it stops being readable, so it shows the UPI and
+// nothing else — and the moment a payout actually has to be made, the account name, number, IFSC
+// and bank are exactly what is needed and none of them were anywhere on the page. They were being
+// loaded already (loadAffiliates selects *), just never shown. Paying somebody ₹50,000 against a
+// row that only says "UPI: something" is not a thing anyone should have to do.
+//
+// The full bank record lives on the APPLICATION — affiliates carries only the three fields the
+// table needed — so both rows are read and shown together.
+function affDetailRow(label, value, mono) {
+  const v = (value === null || value === undefined || value === '') ? '—' : String(value);
+  return '<div style="display:flex;gap:16px;padding:9px 0;border-bottom:1px solid var(--border)">'
+    + '<span style="flex:0 0 150px;font-size:12px;color:var(--muted)">' + label + '</span>'
+    + '<span style="flex:1;font-size:12.5px;color:var(--text);word-break:break-word'
+    + (mono ? ';font-family:var(--mono)' : '') + '">' + v + '</span></div>';
+}
+
+function showAffiliateDetails(affiliateId) {
+  const a = (_data?.affiliates || []).find(function (x) { return x.id === affiliateId; });
+  if (!a) return;
+  // Match the application by id where we have it, falling back to email.
+  const app = _affApps.find(function (x) {
+    return (a.application_id && x.id === a.application_id)
+        || (x.email || '').toLowerCase() === (a.email || '').toLowerCase();
+  }) || {};
+
+  const f = affFunnel[a.id] || { clicks: 0, signups: 0 };
+  const money = function (paise) { return '₹' + ((paise || 0) / 100).toLocaleString('en-IN'); };
+  const when  = function (d) { return d ? fmtDateTime(d) : '—'; };
+
+  // The bank block is what a payout is actually made from, so it is grouped and marked when
+  // incomplete rather than leaving a blank the reader has to notice.
+  const hasUpi  = !!(app.upi_id || a.upi_id);
+  const hasBank = !!(app.bank_account_number || a.bank_account_number);
+
+  const body =
+      '<h3 style="margin:0 0 2px;font-size:16px">' + ((a.first_name||'') + ' ' + (a.last_name||'')).trim() + '</h3>'
+    + '<p style="margin:0 0 16px;font-size:12px;color:var(--muted)">' + (a.email||'—') + '</p>'
+
+    + '<div style="font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:14px 0 2px">Programme</div>'
+    + affDetailRow('Ref code', a.ref_code, true)
+    + affDetailRow('Tier', (a.tier||'starter') + ' · ' + ({starter:'10%',builder:'13%',partner:'16%',elite:'20%'}[a.tier]||'10%'))
+    + affDetailRow('Status', a.status)
+    + affDetailRow('Accepted', when(app.accepted_at))
+    + affDetailRow('Applied', when(app.created_at))
+    + affDetailRow('Terms accepted', app.terms_accepted ? 'Yes' : 'No')
+
+    + '<div style="font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:18px 0 2px">Performance</div>'
+    + affDetailRow('Link clicks', f.clicks)
+    + affDetailRow('Signed up', f.signups)
+    + affDetailRow('Paying referrals', a.active_referrals || 0)
+    + affDetailRow('Total earned', money(a.total_earned_paise))
+    + affDetailRow('Unpaid balance', money(a.unpaid_paise))
+
+    + '<div style="font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:18px 0 2px">Payment details</div>'
+    + (hasUpi || hasBank ? '' :
+        '<p style="margin:6px 0 0;font-size:12.5px;color:var(--yellow)">Not submitted yet — this affiliate cannot be paid until they add them.</p>')
+    + affDetailRow('UPI ID', app.upi_id || a.upi_id, true)
+    + affDetailRow('Account name', app.bank_account_name)
+    + affDetailRow('Account number', app.bank_account_number || a.bank_account_number, true)
+    + affDetailRow('IFSC', app.bank_ifsc || a.bank_ifsc, true)
+    + affDetailRow('Bank', app.bank_name)
+    + affDetailRow('Submitted', when(app.bank_details_submitted_at))
+
+    + '<div style="font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:18px 0 2px">Application</div>'
+    + affDetailRow('Website / social', app.website_url
+        ? '<a href="' + app.website_url + '" target="_blank" rel="noopener" style="color:var(--accent)">' + app.website_url + '</a>'
+        : '—')
+    + affDetailRow('Audience', app.audience_type)
+    + affDetailRow('Reach', app.audience_reach)
+    + affDetailRow('How they will promote', app.promotion_plan);
+
+  let wrap = document.getElementById('affDetailModal');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.id = 'affDetailModal';
+    wrap.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;'
+      + 'justify-content:center;background:rgba(14,14,12,.55);padding:20px;';
+    wrap.innerHTML = '<div id="affDetailCard" style="max-width:560px;width:100%;max-height:86vh;'
+      + 'overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);'
+      + 'border-radius:14px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.28)"></div>';
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) wrap.remove(); });
+    document.addEventListener('keydown', function onEsc(e) {
+      if (e.key === 'Escape') { const m = document.getElementById('affDetailModal'); if (m) m.remove(); }
+    });
+    document.body.appendChild(wrap);
+  }
+  document.getElementById('affDetailCard').innerHTML = body
+    + '<div style="display:flex;gap:8px;margin-top:20px">'
+    + '<button class="btn" onclick="document.getElementById(\'affDetailModal\').remove()">Close</button>'
+    + '</div>';
+  wrap.style.display = 'flex';
+}
+
 async function deleteFeedback(id, btn) {
   if (!confirm('Delete this feedback permanently?\n\nIt is removed from the database, not just this list.')) return;
   btn.disabled = true; btn.textContent = 'Deleting…';
@@ -1086,7 +1181,9 @@ async function loadAffiliates() {
   renderAffiliates(data || []);
 }
 
+let _affApps = [];   // every application row, kept so the details panel can read the full record
 function renderAffiliates(rows) {
+  _affApps = rows || [];
   const pending  = rows.filter(r => !r.status || r.status === 'pending');
   const rejected = rows.filter(r => r.status === 'rejected');
 
@@ -1153,6 +1250,7 @@ function renderAffiliates(rows) {
       <td style="font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;${hasBank?'color:var(--green)':'color:var(--yellow);font-weight:600'}">${hasBank?bankStr:'No details'}</td>
       <td style="display:flex;gap:6px;white-space:nowrap">
         ${canPay?`<button class="act-btn toggle-on" onclick="recordPayout('${a.id}','${a.email}',${unpaid})">Pay ₹${(unpaid/100).toLocaleString('en-IN')}</button>`:''}
+        <button class="act-btn" onclick="showAffiliateDetails('${a.id}')">Details</button>
         <button class="act-btn del" onclick="revokeAffiliateById('${a.id}','${a.email}')">Revoke</button>
       </td>
     </tr>`;
