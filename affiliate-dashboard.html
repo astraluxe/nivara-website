@@ -329,23 +329,23 @@ tr:last-child td { border-bottom:none; }
       <span class="name">adris<span>.tech</span></span>
     </div>
     <ul class="dash-nav">
-      <li><a href="#" class="active">
+      <li><a href="#overview" class="active" data-nav="overview">
         <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" fill="currentColor"/><rect x="9" y="1" width="6" height="6" fill="currentColor" opacity="0.5"/><rect x="1" y="9" width="6" height="6" fill="currentColor" opacity="0.5"/><rect x="9" y="9" width="6" height="6" fill="currentColor"/></svg>
         Overview
       </a></li>
-      <li><a href="#">
+      <li><a href="#referrals" data-nav="referrals">
         <svg viewBox="0 0 16 16" fill="none"><circle cx="6" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="4" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 7l2-2M9 9l2 2" stroke="currentColor" stroke-width="1.5"/></svg>
         Referrals
       </a></li>
-      <li><a href="#">
+      <li><a href="#earnings" data-nav="earnings">
         <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="9" stroke="currentColor" stroke-width="1.5"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.5"/></svg>
         Earnings
       </a></li>
-      <li><a href="#">
+      <li><a href="#payouts" data-nav="payouts">
         <svg viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5"/></svg>
         Payouts
       </a></li>
-      <li><a href="#">
+      <li><a href="#profile" data-nav="profile">
         <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.31 2.69-6 6-6s6 2.69 6 6" stroke="currentColor" stroke-width="1.5"/></svg>
         Profile &amp; UPI
       </a></li>
@@ -379,7 +379,7 @@ tr:last-child td { border-bottom:none; }
       </div>
 
       <!-- BANK DETAILS FORM -->
-      <div class="bank-form-section" id="bankFormSection">
+      <div class="bank-form-section" id="bankFormSection" data-sec="profile">
         <h3>Payment details</h3>
         <p class="bfs-sub">Add your UPI ID <em>or</em> bank account details below. Both are optional — you only need one. Details are saved securely and used only for monthly commission payouts.</p>
         <div class="bfs-grid">
@@ -449,7 +449,7 @@ tr:last-child td { border-bottom:none; }
       <div class="dash-grid">
 
         <!-- REFERRALS TABLE -->
-        <div class="dash-table">
+        <div class="dash-table" id="secReferrals" data-sec="referrals">
           <div class="dth">
             <h3>Recent referrals</h3>
             <span class="dtag" id="refCount">0 total</span>
@@ -470,7 +470,7 @@ tr:last-child td { border-bottom:none; }
         </div>
 
         <!-- PAYOUT PANEL -->
-        <div class="payout-panel">
+        <div class="payout-panel" id="secPayouts" data-sec="payouts">
           <div class="pph">
             <h3>Next payout</h3>
             <span class="ptag" id="payoutDate">—</span>
@@ -491,7 +491,7 @@ tr:last-child td { border-bottom:none; }
       </div><!-- /dash-grid -->
 
       <!-- COMMISSION HISTORY -->
-      <div class="dash-table" style="margin-top:24px;">
+      <div class="dash-table" id="secEarnings" data-sec="earnings" style="margin-top:24px;">
         <div class="dth">
           <h3>Commission history</h3>
           <span class="dtag">by month</span>
@@ -886,6 +886,77 @@ async function handleMagicLinkCallback() {
 handleMagicLinkCallback().then(handled => {
   if (!handled) tryRestoreSession().then(restored => { if (!restored) showGate(); });
 });
+</script>
+<script>
+// THE SIDEBAR WAS DECORATION. Every item was <a href="#"> with no handler, no target and no
+// script behind it, so clicking Referrals, Earnings, Payouts or Profile did nothing at all except
+// jump to the top of the page. The sections they name have existed the whole time — this is one
+// scrolling dashboard — so nothing needed building; they simply had nothing to point at.
+//
+// Scrolling rather than showing and hiding panels, because that is how the page is laid out: the
+// summary and referral link sit at the top and the cards follow. Hiding them would mean rebuilding
+// a layout that already reads correctly.
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.dash-nav a[data-nav]'));
+  if (!links.length) return;
+
+  function targetFor(key) {
+    if (key === 'overview') return document.querySelector('.dash-main');
+    if (key === 'profile')  return document.getElementById('bankFormSection');
+    return document.querySelector('[data-sec="' + key + '"]');
+  }
+
+  function setActive(key) {
+    links.forEach(function (a) {
+      a.classList.toggle('active', a.getAttribute('data-nav') === key);
+    });
+  }
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var key = a.getAttribute('data-nav');
+      var el = targetFor(key);
+      setActive(key);
+      if (!el) return;
+      if (key === 'overview') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      // Profile is collapsed until asked for, so open it before scrolling — landing on a closed
+      // section looks like the link did nothing, which is the bug being fixed.
+      if (key === 'profile') {
+        if (el && !el.classList.contains('open') && typeof toggleBankForm === 'function') {
+          toggleBankForm();   // it scrolls itself, so nothing more to do here
+          return;
+        }
+      }
+      var y = el.getBoundingClientRect().top + window.pageYOffset - 18;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+  });
+
+  // Keep the highlight honest while scrolling by hand, rather than leaving whatever was clicked
+  // last lit up somewhere the reader no longer is.
+  var sections = [];
+  ['referrals', 'earnings', 'payouts', 'profile'].forEach(function (k) {
+    var el = targetFor(k);
+    if (el) sections.push({ key: k, el: el });
+  });
+  if ('IntersectionObserver' in window && sections.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var hit = sections.filter(function (s) { return s.el === en.target; })[0];
+        if (hit) setActive(hit.key);
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(function (s) { io.observe(s.el); });
+  }
+  window.addEventListener('scroll', function () {
+    if (window.pageYOffset < 80) setActive('overview');
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>

@@ -1062,8 +1062,25 @@ async function acceptAffiliate(id, email, firstName, lastName) {
   }).eq('id', id);
   if (error) { alert('Error: ' + error.message); return; }
 
-  await _supa.from('affiliates').upsert({
+  // THIS FAILED SILENTLY FOR EVERY ACCEPT. onConflict names a column that Postgres requires to
+  // carry a UNIQUE index, and application_id only had a plain one — so the upsert errored with
+  // "there is no unique or exclusion constraint matching the ON CONFLICT specification", the
+  // result was never inspected, and the application was marked accepted while no affiliate row
+  // was ever created. The admin screen then read "Active affiliates 0" with nothing to explain it.
+  // The index now exists; this checks the answer so a future failure cannot hide the same way.
+  //
+  // user_id is resolved here rather than left for the affiliate's first dashboard visit: RLS on
+  // affiliate_clicks and affiliate_commissions keys off it, so until it is set they cannot read
+  // their own numbers.
+  let affUserId = null;
+  try {
+    const { data: u } = await _supa.from('users').select('id').ilike('email', email).maybeSingle();
+    affUserId = u ? u.id : null;
+  } catch (e) { /* no account yet — they link it on first sign-in */ }
+
+  const { error: affErr } = await _supa.from('affiliates').upsert({
     application_id: id,
+    user_id: affUserId,
     email,
     first_name: firstName,
     last_name: lastName || '',
@@ -1074,6 +1091,15 @@ async function acceptAffiliate(id, email, firstName, lastName) {
     unpaid_paise: 0,
     status: 'active',
   }, { onConflict: 'application_id' });
+
+  if (affErr) {
+    // Put the application back, so the record matches reality and the accept can be retried.
+    await _supa.from('affiliate_applications')
+      .update({ status: 'pending', ref_code: null, accepted_at: null }).eq('id', id);
+    alert('Could not create the affiliate record: ' + affErr.message
+        + '\n\nThe application has been left pending so you can try again.');
+    return;
+  }
 
   const subject = encodeURIComponent('Welcome to the adris.tech Affiliate Programme!');
   const body = encodeURIComponent(
