@@ -529,7 +529,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <div class="sec">Active affiliates — earnings &amp; payouts</div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Ref code</th><th>Tier</th><th>Active refs</th><th>This month</th><th>Total earned</th><th>Unpaid</th><th>Payment details</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Name</th><th>Email</th><th>Ref code</th><th>Tier</th><th title="People who opened the link">Clicks</th><th title="Accounts created through the link">Signed up</th><th title="Referred users currently on a paid plan — this is what tier and commission are based on">Paying</th><th>This month</th><th>Total earned</th><th>Unpaid</th><th>Payment details</th><th>Actions</th></tr></thead>
           <tbody id="aff-acceptedBody"></tbody>
         </table>
       </div>
@@ -1046,7 +1046,37 @@ async function refreshAnnouncements() {
 
 // ── Affiliate management ─────────────────────────────────────────────────────
 let _affLoaded = false;
+// Clicks and signups per affiliate, for the admin table. Read with the head admin's existing
+// full-table access rather than through affiliate_funnel(), which is scoped to whoever is calling
+// it and would only ever return the admin's own figures.
+let affFunnel = {};
+async function loadAffFunnel(ids) {
+  affFunnel = {};
+  if (!ids.length) return;
+  try {
+    const [{ data: clicks }, { data: refs }] = await Promise.all([
+      _supa.from('affiliate_clicks').select('affiliate_id').in('affiliate_id', ids),
+      _supa.from('users').select('referred_by_affiliate').in('referred_by_affiliate', ids),
+    ]);
+    (clicks || []).forEach(function (c) {
+      const k = c.affiliate_id;
+      affFunnel[k] = affFunnel[k] || { clicks: 0, signups: 0 };
+      affFunnel[k].clicks++;
+    });
+    (refs || []).forEach(function (r) {
+      const k = r.referred_by_affiliate;
+      affFunnel[k] = affFunnel[k] || { clicks: 0, signups: 0 };
+      affFunnel[k].signups++;
+    });
+  } catch (e) { /* table still renders, just without the two extra columns */ }
+}
+
 async function loadAffiliates() {
+  // Counts first, so the rows can print them.
+  try {
+    const { data: _affIds } = await _supa.from('affiliates').select('id');
+    await loadAffFunnel((_affIds || []).map(function (x) { return x.id; }));
+  } catch (e) {}
   if (_affLoaded) return; _affLoaded = true;
   const { data, error } = await _supa
     .from('affiliate_applications')
@@ -1114,11 +1144,13 @@ function renderAffiliates(rows) {
       <td class="mono" style="font-size:11px">${a.email||'—'}</td>
       <td class="mono" style="font-size:11px;color:var(--accent)">${a.ref_code||'—'}</td>
       <td><span style="font-size:9px;font-family:var(--mono);text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(124,92,255,.12);color:${tierColor[a.tier]||'#a78bfa'}">${a.tier||'starter'}</span></td>
-      <td class="mono" style="font-size:11px;text-align:center">${a.active_referrals||0}</td>
+      <td class="mono" style="font-size:11px;text-align:center;color:var(--muted)">${affFunnel[a.id]?.clicks ?? 0}</td>
+      <td class="mono" style="font-size:11px;text-align:center;color:var(--muted)">${affFunnel[a.id]?.signups ?? 0}</td>
+      <td class="mono" style="font-size:11px;text-align:center;font-weight:600">${a.active_referrals||0}</td>
       <td class="mono" style="font-size:11px;color:${thisMonth>0?'var(--green)':'var(--muted)'}">${thisMonth>0?'₹'+(thisMonth/100).toLocaleString('en-IN'):'—'}</td>
       <td class="mono" style="font-size:11px;color:var(--accent)">${(a.total_earned_paise||0)>0?'₹'+((a.total_earned_paise)/100).toLocaleString('en-IN'):'—'}</td>
       <td class="mono" style="font-size:11px;font-weight:${unpaid>0?'700':'400'};color:${unpaid>=50000?'var(--yellow)':unpaid>0?'var(--muted)':'var(--muted)'}">${unpaid>0?'₹'+(unpaid/100).toLocaleString('en-IN'):'—'}</td>
-      <td style="font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;${hasBank?'color:var(--green)':'color:var(--yellow);font-weight:600'}">${hasBank?bankStr:'⚠ No details'}</td>
+      <td style="font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;${hasBank?'color:var(--green)':'color:var(--yellow);font-weight:600'}">${hasBank?bankStr:'No details'}</td>
       <td style="display:flex;gap:6px;white-space:nowrap">
         ${canPay?`<button class="act-btn toggle-on" onclick="recordPayout('${a.id}','${a.email}',${unpaid})">Pay ₹${(unpaid/100).toLocaleString('en-IN')}</button>`:''}
         <button class="act-btn del" onclick="revokeAffiliateById('${a.id}','${a.email}')">Revoke</button>
