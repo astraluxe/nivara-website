@@ -362,7 +362,17 @@ tr:last-child td { border-bottom:none; }
     <!-- TOP BAR -->
     <div class="dash-topbar">
       <div class="greeting">Good work, <span id="greetName">—</span> <span class="muted">· Affiliate dashboard</span></div>
-      <button class="logout-btn" id="logoutBtn">Sign out</button>
+      <div style="display:flex;align-items:center;gap:10px">
+        <!-- Sign out was the only way off this page, so leaving the dashboard meant leaving the
+             account. admin.html already offers "← Website" for the same reason; this matches it. -->
+        <a href="/" style="font-size:12.5px;color:var(--muted);text-decoration:none;border:1px solid
+           var(--rule-strong, rgba(14,14,12,.22));border-radius:8px;padding:6px 12px;
+           transition:color .15s,border-color .15s;white-space:nowrap"
+           onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'"
+           onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--rule-strong, rgba(14,14,12,.22))'"
+        >← Website</a>
+        <button class="logout-btn" id="logoutBtn">Sign out</button>
+      </div>
     </div>
 
     <!-- CONTENT -->
@@ -370,7 +380,14 @@ tr:last-child td { border-bottom:none; }
 
       <!-- BANK DETAILS WARNING (shown if no payment details on file) -->
       <div class="bank-warn" id="bankWarn" style="display:none">
-        <div class="bw-ico">⚠️</div>
+        <div class="bw-ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.3 3.2 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.2a2 2 0 0 0-3.4 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
         <div class="bw-body">
           <h4>Payment details required — action needed</h4>
           <p>You have not yet submitted your bank account or UPI payment details. <strong>Commission earned in any month where no payment details are on file is permanently forfeited</strong> and cannot be claimed later — this is non-negotiable per our <a href="/affiliate-terms#s7" target="_blank" style="color:var(--accent)">Affiliate Terms (Section 7)</a>.<br/><br/>Submit your details now to ensure you get paid for your referrals.</p>
@@ -667,7 +684,12 @@ function populateDash(aff, commissions) {
   const methodEl = document.getElementById('plMethod');
   if (aff.upi_id) methodEl.textContent = 'UPI: ' + aff.upi_id;
   else if (aff.bank_account_number) methodEl.textContent = 'Bank A/c ···' + String(aff.bank_account_number).slice(-4);
-  else methodEl.innerHTML = '<span style="color:#dc2626;font-weight:600">⚠ Not set — add now</span>';
+  else methodEl.innerHTML = '<span style="color:#dc2626;font-weight:600;display:inline-flex;'
+    + 'align-items:center;gap:5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" '
+    + 'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+    + 'aria-hidden="true"><path d="M10.3 3.2 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.2a2 '
+    + '2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" '
+    + 'y2="17"/></svg>Not set \u2014 add now</span>';
 
   // Show bank details warning if not set
   document.getElementById('bankWarn').style.display = hasBank ? 'none' : 'flex';
