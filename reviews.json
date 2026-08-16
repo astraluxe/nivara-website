@@ -1,15 +1,5 @@
 {
   "_comment": "Reviews shown on /  and /pricing. Written by the head dashboard (Reviews tab) via /api/reviews, which commits this file to GitHub; Vercel then redeploys and the change is live. Kept as a static file on purpose: the pages read it straight from the CDN, so a testimonial costs no database row, no API request and no runtime dependency. Edit by hand only if the dashboard is unavailable — keep the shape identical.",
   "_provenance_rule": "context MUST match reality. 'saw' = they were shown the product and have not run it. 'used' = they have actually used it. Nothing on the site may imply usage that did not happen. The card no longer prints this label - the section heading already frames these as first impressions shared with permission - but the answer is still recorded per review, because it is worth knowing before quoting someone.",
-  "reviews": [
-    {
-      "id": "test-entry-delete-me",
-      "name": "Test Entry",
-      "role": "Added by Claude to prove the pipeline",
-      "linkedin": "https://www.linkedin.com/company/adris-tech/",
-      "quote": "This is a test review written through the head dashboard to check that the whole path works: dashboard form to GitHub commit to Vercel deploy to this carousel. It is not a real person and not a real opinion. Delete it from the Reviews tab once you have seen it scroll.",
-      "context": "saw",
-      "added": "2026-08-16T00:00:00.000Z"
-    }
-  ]
+  "reviews": []
 }
