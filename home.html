@@ -516,36 +516,29 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 </section>
 
 <!-- ============================================
-     VOICES — a real review, published with permission.
-     He was SHOWN the product in a meeting; he is not a customer and has not run it
-     himself. So nothing here may imply usage — no "our users say", no "in production",
-     no invented duration. His own opening line ("Had a chance to see Adris in action
-     today") sets the provenance, and the framing must agree with it.
+     VOICES — the reviews carousel.
+
+     These used to be one testimonial hardcoded here and the same one hardcoded
+     again in pricing.html, so adding a second meant editing two files and
+     removing the last one would have left this heading standing over an empty
+     box. The content now lives in /reviews.json, written by the head dashboard,
+     and reviews.js is the only renderer — the two pages cannot drift apart.
+
+     THE PROVENANCE RULE STILL STANDS and is now enforced by data rather than by
+     this comment: every review carries context 'saw' or 'used', and the card
+     prints it. Nothing here may imply that someone has run the product when
+     they have only been shown it, so this heading stays neutral about which.
+
+     The section removes itself when there are no reviews.
 ============================================ -->
-<section class="bh-sec" id="voices">
+<section class="bh-sec" id="voices" data-reviews-section>
   <div class="wrap">
     <div class="bh-head bh-rv">
       <div class="idx">// 04 — First impressions</div>
-      <h2>A founder saw it run. <span class="it">This was his reaction.</span></h2>
-      <p class="sub">Shared with his permission, exactly as he wrote it.</p>
+      <h2>What people say <span class="it">in their own words.</span></h2>
+      <p class="sub">Shared with permission, exactly as they wrote it.</p>
     </div>
-    <figure class="bh-quote bh-rv d1">
-      <span class="mark" aria-hidden="true">&ldquo;</span>
-      <blockquote>
-        Had a chance to see Adris in action today. What impressed me most wasn't the AI itself, but how naturally the research, automation, and local-first workflow fit together. <span class="it">It feels like it's designed to help people think and work better, not just generate answers.</span> It's building a practical workspace where AI, research, automation, and knowledge come together seamlessly. Looking forward to seeing where Amogh and the team take it.
-      </blockquote>
-      <figcaption class="bh-cite">
-        <span class="av" aria-hidden="true">KS</span>
-        <span class="who">
-          <span class="nm">Keshav Sharma</span>
-          <span class="rl">Founder, Syntropy Intel</span>
-        </span>
-        <a class="li" href="https://www.linkedin.com/in/keshav-sharma-927022415/" target="_blank" rel="noopener noreferrer">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.45-2.2 2.96V21h-4z"/></svg>
-          View on LinkedIn
-        </a>
-      </figcaption>
-    </figure>
+    <div class="bh-rv d1" data-adris-reviews></div>
   </div>
 </section>
 
@@ -1048,5 +1041,6 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     .catch(function () { /* offline — the printed fallback stands */ });
 })();
 </script>
+<script src="/reviews.js" defer></script>
 </body>
 </html>

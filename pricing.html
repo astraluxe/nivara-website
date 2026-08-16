@@ -540,34 +540,14 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   </div>
 </div>
 
-<!-- ── REVIEW — published with permission; sits right after the prices.
-     He was SHOWN the product in a meeting — not a customer, has not run it himself.
-     Nothing here may imply usage. See the matching note on home.html. ── -->
-<section class="pq">
+<!-- ── REVIEWS — rendered by /reviews.js from /reviews.json, same as the home page.
+     Was a single hardcoded testimonial duplicated from home.html. Adding one meant
+     editing both files; this reads the file the head dashboard writes.
+     Every card prints whether the person SAW a demo or has USED the product —
+     nothing here may imply usage that did not happen. Removes itself when empty. ── -->
+<section class="pq" data-reviews-section>
   <p class="pq-ey">First impressions &mdash; shared with permission</p>
-  <!-- ADDING ANOTHER REVIEW: copy one <figure class="pq-card"> block below and drop the "single"
-       class from .pq-grid. Two or more lay out as columns automatically. Keep the standing rule
-       from the comment above this section — nothing may imply someone has USED the product unless
-       they actually have. -->
-  <div class="pq-grid single">
-  <figure class="pq-card">
-    <span class="pq-mark" aria-hidden="true">&ldquo;</span>
-    <blockquote>
-      Had a chance to see Adris in action today. What impressed me most wasn't the AI itself, but how naturally the research, automation, and local-first workflow fit together. <em>It feels like it's designed to help people think and work better, not just generate answers.</em> It's building a practical workspace where AI, research, automation, and knowledge come together seamlessly. Looking forward to seeing where Amogh and the team take it.
-    </blockquote>
-    <figcaption class="pq-cite">
-      <span class="pq-av" aria-hidden="true">KS</span>
-      <span class="pq-who">
-        <span class="pq-nm">Keshav Sharma</span>
-        <span class="pq-rl">Founder, Syntropy Intel</span>
-      </span>
-      <a class="pq-li" href="https://www.linkedin.com/in/keshav-sharma-927022415/" target="_blank" rel="noopener noreferrer">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.06-1.9-3.06-1.9 0-2.2 1.45-2.2 2.96V21h-4z"/></svg>
-        View on LinkedIn
-      </a>
-    </figcaption>
-  </figure>
-  </div>
+  <div data-adris-reviews></div>
 </section>
 
 <!-- ── PLAN FINDER (interactive quiz) ──────────────────────────── -->
@@ -1803,5 +1783,6 @@ initAffiliate();
   </div>
 </footer>
 <script src="/affiliate-welcome.js" defer></script>
+<script src="/reviews.js" defer></script>
 </body>
 </html>

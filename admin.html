@@ -305,6 +305,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <li><button class="tab" onclick="switchTab('revenue')">Revenue</button></li>
       <li><button class="tab" onclick="switchTab('offers')">Offers</button></li>
       <li><button class="tab" onclick="switchTab('pilot')">Pilot</button></li>
+      <li><button class="tab" onclick="switchTab('reviews')">Reviews</button></li>
     </ul>
     <div class="adm-side-foot">
       <div class="lbl">Signed in as</div>
@@ -490,6 +491,78 @@ tr:hover td { background:rgba(124,92,255,.03); }
     <!-- FEEDBACK TAB -->
     <div id="tab-feedback" class="tab-panel">
       <div id="feedbackList"></div>
+    </div>
+
+    <!-- REVIEWS TAB — what appears in the carousel on / and /pricing.
+         Writes go through /api/reviews, which commits reviews.json to GitHub and lets
+         Vercel redeploy. No database row, no runtime dependency on the busiest page. -->
+    <div id="tab-reviews" class="tab-panel">
+      <div class="ann-form">
+        <h3 style="margin:0 0 4px;font-size:15px">Add a review</h3>
+        <p style="margin:0 0 16px;font-size:12.5px;color:var(--muted);line-height:1.6">
+          Goes live on the home and pricing pages about a minute after saving &mdash; it is committed
+          to GitHub and Vercel rebuilds the site. Leave the LinkedIn link empty and the card simply
+          shows no icon.
+        </p>
+
+        <input type="hidden" id="rvId" />
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div>
+            <label style="display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px">Name</label>
+            <input type="text" id="rvName" placeholder="Keshav Sharma" style="width:100%" />
+          </div>
+          <div>
+            <label style="display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px">Role / company</label>
+            <input type="text" id="rvRole" placeholder="Founder, Syntropy Intel" style="width:100%" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px">LinkedIn profile URL</label>
+          <input type="text" id="rvLinkedin" placeholder="https://www.linkedin.com/in/..." style="width:100%" />
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px">
+            Have they actually used adris.tech?
+          </label>
+          <select id="rvContext" style="width:100%">
+            <option value="saw">No &mdash; they were shown it / saw a demo</option>
+            <option value="used">Yes &mdash; they have used it themselves</option>
+          </select>
+          <!-- THIS IS NOT COSMETIC. The card prints this on the site. Saying someone uses the
+               product when they were only shown it is a claim we cannot back, so the answer is
+               recorded per review instead of living in a code comment nobody reads. -->
+          <p style="margin:6px 0 0;font-size:11.5px;color:var(--muted);line-height:1.6">
+            The card shows this. Do not mark "used" unless they really have &mdash; the site must not
+            claim usage that did not happen.
+          </p>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px">
+            Review, exactly as they wrote it
+          </label>
+          <textarea id="rvQuote" rows="5" placeholder="Paste their words here." style="width:100%"></textarea>
+          <p style="margin:6px 0 0;font-size:11.5px;color:var(--muted)"><span id="rvCount">0</span> characters</p>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button class="btn" id="rvSaveBtn" onclick="saveReview()">Save &amp; publish</button>
+          <button class="btn" id="rvCancelBtn" onclick="resetReviewForm()"
+                  style="display:none;background:transparent;color:var(--muted);border:1px solid var(--border)">
+            Cancel edit
+          </button>
+          <span id="rvMsg" style="font-size:12.5px;color:var(--muted)"></span>
+        </div>
+      </div>
+
+      <div class="dth" style="margin:22px 0 10px">
+        <h3 style="margin:0;font-size:15px">Live on the site</h3>
+        <span class="dtag" id="rvCountTag">&mdash;</span>
+      </div>
+      <div id="rvList"><div class="empty">Loading&hellip;</div></div>
     </div>
 
     <!-- AFFILIATES TAB -->
@@ -889,7 +962,7 @@ async function deleteFeedback(id, btn) {
 }
 
 function switchTab(name) {
-  const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers','pilot'];
+  const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers','pilot','reviews'];
   document.querySelectorAll('.tab').forEach((t,i) => {
     t.classList.toggle('active', tabs[i]===name);
   });
@@ -898,6 +971,7 @@ function switchTab(name) {
   if (name === 'affiliates') loadAffiliates();
   if (name === 'offers') loadOffers();
   if (name === 'pilot') loadPilot();
+  if (name === 'reviews') loadReviews();
 }
 
 // ── Pilot program ─────────────────────────────────────────────────────────────
@@ -1560,6 +1634,158 @@ async function deletePromo(id) {
   const { error } = await _supa.from('promo_codes').delete().eq('id', id);
   if (!error) await loadOffers();
 }
+
+// ── REVIEWS ────────────────────────────────────────────────────────────────
+// Every call reads the list back from GitHub and re-renders from THAT, never from what
+// this page hoped it wrote. A save that half-succeeded then shows the truth immediately
+// instead of a row that only exists in one browser tab.
+let _reviews = [];
+
+async function reviewsApi(payload) {
+  const res = await fetch('/api/reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _session.access_token },
+    body: JSON.stringify(payload),
+  });
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) throw new Error(data.message || data.error || ('Request failed (' + res.status + ')'));
+  return data;
+}
+
+function rvEsc(x) {
+  return String(x == null ? '' : x).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function renderReviews() {
+  const list = document.getElementById('rvList');
+  const tag  = document.getElementById('rvCountTag');
+  if (tag) tag.textContent = _reviews.length + (_reviews.length === 1 ? ' review' : ' reviews');
+  if (!_reviews.length) {
+    list.innerHTML = '<div class="empty">No reviews yet. The section is hidden on the site until you add one.</div>';
+    return;
+  }
+  list.innerHTML = _reviews.map(function (r) {
+    const ctx = r.context === 'used'
+      ? '<span style="color:var(--green,#16a34a)">Has used it</span>'
+      : '<span style="color:var(--muted)">Saw a demo</span>';
+    return '<div class="fb-card" style="position:relative">'
+      + '<div style="display:flex;gap:8px;position:absolute;top:10px;right:10px">'
+      +   '<button class="fb-del" onclick="editReview(\'' + rvEsc(r.id) + '\')" '
+      +     'style="border-color:var(--border)">Edit</button>'
+      +   '<button class="fb-del" onclick="deleteReview(\'' + rvEsc(r.id) + '\', this)">Delete</button>'
+      + '</div>'
+      + '<div class="fb-meta">' + rvEsc(r.name) + (r.role ? ' &middot; ' + rvEsc(r.role) : '')
+      +   ' &middot; ' + ctx
+      +   (r.linkedin
+            ? ' &middot; <a href="' + rvEsc(r.linkedin) + '" target="_blank" rel="noopener" '
+              + 'style="color:var(--accent)">LinkedIn</a>'
+            : ' &middot; <span style="color:var(--muted)">no LinkedIn link</span>')
+      + '</div>'
+      + '<div class="fb-body">' + rvEsc(r.quote) + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+async function loadReviews() {
+  const list = document.getElementById('rvList');
+  list.innerHTML = '<div class="empty">Loading&hellip;</div>';
+  try {
+    const d = await reviewsApi({ action: 'list' });
+    _reviews = d.reviews || [];
+    renderReviews();
+  } catch (e) {
+    // The most likely failure by far is the GitHub token not being set yet, and the
+    // endpoint says so in words — so show the message rather than a generic error.
+    list.innerHTML = '<div class="empty" style="line-height:1.7">' + rvEsc(e.message) + '</div>';
+  }
+}
+
+function resetReviewForm() {
+  ['rvId', 'rvName', 'rvRole', 'rvLinkedin', 'rvQuote'].forEach(function (id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('rvContext').value = 'saw';
+  document.getElementById('rvCount').textContent = '0';
+  document.getElementById('rvSaveBtn').textContent = 'Save & publish';
+  document.getElementById('rvCancelBtn').style.display = 'none';
+  document.getElementById('rvMsg').textContent = '';
+}
+
+function editReview(id) {
+  const r = _reviews.find(function (x) { return x.id === id; });
+  if (!r) return;
+  document.getElementById('rvId').value = r.id;
+  document.getElementById('rvName').value = r.name || '';
+  document.getElementById('rvRole').value = r.role || '';
+  document.getElementById('rvLinkedin').value = r.linkedin || '';
+  document.getElementById('rvQuote').value = r.quote || '';
+  document.getElementById('rvContext').value = r.context === 'used' ? 'used' : 'saw';
+  document.getElementById('rvCount').textContent = String((r.quote || '').length);
+  document.getElementById('rvSaveBtn').textContent = 'Update & publish';
+  document.getElementById('rvCancelBtn').style.display = '';
+  document.getElementById('rvMsg').textContent = '';
+  document.querySelector('#tab-reviews .ann-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function saveReview() {
+  const btn = document.getElementById('rvSaveBtn');
+  const msg = document.getElementById('rvMsg');
+  const review = {
+    id:       document.getElementById('rvId').value.trim(),
+    name:     document.getElementById('rvName').value.trim(),
+    role:     document.getElementById('rvRole').value.trim(),
+    linkedin: document.getElementById('rvLinkedin').value.trim(),
+    quote:    document.getElementById('rvQuote').value.trim(),
+    context:  document.getElementById('rvContext').value,
+  };
+  if (!review.name)  { msg.textContent = 'Name is required.'; return; }
+  if (!review.quote) { msg.textContent = 'The review text is required.'; return; }
+
+  btn.disabled = true;
+  const wasEdit = !!review.id;
+  btn.textContent = 'Publishing\u2026';
+  msg.textContent = '';
+  try {
+    const d = await reviewsApi({ action: 'save', review: review });
+    _reviews = d.reviews || [];
+    renderReviews();
+    resetReviewForm();
+    // Say plainly that it is committed but not yet visible. Without this line the
+    // obvious next move is to reload the site, see the old version, and save again.
+    msg.textContent = (wasEdit ? 'Updated' : 'Added')
+      + (d.commit ? ' (commit ' + d.commit + ')' : '') + '. Live on the site in about a minute.';
+  } catch (e) {
+    msg.textContent = e.message;
+  } finally {
+    btn.disabled = false;
+    if (btn.textContent === 'Publishing\u2026') btn.textContent = 'Save & publish';
+  }
+}
+
+async function deleteReview(id, btn) {
+  const r = _reviews.find(function (x) { return x.id === id; });
+  if (!confirm('Delete the review from ' + ((r && r.name) || 'this person') + '?\n\nIt is removed from the site.')) return;
+  btn.disabled = true; btn.textContent = 'Deleting\u2026';
+  try {
+    const d = await reviewsApi({ action: 'delete', id: id });
+    _reviews = d.reviews || [];
+    renderReviews();
+    document.getElementById('rvMsg').textContent = 'Removed. Off the site in about a minute.';
+  } catch (e) {
+    btn.disabled = false; btn.textContent = 'Delete';
+    alert('Could not delete: ' + e.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const q = document.getElementById('rvQuote');
+  if (q) q.addEventListener('input', function () {
+    document.getElementById('rvCount').textContent = String(q.value.length);
+  });
+});
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 (async () => {
