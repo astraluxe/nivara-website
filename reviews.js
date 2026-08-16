@@ -70,10 +70,6 @@
     +   'color:var(--muted,rgba(14,14,12,.58));transition:color .18s,border-color .18s}'
     + '.rvx-li svg{width:14px;height:14px}'
     + '.rvx-li:hover{color:#0A66C2;border-color:#0A66C2}'
-    /* Provenance, printed rather than implied. "saw" must never read as usage. */
-    + '.rvx-ctx{display:inline-block;margin-bottom:12px;padding:3px 9px;border-radius:999px;'
-    +   'font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;'
-    +   'border:1px solid var(--rule,rgba(14,14,12,.12));color:var(--muted,rgba(14,14,12,.58))}'
     + '.rvx-dots{display:flex;justify-content:center;gap:7px;margin-top:22px}'
     + '.rvx-dot{width:7px;height:7px;padding:0;border:0;border-radius:50%;cursor:pointer;'
     +   'background:var(--rule-strong,rgba(14,14,12,.22));transition:background .2s,width .2s}'
@@ -115,6 +111,11 @@
     return s;
   }
 
+  // NOT PRINTED ON THE CARD any more. The section heading already frames these as
+  // first impressions shared with permission, so the card was saying it a second time
+  // right above the quote mark. The field is still recorded per review in the
+  // dashboard — whether someone has actually used the product is worth knowing before
+  // quoting them — so it can be shown again without re-entering it for every review.
   var CONTEXT_LABEL = {
     saw:  'Saw a demo',
     used: 'Has used adris.tech',
@@ -122,9 +123,7 @@
 
   function cardHtml(r) {
     var url = safeUrl(r.linkedin);
-    var ctx = CONTEXT_LABEL[r.context] || CONTEXT_LABEL.saw;
     return '<figure class="rvx-card">'
-      + '<span class="rvx-ctx">' + esc(ctx) + '</span>'
       + '<span class="rvx-mark" aria-hidden="true">&ldquo;</span>'
       + '<blockquote class="rvx-q clamp">' + esc(r.quote) + '</blockquote>'
       + '<figcaption class="rvx-cite">'

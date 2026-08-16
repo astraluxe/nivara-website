@@ -436,10 +436,37 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 <!-- ============================================
      WHO IT'S FOR — B2B segments
 ============================================ -->
+<!-- ============================================
+     VOICES — the reviews carousel.
+
+     These used to be one testimonial hardcoded here and the same one hardcoded
+     again in pricing.html, so adding a second meant editing two files and
+     removing the last one would have left this heading standing over an empty
+     box. The content now lives in /reviews.json, written by the head dashboard,
+     and reviews.js is the only renderer — the two pages cannot drift apart.
+
+     THE PROVENANCE RULE STILL STANDS and is now enforced by data rather than by
+     this comment: every review carries context 'saw' or 'used', and the card
+     prints it. Nothing here may imply that someone has run the product when
+     they have only been shown it, so this heading stays neutral about which.
+
+     The section removes itself when there are no reviews.
+============================================ -->
+<section class="bh-sec" id="voices" data-reviews-section>
+  <div class="wrap">
+    <div class="bh-head bh-rv">
+      <div class="idx">// 02 — First impressions</div>
+      <h2>What people say <span class="it">in their own words.</span></h2>
+      <p class="sub">Shared with permission, exactly as they wrote it.</p>
+    </div>
+    <div class="bh-rv d1" data-adris-reviews></div>
+  </div>
+</section>
+
 <section class="bh-sec" id="audience">
   <div class="wrap">
     <div class="bh-head bh-rv">
-      <div class="idx">// 02 — Built for teams that ship</div>
+      <div class="idx">// 03 — Built for teams that ship</div>
       <h2>Who runs on <span class="it">adris.</span></h2>
     </div>
     <div class="bh-who">
@@ -486,7 +513,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 <section class="bh-sec" id="trust">
   <div class="wrap">
     <div class="bh-head bh-rv">
-      <div class="idx">// 03 — Private by architecture</div>
+      <div class="idx">// 04 — Private by architecture</div>
       <h2>Your data never <span class="it">leaves the building.</span></h2>
       <p class="sub">Most AI platforms run your business through their cloud. adris runs on your hardware — the same guarantee you'd demand from any system that touches client data.</p>
     </div>
@@ -512,33 +539,6 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <li><span class="tick"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 7"/></svg></span><span><b>Network-level protection included.</b> Vault blocks trackers and malicious domains at the DNS level; Guard scans contracts and monitors threats — all computed locally.</span></li>
       </ul>
     </div>
-  </div>
-</section>
-
-<!-- ============================================
-     VOICES — the reviews carousel.
-
-     These used to be one testimonial hardcoded here and the same one hardcoded
-     again in pricing.html, so adding a second meant editing two files and
-     removing the last one would have left this heading standing over an empty
-     box. The content now lives in /reviews.json, written by the head dashboard,
-     and reviews.js is the only renderer — the two pages cannot drift apart.
-
-     THE PROVENANCE RULE STILL STANDS and is now enforced by data rather than by
-     this comment: every review carries context 'saw' or 'used', and the card
-     prints it. Nothing here may imply that someone has run the product when
-     they have only been shown it, so this heading stays neutral about which.
-
-     The section removes itself when there are no reviews.
-============================================ -->
-<section class="bh-sec" id="voices" data-reviews-section>
-  <div class="wrap">
-    <div class="bh-head bh-rv">
-      <div class="idx">// 04 — First impressions</div>
-      <h2>What people say <span class="it">in their own words.</span></h2>
-      <p class="sub">Shared with permission, exactly as they wrote it.</p>
-    </div>
-    <div class="bh-rv d1" data-adris-reviews></div>
   </div>
 </section>
 

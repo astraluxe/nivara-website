@@ -209,6 +209,41 @@ tr:hover td { background:rgba(124,92,255,.03); }
           color:var(--muted); border-radius:7px; padding:3px 9px; font-size:11px; cursor:pointer;
           font-family:var(--sans); transition:color .15s, border-color .15s; }
 .fb-del:hover { color:var(--red); border-color:var(--red); }
+
+/* Review rows — their own controls, NOT .fb-del. That class positions itself
+   absolutely, so a second one lands on top of the first. */
+.rv-card { position:relative; }
+.rv-acts { position:absolute; top:12px; right:12px; display:flex; gap:6px; z-index:1; }
+.rv-act  { background:transparent; border:1px solid var(--border); color:var(--muted);
+           border-radius:7px; padding:4px 10px; font-size:11px; line-height:1.4; cursor:pointer;
+           font-family:var(--sans); transition:color .15s, border-color .15s; }
+.rv-act:hover        { color:var(--text); border-color:var(--text); }
+.rv-act.danger:hover { color:var(--red); border-color:var(--red); }
+.rv-act:disabled     { opacity:.5; cursor:not-allowed; }
+/* Keep the name line clear of the buttons instead of running underneath them. */
+.rv-card .fb-meta { padding-right:140px; }
+@media (max-width:640px) {
+  .rv-acts { position:static; margin-bottom:10px; }
+  .rv-card .fb-meta { padding-right:0; }
+}
+
+/* Confirm dialog. A mis-click on Delete removes a published testimonial from the
+   live site, so it asks first — and asks with the name in the question, because
+   "Are you sure?" is a button people learn to click without reading. */
+.rv-mask { position:fixed; inset:0; z-index:9999; display:flex; align-items:center;
+           justify-content:center; background:rgba(14,14,12,.55); padding:20px; }
+.rv-dlg  { max-width:420px; width:100%; background:var(--surface); color:var(--text);
+           border:1px solid var(--border); border-radius:14px; padding:22px;
+           box-shadow:0 24px 70px rgba(0,0,0,.28); }
+.rv-dlg h4 { margin:0 0 8px; font-size:15px; }
+.rv-dlg p  { margin:0 0 18px; font-size:13px; line-height:1.6; color:var(--muted); }
+.rv-dlg .row { display:flex; gap:8px; justify-content:flex-end; }
+.rv-dlg .no  { background:transparent; border:1px solid var(--border); color:var(--text);
+               border-radius:9px; padding:8px 14px; font-size:13px; cursor:pointer;
+               font-family:var(--sans); }
+.rv-dlg .yes { background:var(--red,#dc2626); border:none; color:#fff; border-radius:9px;
+               padding:8px 14px; font-size:13px; font-weight:600; cursor:pointer;
+               font-family:var(--sans); }
 .ann-form h3 { font-size:13px; font-weight:600; margin-bottom:16px; }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
 .form-row.single { grid-template-columns:1fr; }
@@ -1671,11 +1706,10 @@ function renderReviews() {
     const ctx = r.context === 'used'
       ? '<span style="color:var(--green,#16a34a)">Has used it</span>'
       : '<span style="color:var(--muted)">Saw a demo</span>';
-    return '<div class="fb-card" style="position:relative">'
-      + '<div style="display:flex;gap:8px;position:absolute;top:10px;right:10px">'
-      +   '<button class="fb-del" onclick="editReview(\'' + rvEsc(r.id) + '\')" '
-      +     'style="border-color:var(--border)">Edit</button>'
-      +   '<button class="fb-del" onclick="deleteReview(\'' + rvEsc(r.id) + '\', this)">Delete</button>'
+    return '<div class="fb-card rv-card">'
+      + '<div class="rv-acts">'
+      +   '<button class="rv-act" onclick="editReview(\'' + rvEsc(r.id) + '\')">Edit</button>'
+      +   '<button class="rv-act danger" onclick="deleteReview(\'' + rvEsc(r.id) + '\', this)">Delete</button>'
       + '</div>'
       + '<div class="fb-meta">' + rvEsc(r.name) + (r.role ? ' &middot; ' + rvEsc(r.role) : '')
       +   ' &middot; ' + ctx
@@ -1765,9 +1799,51 @@ async function saveReview() {
   }
 }
 
+// Asks in the page rather than through the browser's confirm(). The native one is
+// easy to dismiss on reflex, cannot name what is being deleted in any readable way,
+// and on some setups is suppressed entirely — which would have made Delete act
+// instantly on a mis-click. Resolves true/false so the caller reads top to bottom.
+function rvConfirm(title, body, yesLabel) {
+  return new Promise(function (resolve) {
+    const mask = document.createElement('div');
+    mask.className = 'rv-mask';
+    mask.innerHTML = '<div class="rv-dlg" role="dialog" aria-modal="true">'
+      + '<h4></h4><p></p>'
+      + '<div class="row"><button class="no" type="button">Cancel</button>'
+      + '<button class="yes" type="button"></button></div></div>';
+    mask.querySelector('h4').textContent = title;
+    mask.querySelector('p').textContent = body;
+    mask.querySelector('.yes').textContent = yesLabel || 'Delete';
+
+    function close(v) {
+      document.removeEventListener('keydown', onKey);
+      mask.remove();
+      resolve(v);
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') close(false);
+      if (e.key === 'Enter')  close(true);
+    }
+    mask.querySelector('.no').onclick  = function () { close(false); };
+    mask.querySelector('.yes').onclick = function () { close(true); };
+    // Clicking the backdrop cancels; clicking the dialog itself must not.
+    mask.addEventListener('click', function (e) { if (e.target === mask) close(false); });
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(mask);
+    mask.querySelector('.no').focus();   // the safe option is the one under the cursor
+  });
+}
+
 async function deleteReview(id, btn) {
   const r = _reviews.find(function (x) { return x.id === id; });
-  if (!confirm('Delete the review from ' + ((r && r.name) || 'this person') + '?\n\nIt is removed from the site.')) return;
+  const who = (r && r.name) || 'this person';
+  const okToDelete = await rvConfirm(
+    'Delete the review from ' + who + '?',
+    'It comes off the home and pricing pages within about a minute, and the entry is '
+      + 'removed from the site\u2019s review file. This cannot be undone from here.',
+    'Delete review'
+  );
+  if (!okToDelete) return;
   btn.disabled = true; btn.textContent = 'Deleting\u2026';
   try {
     const d = await reviewsApi({ action: 'delete', id: id });
