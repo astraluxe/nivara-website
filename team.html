@@ -284,6 +284,17 @@ html,body{background:#fff!important;color:#111!important;height:100%}
 // Mirrors pricing.html. The server refuses anyway (CHECKOUT_ALLOWLIST), but a page that starts a
 // payment should say so itself rather than letting the request fail in front of the customer.
 window.PAYMENTS_LOCKED = true;
+// Same server answer as pricing.html. This page starts a ₹19,999 Team subscription through the very
+// same function, so it must not be openable on its own — that mismatch is exactly how /team stayed
+// buyable while the pricing page looked shut.
+(function () {
+  try {
+    fetch('https://xkkqcqsacgdrfwbwdqsp.supabase.co/functions/v1/checkout-status')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (st) { if (st && st.open) window.PAYMENTS_LOCKED = false; })
+      .catch(function () { /* stays locked */ });
+  } catch (e) {}
+})();
 </script>
 <script>
 const SUPA_URL  = 'https://xkkqcqsacgdrfwbwdqsp.supabase.co';

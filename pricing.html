@@ -378,7 +378,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     <div style="flex:1;min-width:0">
       <div style="font-size:13px;font-weight:600;color:#7C5CFF;margin-bottom:3px">Checkout is briefly paused — and that's a good thing</div>
       <div style="font-size:12.5px;color:var(--ink);line-height:1.6">
-        We're putting our new checkout through final testing so your very first payment is flawless — smooth, secure, and right the first time. The prices below are final and won't change; upgrading simply reopens shortly. We expect it live by <strong>Friday, 31&nbsp;July&nbsp;2026 (IST)</strong>. Thanks for your patience — it's a short wait for a payment experience we're proud of. Meanwhile, <a href="/download" style="color:#7C5CFF;text-decoration:none;font-weight:500">the app is free to download and use</a>.
+        We're putting our new checkout through final testing so your very first payment is flawless — smooth, secure, and right the first time. The prices below are final and won't change; upgrading simply reopens shortly. It reopens automatically the moment testing is finished. Thanks for your patience — it's a short wait for a payment experience we're proud of. Meanwhile, <a href="/download" style="color:#7C5CFF;text-decoration:none;font-weight:500">the app is free to download and use</a>.
       </div>
     </div>
   </div>
@@ -1338,8 +1338,19 @@ async function openSubPanel() {
 // earlier gateway hiccup again). This is the single hard gate — every payment path
 // (INR, USD, and the resume-after-login path) checks it, so Razorpay is never
 // reached while true. Flip to false to reopen checkout.
+// THE LOCK IS THE SERVER'S ANSWER NOW, NOT A LINE IN THIS FILE.
+//
+// It used to be a hardcoded true with a hardcoded reopening date — a date that came and went while
+// checkout stayed shut, so the page was telling visitors something untrue. Worse, opening it was a
+// manual edit that had to be made in the right order relative to RAZORPAY_MODE, a Supabase secret
+// no browser can see. Unlock while that still says 'test' and every visitor can buy a real plan
+// with a free Razorpay test card.
+//
+// So the page starts LOCKED and asks checkout-status, which reports the mode the server is actually
+// in. Setting RAZORPAY_MODE to 'live' opens the site by itself — no deploy, no second step to
+// forget, and no window in which the two disagree.
 window.PAYMENTS_LOCKED = true;
-window.PAY_UNLOCK_DATE = 'Friday, 31 July 2026 (IST)';
+window.PAY_LOCK_MESSAGE = 'Checkout is being set up. Please check back shortly.';
 
 // ── Who may reach checkout while it is locked ────────────────────────────────
 //
@@ -1355,6 +1366,47 @@ window.PAY_UNLOCK_DATE = 'Friday, 31 July 2026 (IST)';
 window.PAY_TESTERS = [
   'astraluxe.tech@gmail.com',
 ];
+
+// Ask the server whether checkout is open, and restore the real Pay buttons if it is.
+//
+// Runs before the tester check below, because an open shop needs no tester list. If this request
+// fails the page simply stays locked, which is the safe direction to fail in: nobody is charged by
+// a page that could not confirm it should be charging.
+(async function applyServerLock() {
+  try {
+    const res = await fetch(SUPA_URL + '/functions/v1/checkout-status', {
+      headers: { 'apikey': SUPA_ANON }
+    });
+    if (!res.ok) return;
+    const st = await res.json();
+    if (st && st.message) window.PAY_LOCK_MESSAGE = st.message;
+    if (!st || !st.open) return;               // still shut — leave every button locked
+
+    window.PAYMENTS_LOCKED = false;
+    if (document.readyState === 'loading') {
+      await new Promise(function (r) { document.addEventListener('DOMContentLoaded', r, { once: true }); });
+    }
+    document.querySelectorAll('.bts .bi, .bts .bu').forEach(function (btn) {
+      var pc = btn.closest('.pc');
+      if (pc && pc.dataset.currentPlan === '1') return;   // leave the owned plan's card alone
+      var orig = btn.getAttribute('data-orig');
+      if (!orig) return;
+      btn.innerHTML = orig;
+      btn.style.opacity = '';
+      btn.style.cursor = '';
+      btn.title = '';
+      btn.onclick = null;
+      var isUsd = /Pay in \$/.test(orig);
+      var card = btn.closest('.pc');
+      var key = card && card.id ? card.id.replace(/^plan/, '').toLowerCase() : '';
+      if (key === 'team') key = 'business';
+      if (isUsd) btn.onclick = function () { payWithUSD(); };
+      else if (key) btn.onclick = function () { payWithINR(key); };
+    });
+    var banner = document.getElementById('payLockBanner');
+    if (banner) banner.style.display = 'none';
+  } catch (e) { /* offline — stays locked, which is the safe default */ }
+})();
 
 // Lift the lock for a signed-in tester, and put the real Pay buttons back. Runs after the handler
 // below has stashed each button's original label in data-orig, and is a no-op for everyone else.
@@ -1428,11 +1480,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var pc = btn.closest('.pc');
     if (pc && pc.dataset.currentPlan === '1') return;
     btn.setAttribute('data-orig', btn.innerHTML);
-    btn.innerHTML = '&#128274; Reopens Fri 31 Jul';
+    btn.innerHTML = '&#128274; Coming soon';
     btn.style.opacity = '.75';
     btn.style.cursor = 'not-allowed';
     btn.onclick = function (e) { e.preventDefault(); showPayLock(); };
-    btn.title = 'Checkout reopens ' + window.PAY_UNLOCK_DATE;
+    btn.title = window.PAY_LOCK_MESSAGE;
   });
 });
 

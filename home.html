@@ -356,7 +356,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
   </div>
   <div class="wrap">
     <div class="bh-hero-copy">
-      <div class="bh-eyebrow bh-rv"><span class="pulse"></span>Live · v1.37.0 &nbsp;·&nbsp; Windows &amp; Linux &nbsp;·&nbsp; Bengaluru, IN</div>
+      <div class="bh-eyebrow bh-rv"><span class="pulse"></span>Live · <span class="js-app-version">v1.39.0</span> &nbsp;·&nbsp; Windows &amp; Linux &nbsp;·&nbsp; Bengaluru, IN</div>
       <h1 class="bh-h1 bh-rv d1">Run your business<br/>on <span class="it acc">one</span> AI platform.</h1>
       <p class="bh-sub bh-rv d2">
         AI agents that find leads and write outreach. Automations that run 24/7. A code editor, security scanning, and local AI models — <b>eight products in one desktop app</b>, replacing <b>₹2–3 lakh/month</b> of tools and hiring. Everything runs on your machines. Nothing leaves them.
@@ -1034,5 +1034,19 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 })();
 </script>
 <script src="/affiliate-welcome.js" defer></script>
+<script>
+// The badge was hardcoded and had already fallen two releases behind. latest.json is written by the
+// release script, so it is the one number that is always current — the printed value stays as the
+// fallback for when the fetch cannot run.
+(function () {
+  fetch('/latest.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      if (!j || !j.version) return;
+      document.querySelectorAll('.js-app-version').forEach(function (el) { el.textContent = 'v' + j.version; });
+    })
+    .catch(function () { /* offline — the printed fallback stands */ });
+})();
+</script>
 </body>
 </html>
