@@ -3,15 +3,6 @@
   "_provenance_rule": "context MUST match reality. 'saw' = they were shown the product and have not run it. 'used' = they have actually used it. Nothing on the site may imply usage that did not happen. The card no longer prints this label - the section heading already frames these as first impressions shared with permission - but the answer is still recorded per review, because it is worth knowing before quoting someone.",
   "reviews": [
     {
-      "id": "rv-msvyx0si",
-      "name": "testSecond Test",
-      "role": "anything",
-      "linkedin": "",
-      "quote": "a couple of sentences",
-      "context": "saw",
-      "added": "2026-08-16T15:36:54.594Z"
-    },
-    {
       "id": "test-entry-delete-me",
       "name": "Test Entry",
       "role": "Added by Claude to prove the pipeline",
