@@ -446,7 +446,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <div class="plan-pic"><img src="/images/plan-solo.png" alt="Solo plan"/></div>
       <div class="bts">
         <button class="bi" onclick="payWithINR('solo')">Pay in &#8377; 1,499 &rarr;</button>
-        <button class="bu" onclick="payWithUSD()">Pay in $ 15 &rarr;</button>
+        <button class="bu" onclick="payWithUSD(this)">Pay in $ 15 &rarr;</button>
       </div>
       <hr/>
       <ul>
@@ -476,7 +476,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <div class="plan-pic"><img src="/images/plan-builder.png" alt="Builder plan"/></div>
       <div class="bts">
         <button class="bi" onclick="payWithINR('builder')">Pay in &#8377; 4,999 &rarr;</button>
-        <button class="bu" onclick="payWithUSD()">Pay in $ 49 &rarr;</button>
+        <button class="bu" onclick="payWithUSD(this)">Pay in $ 49 &rarr;</button>
       </div>
       <hr/>
       <ul>
@@ -992,15 +992,6 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 </div>
 
 <!-- ── USD MODAL ──────────────────────────────────────────────── -->
-<div class="mb" id="usdModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="mbx">
-    <button class="mx" onclick="document.getElementById('usdModal').classList.remove('open')">&#215;</button>
-    <h3>International payment</h3>
-    <p>USD payments are processed manually. Contact us via the partner page and we will send a payment link within 2 hours.</p>
-    <a href="/partner" class="dl">Contact us &rarr;</a>
-  </div>
-</div>
-
 <!-- ── LOGIN MODAL ────────────────────────────────────────────── -->
 <div class="mb" id="loginModal" onclick="if(event.target===this)closeLogin()">
   <div class="mbx">
@@ -1400,7 +1391,7 @@ window.PAY_TESTERS = [
       var card = btn.closest('.pc');
       var key = card && card.id ? card.id.replace(/^plan/, '').toLowerCase() : '';
       if (key === 'team') key = 'business';
-      if (isUsd) btn.onclick = function () { payWithUSD(); };
+      if (isUsd) btn.onclick = function () { payWithUSD(btn); };
       else if (key) btn.onclick = function () { payWithINR(key); };
     });
     var banner = document.getElementById('payLockBanner');
@@ -1440,7 +1431,7 @@ window.PAY_TESTERS = [
       var card = btn.closest('.pc');
       var key = card && card.id ? card.id.replace(/^plan/, '').toLowerCase() : '';
       if (key === 'team') key = 'business';
-      if (m === 'usd') btn.onclick = function () { payWithUSD(); };
+      if (m === 'usd') btn.onclick = function () { payWithUSD(btn); };
       else if (key) btn.onclick = function () { payWithINR(key); };
     });
 
@@ -1479,6 +1470,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // business rewriting them. This is the other half of the race described in markCurrentPlan.
     var pc = btn.closest('.pc');
     if (pc && pc.dataset.currentPlan === '1') return;
+    // A "Pay in $" button does not take a payment any more — it opens the contact form. Being
+    // unable to charge in dollars is exactly when someone most needs to reach us, so the checkout
+    // lock leaves these alone.
+    if (/Pay in \$/.test(btn.innerHTML)) return;
     btn.setAttribute('data-orig', btn.innerHTML);
     btn.innerHTML = '&#128274; Coming soon';
     btn.style.opacity = '.75';
@@ -1504,9 +1499,22 @@ async function payWithINR(planKey) {
   await startRazorpayPayment(planKey, session, activePromo);
 }
 
-function payWithUSD() {
-  if (window.PAYMENTS_LOCKED) { showPayLock(); return; }
-  document.getElementById('usdModal').classList.add('open');
+// USD IS NOT CHARGED HERE — IT STARTS A CONVERSATION.
+//
+// Razorpay is wired for INR only; there is no international gateway behind these buttons and never
+// was. What existed was a modal saying "USD payments are processed manually, contact us via the
+// partner page" — the right answer, reached through an extra click that told the visitor nothing
+// they could not simply be shown.  So the button now goes where the modal was pointing.
+//
+// Not gated on PAYMENTS_LOCKED: this opens a form, it does not take money, and someone who cannot
+// pay in rupees is precisely the person who needs to reach us.
+function payWithUSD(el) {
+  var card = (el && el.closest) ? el.closest('.pc') : null;
+  var key  = (card && card.id) ? card.id.replace(/^plan/, '').toLowerCase() : '';
+  // Carry the plan across so the form arrives already knowing what they were looking at, rather
+  // than making them describe it from memory on a different page.
+  window.location.href = '/partner?topic=international-payment'
+    + (key ? '&plan=' + encodeURIComponent(key) : '') + '#apply';
 }
 
 async function startRazorpayPayment(planKey, session, activePromo) {

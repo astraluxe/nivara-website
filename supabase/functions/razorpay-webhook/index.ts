@@ -83,6 +83,16 @@ Deno.serve(async (req: Request) => {
     return new Response("Unauthorized", { status: 401 });
   }
 
+  // ── Gate 4: live events only. The test secret is still accepted above so a test-mode event is
+  // recognised rather than looking like an attack in the logs — but it stops here. Checkout now
+  // charges real money exclusively, so a test-mode charge granting a real plan would hand a free
+  // Business subscription to anyone who can reach the Razorpay test dashboard. 200 so Razorpay
+  // marks it delivered and stops retrying; the log line says plainly what happened.
+  if (mode === "test") {
+    console.log("IGNORED (test mode disabled)");
+    return new Response("ok (test mode disabled)", { status: 200 });
+  }
+
   let payload: Rec;
   try { payload = JSON.parse(rawBody); } catch { return new Response("Bad JSON", { status: 400 }); }
 
@@ -164,8 +174,8 @@ Deno.serve(async (req: Request) => {
   // also being enabled in the dashboard. If it wasn't, money moved and no plan was ever
   // granted. Ask Razorpay directly instead of depending on webhook configuration.
   if (!plan && subId) {
-    const keyId = (mode === "test" ? Deno.env.get("RAZORPAY_TEST_KEY_ID") : "") || Deno.env.get("RAZORPAY_KEY_ID") || "";
-    const keySecret = (mode === "test" ? Deno.env.get("RAZORPAY_TEST_KEY_SECRET") : "") || Deno.env.get("RAZORPAY_KEY_SECRET") || "";
+    const keyId = Deno.env.get("RAZORPAY_KEY_ID") || "";
+    const keySecret = Deno.env.get("RAZORPAY_KEY_SECRET") || "";
     if (keyId && keySecret) {
       try {
         const r = await fetch(`https://api.razorpay.com/v1/subscriptions/${subId}`, {

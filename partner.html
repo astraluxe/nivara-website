@@ -738,6 +738,44 @@ document.getElementById('navHam').addEventListener('click', function() {
     selectCard(firstRadio ? firstRadio.value : '');
   }
 
+  // ── ARRIVING FROM THE DOLLAR BUTTONS ON /pricing ────────────────────────────────────────────
+  // Those buttons cannot charge — Razorpay is INR-only — so they send people here instead. Landing
+  // on a partnership form with "MCP / Tool showcase" preselected would read as the wrong page
+  // entirely, so the request itself is carried across: the contact card is chosen, the plan they
+  // were looking at is written into the message, and a line at the top says why they were moved.
+  // Anything they type themselves wins; nothing here is overwritten.
+  try {
+    var qs = new URLSearchParams(location.search);
+    if (qs.get('topic') === 'international-payment') {
+      selectCard('other');
+
+      var LABEL = { solo: 'Solo', builder: 'Builder', team: 'Team', business: 'Team' };
+      var label = LABEL[(qs.get('plan') || '').toLowerCase()] || '';
+
+      var desc = document.getElementById('pf-desc');
+      if (desc && !desc.value.trim()) {
+        desc.value = label
+          ? 'I would like to pay for the ' + label + ' plan in USD (international payment).'
+          : 'I would like to pay in USD (international payment).';
+      }
+
+      var form = document.getElementById('partnerForm');
+      if (form && !document.getElementById('usdNote')) {
+        var note = document.createElement('p');
+        note.id = 'usdNote';
+        note.style.cssText = 'margin:0 0 18px;padding:12px 14px;border:1px solid var(--border);'
+          + 'border-radius:10px;background:var(--paper-2,rgba(124,92,255,.06));font-size:13px;'
+          + 'line-height:1.6;color:var(--muted);';
+        note.textContent = label
+          ? 'Card checkout is in Indian rupees only, so USD payments for ' + label
+            + ' are arranged by hand. Send this and we will reply with a payment link.'
+          : 'Card checkout is in Indian rupees only, so USD payments are arranged by hand. '
+            + 'Send this and we will reply with a payment link.';
+        form.parentNode.insertBefore(note, form);
+      }
+    }
+  } catch (e) { /* no query string support — the form still works, just unprefilled */ }
+
   // "What we're open to" buttons → scroll to form + pre-select type
   document.querySelectorAll('.open-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {

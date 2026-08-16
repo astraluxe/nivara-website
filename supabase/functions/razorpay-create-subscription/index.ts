@@ -7,11 +7,11 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 // The notes written here — {user_id, plan} — are what the webhook reads to decide whose account to
 // upgrade and to what. Nothing else in the system carries that pairing, so they are load-bearing.
 //
-// TEST MODE IS CHOSEN BY THE SERVER, NEVER BY THE CALLER. It would be natural to accept a
-// `test: true` flag from the page, and it would also be a way to hand out paid plans for nothing:
-// test-mode cards are free and the webhook honours a valid test signature, so anyone who could ask
-// for test mode could pay ₹0 for Business. The mode comes from RAZORPAY_MODE on the server, and the
-// browser has no say in it.
+// THERE IS NO TEST MODE. Every subscription started here is a real charge against the live keys.
+// The caller was never allowed to ask for test mode — a `test: true` flag from the page would have
+// been a way to buy Business for ₹0, since test cards are free and the webhook honours a valid test
+// signature — and now the server cannot choose it either. See the block below for why the
+// RAZORPAY_MODE branch was removed rather than left switched off.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CORS = {
@@ -49,29 +49,31 @@ Deno.serve(async (req: Request) => {
     discount_pct = Number(body.discount_pct ?? 0);
   } catch { return jsonErr('Invalid request body', 400); }
 
-  // ── Which Razorpay environment are we in? Server's decision alone. ───────────────────────────
-  const testMode = (Deno.env.get('RAZORPAY_MODE') ?? 'live').toLowerCase() === 'test';
+  // ── LIVE ONLY. REAL MONEY, OR NOTHING. ───────────────────────────────────────────────────────
+  // This used to branch on RAZORPAY_MODE and reach for the TEST_* keys and plans when it said
+  // 'test'. Testing is done, and leaving that branch in place meant the difference between a real
+  // charge and a free test card was one environment variable — one that lives in a dashboard, can
+  // be changed without a deploy, and leaves no trace in this repository. A checkout that silently
+  // stops charging is a worse failure than one that refuses to start, because it looks like it
+  // worked. So the choice is gone: there is one set of credentials, and they are the live ones.
+  //
+  // Restoring test mode is a deliberate code change, reviewed and deployed like any other — see the
+  // git history of this file for the branch that used to be here. The TEST_* secrets can stay set;
+  // nothing reads them any more.
+  const testMode = false;
 
-  const PLAN_IDS: Record<string, string> = testMode
-    ? {
-        solo:     Deno.env.get('TEST_SOLO_PLAN_ID')    ?? '',
-        builder:  Deno.env.get('TEST_BUILDER_PLAN_ID') ?? '',
-        business: Deno.env.get('TEST_TEAM_PLAN_ID')    ?? '',
-      }
-    : {
-        solo:     Deno.env.get('SOLO_PLAN_ID')    ?? '',
-        builder:  Deno.env.get('BUILDER_PLAN_ID') ?? '',
-        business: Deno.env.get('TEAM_PLAN_ID')    ?? '',
-      };
+  const PLAN_IDS: Record<string, string> = {
+    solo:     Deno.env.get('SOLO_PLAN_ID')    ?? '',
+    builder:  Deno.env.get('BUILDER_PLAN_ID') ?? '',
+    business: Deno.env.get('TEAM_PLAN_ID')    ?? '',
+  };
   if (!PLAN_IDS[plan]) {
-    // Naming the mode matters here: "Unknown plan: solo" while in test mode almost always means the
-    // TEST_*_PLAN_ID variables were never created, not that the plan is wrong.
-    return jsonErr(`Unknown plan: ${plan}${testMode ? ' (test mode — is TEST_' + plan.toUpperCase() + '_PLAN_ID set?)' : ''}`, 400);
+    return jsonErr(`Unknown plan: ${plan} (is ${plan === 'business' ? 'TEAM' : plan.toUpperCase()}_PLAN_ID set?)`, 400);
   }
 
-  const keyId     = (testMode ? Deno.env.get('RAZORPAY_TEST_KEY_ID')     : Deno.env.get('RAZORPAY_KEY_ID'))     ?? '';
-  const keySecret = (testMode ? Deno.env.get('RAZORPAY_TEST_KEY_SECRET') : Deno.env.get('RAZORPAY_KEY_SECRET')) ?? '';
-  if (!keyId || !keySecret) return jsonErr(`Payment not configured${testMode ? ' (test mode — RAZORPAY_TEST_KEY_ID/SECRET missing)' : ''}`, 500);
+  const keyId     = Deno.env.get('RAZORPAY_KEY_ID')     ?? '';
+  const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET') ?? '';
+  if (!keyId || !keySecret) return jsonErr('Payment not configured (RAZORPAY_KEY_ID/SECRET missing)', 500);
   const creds = btoa(`${keyId}:${keySecret}`);
 
   // If a promo discount is requested, verify it server-side and create a discounted plan
