@@ -1,5 +1,15 @@
 {
   "_comment": "Reviews shown on /  and /pricing. Written by the head dashboard (Reviews tab) via /api/reviews, which commits this file to GitHub; Vercel then redeploys and the change is live. Kept as a static file on purpose: the pages read it straight from the CDN, so a testimonial costs no database row, no API request and no runtime dependency. Edit by hand only if the dashboard is unavailable — keep the shape identical.",
   "_provenance_rule": "context MUST match reality. 'saw' = they were shown the product and have not run it. 'used' = they have actually used it. Nothing on the site may imply usage that did not happen. The card no longer prints this label - the section heading already frames these as first impressions shared with permission - but the answer is still recorded per review, because it is worth knowing before quoting someone.",
-  "reviews": []
+  "reviews": [
+    {
+      "id": "keshav-sharma",
+      "name": "Keshav Sharma",
+      "role": "Founder, Syntropy Intel",
+      "linkedin": "https://www.linkedin.com/in/keshav-sharma-927022415/",
+      "quote": "Had a chance to see Adris in action today. What impressed me most wasn't the AI itself, but how naturally the research, automation, and local-first workflow fit together. It feels like it's designed to help people think and work better, not just generate answers. It's building a practical workspace where AI, research, automation, and knowledge come together seamlessly. Looking forward to seeing where Amogh and the team take it.",
+      "context": "saw",
+      "added": "2026-08-16T00:00:00.000Z"
+    }
+  ]
 }
