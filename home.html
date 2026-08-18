@@ -94,6 +94,138 @@
 .bh-chip s { color: var(--muted-2); font-family: var(--font-mono); font-size: 11.5px; }
 .bh-chip.one { border-color: var(--accent); color: var(--accent); font-weight: 600; background: color-mix(in srgb, var(--accent) 7%, transparent); }
 
+/* ── THE FILM ──────────────────────────────────────────────────
+   The 59-second product film. It has NO audio track — the story is
+   carried by on-screen captions — so a muted ambient loop loses
+   nothing, and there is deliberately no volume control to imply
+   otherwise.
+
+   Three states, one <video> element:
+     inline  — in the band below, autoplays muted on a good connection
+     docked  — pinned to the corner as a mini player once you scroll past
+     full    — real Fullscreen API, restarts from 0 with native controls
+
+   Docking is done by adding position:fixed to .bh-film-screen rather
+   than re-parenting the <video>, because moving a playing video in the
+   DOM restarts it in some browsers. .bh-film-stage keeps the layout
+   space so nothing jumps when it docks.
+──────────────────────────────────────────────────────────────── */
+.bh-film { padding: clamp(56px, 7vw, 96px) 0; border-bottom: 1px solid var(--rule); overflow: clip; }
+.bh-film-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: clamp(24px, 3vw, 38px); }
+.bh-film-head .idx { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 14px; }
+.bh-film-head h2 { font-size: clamp(28px, 3.4vw, 44px); font-weight: 500; letter-spacing: -.03em; line-height: 1.1; }
+.bh-film-head h2 .it { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+
+/* Opacity-only reveal: .bh-rv uses a transform, and a transformed
+   ancestor would break position:fixed on the docked player. */
+.bh-fade { opacity: 0; transition: opacity .8s cubic-bezier(.16,1,.3,1); }
+.bh-fade.in { opacity: 1; }
+
+.bh-film-stage { margin: 0; position: relative; aspect-ratio: 16 / 9; }
+.bh-film-screen {
+  position: absolute; inset: 0; border-radius: 14px; overflow: hidden;
+  border: 1px solid var(--rule-strong); background: var(--paper-2);
+  box-shadow: 0 30px 80px -40px rgba(14,14,12,.45), 0 2px 10px -4px rgba(14,14,12,.18);
+  transition: border-color .25s, box-shadow .25s;
+}
+.bh-film-screen:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--rule-strong)); }
+[data-theme="ink"] .bh-film-screen { box-shadow: 0 30px 90px -40px rgba(124,92,255,.35), 0 0 0 1px rgba(242,239,233,.04); }
+
+.bh-film-video { width: 100%; height: 100%; object-fit: cover; display: block; background: var(--paper-2); }
+/* A placeholder wash until the poster is attached (it is deferred so the
+   homepage does not pay ~110 KB for a below-the-fold image). */
+.bh-film-screen::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s;
+  background: radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
+}
+.bh-film-screen.is-loading::after { opacity: 1; }
+
+/* Big play affordance — shown until the film is actually running. */
+.bh-film-play {
+  position: absolute; inset: 0; display: grid; place-items: center; gap: 0;
+  width: 100%; height: 100%; border: 0; background: transparent; cursor: pointer;
+  color: var(--ink); transition: opacity .3s; padding: 0;
+}
+.bh-film-screen.is-playing .bh-film-play { opacity: 0; pointer-events: none; }
+.bh-film-play .disc {
+  display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%;
+  background: color-mix(in oklab, var(--paper) 82%, transparent);
+  border: 1px solid var(--rule-strong); backdrop-filter: blur(6px);
+  transition: transform .25s cubic-bezier(.16,1,.3,1), background .25s, border-color .25s;
+}
+.bh-film-play:hover .disc { transform: scale(1.07); background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.bh-film-play .disc svg { margin-left: 4px; }
+.bh-film-play .lbl {
+  position: absolute; left: 0; right: 0; bottom: 20px; text-align: center;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+
+/* Hover toolbar — restart / full screen. */
+.bh-film-tools {
+  position: absolute; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 3;
+  opacity: 0; transform: translateY(-6px); transition: opacity .25s, transform .25s;
+}
+.bh-film-screen:hover .bh-film-tools, .bh-film-screen:focus-within .bh-film-tools { opacity: 1; transform: none; }
+.bh-film-tools button {
+  display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; cursor: pointer;
+  border-radius: 8px; border: 1px solid var(--rule-strong); color: var(--ink);
+  background: color-mix(in oklab, var(--paper) 85%, transparent); backdrop-filter: blur(8px);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase;
+  transition: background .18s, border-color .18s, color .18s;
+}
+.bh-film-tools button:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.bh-film-badge {
+  position: absolute; left: 14px; top: 14px; z-index: 3; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 999px;
+  background: color-mix(in oklab, var(--paper) 80%, transparent); border: 1px solid var(--rule);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.bh-film-badge .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+.bh-film-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--rule); z-index: 3; }
+.bh-film-bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s linear; }
+
+/* ── Docked mini player ── */
+.bh-film-screen.is-docked {
+  position: fixed; inset: auto 22px 22px auto; width: min(340px, 42vw); height: auto; aspect-ratio: 16 / 9;
+  z-index: 120; border-radius: 12px; cursor: pointer;
+  box-shadow: 0 24px 60px -20px rgba(14,14,12,.5);
+  animation: bh-film-dock .34s cubic-bezier(.16,1,.3,1);
+}
+@keyframes bh-film-dock { from { opacity: 0; transform: translateY(18px) scale(.94); } to { opacity: 1; transform: none; } }
+.bh-film-screen.is-docked .bh-film-badge, .bh-film-screen.is-docked .bh-film-play .lbl { display: none; }
+.bh-film-screen.is-docked .bh-film-tools { opacity: 1; transform: none; top: 8px; right: 8px; gap: 6px; }
+.bh-film-screen.is-docked .bh-film-tools button { height: 26px; padding: 0 8px; font-size: 8.5px; }
+.bh-film-screen.is-docked .bh-film-play .disc { width: 52px; height: 52px; }
+/* These need to out-rank `.bh-film-tools button { display: inline-flex }`,
+   so they are qualified with the button element too. */
+.bh-film-tools button.bh-film-dockonly { display: none; }
+.bh-film-screen.is-docked .bh-film-tools button.bh-film-dockonly { display: inline-flex; }
+.bh-film-screen.is-docked .bh-film-tools button.bh-film-inlineonly { display: none; }
+
+/* ── Full screen ── */
+.bh-film-screen:fullscreen { border-radius: 0; border: 0; background: #08080a; }
+.bh-film-screen:fullscreen .bh-film-video { object-fit: contain; background: #08080a; }
+.bh-film-screen:fullscreen .bh-film-badge { display: none; }
+
+@media (max-width: 720px) {
+  .bh-film-play .disc { width: 60px; height: 60px; }
+  .bh-film-screen.is-docked { width: min(220px, 58vw); inset: auto 12px 12px auto; }
+  /* At this size the badge lands on top of the film's own titles. */
+  .bh-film-badge { display: none; }
+  .bh-film-tools { opacity: 1; transform: none; top: 10px; right: 10px; }
+  /* No hover on touch, so the bar is always up — make it icon-only
+     rather than a wide strip lying across the film. */
+  .bh-film-tools button .t { display: none; }
+  .bh-film-tools button { padding: 0; width: 30px; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bh-fade { opacity: 1; transition: none; }
+  .bh-film-screen.is-docked { animation: none; }
+}
+
 /* ── Section heads ────────────────────────────────────────────── */
 .bh-sec { padding: clamp(64px, 8vw, 112px) 0; border-bottom: 1px solid var(--rule); }
 .bh-head { margin-bottom: clamp(36px, 4vw, 56px); }
@@ -409,6 +541,68 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <span class="bh-chip">Model playground <s>₹1,600/mo</s></span>
       <span class="bh-chip one">adris.tech — from ₹0</span>
     </div>
+  </div>
+</section>
+
+<!-- ============================================
+     THE FILM — 59 seconds, silent by design
+
+     Sits here on purpose: the marquee directly above says "one
+     subscription replaces the whole stack", and the film opens on
+     exactly that premise ("One founder. Eight subscriptions."). It is
+     deliberately NOT in the hero — the hero's globe is its identity and
+     a 43 MB video has no business competing for the largest paint.
+
+     The section is unnumbered, like the marquee band, so the // 01–05
+     indexes below keep their numbering.
+============================================ -->
+<section class="bh-film" id="film" aria-labelledby="filmTitle">
+  <div class="wrap">
+    <div class="bh-film-head bh-rv">
+      <div>
+        <div class="idx">// the film</div>
+        <h2 id="filmTitle">Fifty-nine seconds. <span class="it">A day of work, done.</span></h2>
+      </div>
+    </div>
+
+    <figure class="bh-film-stage bh-fade">
+      <div class="bh-film-screen is-loading" id="filmScreen">
+        <video id="filmVideo" class="bh-film-video"
+               data-src="/adris-film.mp4"
+               data-poster="/adris-film-poster.jpg"
+               muted playsinline loop preload="none"
+               aria-label="adris.tech product film"></video>
+
+        <span class="bh-film-badge"><span class="pulse"></span>0:59</span>
+
+        <div class="bh-film-tools">
+          <button type="button" data-film="restart" title="Play from the start">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+            <span class="t">Restart</span>
+          </button>
+          <button type="button" data-film="pip" class="bh-film-dockonly" title="Pop out into a floating window">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="12" width="8" height="6" rx="1"/></svg>
+            <span class="t">Pop out</span>
+          </button>
+          <button type="button" data-film="expand" class="bh-film-inlineonly" title="Watch full screen">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+            <span class="t">Full screen</span>
+          </button>
+          <button type="button" data-film="close" class="bh-film-dockonly" title="Close the mini player">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+
+        <button class="bh-film-play" type="button" id="filmPlay" aria-label="Play the adris.tech film">
+          <span class="disc">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+          </span>
+          <span class="lbl">Watch the film</span>
+        </button>
+
+        <div class="bh-film-bar" aria-hidden="true"><span id="filmProg"></span></div>
+      </div>
+    </figure>
   </div>
 </section>
 
@@ -795,7 +989,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
   }, { threshold: 0.12 });
-  document.querySelectorAll('.bh-rv').forEach(function (el) { io.observe(el); });
+  document.querySelectorAll('.bh-rv, .bh-fade').forEach(function (el) { io.observe(el); });
 
   // Count-up numbers
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -818,6 +1012,148 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     });
   }, { threshold: 0.6 });
   document.querySelectorAll('[data-count]').forEach(function (el) { cio.observe(el); });
+})();
+</script>
+
+<!-- ============================================
+     THE FILM — inline / docked / full screen
+
+     The file is 43 MB, so nothing about it is allowed to touch first
+     paint: the poster is attached only when the band gets near the
+     viewport, and the video source only when we actually intend to
+     play. On a metered or slow connection, or with reduced motion on,
+     it never auto-streams — the poster and the play button stand in
+     and the visitor opts in.
+============================================ -->
+<script>
+(function () {
+  var screenEl = document.getElementById('filmScreen');
+  var video    = document.getElementById('filmVideo');
+  var prog     = document.getElementById('filmProg');
+  var section  = document.getElementById('film');
+  if (!screenEl || !video || !section) return;
+
+  var stage = screenEl.parentNode; // .bh-film-stage — keeps the layout box while docked
+
+  var reduce  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var conn    = navigator.connection || navigator.webkitConnection || {};
+  var thrifty = !!conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveType || '');
+  var autoOk  = !reduce && !thrifty;
+
+  var srcSet = false, posterSet = false;
+  var docked = false, dismissed = false, userPaused = false;
+  try { dismissed = sessionStorage.getItem('adris-film-dock') === 'off'; } catch (e) {}
+
+  function attachPoster() {
+    if (posterSet) return; posterSet = true;
+    video.poster = video.getAttribute('data-poster');
+    screenEl.classList.remove('is-loading');
+  }
+  function attachSrc() {
+    attachPoster();
+    if (srcSet) return; srcSet = true;
+    video.preload = 'auto';
+    video.src = video.getAttribute('data-src');
+  }
+  function play() {
+    attachSrc(); userPaused = false;
+    var p = video.play();
+    // Autoplay can still be refused; the poster + play button remain, which is a fine resting state.
+    if (p && p.catch) p.catch(function () {});
+  }
+  function pause(byUser) { if (byUser) userPaused = true; video.pause(); }
+
+  // ── State classes + progress ──
+  video.addEventListener('playing', function () { screenEl.classList.add('is-playing'); });
+  video.addEventListener('pause',   function () { screenEl.classList.remove('is-playing'); });
+  video.addEventListener('timeupdate', function () {
+    if (video.duration) prog.style.width = (video.currentTime / video.duration * 100).toFixed(2) + '%';
+  });
+
+  // ── Dock / undock (CSS only — the <video> is never re-parented) ──
+  function dock() {
+    if (docked || dismissed || document.fullscreenElement) return;
+    docked = true; screenEl.classList.add('is-docked');
+  }
+  function undock() {
+    if (!docked) return;
+    docked = false; screenEl.classList.remove('is-docked');
+  }
+
+  // Attach the poster a screenful early so the band is never an empty box.
+  var nearIO = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { attachPoster(); nearIO.disconnect(); } });
+  }, { rootMargin: '600px 0px' });
+  nearIO.observe(stage);
+
+  // In view -> play inline. Out of view while playing -> dock to the corner.
+  var viewIO = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.intersectionRatio >= 0.35) {
+        undock();
+        if (autoOk && !userPaused && video.paused) play();
+      } else if (e.intersectionRatio === 0) {
+        if (!video.paused) dock();
+      }
+    });
+  }, { threshold: [0, 0.35] });
+  viewIO.observe(stage);
+
+  // ── Clicks ──
+  document.getElementById('filmPlay').addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (video.paused) play(); else pause(true);
+  });
+
+  video.addEventListener('click', function () {
+    if (docked) { // clicking the mini player takes you back to the band
+      undock();
+      section.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+      play();
+      return;
+    }
+    if (video.paused) play(); else pause(true);
+  });
+
+  function enterFull() {
+    if (document.fullscreenElement) { document.exitFullscreen(); return; } // the button toggles
+    attachSrc();
+    undock();
+    var req = screenEl.requestFullscreen || screenEl.webkitRequestFullscreen;
+    if (!req) { // iOS Safari only fullscreens the video element itself
+      if (video.webkitEnterFullscreen) { play(); video.webkitEnterFullscreen(); }
+      return;
+    }
+    var done = req.call(screenEl);
+    var start = function () { video.controls = true; video.currentTime = 0; play(); };
+    if (done && done.then) done.then(start).catch(function () {}); else start();
+  }
+
+  screenEl.querySelectorAll('[data-film]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var act = btn.getAttribute('data-film');
+      if (act === 'restart')      { attachSrc(); video.currentTime = 0; play(); }
+      else if (act === 'expand')  { enterFull(); }
+      else if (act === 'pip')     { if (video.requestPictureInPicture) video.requestPictureInPicture().catch(function () {}); }
+      else if (act === 'close')   {
+        dismissed = true;
+        try { sessionStorage.setItem('adris-film-dock', 'off'); } catch (e2) {}
+        pause(true); undock();
+      }
+    });
+  });
+
+  document.addEventListener('fullscreenchange', function () {
+    if (!document.fullscreenElement) video.controls = false;
+  });
+
+  // Don't burn bandwidth or CPU in a background tab.
+  var resumeOnReturn = false;
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { resumeOnReturn = !video.paused; video.pause(); }
+    else if (resumeOnReturn && !userPaused) play();
+  });
 })();
 </script>
 

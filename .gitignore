@@ -18,3 +18,6 @@ tweaks-panel.jsx
 # Internal docs — never deploy publicly
 fin.md
 adris-test-results.json
+
+# Source master of the homepage film (the web copy is adris-film.mp4)
+main adris video.mp4
