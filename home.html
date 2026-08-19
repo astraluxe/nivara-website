@@ -121,7 +121,17 @@
 .bh-fade { opacity: 0; transition: opacity .8s cubic-bezier(.16,1,.3,1); }
 .bh-fade.in { opacity: 1; }
 
-.bh-film-stage { margin: 0; position: relative; aspect-ratio: 16 / 9; }
+/* A 16:9 box at full container width is ~720px tall on a wide screen,
+   which is taller than the usable height of a laptop viewport — the top
+   and bottom of the player ended up cropped by the window and you had to
+   zoom out to see it whole. Cap the HEIGHT against the viewport and let
+   the width follow from the ratio, so the whole player is always on
+   screen at once. On narrow screens 100% wins and nothing changes. */
+.bh-film-stage {
+  margin: 0 auto; position: relative; aspect-ratio: 16 / 9;
+  width: min(100%, calc(70vh * 16 / 9));
+  width: min(100%, calc(70svh * 16 / 9));
+}
 .bh-film-screen {
   position: absolute; inset: 0; border-radius: 14px; overflow: hidden;
   border: 1px solid var(--rule-strong); background: var(--paper-2);
@@ -142,7 +152,7 @@
 
 /* Big play affordance — shown until the film is actually running. */
 .bh-film-play {
-  position: absolute; inset: 0; display: grid; place-items: center; gap: 0;
+  position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 14px;
   width: 100%; height: 100%; border: 0; background: transparent; cursor: pointer;
   color: var(--ink); transition: opacity .3s; padding: 0;
 }
@@ -155,24 +165,49 @@
 }
 .bh-film-play:hover .disc { transform: scale(1.07); background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .bh-film-play .disc svg { margin-left: 4px; }
+/* Stacked under the disc rather than pinned to the bottom, so it cannot
+   collide with the toolbar that now lives down there. */
 .bh-film-play .lbl {
-  position: absolute; left: 0; right: 0; bottom: 20px; text-align: center;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
 }
 
-/* Hover toolbar — restart / full screen. */
+/* Toolbar — icon-only, bottom right, above the progress bar. Each button
+   names itself on hover instead of carrying a permanent word. */
 .bh-film-tools {
-  position: absolute; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 3;
-  opacity: 0; transform: translateY(-6px); transition: opacity .25s, transform .25s;
+  position: absolute; bottom: 14px; right: 14px; display: flex; gap: 8px; z-index: 4;
+  opacity: 0; transform: translateY(6px); transition: opacity .25s, transform .25s;
 }
 .bh-film-screen:hover .bh-film-tools, .bh-film-screen:focus-within .bh-film-tools { opacity: 1; transform: none; }
 .bh-film-tools button {
-  display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; cursor: pointer;
-  border-radius: 8px; border: 1px solid var(--rule-strong); color: var(--ink);
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; padding: 0; cursor: pointer;
+  border-radius: 9px; border: 1px solid var(--rule-strong); color: var(--ink);
   background: color-mix(in oklab, var(--paper) 85%, transparent); backdrop-filter: blur(8px);
-  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase;
   transition: background .18s, border-color .18s, color .18s;
 }
+/* Tooltip. Right-anchored so the rightmost button cannot be clipped by
+   the screen's overflow:hidden. */
+.bh-film-tools button::after {
+  content: attr(data-label);
+  position: absolute; bottom: calc(100% + 8px); right: 0;
+  padding: 5px 9px; border-radius: 6px; white-space: nowrap;
+  background: var(--ink); color: var(--paper);
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  opacity: 0; transform: translateY(4px); pointer-events: none;
+  transition: opacity .16s, transform .16s;
+}
+.bh-film-tools button:hover::after,
+.bh-film-tools button:focus-visible::after { opacity: 1; transform: none; }
+
+/* Icon swaps: play<->pause follows playback, expand<->collapse follows
+   fullscreen. Only one of each pair is ever in the layout. */
+.bh-film-tools .i-pause,
+.bh-film-screen.is-playing .bh-film-tools .i-play { display: none; }
+.bh-film-screen.is-playing .bh-film-tools .i-pause { display: block; }
+.bh-film-tools .i-collapse { display: none; }
+.bh-film-screen:fullscreen .bh-film-tools .i-collapse { display: block; }
+.bh-film-screen:fullscreen .bh-film-tools .i-expand { display: none; }
 .bh-film-tools button:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 
 .bh-film-badge {
@@ -184,7 +219,16 @@
 }
 .bh-film-badge .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
-.bh-film-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--rule); z-index: 3; }
+/* Click anywhere on it to seek — with the toolbar replacing the native
+   controls in fullscreen, this is the only scrubber there is. */
+.bh-film-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--rule);
+  z-index: 3; cursor: pointer; transition: height .18s;
+}
+.bh-film-screen:hover .bh-film-bar, .bh-film-bar:hover { height: 6px; }
+/* Invisible taller strip so the bar can actually be hit by a finger.
+   The toolbar sits at z-index 4 and still wins where they overlap. */
+.bh-film-bar::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 20px; }
 .bh-film-bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s linear; }
 
 /* ── Docked mini player ── */
@@ -196,8 +240,9 @@
 }
 @keyframes bh-film-dock { from { opacity: 0; transform: translateY(18px) scale(.94); } to { opacity: 1; transform: none; } }
 .bh-film-screen.is-docked .bh-film-badge, .bh-film-screen.is-docked .bh-film-play .lbl { display: none; }
-.bh-film-screen.is-docked .bh-film-tools { opacity: 1; transform: none; top: 8px; right: 8px; gap: 6px; }
-.bh-film-screen.is-docked .bh-film-tools button { height: 26px; padding: 0 8px; font-size: 8.5px; }
+.bh-film-screen.is-docked .bh-film-tools { opacity: 1; transform: none; bottom: 8px; right: 8px; gap: 6px; }
+.bh-film-screen.is-docked .bh-film-tools button { width: 26px; height: 26px; border-radius: 7px; }
+.bh-film-screen.is-docked .bh-film-tools button svg { width: 10px; height: 10px; }
 .bh-film-screen.is-docked .bh-film-play .disc { width: 52px; height: 52px; }
 /* These need to out-rank `.bh-film-tools button { display: inline-flex }`,
    so they are qualified with the button element too. */
@@ -215,11 +260,22 @@
   .bh-film-screen.is-docked { width: min(220px, 58vw); inset: auto 12px 12px auto; }
   /* At this size the badge lands on top of the film's own titles. */
   .bh-film-badge { display: none; }
-  .bh-film-tools { opacity: 1; transform: none; top: 10px; right: 10px; }
-  /* No hover on touch, so the bar is always up — make it icon-only
-     rather than a wide strip lying across the film. */
-  .bh-film-tools button .t { display: none; }
-  .bh-film-tools button { padding: 0; width: 30px; justify-content: center; }
+  /* No hover on touch, so the toolbar is always up. */
+  .bh-film-tools { opacity: 1; transform: none; bottom: 10px; right: 10px; }
+  /* Tooltips need a hover to make sense; on touch they'd only ever flash
+     on tap, over the button the finger is already on. */
+  .bh-film-tools button::after { display: none; }
+  /* Keep real tap targets — 26px docked buttons are too small for a
+     thumb, and the hover-grown seek bar never grows on touch. */
+  .bh-film-tools button { width: 34px; height: 34px; border-radius: 9px; }
+  .bh-film-screen.is-docked .bh-film-tools { gap: 6px; bottom: 6px; right: 6px; }
+  .bh-film-screen.is-docked .bh-film-tools button { width: 30px; height: 30px; border-radius: 8px; }
+  .bh-film-screen.is-docked .bh-film-tools button svg { width: 12px; height: 12px; }
+  /* Four buttons fill a 220px mini player and bury the picture. Pop-out
+     is the one to lose on a phone — this player already IS the pop-out,
+     and OS-level PiP is a system gesture here rather than our button. */
+  .bh-film-screen.is-docked .bh-film-tools button.bh-film-dockonly[data-film="pip"] { display: none; }
+  .bh-film-bar { height: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bh-fade { opacity: 1; transition: none; }
@@ -576,20 +632,22 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <span class="bh-film-badge"><span class="pulse"></span>0:59</span>
 
         <div class="bh-film-tools">
-          <button type="button" data-film="restart" title="Play from the start">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-            <span class="t">Restart</span>
+          <button type="button" data-film="toggle" data-label="Play" aria-label="Play or pause">
+            <svg class="i-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+            <svg class="i-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
           </button>
-          <button type="button" data-film="pip" class="bh-film-dockonly" title="Pop out into a floating window">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="12" width="8" height="6" rx="1"/></svg>
-            <span class="t">Pop out</span>
+          <button type="button" data-film="restart" data-label="Restart" aria-label="Play from the start">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
           </button>
-          <button type="button" data-film="expand" class="bh-film-inlineonly" title="Watch full screen">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-            <span class="t">Full screen</span>
+          <button type="button" data-film="pip" class="bh-film-dockonly" data-label="Pop out" aria-label="Pop out into a floating window">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="12" width="8" height="6" rx="1"/></svg>
           </button>
-          <button type="button" data-film="close" class="bh-film-dockonly" title="Close the mini player">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          <button type="button" data-film="expand" class="bh-film-inlineonly" data-label="Full screen" aria-label="Watch full screen">
+            <svg class="i-expand" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+            <svg class="i-collapse" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h3a2 2 0 0 0 2-2V3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M21 16h-3a2 2 0 0 0-2 2v3"/></svg>
+          </button>
+          <button type="button" data-film="close" class="bh-film-dockonly" data-label="Close" aria-label="Close the mini player">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
           </button>
         </div>
 
@@ -1064,11 +1122,38 @@ document.getElementById('themeToggle').addEventListener('click', function () {
   function pause(byUser) { if (byUser) userPaused = true; video.pause(); }
 
   // ── State classes + progress ──
-  video.addEventListener('playing', function () { screenEl.classList.add('is-playing'); });
-  video.addEventListener('pause',   function () { screenEl.classList.remove('is-playing'); });
+  var toggleBtn = screenEl.querySelector('[data-film="toggle"]');
+  var expandBtn = screenEl.querySelector('[data-film="expand"]');
+  // The icon swap is CSS; only the words have to be kept in step here.
+  function syncLabels() {
+    if (toggleBtn) {
+      var t = video.paused ? 'Play' : 'Pause';
+      toggleBtn.setAttribute('data-label', t);
+      toggleBtn.setAttribute('aria-label', t);
+    }
+    if (expandBtn) {
+      var f = document.fullscreenElement ? 'Exit full screen' : 'Full screen';
+      expandBtn.setAttribute('data-label', f);
+      expandBtn.setAttribute('aria-label', f);
+    }
+  }
+  video.addEventListener('playing', function () { screenEl.classList.add('is-playing'); syncLabels(); });
+  video.addEventListener('pause',   function () { screenEl.classList.remove('is-playing'); syncLabels(); });
   video.addEventListener('timeupdate', function () {
     if (video.duration) prog.style.width = (video.currentTime / video.duration * 100).toFixed(2) + '%';
   });
+  syncLabels();
+
+  // ── Seek: the progress bar is the only scrubber, since the toolbar
+  //    replaces the native controls in fullscreen too. ──
+  var bar = screenEl.querySelector('.bh-film-bar');
+  function seekFrom(clientX) {
+    if (!video.duration) return;
+    var r = bar.getBoundingClientRect();
+    var pct = Math.min(Math.max((clientX - r.left) / r.width, 0), 1);
+    video.currentTime = pct * video.duration;
+  }
+  bar.addEventListener('click', function (e) { e.stopPropagation(); attachSrc(); seekFrom(e.clientX); });
 
   // ── Dock / undock (CSS only — the <video> is never re-parented) ──
   function dock() {
@@ -1125,7 +1210,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       return;
     }
     var done = req.call(screenEl);
-    var start = function () { video.controls = true; video.currentTime = 0; play(); };
+    // No native controls — the same toolbar carries over into fullscreen.
+    var start = function () { video.currentTime = 0; play(); syncLabels(); };
     if (done && done.then) done.then(start).catch(function () {}); else start();
   }
 
@@ -1133,7 +1219,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
       var act = btn.getAttribute('data-film');
-      if (act === 'restart')      { attachSrc(); video.currentTime = 0; play(); }
+      if (act === 'toggle')       { if (video.paused) play(); else pause(true); }
+      else if (act === 'restart') { attachSrc(); video.currentTime = 0; play(); }
       else if (act === 'expand')  { enterFull(); }
       else if (act === 'pip')     { if (video.requestPictureInPicture) video.requestPictureInPicture().catch(function () {}); }
       else if (act === 'close')   {
@@ -1144,9 +1231,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     });
   });
 
-  document.addEventListener('fullscreenchange', function () {
-    if (!document.fullscreenElement) video.controls = false;
-  });
+  document.addEventListener('fullscreenchange', syncLabels);
 
   // Don't burn bandwidth or CPU in a background tab.
   var resumeOnReturn = false;
