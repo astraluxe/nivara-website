@@ -1333,9 +1333,13 @@ window.PAY_LOCK_MESSAGE = 'Checkout is being set up. Please check back shortly.'
 // and typed 4111 1111 1111 1111.
 //
 // So the lock stays ON for the world, and only these addresses get through it. Empty the list and
-// everyone is locked out again; set PAYMENTS_LOCKED=false when checkout genuinely opens to all.
+// everyone is locked out again.
+//
+// EMPTY SINCE 2026-08-19, BECAUSE CHECKOUT IS OPEN TO EVERYONE. checkout-status reports
+// open:true / restricted:false, so there is nothing left to bypass — and an address left in here
+// bought nothing except a standing "checkout is still locked for everyone else" banner on that
+// account, which was false. The mechanism stays for the next time the shop is deliberately shut.
 window.PAY_TESTERS = [
-  'astraluxe.tech@gmail.com',
 ];
 
 // Ask the server whether checkout is open, and restore the real Pay buttons if it is.
@@ -1343,7 +1347,7 @@ window.PAY_TESTERS = [
 // Runs before the tester check below, because an open shop needs no tester list. If this request
 // fails the page simply stays locked, which is the safe direction to fail in: nobody is charged by
 // a page that could not confirm it should be charging.
-(async function applyServerLock() {
+const serverLockChecked = (async function applyServerLock() {
   try {
     const res = await fetch(SUPA_URL + '/functions/v1/checkout-status', {
       headers: { 'apikey': SUPA_ANON }
@@ -1383,6 +1387,13 @@ window.PAY_TESTERS = [
 // below has stashed each button's original label in data-orig, and is a no-op for everyone else.
 (async function applyTesterUnlock() {
   try {
+    // WAIT FOR THE SERVER’S ANSWER FIRST. This guard used to run synchronously, before
+    // applyServerLock’s fetch had returned, so it read PAYMENTS_LOCKED while it was still the
+    // initial true and let a tester through a shop that was already open to everyone. The button
+    // loop below then did nothing (data-orig is only stashed while locked), but the banner at the
+    // end has no such guard, so it printed “checkout is still locked for everyone else” on an
+    // open checkout. Awaiting the check makes the guard read a settled value.
+    await serverLockChecked;
     if (!window.PAYMENTS_LOCKED) return;
     // WAIT FOR THE LOCK HANDLER TO HAVE RUN. It stashes each button label in data-orig on
     // DOMContentLoaded; this function reads that back. Racing it means orig is null, every button
