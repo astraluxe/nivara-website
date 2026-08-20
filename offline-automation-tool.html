@@ -22,7 +22,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"Build workflows with AI steps that run entirely on your own machine — no cloud, no per-task fees, and no internet connection required.","url":"https://www.adris.tech/offline-automation-tool","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Offline automation tool","item":"https://www.adris.tech/offline-automation-tool"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it really work with no internet?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step in the workflow is itself a network action such as sending mail."}},{"@type":"Question","name":"Do I pay per run?","acceptedAnswer":{"@type":"Answer","text":"No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What happens when my computer is off?","acceptedAnswer":{"@type":"Answer","text":"Local workflows wait until it is on. If a workflow must fire regardless, use a cloud-scheduled run on a paid plan."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it really work with no internet?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step in the workflow is itself a network action such as sending mail."}},{"@type":"Question","name":"Do I pay per run?","acceptedAnswer":{"@type":"Answer","text":"No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What happens when my computer is off?","acceptedAnswer":{"@type":"Answer","text":"Local workflows wait until it is on. If a workflow must fire regardless, use a cloud-scheduled run on a paid plan."}},{"@type":"Question","name":"Can it run on a machine with no internet at all?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step is itself a network action."}},{"@type":"Question","name":"Is it really not metered?","acceptedAnswer":{"@type":"Answer","text":"Locally executed runs are not counted. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What triggers can it use?","acceptedAnswer":{"@type":"Answer","text":"Nine, including schedules, a file appearing in a folder, email, webhooks, GitHub and Stripe."}},{"@type":"Question","name":"Can it handle sensitive documents?","acceptedAnswer":{"@type":"Answer","text":"That is the case it was built for — patient records, contracts, payroll. The file is read where it sits and nothing is transmitted."}},{"@type":"Question","name":"Do I need to write code?","acceptedAnswer":{"@type":"Answer","text":"No. Describe it in a sentence and edit what gets built."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +37,28 @@
   padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
   background: var(--paper-2); }
 .lp-note strong { color: var(--ink); }
+/* A comparison table and a related-pages strip. Text only, no images and no scripts, so the
+   extra depth costs a few kilobytes rather than a slower page. */
+/* A grid item defaults to min-width:auto, so .hiw-main refused to shrink below its widest child
+   and grew to 537px inside a 390px phone — the table was not scrolling, the whole column was
+   overflowing and the last column got clipped away. Scoped here rather than in the shared
+   stylesheet so the module pages are untouched. */
+.hiw-main { min-width: 0; }
+.lp-table { border-collapse: collapse; margin: 20px 0; font-size: 14px; display: block;
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.lp-table thead { position: sticky; left: 0; }
+.lp-table th, .lp-table td { min-width: 104px; }
+.lp-table tr td:first-child, .lp-table tr th:first-child { min-width: 120px; }
+.lp-table th, .lp-table td { border: 1px solid var(--rule); padding: 10px 13px; text-align: left; vertical-align: top; }
+.lp-table th { background: var(--paper-2); font-weight: 600; color: var(--ink); font-size: 13px; }
+.lp-table td { color: var(--muted); line-height: 1.6; }
+.lp-table td strong, .lp-table td b { color: var(--ink); }
+.lp-table tr td:first-child { color: var(--ink); font-weight: 500; }
+.lp-rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 24px 0 0; }
+.lp-rel a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px;
+  text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 600; transition: border-color .18s; }
+.lp-rel a:hover { border-color: var(--accent); }
+.lp-rel a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 </style>
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
@@ -155,7 +177,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     <a href="#why" class="hiw-jump"><span class="hiw-jump-num">00</span> Why offline</a>
     <a href="#shape" class="hiw-jump"><span class="hiw-jump-num">01</span> What it can do</a>
     <a href="#build" class="hiw-jump"><span class="hiw-jump-num">02</span> Setting one up</a>
-    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">03</span> Questions</a>
+    <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">03</span> What can run offline</a>
+    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">04</span> Questions</a>
   </div>
 </div>
 
@@ -166,7 +189,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <li><a href="#why" class="active"><span class="hiw-nav-num">00</span>Why offline</a></li>
       <li><a href="#shape"><span class="hiw-nav-num">01</span>What it can do</a></li>
       <li><a href="#build"><span class="hiw-nav-num">02</span>Setting one up</a></li>
-      <li><a href="#faq"><span class="hiw-nav-num">03</span>Questions</a></li>
+      <li><a href="#compare"><span class="hiw-nav-num">03</span>What can run offline</a></li>
+      <li><a href="#faq"><span class="hiw-nav-num">04</span>Questions</a></li>
     </ul>
   </aside>
 
@@ -198,8 +222,26 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>Describe the automation in a sentence and it is built on the canvas for you to check and edit — nine trigger types, conditions, loops and parallel branches, and fourteen destinations for the output. Nothing has to be written in a scripting language, and nothing is hidden from you afterwards.</p>
     </section>
 
+    <section class="hiw-section" id="compare">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> What can run offline</div>
+      <h2>What actually works with the network off.</h2>
+      <table class="lp-table">
+        <thead><tr><th>Step</th><th>Offline?</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Watch a folder, read a file</td><td><strong>Yes</strong></td><td>Your disk, your machine</td></tr>
+          <tr><td>Summarise / classify / extract</td><td><strong>Yes</strong></td><td>With a local model</td></tr>
+          <tr><td>Write to a spreadsheet or a file</td><td><strong>Yes</strong></td><td>Written locally</td></tr>
+          <tr><td>Run on a schedule</td><td>Yes, while the machine is on</td><td>The trigger is local</td></tr>
+          <tr><td>Send an email or a Slack message</td><td>No</td><td>That step <em>is</em> the network</td></tr>
+          <tr><td>Fetch a web page</td><td>No</td><td>Same reason</td></tr>
+          <tr><td>Use a frontier model</td><td>No</td><td>It lives in someone else’s data centre</td></tr>
+        </tbody>
+      </table>
+      <p>The useful way to read this: everything that touches <em>your</em> data runs offline, and only the steps that deliberately reach outside need a connection. You can see which ones those are on the canvas.</p>
+    </section>
+
     <section class="hiw-section" id="faq">
-      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Questions</div>
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Questions</div>
       <h2>Common questions</h2>
       <h3>Does it really work with no internet?</h3>
       <p>Yes, provided the AI step uses a local model and no step in the workflow is itself a network action such as sending mail.</p>
@@ -207,8 +249,27 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes.</p>
       <h3>What happens when my computer is off?</h3>
       <p>Local workflows wait until it is on. If a workflow must fire regardless, use a cloud-scheduled run on a paid plan.</p>
+      <h3>Can it run on a machine with no internet at all?</h3>
+      <p>Yes, provided the AI step uses a local model and no step is itself a network action.</p>
+      <h3>Is it really not metered?</h3>
+      <p>Locally executed runs are not counted. Paid plans exist for cloud-scheduled runs and higher volumes.</p>
+      <h3>What triggers can it use?</h3>
+      <p>Nine, including schedules, a file appearing in a folder, email, webhooks, GitHub and Stripe.</p>
+      <h3>Can it handle sensitive documents?</h3>
+      <p>That is the case it was built for — patient records, contracts, payroll. The file is read where it sits and nothing is transmitted.</p>
+      <h3>Do I need to write code?</h3>
+      <p>No. Describe it in a sentence and edit what gets built.</p>
     </section>
 
+
+    <section class="hiw-section">
+      <h2>Related</h2>
+      <div class="lp-rel">
+        <a href="/zapier-alternative">Compared to Zapier<span>Where each one is genuinely the better choice</span></a>
+        <a href="/modules/automation">Automation module<span>The canvas, triggers and outputs</span></a>
+        <a href="/private-llm-runner">Private LLM runner<span>The local model that makes offline steps possible</span></a>
+      </div>
+    </section>
     <div class="hiw-cta">
       <h2>Automate the work <span class="it">that cannot leave the building.</span></h2>
       <p>Included in the free tier, alongside local models that let the whole workflow run offline.</p>

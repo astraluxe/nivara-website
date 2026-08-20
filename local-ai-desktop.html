@@ -22,7 +22,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"A local AI desktop app that runs on your own machine — agents, automation, code and contract review, with nothing leaving your computer.","url":"https://www.adris.tech/local-ai-desktop","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Local AI desktop app","item":"https://www.adris.tech/local-ai-desktop"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this a wrapper around ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"No. It runs open models on your machine, and it can additionally connect to a provider using your own API key if you want one. Neither path routes through our servers."}},{"@type":"Question","name":"Does it work on Mac?","acceptedAnswer":{"@type":"Answer","text":"Windows and Linux today. macOS is not available yet."}},{"@type":"Question","name":"Where is my chat history stored?","acceptedAnswer":{"@type":"Answer","text":"In a SQLite database file on your own disk. It is not synced anywhere unless you explicitly turn something on."}},{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"There is a free tier with all eight modules and local models. Paid plans add cloud AI credits and higher automation limits."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this a wrapper around ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"No. It runs open models on your machine, and it can additionally connect to a provider using your own API key if you want one. Neither path routes through our servers."}},{"@type":"Question","name":"Does it work on Mac?","acceptedAnswer":{"@type":"Answer","text":"Windows and Linux today. macOS is not available yet."}},{"@type":"Question","name":"Where is my chat history stored?","acceptedAnswer":{"@type":"Answer","text":"In a SQLite database file on your own disk. It is not synced anywhere unless you explicitly turn something on."}},{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"There is a free tier with all eight modules and local models. Paid plans add cloud AI credits and higher automation limits."}},{"@type":"Question","name":"Is there a Mac version?","acceptedAnswer":{"@type":"Answer","text":"Not yet. Windows and Linux today."}},{"@type":"Question","name":"How big is the download?","acceptedAnswer":{"@type":"Answer","text":"Around 10 MB for the app. Local models are downloaded separately and only if you want them."}},{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"Not to install it or to run local models. An account is needed for cloud AI credits and syncing."}},{"@type":"Question","name":"What happens if I lose internet?","acceptedAnswer":{"@type":"Answer","text":"Local models, document reading, the editor and local automations all keep working. Steps that call an outside service wait."}},{"@type":"Question","name":"Can I use my own OpenAI or Claude key?","acceptedAnswer":{"@type":"Answer","text":"Yes. Calls go straight from your machine to that provider, with the key stored in an encrypted local store."}},{"@type":"Question","name":"Is my data used for training?","acceptedAnswer":{"@type":"Answer","text":"There is nothing to train on — it does not leave your machine. If you connect your own provider key, that provider’s terms apply to those calls."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +37,28 @@
   padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
   background: var(--paper-2); }
 .lp-note strong { color: var(--ink); }
+/* A comparison table and a related-pages strip. Text only, no images and no scripts, so the
+   extra depth costs a few kilobytes rather than a slower page. */
+/* A grid item defaults to min-width:auto, so .hiw-main refused to shrink below its widest child
+   and grew to 537px inside a 390px phone — the table was not scrolling, the whole column was
+   overflowing and the last column got clipped away. Scoped here rather than in the shared
+   stylesheet so the module pages are untouched. */
+.hiw-main { min-width: 0; }
+.lp-table { border-collapse: collapse; margin: 20px 0; font-size: 14px; display: block;
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.lp-table thead { position: sticky; left: 0; }
+.lp-table th, .lp-table td { min-width: 104px; }
+.lp-table tr td:first-child, .lp-table tr th:first-child { min-width: 120px; }
+.lp-table th, .lp-table td { border: 1px solid var(--rule); padding: 10px 13px; text-align: left; vertical-align: top; }
+.lp-table th { background: var(--paper-2); font-weight: 600; color: var(--ink); font-size: 13px; }
+.lp-table td { color: var(--muted); line-height: 1.6; }
+.lp-table td strong, .lp-table td b { color: var(--ink); }
+.lp-table tr td:first-child { color: var(--ink); font-weight: 500; }
+.lp-rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 24px 0 0; }
+.lp-rel a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px;
+  text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 600; transition: border-color .18s; }
+.lp-rel a:hover { border-color: var(--accent); }
+.lp-rel a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 </style>
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
@@ -156,7 +178,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     <a href="#inside" class="hiw-jump"><span class="hiw-jump-num">01</span> What is inside</a>
     <a href="#offline" class="hiw-jump"><span class="hiw-jump-num">02</span> Offline use</a>
     <a href="#specs" class="hiw-jump"><span class="hiw-jump-num">03</span> Requirements</a>
-    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">04</span> Questions</a>
+    <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">04</span> How it compares</a>
+    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">05</span> Questions</a>
   </div>
 </div>
 
@@ -168,7 +191,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <li><a href="#inside"><span class="hiw-nav-num">01</span>What is inside</a></li>
       <li><a href="#offline"><span class="hiw-nav-num">02</span>Offline use</a></li>
       <li><a href="#specs"><span class="hiw-nav-num">03</span>Requirements</a></li>
-      <li><a href="#faq"><span class="hiw-nav-num">04</span>Questions</a></li>
+      <li><a href="#compare"><span class="hiw-nav-num">04</span>How it compares</a></li>
+      <li><a href="#faq"><span class="hiw-nav-num">05</span>Questions</a></li>
     </ul>
   </aside>
 
@@ -215,8 +239,26 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       </ul>
     </section>
 
+    <section class="hiw-section" id="compare">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> How it compares</div>
+      <h2>Against a browser tab.</h2>
+      <table class="lp-table">
+        <thead><tr><th>&nbsp;</th><th>adris (desktop)</th><th>ChatGPT / Gemini</th><th>Copilot in Office</th></tr></thead>
+        <tbody>
+          <tr><td>Where your files go</td><td><strong>Nowhere</strong></td><td>Their servers</td><td>Their servers</td></tr>
+          <tr><td>Works offline</td><td>Yes, with a local model</td><td>No</td><td>No</td></tr>
+          <tr><td>Reads your disk directly</td><td>Yes</td><td>Upload each time</td><td>Inside Office only</td></tr>
+          <tr><td>Runs scheduled work</td><td>Yes</td><td>No</td><td>No</td></tr>
+          <tr><td>Cost</td><td>Free tier, then ₹1,499/mo</td><td>~₹1,700–2,000/mo</td><td>~₹2,500/mo</td></tr>
+          <tr><td>Best model available</td><td>Local, or your own key</td><td><strong>Frontier</strong></td><td>Frontier</td></tr>
+          <tr><td>Also replaces</td><td>Automation, code editor, VPN, contract review</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p>If what you want is the strongest possible model for a hard question, use the browser tab — it is genuinely better at that. This is for the other case: work touching files you should not upload, and work that should keep happening without you sitting there.</p>
+    </section>
+
     <section class="hiw-section" id="faq">
-      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Questions</div>
+      <div class="hiw-section-tag"><span class="hiw-section-num">05</span> Questions</div>
       <h2>Common questions</h2>
       <h3>Is this a wrapper around ChatGPT?</h3>
       <p>No. It runs open models on your machine, and it can additionally connect to a provider using your own API key if you want one. Neither path routes through our servers.</p>
@@ -226,8 +268,29 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>In a SQLite database file on your own disk. It is not synced anywhere unless you explicitly turn something on.</p>
       <h3>What does it cost?</h3>
       <p>There is a free tier with all eight modules and local models. Paid plans add cloud AI credits and higher automation limits.</p>
+      <h3>Is there a Mac version?</h3>
+      <p>Not yet. Windows and Linux today.</p>
+      <h3>How big is the download?</h3>
+      <p>Around 10 MB for the app. Local models are downloaded separately and only if you want them.</p>
+      <h3>Do I need to create an account?</h3>
+      <p>Not to install it or to run local models. An account is needed for cloud AI credits and syncing.</p>
+      <h3>What happens if I lose internet?</h3>
+      <p>Local models, document reading, the editor and local automations all keep working. Steps that call an outside service wait.</p>
+      <h3>Can I use my own OpenAI or Claude key?</h3>
+      <p>Yes. Calls go straight from your machine to that provider, with the key stored in an encrypted local store.</p>
+      <h3>Is my data used for training?</h3>
+      <p>There is nothing to train on — it does not leave your machine. If you connect your own provider key, that provider’s terms apply to those calls.</p>
     </section>
 
+
+    <section class="hiw-section">
+      <h2>Related</h2>
+      <div class="lp-rel">
+        <a href="/private-llm-runner">Private LLM runner<span>Running open models on your own hardware</span></a>
+        <a href="/ai-agents-for-business">AI agents<span>The 48-agent office inside the app</span></a>
+        <a href="/how-it-works">How it works<span>A worked example of every module</span></a>
+      </div>
+    </section>
     <div class="hiw-cta">
       <h2>Install it and see <span class="it">where your data goes.</span></h2>
       <p>Nowhere. That is the point. Free download, no credit card, Windows and Linux.</p>

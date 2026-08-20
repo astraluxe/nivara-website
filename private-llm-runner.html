@@ -22,7 +22,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"Run open LLMs privately on your own PC. See which of 51 models your hardware can handle, pull them locally and chat offline. No API key, free.","url":"https://www.adris.tech/private-llm-runner","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Private LLM runner","item":"https://www.adris.tech/private-llm-runner"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need a GPU?","acceptedAnswer":{"@type":"Answer","text":"No. A GPU makes local inference faster but is not required. The catalogue marks which models are realistic on CPU."}},{"@type":"Question","name":"Does it use Ollama?","acceptedAnswer":{"@type":"Answer","text":"It can run models through Ollama if you have it, and it manages the pull and the runtime for you if you do not."}},{"@type":"Question","name":"How much RAM do I need?","acceptedAnswer":{"@type":"Answer","text":"8 GB is enough for small models, 16 GB is comfortable for mid-size ones, and Mesh lets you pool memory across your own machines for anything larger."}},{"@type":"Question","name":"Is it really free?","acceptedAnswer":{"@type":"Answer","text":"The Models module is free forever, including on the free tier. Running a model on your own hardware costs nothing per use."}},{"@type":"Question","name":"Can it work with no internet at all?","acceptedAnswer":{"@type":"Answer","text":"Yes, once the model is downloaded. Inference is entirely local after that."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need a GPU?","acceptedAnswer":{"@type":"Answer","text":"No. A GPU makes local inference faster but is not required. The catalogue marks which models are realistic on CPU."}},{"@type":"Question","name":"Does it use Ollama?","acceptedAnswer":{"@type":"Answer","text":"It can run models through Ollama if you have it, and it manages the pull and the runtime for you if you do not."}},{"@type":"Question","name":"How much RAM do I need?","acceptedAnswer":{"@type":"Answer","text":"8 GB is enough for small models, 16 GB is comfortable for mid-size ones, and Mesh lets you pool memory across your own machines for anything larger."}},{"@type":"Question","name":"Is it really free?","acceptedAnswer":{"@type":"Answer","text":"The Models module is free forever, including on the free tier. Running a model on your own hardware costs nothing per use."}},{"@type":"Question","name":"Can it work with no internet at all?","acceptedAnswer":{"@type":"Answer","text":"Yes, once the model is downloaded. Inference is entirely local after that."}},{"@type":"Question","name":"Which model should I start with?","acceptedAnswer":{"@type":"Answer","text":"Whichever the catalogue marks comfortable for your machine. A small model that runs well beats a large one that swaps to disk and takes a minute per reply."}},{"@type":"Question","name":"Can I use models I already downloaded with Ollama?","acceptedAnswer":{"@type":"Answer","text":"Yes. If Ollama is installed, adris can run models through it rather than pulling a second copy."}},{"@type":"Question","name":"How much disk space do models take?","acceptedAnswer":{"@type":"Answer","text":"From about 0.7 GB for the smallest usable ones to tens of gigabytes at frontier scale. The catalogue shows the size before you download."}},{"@type":"Question","name":"Is a local model as good as GPT or Claude?","acceptedAnswer":{"@type":"Answer","text":"No, and anyone saying otherwise is selling something. For summarising, extracting, classifying and drafting they are close enough that you often cannot tell. For hard reasoning, connect your own API key — that option sits right next to the local one."}},{"@type":"Question","name":"Does it work without a GPU?","acceptedAnswer":{"@type":"Answer","text":"Yes. A GPU makes it faster; it is not a condition of running. The catalogue marks which models are realistic on CPU."}},{"@type":"Question","name":"Can I run a model too big for my computer?","acceptedAnswer":{"@type":"Answer","text":"Mesh pools memory across machines you own, so two ordinary laptops can run a model neither could hold alone."}},{"@type":"Question","name":"Do I need an internet connection?","acceptedAnswer":{"@type":"Answer","text":"To download the model once. After that, no."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +37,28 @@
   padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
   background: var(--paper-2); }
 .lp-note strong { color: var(--ink); }
+/* A comparison table and a related-pages strip. Text only, no images and no scripts, so the
+   extra depth costs a few kilobytes rather than a slower page. */
+/* A grid item defaults to min-width:auto, so .hiw-main refused to shrink below its widest child
+   and grew to 537px inside a 390px phone — the table was not scrolling, the whole column was
+   overflowing and the last column got clipped away. Scoped here rather than in the shared
+   stylesheet so the module pages are untouched. */
+.hiw-main { min-width: 0; }
+.lp-table { border-collapse: collapse; margin: 20px 0; font-size: 14px; display: block;
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.lp-table thead { position: sticky; left: 0; }
+.lp-table th, .lp-table td { min-width: 104px; }
+.lp-table tr td:first-child, .lp-table tr th:first-child { min-width: 120px; }
+.lp-table th, .lp-table td { border: 1px solid var(--rule); padding: 10px 13px; text-align: left; vertical-align: top; }
+.lp-table th { background: var(--paper-2); font-weight: 600; color: var(--ink); font-size: 13px; }
+.lp-table td { color: var(--muted); line-height: 1.6; }
+.lp-table td strong, .lp-table td b { color: var(--ink); }
+.lp-table tr td:first-child { color: var(--ink); font-weight: 500; }
+.lp-rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 24px 0 0; }
+.lp-rel a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px;
+  text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 600; transition: border-color .18s; }
+.lp-rel a:hover { border-color: var(--accent); }
+.lp-rel a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 </style>
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
@@ -156,7 +178,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     <a href="#private" class="hiw-jump"><span class="hiw-jump-num">01</span> What private means</a>
     <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">02</span> Comparing models</a>
     <a href="#beyond" class="hiw-jump"><span class="hiw-jump-num">03</span> Beyond chat</a>
-    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">04</span> Questions</a>
+    <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">04</span> How it compares</a>
+    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">05</span> Questions</a>
   </div>
 </div>
 
@@ -168,7 +191,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <li><a href="#private"><span class="hiw-nav-num">01</span>What private means</a></li>
       <li><a href="#compare"><span class="hiw-nav-num">02</span>Comparing models</a></li>
       <li><a href="#beyond"><span class="hiw-nav-num">03</span>Beyond chat</a></li>
-      <li><a href="#faq"><span class="hiw-nav-num">04</span>Questions</a></li>
+      <li><a href="#compare"><span class="hiw-nav-num">04</span>How it compares</a></li>
+      <li><a href="#faq"><span class="hiw-nav-num">05</span>Questions</a></li>
     </ul>
   </aside>
 
@@ -202,8 +226,26 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>A chat window is the least interesting thing to do with a local model. In adris the same model drives the agents, the automation steps, the code assistant and the document reading — so the private model is not a sandbox off to one side, it is the engine for the whole application.</p>
     </section>
 
+    <section class="hiw-section" id="compare">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> How it compares</div>
+      <h2>Against Ollama, LM Studio <span class="it">and the cloud.</span></h2>
+      <table class="lp-table">
+        <thead><tr><th>&nbsp;</th><th>adris</th><th>Ollama</th><th>LM Studio</th><th>ChatGPT / Claude</th></tr></thead>
+        <tbody>
+          <tr><td>Runs offline</td><td><strong>Yes</strong></td><td>Yes</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Command line needed</td><td>No</td><td><strong>Yes</strong></td><td>No</td><td>No</td></tr>
+          <tr><td>Tells you what your PC can run</td><td><strong>Yes, before you download</strong></td><td>No</td><td>Partly</td><td>n/a</td></tr>
+          <tr><td>Cost per use</td><td>Free once downloaded</td><td>Free</td><td>Free</td><td>Per token or per seat</td></tr>
+          <tr><td>Pool RAM across machines</td><td><strong>Yes (Mesh)</strong></td><td>No</td><td>No</td><td>n/a</td></tr>
+          <tr><td>The model can also do work</td><td><strong>Agents, automations, docs</strong></td><td>Chat + API</td><td>Chat + API</td><td>Chat + tools</td></tr>
+          <tr><td>Frontier-level quality</td><td>Only via your own key</td><td>No</td><td>No</td><td><strong>Yes</strong></td></tr>
+        </tbody>
+      </table>
+      <p>Ollama and LM Studio are good at what they do and this is not an attempt to talk you out of them. The difference is what happens after the model is running: here it drives the agents, the automations and the document reading rather than sitting in a chat window on its own.</p>
+    </section>
+
     <section class="hiw-section" id="faq">
-      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Questions</div>
+      <div class="hiw-section-tag"><span class="hiw-section-num">05</span> Questions</div>
       <h2>Common questions</h2>
       <h3>Do I need a GPU?</h3>
       <p>No. A GPU makes local inference faster but is not required. The catalogue marks which models are realistic on CPU.</p>
@@ -215,8 +257,31 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>The Models module is free forever, including on the free tier. Running a model on your own hardware costs nothing per use.</p>
       <h3>Can it work with no internet at all?</h3>
       <p>Yes, once the model is downloaded. Inference is entirely local after that.</p>
+      <h3>Which model should I start with?</h3>
+      <p>Whichever the catalogue marks comfortable for your machine. A small model that runs well beats a large one that swaps to disk and takes a minute per reply.</p>
+      <h3>Can I use models I already downloaded with Ollama?</h3>
+      <p>Yes. If Ollama is installed, adris can run models through it rather than pulling a second copy.</p>
+      <h3>How much disk space do models take?</h3>
+      <p>From about 0.7 GB for the smallest usable ones to tens of gigabytes at frontier scale. The catalogue shows the size before you download.</p>
+      <h3>Is a local model as good as GPT or Claude?</h3>
+      <p>No, and anyone saying otherwise is selling something. For summarising, extracting, classifying and drafting they are close enough that you often cannot tell. For hard reasoning, connect your own API key — that option sits right next to the local one.</p>
+      <h3>Does it work without a GPU?</h3>
+      <p>Yes. A GPU makes it faster; it is not a condition of running. The catalogue marks which models are realistic on CPU.</p>
+      <h3>Can I run a model too big for my computer?</h3>
+      <p>Mesh pools memory across machines you own, so two ordinary laptops can run a model neither could hold alone.</p>
+      <h3>Do I need an internet connection?</h3>
+      <p>To download the model once. After that, no.</p>
     </section>
 
+
+    <section class="hiw-section">
+      <h2>Related</h2>
+      <div class="lp-rel">
+        <a href="/modules/models">Models module<span>The catalogue, hardware fit and side-by-side comparison</span></a>
+        <a href="/modules/mesh">Mesh<span>Pool memory across your own machines</span></a>
+        <a href="/blog/running-a-local-model-is-not-a-hobby-anymore">Running a local model<span>What changed, and what it is honestly good at</span></a>
+      </div>
+    </section>
     <div class="hiw-cta">
       <h2>Run your first local model <span class="it">tonight.</span></h2>
       <p>The Models module is free forever, including on the free tier. Pick a model sized for your machine and pull it.</p>

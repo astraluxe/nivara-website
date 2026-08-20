@@ -22,7 +22,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"A 48-agent AI workforce that researches prospects, verifies contacts in a real browser and drafts outreach. Runs on your own machine.","url":"https://www.adris.tech/ai-agents-for-business","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"AI agents for business","item":"https://www.adris.tech/ai-agents-for-business"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many agents are there?","acceptedAnswer":{"@type":"Answer","text":"Around 48 across ten departments, led by a chief-of-staff agent that routes work to the right one."}},{"@type":"Question","name":"Can they actually send emails and messages?","acceptedAnswer":{"@type":"Answer","text":"They draft and prepare them, and you approve before anything goes out. Connected accounts are called from your own machine."}},{"@type":"Question","name":"Do they make up contacts?","acceptedAnswer":{"@type":"Answer","text":"The verification step opens the page and reads it. A field that could not be confirmed is left blank rather than filled with a guess."}},{"@type":"Question","name":"Does this need a cloud AI model?","acceptedAnswer":{"@type":"Answer","text":"No. The agents can run on a local model, on your own API key, or on included credits."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many agents are there?","acceptedAnswer":{"@type":"Answer","text":"Around 48 across ten departments, led by a chief-of-staff agent that routes work to the right one."}},{"@type":"Question","name":"Can they actually send emails and messages?","acceptedAnswer":{"@type":"Answer","text":"They draft and prepare them, and you approve before anything goes out. Connected accounts are called from your own machine."}},{"@type":"Question","name":"Do they make up contacts?","acceptedAnswer":{"@type":"Answer","text":"The verification step opens the page and reads it. A field that could not be confirmed is left blank rather than filled with a guess."}},{"@type":"Question","name":"Does this need a cloud AI model?","acceptedAnswer":{"@type":"Answer","text":"No. The agents can run on a local model, on your own API key, or on included credits."}},{"@type":"Question","name":"Will it send messages without asking me?","acceptedAnswer":{"@type":"Answer","text":"No. It drafts and prepares; you approve before anything goes out."}},{"@type":"Question","name":"How does it avoid inventing contacts?","acceptedAnswer":{"@type":"Answer","text":"The verification step opens the page and reads it. A field it cannot confirm is left blank rather than filled with a plausible guess."}},{"@type":"Question","name":"Can it work from a spreadsheet I already have?","acceptedAnswer":{"@type":"Answer","text":"Yes. Point it at a sheet in the Brain and it reads it, filters it and works down the rows."}},{"@type":"Question","name":"How many agents are there?","acceptedAnswer":{"@type":"Answer","text":"Around 48 across ten departments, with a chief-of-staff agent routing work to the right one so you describe the outcome rather than picking a specialist."}},{"@type":"Question","name":"Does this need an expensive AI plan?","acceptedAnswer":{"@type":"Answer","text":"No. Agents can run on a local model, on your own API key, or on included credits."}},{"@type":"Question","name":"Is it useful for a one-person business?","acceptedAnswer":{"@type":"Answer","text":"That is the main case. The agents do the volume work a first hire would do, before there is a first hire."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +37,28 @@
   padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
   background: var(--paper-2); }
 .lp-note strong { color: var(--ink); }
+/* A comparison table and a related-pages strip. Text only, no images and no scripts, so the
+   extra depth costs a few kilobytes rather than a slower page. */
+/* A grid item defaults to min-width:auto, so .hiw-main refused to shrink below its widest child
+   and grew to 537px inside a 390px phone — the table was not scrolling, the whole column was
+   overflowing and the last column got clipped away. Scoped here rather than in the shared
+   stylesheet so the module pages are untouched. */
+.hiw-main { min-width: 0; }
+.lp-table { border-collapse: collapse; margin: 20px 0; font-size: 14px; display: block;
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.lp-table thead { position: sticky; left: 0; }
+.lp-table th, .lp-table td { min-width: 104px; }
+.lp-table tr td:first-child, .lp-table tr th:first-child { min-width: 120px; }
+.lp-table th, .lp-table td { border: 1px solid var(--rule); padding: 10px 13px; text-align: left; vertical-align: top; }
+.lp-table th { background: var(--paper-2); font-weight: 600; color: var(--ink); font-size: 13px; }
+.lp-table td { color: var(--muted); line-height: 1.6; }
+.lp-table td strong, .lp-table td b { color: var(--ink); }
+.lp-table tr td:first-child { color: var(--ink); font-weight: 500; }
+.lp-rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 24px 0 0; }
+.lp-rel a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px;
+  text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 600; transition: border-color .18s; }
+.lp-rel a:hover { border-color: var(--accent); }
+.lp-rel a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 </style>
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
@@ -156,7 +178,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     <a href="#roster" class="hiw-jump"><span class="hiw-jump-num">01</span> Who is on the team</a>
     <a href="#memory" class="hiw-jump"><span class="hiw-jump-num">02</span> Shared memory</a>
     <a href="#local" class="hiw-jump"><span class="hiw-jump-num">03</span> Where it runs</a>
-    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">04</span> Questions</a>
+    <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">04</span> How it compares</a>
+    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">05</span> Questions</a>
   </div>
 </div>
 
@@ -168,7 +191,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <li><a href="#roster"><span class="hiw-nav-num">01</span>Who is on the team</a></li>
       <li><a href="#memory"><span class="hiw-nav-num">02</span>Shared memory</a></li>
       <li><a href="#local"><span class="hiw-nav-num">03</span>Where it runs</a></li>
-      <li><a href="#faq"><span class="hiw-nav-num">04</span>Questions</a></li>
+      <li><a href="#compare"><span class="hiw-nav-num">04</span>How it compares</a></li>
+      <li><a href="#faq"><span class="hiw-nav-num">05</span>Questions</a></li>
     </ul>
   </aside>
 
@@ -208,8 +232,25 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>The agents run inside the desktop app. Your lists, your credentials and their memory are stored on your own disk. Connected accounts are called directly from your machine to the service, with the token held in an encrypted local store.</p>
     </section>
 
+    <section class="hiw-section" id="compare">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> How it compares</div>
+      <h2>Against a chatbot, and against hiring.</h2>
+      <table class="lp-table">
+        <thead><tr><th>&nbsp;</th><th>adris agents</th><th>An AI chatbot</th><th>An agency</th><th>A junior hire</th></tr></thead>
+        <tbody>
+          <tr><td>Leaves something behind</td><td><strong>A file, a list, a draft</strong></td><td>An answer in a window</td><td>A deliverable</td><td>A deliverable</td></tr>
+          <tr><td>Verifies what it claims</td><td>Opens the page and reads it</td><td>No</td><td>Usually</td><td>Usually</td></tr>
+          <tr><td>Monthly cost</td><td>₹0–4,999</td><td>~₹2,000</td><td>₹50,000+</td><td>₹25,000+</td></tr>
+          <tr><td>Where your data sits</td><td><strong>Your machine</strong></td><td>Their cloud</td><td>Their systems</td><td>Your systems</td></tr>
+          <tr><td>Available at 2am</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr>
+          <tr><td>Judgement on hard calls</td><td>Needs your review</td><td>No</td><td><strong>Yes</strong></td><td>Growing</td></tr>
+        </tbody>
+      </table>
+      <div class="lp-note"><strong>What it does not do.</strong> It does not replace judgement, and it should not send anything without you reading it first. Treat it as a very fast junior who never gets bored of a 500-row list — not as a person who can be held responsible for the result.</div>
+    </section>
+
     <section class="hiw-section" id="faq">
-      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Questions</div>
+      <div class="hiw-section-tag"><span class="hiw-section-num">05</span> Questions</div>
       <h2>Common questions</h2>
       <h3>How many agents are there?</h3>
       <p>Around 48 across ten departments, led by a chief-of-staff agent that routes work to the right one.</p>
@@ -219,8 +260,29 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>The verification step opens the page and reads it. A field that could not be confirmed is left blank rather than filled with a guess.</p>
       <h3>Does this need a cloud AI model?</h3>
       <p>No. The agents can run on a local model, on your own API key, or on included credits.</p>
+      <h3>Will it send messages without asking me?</h3>
+      <p>No. It drafts and prepares; you approve before anything goes out.</p>
+      <h3>How does it avoid inventing contacts?</h3>
+      <p>The verification step opens the page and reads it. A field it cannot confirm is left blank rather than filled with a plausible guess.</p>
+      <h3>Can it work from a spreadsheet I already have?</h3>
+      <p>Yes. Point it at a sheet in the Brain and it reads it, filters it and works down the rows.</p>
+      <h3>How many agents are there?</h3>
+      <p>Around 48 across ten departments, with a chief-of-staff agent routing work to the right one so you describe the outcome rather than picking a specialist.</p>
+      <h3>Does this need an expensive AI plan?</h3>
+      <p>No. Agents can run on a local model, on your own API key, or on included credits.</p>
+      <h3>Is it useful for a one-person business?</h3>
+      <p>That is the main case. The agents do the volume work a first hire would do, before there is a first hire.</p>
     </section>
 
+
+    <section class="hiw-section">
+      <h2>Related</h2>
+      <div class="lp-rel">
+        <a href="/modules/krew">Krew module<span>The full roster and how delegation works</span></a>
+        <a href="/modules/brain">Brain<span>The shared memory every agent reads and writes</span></a>
+        <a href="/local-ai-desktop">Local AI desktop app<span>The app the agents live in</span></a>
+      </div>
+    </section>
     <div class="hiw-cta">
       <h2>Put the first job <span class="it">on someone’s desk.</span></h2>
       <p>Krew is in the free tier. Ask for something specific and watch which desk it lands on.</p>

@@ -229,7 +229,7 @@ ${mdToHtml(post.body)}
       <a class="post-card${i === 0 ? ' feature' : ''}" href="/blog/${esc(p.slug)}">
         ${i === 0 && p.poster ? `<div class="post-card-img"><img src="${esc(p.poster)}" alt="" loading="lazy" decoding="async" /></div>` : ''}
         <div class="post-card-body">
-          <div class="post-meta"><span class="post-tag">${esc(p.tag || 'Notes')}</span><span>${niceDate(p.date)}</span><span>${readTime(p.body)} min read</span></div>
+          <div class="post-meta">${p.pinned ? '<span class="post-pin">&#128204; Pinned</span>' : ''}<span class="post-tag">${esc(p.tag || 'Notes')}</span><span>${niceDate(p.date)}</span><span>${readTime(p.body)} min read</span></div>
           <h2>${esc(p.title)}</h2>
           <p>${esc(p.excerpt || '')}</p>
           <span class="post-card-go">Read${p.video ? ' &amp; watch' : ''} &rarr;</span>

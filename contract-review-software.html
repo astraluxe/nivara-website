@@ -22,7 +22,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"AI contract review that never uploads your documents. Scan MSAs, NDAs and vendor agreements on your own machine, with every risky clause quoted.","url":"https://www.adris.tech/contract-review-software","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Contract review software","item":"https://www.adris.tech/contract-review-software"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does my contract get uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The scan runs on your own machine inside the desktop app. The file is read where it is and the findings are written locally."}},{"@type":"Question","name":"Is this a replacement for a lawyer?","acceptedAnswer":{"@type":"Answer","text":"No, and it does not pretend to be. It is a fast first read that tells you which clauses deserve a lawyer’s time, quoted so you can hand them over directly."}},{"@type":"Question","name":"What file types can it read?","acceptedAnswer":{"@type":"Answer","text":"PDF and Word documents, including scanned PDFs, which are read with OCR before the analysis."}},{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"The desktop app is free to install. Contract scanning is included on the Builder plan and above, and the Solo plan includes 10 scans a month to try it."}},{"@type":"Question","name":"Does it work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes, if you are running a local model. The scan itself is computed on your machine either way."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does my contract get uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The scan runs on your own machine inside the desktop app. The file is read where it is and the findings are written locally."}},{"@type":"Question","name":"Is this a replacement for a lawyer?","acceptedAnswer":{"@type":"Answer","text":"No, and it does not pretend to be. It is a fast first read that tells you which clauses deserve a lawyer’s time, quoted so you can hand them over directly."}},{"@type":"Question","name":"What file types can it read?","acceptedAnswer":{"@type":"Answer","text":"PDF and Word documents, including scanned PDFs, which are read with OCR before the analysis."}},{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"The desktop app is free to install. Contract scanning is included on the Builder plan and above, and the Solo plan includes 10 scans a month to try it."}},{"@type":"Question","name":"Does it work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes, if you are running a local model. The scan itself is computed on your machine either way."}},{"@type":"Question","name":"Can it review contracts in Hindi or other Indian languages?","acceptedAnswer":{"@type":"Answer","text":"Yes. Regional-language clauses are translated as part of the scan, so a contract you cannot read in the original is still one you can review."}},{"@type":"Question","name":"Does it work on scanned PDFs?","acceptedAnswer":{"@type":"Answer","text":"Yes. A scanned document is read with OCR first, then analysed like any other file."}},{"@type":"Question","name":"Can my whole team use it?","acceptedAnswer":{"@type":"Answer","text":"Yes, on the Builder plan and above. Each person installs the app and scans on their own machine — there is no shared server holding your documents."}},{"@type":"Question","name":"How accurate is it?","acceptedAnswer":{"@type":"Answer","text":"It is a fast first read and it can miss things, which is why every finding quotes the clause it came from. Check the quote rather than trusting the score — that is what the quotes are there for."}},{"@type":"Question","name":"Is it cheaper than a lawyer?","acceptedAnswer":{"@type":"Answer","text":"For a first read, by a wide margin — it is included in the plan rather than billed per document. For advice you can rely on in a dispute, a lawyer is not optional and this does not pretend to replace one."}},{"@type":"Question","name":"Can I use it on contracts I have already signed?","acceptedAnswer":{"@type":"Answer","text":"Yes, and it is the honest way to test it: scan an agreement you already know and see whether it finds what you know is in there."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +37,28 @@
   padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
   background: var(--paper-2); }
 .lp-note strong { color: var(--ink); }
+/* A comparison table and a related-pages strip. Text only, no images and no scripts, so the
+   extra depth costs a few kilobytes rather than a slower page. */
+/* A grid item defaults to min-width:auto, so .hiw-main refused to shrink below its widest child
+   and grew to 537px inside a 390px phone — the table was not scrolling, the whole column was
+   overflowing and the last column got clipped away. Scoped here rather than in the shared
+   stylesheet so the module pages are untouched. */
+.hiw-main { min-width: 0; }
+.lp-table { border-collapse: collapse; margin: 20px 0; font-size: 14px; display: block;
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.lp-table thead { position: sticky; left: 0; }
+.lp-table th, .lp-table td { min-width: 104px; }
+.lp-table tr td:first-child, .lp-table tr th:first-child { min-width: 120px; }
+.lp-table th, .lp-table td { border: 1px solid var(--rule); padding: 10px 13px; text-align: left; vertical-align: top; }
+.lp-table th { background: var(--paper-2); font-weight: 600; color: var(--ink); font-size: 13px; }
+.lp-table td { color: var(--muted); line-height: 1.6; }
+.lp-table td strong, .lp-table td b { color: var(--ink); }
+.lp-table tr td:first-child { color: var(--ink); font-weight: 500; }
+.lp-rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 24px 0 0; }
+.lp-rel a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px;
+  text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 600; transition: border-color .18s; }
+.lp-rel a:hover { border-color: var(--accent); }
+.lp-rel a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 </style>
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
@@ -156,7 +178,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     <a href="#finds" class="hiw-jump"><span class="hiw-jump-num">01</span> What it catches</a>
     <a href="#private" class="hiw-jump"><span class="hiw-jump-num">02</span> Why local</a>
     <a href="#who" class="hiw-jump"><span class="hiw-jump-num">03</span> Who it is for</a>
-    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">04</span> Questions</a>
+    <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">04</span> How it compares</a>
+    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">05</span> Questions</a>
   </div>
 </div>
 
@@ -168,7 +191,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <li><a href="#finds"><span class="hiw-nav-num">01</span>What it catches</a></li>
       <li><a href="#private"><span class="hiw-nav-num">02</span>Why local</a></li>
       <li><a href="#who"><span class="hiw-nav-num">03</span>Who it is for</a></li>
-      <li><a href="#faq"><span class="hiw-nav-num">04</span>Questions</a></li>
+      <li><a href="#compare"><span class="hiw-nav-num">04</span>How it compares</a></li>
+      <li><a href="#faq"><span class="hiw-nav-num">05</span>Questions</a></li>
     </ul>
   </aside>
 
@@ -214,8 +238,26 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       </div>
     </section>
 
+    <section class="hiw-section" id="compare">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> How it compares</div>
+      <h2>Against the tools you are probably weighing it against.</h2>
+      <table class="lp-table">
+        <thead><tr><th>&nbsp;</th><th>adris (Guard)</th><th>Cloud contract AI</th><th>A lawyer</th></tr></thead>
+        <tbody>
+          <tr><td>Where the document goes</td><td><strong>Nowhere — read on your machine</strong></td><td>Uploaded to their servers</td><td>Emailed to a firm</td></tr>
+          <tr><td>Time for a 47-page MSA</td><td>Under a minute</td><td>Minutes</td><td>Days</td></tr>
+          <tr><td>Cost per document</td><td>Included in the plan</td><td>Per seat, often per document</td><td>₹15,000–80,000</td></tr>
+          <tr><td>Quotes the clause it flags</td><td>Yes, with the section number</td><td>Usually</td><td>Yes</td></tr>
+          <tr><td>Reads Hindi / regional languages</td><td>Yes, translated in the scan</td><td>Varies</td><td>Yes</td></tr>
+          <tr><td>Adds a data processor to your DPA</td><td>No</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Can it be wrong</td><td><strong>Yes — it is a first read, not advice</strong></td><td>Yes</td><td>Accountable for it</td></tr>
+        </tbody>
+      </table>
+      <p>The honest summary: it does not replace a lawyer, and nothing that costs this little does. It tells you <em>which</em> clauses are worth a lawyer's hourly rate, which is the decision most people are actually stuck on.</p>
+    </section>
+
     <section class="hiw-section" id="faq">
-      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Questions</div>
+      <div class="hiw-section-tag"><span class="hiw-section-num">05</span> Questions</div>
       <h2>Common questions</h2>
       <h3>Does my contract get uploaded anywhere?</h3>
       <p>No. The scan runs on your own machine inside the desktop app. The file is read where it is and the findings are written locally.</p>
@@ -227,8 +269,29 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>The desktop app is free to install. Contract scanning is included on the Builder plan and above, and the Solo plan includes 10 scans a month to try it.</p>
       <h3>Does it work offline?</h3>
       <p>Yes, if you are running a local model. The scan itself is computed on your machine either way.</p>
+      <h3>Can it review contracts in Hindi or other Indian languages?</h3>
+      <p>Yes. Regional-language clauses are translated as part of the scan, so a contract you cannot read in the original is still one you can review.</p>
+      <h3>Does it work on scanned PDFs?</h3>
+      <p>Yes. A scanned document is read with OCR first, then analysed like any other file.</p>
+      <h3>Can my whole team use it?</h3>
+      <p>Yes, on the Builder plan and above. Each person installs the app and scans on their own machine — there is no shared server holding your documents.</p>
+      <h3>How accurate is it?</h3>
+      <p>It is a fast first read and it can miss things, which is why every finding quotes the clause it came from. Check the quote rather than trusting the score — that is what the quotes are there for.</p>
+      <h3>Is it cheaper than a lawyer?</h3>
+      <p>For a first read, by a wide margin — it is included in the plan rather than billed per document. For advice you can rely on in a dispute, a lawyer is not optional and this does not pretend to replace one.</p>
+      <h3>Can I use it on contracts I have already signed?</h3>
+      <p>Yes, and it is the honest way to test it: scan an agreement you already know and see whether it finds what you know is in there.</p>
     </section>
 
+
+    <section class="hiw-section">
+      <h2>Related</h2>
+      <div class="lp-rel">
+        <a href="/modules/guard">Guard<span>The full security module — contracts, phishing, compliance</span></a>
+        <a href="/local-ai-desktop">Local AI desktop app<span>Everything else that runs on your own machine</span></a>
+        <a href="/blog/why-contracts-should-not-touch-the-cloud">Why contracts should not touch the cloud<span>The longer argument, written out</span></a>
+      </div>
+    </section>
     <div class="hiw-cta">
       <h2>Read the risky clause <span class="it">before you sign it.</span></h2>
       <p>Contract scanning runs inside Guard, part of the adris desktop app. Free to install, and your documents stay on your machine.</p>

@@ -22,7 +22,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"A Zapier alternative with no per-task pricing and no cloud. Build automations that run on your own computer. Free tier, rupee pricing.","url":"https://www.adris.tech/zapier-alternative","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Zapier alternative","item":"https://www.adris.tech/zapier-alternative"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this open source?","acceptedAnswer":{"@type":"Answer","text":"No. adris is a commercial desktop application with a free tier. If a self-hosted open-source engine is a hard requirement, n8n or Activepieces are the projects to look at — this page is not pretending otherwise."}},{"@type":"Question","name":"Can it run when my computer is off?","acceptedAnswer":{"@type":"Answer","text":"Local workflows need the machine on. Cloud-scheduled runs are available on paid plans for workflows that must fire regardless."}},{"@type":"Question","name":"Does it connect to the apps I already use?","acceptedAnswer":{"@type":"Answer","text":"Yes — Gmail, Slack, Notion, GitHub, Linear, Airtable, Google Sheets and others, with credentials stored encrypted on your own machine."}},{"@type":"Question","name":"How is this different from n8n?","acceptedAnswer":{"@type":"Answer","text":"n8n is open source and self-hosted on a server you run. adris is a desktop app you install, with AI agents, contract scanning, a code editor and local models in the same package."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this open source?","acceptedAnswer":{"@type":"Answer","text":"No. adris is a commercial desktop application with a free tier. If a self-hosted open-source engine is a hard requirement, n8n or Activepieces are the projects to look at — this page is not pretending otherwise."}},{"@type":"Question","name":"Can it run when my computer is off?","acceptedAnswer":{"@type":"Answer","text":"Local workflows need the machine on. Cloud-scheduled runs are available on paid plans for workflows that must fire regardless."}},{"@type":"Question","name":"Does it connect to the apps I already use?","acceptedAnswer":{"@type":"Answer","text":"Yes — Gmail, Slack, Notion, GitHub, Linear, Airtable, Google Sheets and others, with credentials stored encrypted on your own machine."}},{"@type":"Question","name":"How is this different from n8n?","acceptedAnswer":{"@type":"Answer","text":"n8n is open source and self-hosted on a server you run. adris is a desktop app you install, with AI agents, contract scanning, a code editor and local models in the same package."}},{"@type":"Question","name":"How many integrations does it have?","acceptedAnswer":{"@type":"Answer","text":"Dozens, not thousands — Gmail, Slack, Notion, GitHub, Linear, Airtable, Google Sheets and others. If your workflow depends on a niche SaaS connector, check the list before switching."}},{"@type":"Question","name":"Can I import my existing Zaps?","acceptedAnswer":{"@type":"Answer","text":"No. There is no import, and rebuilding a complex workflow takes real time — worth knowing before you plan a migration."}},{"@type":"Question","name":"Is there a free tier?","acceptedAnswer":{"@type":"Answer","text":"Yes, a real one: all eight modules, local models, and automations you can actually use rather than a 14-day trial."}},{"@type":"Question","name":"What happens to my data in a workflow?","acceptedAnswer":{"@type":"Answer","text":"It stays on your machine unless a step is itself a network action — sending an email, posting to Slack. You can see which steps those are on the canvas."}},{"@type":"Question","name":"Do I need to know how to code?","acceptedAnswer":{"@type":"Answer","text":"No. Describe the automation in plain English and it is built on the canvas for you to check and edit."}},{"@type":"Question","name":"Is this cheaper than Zapier for Indian businesses?","acceptedAnswer":{"@type":"Answer","text":"Usually, and not only on the sticker price: billing is in rupees over UPI, which removes the card and conversion friction that makes most Western SaaS cost more here than it appears to."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +37,28 @@
   padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
   background: var(--paper-2); }
 .lp-note strong { color: var(--ink); }
+/* A comparison table and a related-pages strip. Text only, no images and no scripts, so the
+   extra depth costs a few kilobytes rather than a slower page. */
+/* A grid item defaults to min-width:auto, so .hiw-main refused to shrink below its widest child
+   and grew to 537px inside a 390px phone — the table was not scrolling, the whole column was
+   overflowing and the last column got clipped away. Scoped here rather than in the shared
+   stylesheet so the module pages are untouched. */
+.hiw-main { min-width: 0; }
+.lp-table { border-collapse: collapse; margin: 20px 0; font-size: 14px; display: block;
+  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.lp-table thead { position: sticky; left: 0; }
+.lp-table th, .lp-table td { min-width: 104px; }
+.lp-table tr td:first-child, .lp-table tr th:first-child { min-width: 120px; }
+.lp-table th, .lp-table td { border: 1px solid var(--rule); padding: 10px 13px; text-align: left; vertical-align: top; }
+.lp-table th { background: var(--paper-2); font-weight: 600; color: var(--ink); font-size: 13px; }
+.lp-table td { color: var(--muted); line-height: 1.6; }
+.lp-table td strong, .lp-table td b { color: var(--ink); }
+.lp-table tr td:first-child { color: var(--ink); font-weight: 500; }
+.lp-rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 24px 0 0; }
+.lp-rel a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px;
+  text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 600; transition: border-color .18s; }
+.lp-rel a:hover { border-color: var(--accent); }
+.lp-rel a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
 </style>
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
@@ -155,7 +177,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     <a href="#diff" class="hiw-jump"><span class="hiw-jump-num">00</span> How it differs</a>
     <a href="#build" class="hiw-jump"><span class="hiw-jump-num">01</span> Building one</a>
     <a href="#cost" class="hiw-jump"><span class="hiw-jump-num">02</span> Cost</a>
-    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">03</span> Questions</a>
+    <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">03</span> How it compares</a>
+    <a href="#faq" class="hiw-jump"><span class="hiw-jump-num">04</span> Questions</a>
   </div>
 </div>
 
@@ -166,7 +189,8 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <li><a href="#diff" class="active"><span class="hiw-nav-num">00</span>How it differs</a></li>
       <li><a href="#build"><span class="hiw-nav-num">01</span>Building one</a></li>
       <li><a href="#cost"><span class="hiw-nav-num">02</span>Cost</a></li>
-      <li><a href="#faq"><span class="hiw-nav-num">03</span>Questions</a></li>
+      <li><a href="#compare"><span class="hiw-nav-num">03</span>How it compares</a></li>
+      <li><a href="#faq"><span class="hiw-nav-num">04</span>Questions</a></li>
     </ul>
   </aside>
 
@@ -195,8 +219,27 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>Billing is in rupees with UPI, which removes the currency conversion and card friction that makes most Western SaaS more expensive here than its sticker price suggests.</p>
     </section>
 
+    <section class="hiw-section" id="compare">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> How it compares</div>
+      <h2>Against Zapier, Make and n8n, <span class="it">without the marketing.</span></h2>
+      <table class="lp-table">
+        <thead><tr><th>&nbsp;</th><th>adris</th><th>Zapier</th><th>Make</th><th>n8n (self-hosted)</th></tr></thead>
+        <tbody>
+          <tr><td>Where it runs</td><td><strong>Your desktop</strong></td><td>Their cloud</td><td>Their cloud</td><td>A server you run</td></tr>
+          <tr><td>Billed per task</td><td>No</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Runs while the machine is off</td><td>Paid plans (cloud runs)</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>Setup needed</td><td>Install an app</td><td>None</td><td>None</td><td><strong>Docker + a server</strong></td></tr>
+          <tr><td>Open source</td><td>No</td><td>No</td><td>No</td><td><strong>Yes</strong></td></tr>
+          <tr><td>AI step included</td><td>Yes, local or your key</td><td>Add-on</td><td>Add-on</td><td>Yes, bring a key</td></tr>
+          <tr><td>Integrations</td><td>Dozens</td><td><strong>Thousands</strong></td><td>Thousands</td><td>Hundreds</td></tr>
+          <tr><td>Also gives you</td><td>Agents, contract scan, local models</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="lp-note"><strong>Where Zapier still wins.</strong> If you need one of its thousands of niche integrations, or a workflow that must fire at 3am whatever the state of your laptop, Zapier is the better tool and we would rather say so than have you find out after paying. adris is the better answer when the data cannot leave your machine, or when per-task pricing is what is actually hurting.</div>
+    </section>
+
     <section class="hiw-section" id="faq">
-      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Questions</div>
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Questions</div>
       <h2>Common questions</h2>
       <h3>Is this open source?</h3>
       <p>No. adris is a commercial desktop application with a free tier. If a self-hosted open-source engine is a hard requirement, n8n or Activepieces are the projects to look at — this page is not pretending otherwise.</p>
@@ -206,8 +249,29 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p>Yes — Gmail, Slack, Notion, GitHub, Linear, Airtable, Google Sheets and others, with credentials stored encrypted on your own machine.</p>
       <h3>How is this different from n8n?</h3>
       <p>n8n is open source and self-hosted on a server you run. adris is a desktop app you install, with AI agents, contract scanning, a code editor and local models in the same package.</p>
+      <h3>How many integrations does it have?</h3>
+      <p>Dozens, not thousands — Gmail, Slack, Notion, GitHub, Linear, Airtable, Google Sheets and others. If your workflow depends on a niche SaaS connector, check the list before switching.</p>
+      <h3>Can I import my existing Zaps?</h3>
+      <p>No. There is no import, and rebuilding a complex workflow takes real time — worth knowing before you plan a migration.</p>
+      <h3>Is there a free tier?</h3>
+      <p>Yes, a real one: all eight modules, local models, and automations you can actually use rather than a 14-day trial.</p>
+      <h3>What happens to my data in a workflow?</h3>
+      <p>It stays on your machine unless a step is itself a network action — sending an email, posting to Slack. You can see which steps those are on the canvas.</p>
+      <h3>Do I need to know how to code?</h3>
+      <p>No. Describe the automation in plain English and it is built on the canvas for you to check and edit.</p>
+      <h3>Is this cheaper than Zapier for Indian businesses?</h3>
+      <p>Usually, and not only on the sticker price: billing is in rupees over UPI, which removes the card and conversion friction that makes most Western SaaS cost more here than it appears to.</p>
     </section>
 
+
+    <section class="hiw-section">
+      <h2>Related</h2>
+      <div class="lp-rel">
+        <a href="/offline-automation-tool">Offline automation tool<span>The same engine, framed for work that cannot go to a cloud</span></a>
+        <a href="/modules/automation">Automation module<span>Triggers, canvas, outputs in detail</span></a>
+        <a href="/ai-agents-for-business">AI agents<span>When the work needs judgement, not just plumbing</span></a>
+      </div>
+    </section>
     <div class="hiw-cta">
       <h2>Build the first one <span class="it">in an afternoon.</span></h2>
       <p>Automation is part of the free tier. Describe the workflow in plain English or drag it on the canvas.</p>
