@@ -22,7 +22,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"Build workflows with AI steps that run entirely on your own machine — no cloud, no per-task fees, and no internet connection required.","url":"https://www.adris.tech/offline-automation-tool","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Offline automation tool","item":"https://www.adris.tech/offline-automation-tool"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it really work with no internet?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step in the workflow is itself a network action such as sending mail."}},{"@type":"Question","name":"Do I pay per run?","acceptedAnswer":{"@type":"Answer","text":"No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What happens when my computer is off?","acceptedAnswer":{"@type":"Answer","text":"Local workflows wait until it is on. If a workflow must fire regardless, use a cloud-scheduled run on a paid plan."}},{"@type":"Question","name":"Can it run on a machine with no internet at all?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step is itself a network action."}},{"@type":"Question","name":"Is it really not metered?","acceptedAnswer":{"@type":"Answer","text":"Locally executed runs are not counted. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What triggers can it use?","acceptedAnswer":{"@type":"Answer","text":"Nine, including schedules, a file appearing in a folder, email, webhooks, GitHub and Stripe."}},{"@type":"Question","name":"Can it handle sensitive documents?","acceptedAnswer":{"@type":"Answer","text":"That is the case it was built for — patient records, contracts, payroll. The file is read where it sits and nothing is transmitted."}},{"@type":"Question","name":"Do I need to write code?","acceptedAnswer":{"@type":"Answer","text":"No. Describe it in a sentence and edit what gets built."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it really work with no internet?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step in the workflow is itself a network action such as sending mail."}},{"@type":"Question","name":"Do I pay per run?","acceptedAnswer":{"@type":"Answer","text":"No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What happens when my computer is off?","acceptedAnswer":{"@type":"Answer","text":"A local workflow waits until it is on. A cloud run fires anyway — paid plans include an allowance for exactly this (5,000 runs a month on Builder), and runs that execute entirely on your machine do not count against it."}},{"@type":"Question","name":"Can it run on a machine with no internet at all?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step is itself a network action."}},{"@type":"Question","name":"Is it really not metered?","acceptedAnswer":{"@type":"Answer","text":"Locally executed runs are not counted. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What triggers can it use?","acceptedAnswer":{"@type":"Answer","text":"Nine, including schedules, a file appearing in a folder, email, webhooks, GitHub and Stripe."}},{"@type":"Question","name":"Can it handle sensitive documents?","acceptedAnswer":{"@type":"Answer","text":"That is the case it was built for — patient records, contracts, payroll. The file is read where it sits and nothing is transmitted."}},{"@type":"Question","name":"Do I need to write code?","acceptedAnswer":{"@type":"Answer","text":"No. Describe it in a sentence and edit what gets built."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -213,7 +213,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <li><strong>Read and decide</strong> — go through a spreadsheet row by row and draft a tailored response for each.</li>
         <li><strong>Extract to structure</strong> — pull the fields you need out of invoices or agreements into a sheet.</li>
       </ul>
-      <p>Where a step genuinely needs the internet — sending an email, posting to Slack — that step is the only part that touches the network, and you can see exactly which ones do.</p>
+      <p>Where a step genuinely needs the internet — sending an email, posting to Slack — that step is the only part that touches the network, and you can see exactly which ones do on the canvas.</p>
     </section>
 
     <section class="hiw-section" id="build">
@@ -231,13 +231,13 @@ document.getElementById('themeToggle').addEventListener('click', function () {
           <tr><td>Watch a folder, read a file</td><td><strong>Yes</strong></td><td>Your disk, your machine</td></tr>
           <tr><td>Summarise / classify / extract</td><td><strong>Yes</strong></td><td>With a local model</td></tr>
           <tr><td>Write to a spreadsheet or a file</td><td><strong>Yes</strong></td><td>Written locally</td></tr>
-          <tr><td>Run on a schedule</td><td>Yes, while the machine is on</td><td>The trigger is local</td></tr>
+          <tr><td>Run on a schedule</td><td><strong>Yes</strong></td><td>Locally while the machine is on; on a paid plan a cloud run fires even when it is off</td></tr>
           <tr><td>Send an email or a Slack message</td><td>No</td><td>That step <em>is</em> the network</td></tr>
           <tr><td>Fetch a web page</td><td>No</td><td>Same reason</td></tr>
           <tr><td>Use a frontier model</td><td>No</td><td>It lives in someone else’s data centre</td></tr>
         </tbody>
       </table>
-      <p>The useful way to read this: everything that touches <em>your</em> data runs offline, and only the steps that deliberately reach outside need a connection. You can see which ones those are on the canvas.</p>
+      <div class="lp-note"><strong>To be clear about what the No column means.</strong> It is not that adris cannot do these things — it sends email, posts to Slack and reads web pages perfectly well. It is that those steps <em>are</em> the network, so they are the only ones that wait when you are genuinely disconnected. Everything touching your own data keeps running. On a paid plan a cloud run performs them for you even with the machine switched off.</div>
     </section>
 
     <section class="hiw-section" id="faq">
@@ -248,7 +248,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <h3>Do I pay per run?</h3>
       <p>No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes.</p>
       <h3>What happens when my computer is off?</h3>
-      <p>Local workflows wait until it is on. If a workflow must fire regardless, use a cloud-scheduled run on a paid plan.</p>
+      <p>A local workflow waits until it is on. A cloud run fires anyway — paid plans include an allowance for exactly this (5,000 runs a month on Builder), and runs that execute entirely on your machine do not count against it.</p>
       <h3>Can it run on a machine with no internet at all?</h3>
       <p>Yes, provided the AI step uses a local model and no step is itself a network action.</p>
       <h3>Is it really not metered?</h3>
