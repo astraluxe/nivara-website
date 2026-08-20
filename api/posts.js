@@ -121,6 +121,73 @@ export default async function handler(req) {
 
   if (action === 'list') return json({ posts: doc.posts });
 
+  /* ── Drop a picture or a video straight into the dashboard ──────────────────
+   *
+   * Same storage idea as the posts themselves: the file is committed to the repo
+   * under /blog-media and served off the CDN. No bucket, no signed URLs, no
+   * second service to keep alive for what is usually one image per post.
+   *
+   * THE LIMIT IS REAL AND IT IS NOT MINE. A request body to a Vercel function is
+   * capped at 4.5 MB, and base64 inflates a file by about a third on the way in,
+   * so anything over ~3 MB cannot arrive here however it is sent. The dashboard
+   * checks the size before uploading and says so, because "Save" appearing to
+   * hang while a 40 MB video fails to arrive is the worst version of this.
+   *
+   * A big video therefore still goes in by hand and is referenced by path — the
+   * 43 MB film is 14x over the ceiling and no amount of UI changes that.
+   */
+  if (action === 'upload') {
+    const raw = String(body.name || 'file');
+    const b64 = String(body.data || '');
+    if (!b64) return json({ error: 'No file data arrived.' }, 400);
+
+    const ext = (raw.match(/\.([a-z0-9]+)$/i) || [, ''])[1].toLowerCase();
+    const OK = { jpg: 1, jpeg: 1, png: 1, webp: 1, gif: 1, avif: 1, mp4: 1, webm: 1 };
+    if (!OK[ext]) return json({ error: `Cannot use a .${ext || '?'} file. Pictures: jpg, png, webp, gif, avif. Video: mp4, webm.` }, 400);
+
+    // 4 bytes of base64 carry 3 bytes of file.
+    const bytes = Math.floor(b64.length * 3 / 4);
+    if (bytes > 3_200_000) {
+      return json({ error: `That file is ${(bytes / 1048576).toFixed(1)} MB. The upload ceiling is 3 MB — `
+        + 'anything larger cannot fit in a single request. Compress it, or put the file in the repo and use its path.' }, 413);
+    }
+
+    // Keep the visitor's own filename where it is safe to, so /blog-media reads
+    // like a folder rather than a list of hashes; prefix with the date so two
+    // posts can both have a "cover.jpg".
+    const stem = raw.replace(/\.[a-z0-9]+$/i, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || 'file';
+    const stamp = new Date().toISOString().slice(0, 10);
+    const filePath = `blog-media/${stamp}-${stem}.${ext}`;
+
+    // If that exact name exists, its sha is required to overwrite it.
+    let fileSha = null;
+    const head = await gh(`contents/${encodeURI(filePath)}?ref=${encodeURIComponent(BRANCH)}`, token);
+    if (head.ok) { try { fileSha = (await head.json()).sha; } catch { /* treat as new */ } }
+
+    const up = await gh(`contents/${encodeURI(filePath)}`, token, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `blog: upload ${filePath}`,
+        content: b64,
+        branch: BRANCH,
+        ...(fileSha ? { sha: fileSha } : {}),
+      }),
+    });
+    if (!up.ok) {
+      const t = await up.text();
+      return json({ error: `Upload failed (${up.status})`, detail: t.slice(0, 300) }, 502);
+    }
+    return json({
+      ok: true,
+      path: '/' + filePath,
+      kind: /^(mp4|webm)$/.test(ext) ? 'video' : 'image',
+      bytes,
+      note: 'Uploaded. It is live once Vercel finishes rebuilding, about a minute.',
+    });
+  }
+
   let message;
 
   if (action === 'save') {

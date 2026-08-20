@@ -168,6 +168,9 @@ tr:hover td { background:rgba(124,92,255,.03); }
    this page fell back to the browser's own control — a grey chrome box that matched nothing around
    it. It was tolerable against the old hardcoded dark; against the site's paper background it is
    simply wrong. These follow the same shape as the cards they sit inside. */
+.bp-form input,
+.bp-form select,
+.bp-form textarea,
 .ann-form input,
 .ann-form select,
 .ann-form textarea,
@@ -605,86 +608,180 @@ tr:hover td { background:rgba(124,92,255,.03); }
     <!-- BLOG TAB — what appears on /blog and /blog/<slug>.
          Same method as Reviews: writes go through /api/posts, which commits posts.json
          to GitHub and lets Vercel redeploy. No database, no runtime dependency. -->
+    <!-- BLOG TAB — what appears on /blog and /blog/<slug>.
+         Same method as Reviews: writes go through /api/posts, which commits posts.json
+         to GitHub and lets Vercel redeploy. No database, no runtime dependency. -->
     <div id="tab-blog" class="tab-panel">
-      <div class="ann-form">
-        <h3 style="margin:0 0 4px;font-size:15px">Write a post</h3>
-        <p style="margin:0 0 16px;font-size:12.5px;color:var(--muted);line-height:1.6">
-          Goes live at <strong>/blog</strong> about a minute after saving &mdash; it is committed to
-          GitHub and Vercel rebuilds the site. Write about anything: what you are building, research
-          worth keeping, founder life, the ups and the downs. Each post gets its own shareable link.
-        </p>
+      <style>
+        /* The Blog tab's own layout. It used to borrow the review card's .rv-acts, which is
+           position:absolute and expects a positioned card around it — in a flat list row the
+           buttons detached and floated away, which is why Edit and Delete could not be found. */
+        .bp-form { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:0; margin-bottom:22px; overflow:hidden; }
+        .bp-formhead { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .bp-formhead h3 { margin:0; font-size:15px; }
+        .bp-mode { font-size:11px; padding:3px 9px; border-radius:999px; border:1px solid var(--border); color:var(--muted); }
+        .bp-mode.editing { border-color:var(--accent,#7C5CFF); color:var(--accent,#7C5CFF); }
+        .bp-body { padding:20px; }
+        .bp-step { border-top:1px solid var(--border); margin:22px -20px 0; padding:20px 20px 0; }
+        .bp-step:first-child { border-top:0; margin-top:0; padding-top:0; }
+        .bp-steptitle { display:flex; align-items:baseline; gap:9px; margin-bottom:4px; }
+        .bp-num { width:19px; height:19px; border-radius:50%; background:var(--accent,#7C5CFF); color:#fff;
+                  font-size:10.5px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .bp-steptitle b { font-size:13.5px; }
+        .bp-hint { font-size:12px; color:var(--muted); line-height:1.6; margin:0 0 12px 28px; }
+        .bp-field { margin-bottom:14px; }
+        .bp-field label { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+        .bp-count { font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; }
+        .bp-count.warn { color:#b58900; }
+        .bp-two { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        @media (max-width:720px) { .bp-two { grid-template-columns:1fr; } }
+        .bp-url { font-size:11.5px; color:var(--muted); margin-top:6px; word-break:break-all; }
+        .bp-url b { color:var(--text); font-weight:600; }
+        .bp-cheat { font-size:11.5px; color:var(--muted); margin-top:7px; line-height:1.9; }
+        .bp-cheat code { background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-size:11px; }
+        .bp-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:16px 20px; border-top:1px solid var(--border); background:var(--bg); }
+        .bp-msg { font-size:12.5px; color:var(--muted); }
+        .bp-msg.ok { color:#2e9e5b; } .bp-msg.err { color:var(--red,#d33); }
 
-        <input type="hidden" id="bpOriginalSlug" />
+        /* One post in the list. Flat row, actions in normal flow, always visible. */
+        .bp-row { display:flex; align-items:flex-start; gap:14px; padding:14px 16px; border:1px solid var(--border);
+                  border-radius:10px; margin-bottom:8px; background:var(--surface); }
+        .bp-row:hover { border-color:var(--muted); }
+        .bp-main { flex:1; min-width:0; }
+        .bp-title { font-size:14px; font-weight:600; color:var(--text); margin:0 0 4px; cursor:pointer; }
+        .bp-title:hover { color:var(--accent,#7C5CFF); }
+        .bp-sub { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .bp-sub a { color:var(--muted); }
+        .bp-badges { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:5px; }
+        .bp-badge { font-size:10px; padding:2px 8px; border-radius:999px; border:1px solid var(--border); color:var(--muted); }
+        .bp-badge.draft { border-color:#b58900; color:#b58900; }
+        .bp-badge.video { border-color:var(--accent,#7C5CFF); color:var(--accent,#7C5CFF); }
+        .bp-btns { display:flex; gap:6px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+        .bp-btn { background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:7px;
+                  padding:5px 11px; font-size:11.5px; cursor:pointer; font-family:inherit; white-space:nowrap; transition:all .15s; }
+        .bp-btn:hover { color:var(--text); border-color:var(--text); }
+        .bp-btn.primary:hover { color:var(--accent,#7C5CFF); border-color:var(--accent,#7C5CFF); }
+        .bp-btn.danger:hover { color:var(--red,#d33); border-color:var(--red,#d33); }
+        @media (max-width:720px) { .bp-row { flex-direction:column; } .bp-btns { justify-content:flex-start; } }
 
-        <div style="margin-bottom:12px">
-          <label>Title</label>
-          <input type="text" id="bpTitle" placeholder="What running a company from Bengaluru actually costs" oninput="bpSyncSlug()" />
+        .bp-preview { border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-top:12px; background:var(--bg); }
+        .bp-preview h2 { font-size:17px; margin:20px 0 8px; } .bp-preview h3 { font-size:14px; margin:16px 0 6px; }
+        .bp-preview p { font-size:13.5px; line-height:1.8; margin:0 0 12px; color:var(--text); }
+        .bp-preview ul { margin:0 0 12px 18px; } .bp-preview li { font-size:13.5px; line-height:1.7; margin-bottom:5px; }
+        .bp-preview hr { border:0; border-top:1px solid var(--border); margin:18px 0; }
+        .bp-preview blockquote { margin:0 0 12px; padding-left:14px; border-left:2px solid var(--accent,#7C5CFF); color:var(--muted); }
+        .bp-preview a { color:var(--accent,#7C5CFF); }
+        .bp-preview code { background:var(--surface); border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-size:12px; }
+        .bp-drop { border:1.5px dashed var(--border); border-radius:10px; padding:16px; text-align:center; cursor:pointer;
+                   transition:all .15s; background:var(--bg); }
+        .bp-drop:hover, .bp-drop.over { border-color:var(--accent,#7C5CFF); background:var(--surface); }
+        .bp-drop.filled { border-style:solid; text-align:left; display:flex; align-items:center; gap:12px; }
+        .bp-drop-t { font-size:12.5px; color:var(--text); }
+        .bp-drop-s { font-size:11px; color:var(--muted); margin-top:3px; }
+        .bp-thumb { width:74px; height:44px; object-fit:cover; border-radius:6px; border:1px solid var(--border); flex-shrink:0; background:var(--bg); }
+        .bp-drop .bp-btn { margin-left:auto; }
+        .bp-bar { height:3px; background:var(--border); border-radius:2px; margin-top:9px; overflow:hidden; display:none; }
+        .bp-bar span { display:block; height:100%; width:30%; background:var(--accent,#7C5CFF); animation:bpwait 1s linear infinite; }
+        @keyframes bpwait { from{transform:translateX(-100%)} to{transform:translateX(400%)} }
+      </style>
+
+      <div class="bp-form">
+        <div class="bp-formhead">
+          <h3 id="bpFormTitle">Write a post</h3>
+          <span class="bp-mode" id="bpMode">New post</span>
+          <button class="bp-btn" id="bpCancelEdit" onclick="resetPostForm()" style="display:none;margin-left:auto">Cancel edit</button>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-          <div>
-            <label>Web address <span style="color:var(--muted);font-weight:400">(the shareable link)</span></label>
-            <input type="text" id="bpSlug" placeholder="what-running-a-company-costs" />
-            <div style="font-size:11px;color:var(--muted);margin-top:5px">
-              adris.tech/blog/<span id="bpSlugPreview">…</span>
-              <strong style="color:var(--muted)">&mdash; don't change this after sharing the link.</strong>
+        <div class="bp-body">
+          <input type="hidden" id="bpOriginalSlug" />
+
+          <div class="bp-step">
+            <div class="bp-steptitle"><span class="bp-num">1</span><b>What is it called?</b></div>
+            <p class="bp-hint">The title people see on the blog and in Google. The web address is made from it automatically.</p>
+            <div class="bp-field">
+              <label>Title <span class="bp-count" id="bpTitleCount">0</span></label>
+              <input type="text" id="bpTitle" placeholder="What running a company from Bengaluru actually costs" oninput="bpSyncSlug()" />
+            </div>
+            <div class="bp-two">
+              <div class="bp-field">
+                <label>Web address</label>
+                <input type="text" id="bpSlug" oninput="bpSyncSlug()" placeholder="what-running-a-company-costs" />
+                <div class="bp-url">adris.tech/blog/<b id="bpSlugPreview">…</b></div>
+              </div>
+              <div class="bp-field">
+                <label>Category</label>
+                <select id="bpTag">
+                  <option>Product</option>
+                  <option>Research</option>
+                  <option>Founder life</option>
+                  <option>Engineering</option>
+                  <option>Notes</option>
+                </select>
+                <div class="bp-url">Shown as a tag on the blog list.</div>
+              </div>
             </div>
           </div>
-          <div>
-            <label>Category</label>
-            <select id="bpTag">
-              <option>Product</option>
-              <option>Research</option>
-              <option>Founder life</option>
-              <option>Engineering</option>
-              <option>Notes</option>
-            </select>
+
+          <div class="bp-step">
+            <div class="bp-steptitle"><span class="bp-num">2</span><b>The one-line summary</b></div>
+            <p class="bp-hint">This is what shows on the blog list, in Google results, and in the WhatsApp / LinkedIn preview when
+               someone shares it. Keep it under 155 characters or Google cuts it off mid-sentence.</p>
+            <div class="bp-field">
+              <label>Summary <span class="bp-count" id="bpExcerptCount">0 / 155</span></label>
+              <textarea id="bpExcerpt" rows="2" placeholder="One or two sentences that make someone want to read it."></textarea>
+            </div>
+          </div>
+
+          <div class="bp-step">
+            <div class="bp-steptitle"><span class="bp-num">3</span><b>Write it</b></div>
+            <p class="bp-hint">Type normally. Leave a blank line between paragraphs. Everything else is optional.</p>
+            <div class="bp-field">
+              <label>The post <span class="bp-count" id="bpBodyCount">0 words · 0 min read</span></label>
+              <textarea id="bpBody" rows="16" placeholder="Start typing. A blank line starts a new paragraph."></textarea>
+              <div class="bp-cheat">
+                <code>## Heading</code> &nbsp; <code>- bullet</code> &nbsp; <code>**bold**</code> &nbsp;
+                <code>*italic*</code> &nbsp; <code>[text](https://link)</code> &nbsp; <code>&gt; quote</code> &nbsp; <code>---</code> divider
+              </div>
+            </div>
+            <button class="bp-btn primary" type="button" onclick="togglePostPreview()" id="bpPreviewBtn">Show preview</button>
+            <div class="bp-preview" id="bpPreview" style="display:none"></div>
+          </div>
+
+          <div class="bp-step">
+            <div class="bp-steptitle"><span class="bp-num">4</span><b>Picture or video</b> <span style="font-size:12px;color:var(--muted);font-weight:400">— optional</span></div>
+            <p class="bp-hint">Both are files already on the site, written as a path starting with <code>/</code>.
+               Leave them empty and the post is just words, which is fine.</p>
+                        <div class="bp-two">
+              <div class="bp-field">
+                <label>Picture</label>
+                <div class="bp-drop" id="bpDropImage" onclick="bpPick('image')">
+                  <div><div class="bp-drop-t"><b>&#128206; Attach a picture</b></div><div class="bp-drop-s">Click to choose a file from your computer &mdash; or drag one in.<br />jpg, png, webp, gif &middot; up to 3 MB</div></div>
+                </div>
+                <div class="bp-bar" id="bpBarImage"><span></span></div>
+                <input type="text" id="bpPoster" placeholder="/adris-film-poster.jpg" style="margin-top:8px" />
+                <div class="bp-url">Shown on the blog list and as the picture when the link is shared.</div>
+              </div>
+              <div class="bp-field">
+                <label>Video</label>
+                <div class="bp-drop" id="bpDropVideo" onclick="bpPick('video')">
+                  <div><div class="bp-drop-t"><b>&#128206; Attach a video</b></div><div class="bp-drop-s">Click to choose a file from your computer &mdash; or drag one in.<br />mp4, webm &middot; up to 3 MB</div></div>
+                </div>
+                <div class="bp-bar" id="bpBarVideo"><span></span></div>
+                <input type="text" id="bpVideo" placeholder="/adris-film.mp4" style="margin-top:8px" />
+                <div class="bp-url">Plays at the top of the post.</div>
+              </div>
+            </div>
+            <input type="file" id="bpFile" style="display:none" />
+            </div>
           </div>
         </div>
 
-        <div style="margin-bottom:12px">
-          <label>Summary <span style="color:var(--muted);font-weight:400">(shown on the blog list and in WhatsApp / LinkedIn previews)</span></label>
-          <textarea id="bpExcerpt" rows="2" placeholder="One or two sentences that make someone want to read it."></textarea>
-        </div>
-
-        <div style="margin-bottom:12px">
-          <label>The post</label>
-          <textarea id="bpBody" rows="16" placeholder="Write normally. Leave a blank line between paragraphs.
-
-## A heading looks like this
-
-- a bullet
-- another bullet
-
-**bold**, *italic*, and [a link](https://example.com) all work.
-
---- puts a divider across the page."></textarea>
-          <div style="font-size:11px;color:var(--muted);margin-top:5px">
-            Blank line between paragraphs &middot; <code>##</code> heading &middot; <code>-</code> bullet &middot;
-            <code>**bold**</code> &middot; <code>[text](link)</code> &middot; <code>&gt;</code> quote &middot; <code>---</code> divider
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-          <div>
-            <label>Video <span style="color:var(--muted);font-weight:400">(optional)</span></label>
-            <input type="text" id="bpVideo" placeholder="/adris-film.mp4" />
-            <div style="font-size:11px;color:var(--muted);margin-top:5px">A file already on the site. Plays at the top of the post.</div>
-          </div>
-          <div>
-            <label>Image <span style="color:var(--muted);font-weight:400">(optional)</span></label>
-            <input type="text" id="bpPoster" placeholder="/adris-film-poster.jpg" />
-            <div style="font-size:11px;color:var(--muted);margin-top:5px">Used for the video still and the link preview card.</div>
-          </div>
-        </div>
-
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div class="bp-actions">
           <button class="btn" id="bpSaveBtn" onclick="savePost()">Save &amp; publish</button>
-          <button class="btn btn-ghost" onclick="resetPostForm()">Clear</button>
           <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);font-weight:400;margin:0">
             <input type="checkbox" id="bpDraft" style="width:auto;margin:0" /> Save as draft (not shown on the site)
           </label>
-          <span id="bpMsg" style="font-size:12.5px;color:var(--muted)"></span>
+          <span class="bp-msg" id="bpMsg"></span>
         </div>
       </div>
 
@@ -694,6 +791,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
       </div>
       <div id="bpList"><div class="empty">Loading&hellip;</div></div>
     </div>
+
     <!-- AFFILIATES TAB -->
     <div id="tab-affiliates" class="tab-panel">
 
@@ -2005,14 +2103,69 @@ function bpSlugify(s) {
   return String(s || '').toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-')
     .replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 90);
 }
+
 // The address follows the title only while the post is NEW. Once it has been
 // saved, the slug is a link people may already have, so typing in the title must
 // not silently move the post to a different URL.
 function bpSyncSlug() {
   var orig = document.getElementById('bpOriginalSlug').value;
   var slugEl = document.getElementById('bpSlug');
-  if (!orig) slugEl.value = bpSlugify(document.getElementById('bpTitle').value);
-  document.getElementById('bpSlugPreview').textContent = slugEl.value || '…';
+  if (!orig && document.activeElement !== slugEl) slugEl.value = bpSlugify(document.getElementById('bpTitle').value);
+  document.getElementById('bpSlugPreview').textContent = bpSlugify(slugEl.value) || '…';
+  bpCounts();
+}
+
+function bpCounts() {
+  var t = document.getElementById('bpTitle').value.trim();
+  var e = document.getElementById('bpExcerpt').value.trim();
+  var w = document.getElementById('bpBody').value.trim().split(/\s+/).filter(Boolean).length;
+  var tc = document.getElementById('bpTitleCount');
+  tc.textContent = t.length + (t.length > 60 ? ' — long for Google' : '');
+  tc.className = 'bp-count' + (t.length > 60 ? ' warn' : '');
+  var ec = document.getElementById('bpExcerptCount');
+  ec.textContent = e.length + ' / 155';
+  ec.className = 'bp-count' + (e.length > 155 ? ' warn' : '');
+  document.getElementById('bpBodyCount').textContent =
+    w + (w === 1 ? ' word · ' : ' words · ') + Math.max(1, Math.round(w / 200)) + ' min read';
+}
+
+// A small copy of what /api/blog does on the server, so "Show preview" shows the
+// real shape of the post rather than a guess. Escaped first — a post can talk
+// about <div> without breaking the dashboard.
+function bpRender(md) {
+  var esc = function (s) { return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+  var inline = function (s) { return esc(s)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>'); };
+  var out = [];
+  String(md || '').split(/\n{2,}/).forEach(function (raw) {
+    var b = raw.trim(); if (!b) return;
+    if (/^---+$/.test(b)) return out.push('<hr />');
+    if (/^###\s+/.test(b)) return out.push('<h3>' + inline(b.replace(/^###\s+/, '')) + '</h3>');
+    if (/^##?\s+/.test(b)) return out.push('<h2>' + inline(b.replace(/^##?\s+/, '')) + '</h2>');
+    if (/^>\s+/.test(b)) return out.push('<blockquote>' + inline(b.split('\n').map(function (l) {
+      return l.replace(/^>\s?/, ''); }).join(' ')) + '</blockquote>');
+    if (/^[-*]\s+/.test(b)) return out.push('<ul>' + b.split('\n').filter(function (l) { return /^\s*[-*]\s+/.test(l); })
+      .map(function (l) { return '<li>' + inline(l.replace(/^\s*[-*]\s+/, '')) + '</li>'; }).join('') + '</ul>');
+    out.push('<p>' + b.split('\n').map(inline).join('<br />') + '</p>');
+  });
+  return out.join('\n');
+}
+
+function togglePostPreview() {
+  var box = document.getElementById('bpPreview');
+  var btn = document.getElementById('bpPreviewBtn');
+  var on = box.style.display === 'none';
+  box.style.display = on ? 'block' : 'none';
+  btn.textContent = on ? 'Hide preview' : 'Show preview';
+  if (on) {
+    var t = document.getElementById('bpTitle').value.trim();
+    box.innerHTML = (t ? '<h2 style="margin-top:0">' + t.replace(/[<>&]/g, '') + '</h2>' : '')
+      + bpRender(document.getElementById('bpBody').value);
+  }
 }
 
 function renderPosts() {
@@ -2023,26 +2176,27 @@ function renderPosts() {
     list.innerHTML = '<div class="empty">Nothing published yet. The blog page tells visitors the first post is being written.</div>';
     return;
   }
+  var q = String.fromCharCode(39);
   list.innerHTML = _posts.map(function (p) {
     var when = p.date ? new Date(p.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+    var words = String(p.body || '').split(/\s+/).filter(Boolean).length;
     var url = '/blog/' + p.slug;
-    var q = String.fromCharCode(39);
-    return '<div class="drow">'
-      + '<div style="flex:1;min-width:0">'
-      +   '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">'
-      +     '<strong>' + esc(p.title) + '</strong>'
-      +     (p.draft ? '<span class="dtag" style="color:#b58900">Draft</span>' : '')
-      +     (p.video ? '<span class="dtag">Video</span>' : '')
-      +     '<span class="dtag">' + esc(p.tag || 'Notes') + '</span>'
+    return '<div class="bp-row">'
+      + '<div class="bp-main">'
+      +   '<div class="bp-badges">'
+      +     (p.draft ? '<span class="bp-badge draft">Draft — not on the site</span>' : '')
+      +     '<span class="bp-badge">' + esc(p.tag || 'Notes') + '</span>'
+      +     (p.video ? '<span class="bp-badge video">Video</span>' : '')
       +   '</div>'
-      +   '<div style="font-size:12px;color:var(--muted);margin-top:4px">' + when + ' &middot; '
-      +     '<a href="' + url + '" target="_blank" rel="noreferrer" style="color:var(--muted)">adris.tech' + esc(url) + '</a>'
-      +   '</div>'
+      +   '<div class="bp-title" onclick="editPost(' + q + p.slug + q + ')">' + esc(p.title) + '</div>'
+      +   '<div class="bp-sub"><span>' + when + '</span><span>·</span><span>' + words + ' words</span><span>·</span>'
+      +     '<a href="' + url + '" target="_blank" rel="noreferrer">adris.tech' + esc(url) + '</a></div>'
       + '</div>'
-      + '<div class="rv-acts">'
-      +   '<button class="rv-act" onclick="copyPostLink(' + q + p.slug + q + ')">Copy link</button>'
-      +   '<button class="rv-act" onclick="editPost(' + q + p.slug + q + ')">Edit</button>'
-      +   '<button class="rv-act" onclick="deletePost(' + q + p.slug + q + ')">Delete</button>'
+      + '<div class="bp-btns">'
+      +   '<button class="bp-btn" onclick="window.open(' + q + url + q + ', ' + q + '_blank' + q + ')">Open</button>'
+      +   '<button class="bp-btn primary" onclick="editPost(' + q + p.slug + q + ')">Edit</button>'
+      +   '<button class="bp-btn" onclick="copyPostLink(' + q + p.slug + q + ')">Copy link</button>'
+      +   '<button class="bp-btn danger" onclick="deletePost(' + q + p.slug + q + ')">Delete</button>'
       + '</div>'
       + '</div>';
   }).join('');
@@ -2054,6 +2208,7 @@ async function loadPosts() {
     const d = await postsApi({ action: 'list' });
     _posts = d.posts || [];
     renderPosts();
+    bpCounts();
   } catch (e) {
     list.innerHTML = '<div class="empty">Could not load posts: ' + esc(e.message) + '</div>';
   }
@@ -2061,9 +2216,13 @@ async function loadPosts() {
 
 function copyPostLink(slug) {
   navigator.clipboard.writeText('https://www.adris.tech/blog/' + slug);
+  bpSay('Link copied.', 'ok');
+}
+
+function bpSay(text, kind) {
   var m = document.getElementById('bpMsg');
-  m.textContent = 'Link copied.';
-  setTimeout(function () { m.textContent = ''; }, 1800);
+  m.textContent = text;
+  m.className = 'bp-msg' + (kind ? ' ' + kind : '');
 }
 
 function resetPostForm() {
@@ -2074,7 +2233,15 @@ function resetPostForm() {
   document.getElementById('bpDraft').checked = false;
   document.getElementById('bpSlugPreview').textContent = '…';
   document.getElementById('bpSaveBtn').textContent = 'Save & publish';
-  document.getElementById('bpMsg').textContent = '';
+  document.getElementById('bpFormTitle').textContent = 'Write a post';
+  document.getElementById('bpMode').textContent = 'New post';
+  document.getElementById('bpMode').className = 'bp-mode';
+  document.getElementById('bpCancelEdit').style.display = 'none';
+  document.getElementById('bpPreview').style.display = 'none';
+  document.getElementById('bpPreviewBtn').textContent = 'Show preview';
+  bpSay('');
+  bpCounts();
+  bpSyncFileFields();
 }
 
 function editPost(slug) {
@@ -2091,12 +2258,19 @@ function editPost(slug) {
   document.getElementById('bpDraft').checked = !!p.draft;
   document.getElementById('bpSlugPreview').textContent = p.slug;
   document.getElementById('bpSaveBtn').textContent = 'Update post';
-  document.querySelector('#tab-blog .ann-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('bpFormTitle').textContent = 'Editing';
+  var mode = document.getElementById('bpMode');
+  mode.textContent = p.title;
+  mode.className = 'bp-mode editing';
+  document.getElementById('bpCancelEdit').style.display = '';
+  bpSay('');
+  bpCounts();
+  bpSyncFileFields();
+  document.querySelector('#tab-blog .bp-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function savePost() {
   var btn = document.getElementById('bpSaveBtn');
-  var msg = document.getElementById('bpMsg');
   var post = {
     originalSlug: document.getElementById('bpOriginalSlug').value,
     slug: document.getElementById('bpSlug').value || bpSlugify(document.getElementById('bpTitle').value),
@@ -2108,18 +2282,19 @@ async function savePost() {
     poster: document.getElementById('bpPoster').value,
     draft: document.getElementById('bpDraft').checked,
   };
-  if (!post.title.trim()) { msg.textContent = 'A title is required.'; return; }
-  if (!post.body.trim())  { msg.textContent = 'The post is empty.'; return; }
+  if (!post.title.trim()) { bpSay('Give it a title first.', 'err'); document.getElementById('bpTitle').focus(); return; }
+  if (!post.body.trim())  { bpSay('The post is empty.', 'err'); document.getElementById('bpBody').focus(); return; }
+  if (!post.excerpt.trim() && !confirm('No summary.\n\nThat is the line shown on the blog list and in WhatsApp / Google previews. Publish without one?')) return;
 
-  btn.disabled = true; msg.textContent = 'Saving…';
+  btn.disabled = true; bpSay('Saving…');
   try {
     const d = await postsApi({ action: 'save', post: post });
     _posts = d.posts || [];
     renderPosts();
     resetPostForm();
-    msg.textContent = d.note || 'Saved.';
+    bpSay(d.note || 'Saved.', 'ok');
   } catch (e) {
-    msg.textContent = e.message;
+    bpSay(e.message, 'err');
   } finally {
     btn.disabled = false;
   }
@@ -2130,18 +2305,119 @@ async function deletePost(slug) {
   if (!p) return;
   // Deleting a post breaks every link anyone has shared to it, so the question
   // names the post rather than asking a generic "are you sure".
-  if (!confirm('Delete "' + p.title + '"?\n\nAnyone who has shared adris.tech/blog/' + slug + ' will get a "not found" page.')) return;
-  var msg = document.getElementById('bpMsg');
-  msg.textContent = 'Deleting…';
+  if (!confirm('Delete "' + p.title + '"?\n\nAnyone who has shared adris.tech/blog/' + slug + ' will get a "not found" page.\n\nTo take it off the site but keep the text, open it, tick "Save as draft" and update instead.')) return;
+  bpSay('Deleting…');
   try {
     const d = await postsApi({ action: 'delete', slug: slug });
     _posts = d.posts || [];
     renderPosts();
-    msg.textContent = d.note || 'Deleted.';
+    bpSay(d.note || 'Deleted.', 'ok');
   } catch (e) {
-    msg.textContent = e.message;
+    bpSay(e.message, 'err');
   }
 }
+
+// ── Dropping a picture or a video ─────────────────────────────────────────────
+// The file is committed to the repo under /blog-media, same idea as the post
+// text itself. The 3 MB ceiling is not a preference: a request body to a Vercel
+// function is capped at 4.5 MB and base64 adds about a third on the way in, so a
+// bigger file physically cannot arrive. It is checked HERE, before the upload
+// starts, so an oversized video fails in half a second with a sentence that says
+// what to do instead — rather than appearing to hang and then timing out.
+var BP_MAX = 3 * 1024 * 1024;
+
+function bpPick(kind) {
+  var f = document.getElementById('bpFile');
+  f.accept = kind === 'video' ? 'video/mp4,video/webm' : 'image/*';
+  f.onchange = function () { if (f.files && f.files[0]) bpUpload(f.files[0], kind); f.value = ''; };
+  f.click();
+}
+
+function bpDropZone(kind) {
+  return document.getElementById(kind === 'video' ? 'bpDropVideo' : 'bpDropImage');
+}
+
+function bpShowFile(kind, path, label) {
+  var zone = bpDropZone(kind);
+  var isImg = kind === 'image';
+  zone.classList.add('filled');
+  zone.innerHTML =
+    (isImg ? '<img class="bp-thumb" src="' + path + '" alt="" />'
+           : '<video class="bp-thumb" src="' + path + '" muted></video>')
+    + '<div><div class="bp-drop-t">' + esc(label || path.split('/').pop()) + '</div>'
+    + '<div class="bp-drop-s">' + esc(path) + '</div></div>'
+    + '<button type="button" class="bp-btn danger" onclick="event.stopPropagation();bpClearFile(' + String.fromCharCode(39) + kind + String.fromCharCode(39) + ')">Remove</button>';
+}
+
+function bpClearFile(kind) {
+  document.getElementById(kind === 'video' ? 'bpVideo' : 'bpPoster').value = '';
+  var zone = bpDropZone(kind);
+  zone.classList.remove('filled');
+  zone.innerHTML = kind === 'video'
+    ? '<div><div class="bp-drop-t"><b>&#128206; Attach a video</b></div>'
+      + '<div class="bp-drop-s">Click to choose a file from your computer — or drag one in.<br />mp4, webm · up to 3 MB</div></div>'
+    : '<div><div class="bp-drop-t"><b>&#128206; Attach a picture</b></div>'
+      + '<div class="bp-drop-s">Click to choose a file from your computer — or drag one in.<br />jpg, png, webp, gif · up to 3 MB</div></div>';
+}
+
+// Reflect whatever is typed (or loaded by Edit) back into the drop zone, so the
+// two halves never disagree about what the post has attached.
+function bpSyncFileFields() {
+  [['image', 'bpPoster'], ['video', 'bpVideo']].forEach(function (pair) {
+    var v = (document.getElementById(pair[1]).value || '').trim();
+    if (v) bpShowFile(pair[0], v); else bpClearFile(pair[0]);
+  });
+}
+
+async function bpUpload(file, kind) {
+  var bar = document.getElementById(kind === 'video' ? 'bpBarVideo' : 'bpBarImage');
+  if (file.size > BP_MAX) {
+    bpSay(file.name + ' is ' + (file.size / 1048576).toFixed(1) + ' MB. The ceiling is 3 MB — compress it, '
+      + 'or put the file in the repo and type its path below.', 'err');
+    return;
+  }
+  bar.style.display = 'block';
+  bpSay('Uploading ' + file.name + '…');
+  try {
+    var b64 = await new Promise(function (res, rej) {
+      var fr = new FileReader();
+      fr.onload = function () { res(String(fr.result).split(',')[1]); };
+      fr.onerror = function () { rej(new Error('Could not read that file.')); };
+      fr.readAsDataURL(file);
+    });
+    var d = await postsApi({ action: 'upload', name: file.name, data: b64 });
+    document.getElementById(d.kind === 'video' ? 'bpVideo' : 'bpPoster').value = d.path;
+    bpShowFile(d.kind, d.path, file.name);
+    bpSay(d.note || 'Uploaded.', 'ok');
+  } catch (e) {
+    bpSay(e.message, 'err');
+  } finally {
+    bar.style.display = 'none';
+  }
+}
+
+// Drag and drop onto either zone.
+['image', 'video'].forEach(function (kind) {
+  var zone = bpDropZone(kind);
+  if (!zone) return;
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('over'); });
+  });
+  zone.addEventListener('drop', function (e) {
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!f) return;
+    // Drop a video on the picture box and it still does the right thing.
+    bpUpload(f, /^video\//.test(f.type) ? 'video' : 'image');
+  });
+});
+
+// Live counters as you type.
+['bpTitle', 'bpExcerpt', 'bpBody'].forEach(function (id) {
+  document.addEventListener('input', function (e) { if (e.target && e.target.id === id) bpCounts(); });
+});
 
 </script>
 </body>
