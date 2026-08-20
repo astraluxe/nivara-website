@@ -160,7 +160,7 @@ ${vid ? `<script type="application/ld+json">${JSON.stringify(vid)}</script>` : '
 
       const player = post.video ? `
   <figure class="post-video">
-    <video controls preload="none" playsinline ${post.poster ? `poster="${esc(post.poster)}"` : ''} src="${esc(post.video)}"></video>
+    <video controls autoplay muted playsinline preload="auto" ${post.poster ? `poster="${esc(post.poster)}"` : ''} src="${esc(post.video)}"></video>
   </figure>` : '';
 
       const older = posts[i + 1], newer = posts[i - 1];

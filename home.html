@@ -637,8 +637,14 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     </div>
     <figure class="bh-film-stage bh-fade">
       <a class="bh-film-screen bh-film-link" href="/blog/adris-in-59-seconds" aria-label="Watch the adris.tech film — 59 seconds">
-        <img class="bh-film-video" src="/adris-film-poster.jpg" width="1600" height="900" loading="lazy" decoding="async"
-             alt="adris.tech in use — a verified lead moving to a booked meeting inside the Krew module" />
+        <!-- An 8-second silent loop, 540 KB — enough to make the band feel alive without
+             putting the 43 MB film on the page we most want to rank. The poster shows first,
+             and shows alone if the visitor is on a metered connection or prefers reduced motion. -->
+        <video class="bh-film-video" poster="/adris-film-poster.jpg" muted loop playsinline autoplay
+               preload="none" aria-hidden="true" style="pointer-events:none" id="filmPreview">
+          <source data-src="/adris-film-preview.webm" type="video/webm" />
+          <source data-src="/adris-film-preview.mp4" type="video/mp4" />
+        </video>
         <span class="bh-film-badge"><span class="pulse"></span>0:59</span>
         <span class="bh-film-play">
           <span class="disc"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
@@ -1230,41 +1236,9 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 </script>
 
 <!-- Signed-in avatar in nav + OAuth token forwarding (same as old home) -->
+<!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script>
-(function () {
-  if (window.location.hash.indexOf('access_token=') > -1 || window.location.search.indexOf('code=') > -1) {
-    window.location.replace('/signin' + window.location.search + window.location.hash);
-    return;
-  }
-  var sb = window.supabase.createClient(
-    'https://xkkqcqsacgdrfwbwdqsp.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0'
-  );
-  function updateNav(session) {
-    var el = document.getElementById('navSignIn');
-    if (!el || !session) return;
-    var meta = session.user.user_metadata || {};
-    var avatar = meta.avatar_url || meta.picture;
-    var name = meta.full_name || meta.name || session.user.email;
-    el.removeAttribute('onmouseover');
-    el.removeAttribute('onmouseout');
-    if (avatar) {
-      el.style.cssText = 'padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';
-      el.innerHTML = '<img src="' + avatar + '" alt="' + name + '" title="' + name + '" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';
-    } else {
-      el.style.cssText = 'width:30px;height:30px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';
-      el.textContent = (name || 'U').charAt(0).toUpperCase();
-    }
-  }
-  try {
-    var stored = localStorage.getItem('sb-xkkqcqsacgdrfwbwdqsp-auth-token');
-    if (stored) { var sess = JSON.parse(stored); if (sess && sess.user) updateNav(sess); }
-  } catch (_) {}
-  sb.auth.getSession().then(function (r) { updateNav(r.data.session); });
-  sb.auth.onAuthStateChange(function (_e, s) { updateNav(s); });
-})();
-</script>
+<script src="/nav-auth.js" defer></script>
 <script src="/affiliate-welcome.js" defer></script>
 <script>
 // The badge was hardcoded and had already fallen two releases behind. latest.json is written by the
@@ -1281,5 +1255,31 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 })();
 </script>
 <script src="/reviews.js" defer></script>
+
+<!-- The preview loop attaches itself only when the band is near the viewport, and never on a
+     metered connection or with reduced motion on. data-src keeps it off the initial page load;
+     until then the poster is what you see, which is the same picture. (filmPreview attach) -->
+<script>
+(function () {
+  var v = document.getElementById('filmPreview'); if (!v) return;
+  var conn = navigator.connection || {};
+  var thrifty = !!conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveType || '');
+  if (thrifty || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      v.querySelectorAll('source[data-src]').forEach(function (s) { s.src = s.dataset.src; });
+      v.load();
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+    });
+  }, { rootMargin: '300px 0px' });
+  io.observe(v);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) v.pause(); else if (v.src || v.currentSrc) v.play().catch(function () {});
+  });
+})();
+</script>
+
 </body>
 </html>

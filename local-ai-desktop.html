@@ -53,9 +53,9 @@
       <span class="dot"></span>
     </a>
     <ul class="nav-links">
-      <li><a href="#platform">Platform</a></li>
+      <li><a href="/#platform">Platform</a></li>
       <li class="has-dropdown">
-        <a href="#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a href="/#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         <div class="nav-dropdown">
           <div class="nav-dropdown-inner">
             <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
@@ -103,7 +103,7 @@
 <div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-inner">
     <ul>
-      <li><a href="#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/krew"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Krew — AI Agents</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/automation"  onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Automation</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/coder"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Coder</a></li>
@@ -297,6 +297,10 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     </div>
   </div>
 </footer>
+
+<!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/nav-auth.js" defer></script>
 
 </body>
 </html>
