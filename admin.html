@@ -655,6 +655,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
         .bp-badges { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:5px; }
         .bp-badge { font-size:10px; padding:2px 8px; border-radius:999px; border:1px solid var(--border); color:var(--muted); }
         .bp-badge.draft { border-color:#b58900; color:#b58900; }
+        .bp-badge.pin { border-color:#2e9e5b; color:#2e9e5b; }
         .bp-badge.video { border-color:var(--accent,#7C5CFF); color:var(--accent,#7C5CFF); }
         .bp-btns { display:flex; gap:6px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
         .bp-btn { background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:7px;
@@ -2186,6 +2187,7 @@ function renderPosts() {
       +   '<div class="bp-badges">'
       +     (p.draft ? '<span class="bp-badge draft">Draft — not on the site</span>' : '')
       +     '<span class="bp-badge">' + esc(p.tag || 'Notes') + '</span>'
+      +     (p.pinned ? '<span class="bp-badge pin">&#128204; Pinned to top</span>' : '')
       +     (p.video ? '<span class="bp-badge video">Video</span>' : '')
       +   '</div>'
       +   '<div class="bp-title" onclick="editPost(' + q + p.slug + q + ')">' + esc(p.title) + '</div>'
@@ -2195,6 +2197,7 @@ function renderPosts() {
       + '<div class="bp-btns">'
       +   '<button class="bp-btn" onclick="window.open(' + q + url + q + ', ' + q + '_blank' + q + ')">Open</button>'
       +   '<button class="bp-btn primary" onclick="editPost(' + q + p.slug + q + ')">Edit</button>'
+      +   '<button class="bp-btn" onclick="pinPost(' + q + p.slug + q + ',' + !p.pinned + ')">' + (p.pinned ? 'Unpin' : 'Pin to top') + '</button>'
       +   '<button class="bp-btn" onclick="copyPostLink(' + q + p.slug + q + ')">Copy link</button>'
       +   '<button class="bp-btn danger" onclick="deletePost(' + q + p.slug + q + ')">Delete</button>'
       + '</div>'
@@ -2298,6 +2301,18 @@ async function savePost() {
   } finally {
     btn.disabled = false;
   }
+}
+
+async function pinPost(slug, on) {
+  // Only one post can be pinned, so pinning a second one moves the pin rather than adding a
+  // second — the server enforces that and returns the whole list back.
+  bpSay(on ? 'Pinning…' : 'Unpinning…');
+  try {
+    const d = await postsApi({ action: 'pin', slug: slug, pinned: on });
+    _posts = d.posts || [];
+    renderPosts();
+    bpSay(on ? 'Pinned. It now sits at the top of /blog.' : 'Unpinned. The blog is back in date order.', 'ok');
+  } catch (e) { bpSay(e.message, 'err'); }
 }
 
 async function deletePost(slug) {

@@ -94,7 +94,13 @@ export default async function handler(req) {
   }
   if (!template) return new Response('Blog template missing', { status: 500 });
 
+  // Newest first, except a pinned post, which the head has deliberately put at the top and which
+  // therefore outranks its own date. Only the INDEX order changes: the post itself is untouched,
+  // and next/previous still read in date order so navigation does not jump about.
   posts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+  const pinned = posts.filter((p) => p.pinned);
+  const rest = posts.filter((p) => !p.pinned);
+  const indexOrder = pinned.concat(rest);
 
   const SITE = 'https://www.adris.tech';
   let head, main, canonical, status = 200;
@@ -203,7 +209,7 @@ ${mdToHtml(post.body)}
       '@context': 'https://schema.org', '@type': 'Blog',
       name: 'The adris.tech blog', url: canonical,
       description: 'Notes on building adris.tech — local-first AI, research, product and founder life.',
-      blogPost: posts.slice(0, 20).map((p) => ({
+      blogPost: indexOrder.slice(0, 20).map((p) => ({
         '@type': 'BlogPosting', headline: p.title, url: `${SITE}/blog/${p.slug}`,
         datePublished: p.date, description: p.excerpt || '',
       })),
@@ -219,7 +225,7 @@ ${mdToHtml(post.body)}
 <meta name="twitter:card" content="summary_large_image" />
 <script type="application/ld+json">${JSON.stringify(ld)}</script>`;
 
-    const cards = posts.length ? posts.map((p, i) => `
+    const cards = indexOrder.length ? indexOrder.map((p, i) => `
       <a class="post-card${i === 0 ? ' feature' : ''}" href="/blog/${esc(p.slug)}">
         ${i === 0 && p.poster ? `<div class="post-card-img"><img src="${esc(p.poster)}" alt="" loading="lazy" decoding="async" /></div>` : ''}
         <div class="post-card-body">

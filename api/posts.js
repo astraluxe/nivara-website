@@ -221,6 +221,7 @@ export default async function handler(req) {
       ...(poster ? { poster } : {}),
       body: text,
       draft: !!p.draft,
+      pinned: !!p.pinned,
       added: (at >= 0 && doc.posts[at].added) || new Date().toISOString(),
     };
 
@@ -231,6 +232,16 @@ export default async function handler(req) {
     if (at >= 0) doc.posts[at] = entry;
     else doc.posts.unshift(entry);
     message = `blog: ${at >= 0 ? 'update' : 'add'} ${title}`;
+
+  } else if (action === 'pin') {
+    // ONE pinned post, not a pile of them. "Pinned" that applies to six posts is just the
+    // ordering you already had, so setting it here clears it everywhere else.
+    const slug = cleanLine(body.slug, 90);
+    const on = !!body.pinned;
+    const found = doc.posts.some((x) => x && x.slug === slug);
+    if (!found) return json({ error: 'No post with that address.' }, 404);
+    doc.posts.forEach((x) => { if (x) x.pinned = on && x.slug === slug; });
+    message = `blog: ${on ? 'pin' : 'unpin'} ${slug}`;
 
   } else if (action === 'delete') {
     const slug = cleanLine(body.slug, 90);
