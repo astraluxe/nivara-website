@@ -341,6 +341,7 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <li><button class="tab" onclick="switchTab('offers')">Offers</button></li>
       <li><button class="tab" onclick="switchTab('pilot')">Pilot</button></li>
       <li><button class="tab" onclick="switchTab('reviews')">Reviews</button></li>
+      <li><button class="tab" onclick="switchTab('blog')">Blog</button></li>
     </ul>
     <div class="adm-side-foot">
       <div class="lbl">Signed in as</div>
@@ -600,6 +601,99 @@ tr:hover td { background:rgba(124,92,255,.03); }
       <div id="rvList"><div class="empty">Loading&hellip;</div></div>
     </div>
 
+
+    <!-- BLOG TAB — what appears on /blog and /blog/<slug>.
+         Same method as Reviews: writes go through /api/posts, which commits posts.json
+         to GitHub and lets Vercel redeploy. No database, no runtime dependency. -->
+    <div id="tab-blog" class="tab-panel">
+      <div class="ann-form">
+        <h3 style="margin:0 0 4px;font-size:15px">Write a post</h3>
+        <p style="margin:0 0 16px;font-size:12.5px;color:var(--muted);line-height:1.6">
+          Goes live at <strong>/blog</strong> about a minute after saving &mdash; it is committed to
+          GitHub and Vercel rebuilds the site. Write about anything: what you are building, research
+          worth keeping, founder life, the ups and the downs. Each post gets its own shareable link.
+        </p>
+
+        <input type="hidden" id="bpOriginalSlug" />
+
+        <div style="margin-bottom:12px">
+          <label>Title</label>
+          <input type="text" id="bpTitle" placeholder="What running a company from Bengaluru actually costs" oninput="bpSyncSlug()" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div>
+            <label>Web address <span style="color:var(--muted);font-weight:400">(the shareable link)</span></label>
+            <input type="text" id="bpSlug" placeholder="what-running-a-company-costs" />
+            <div style="font-size:11px;color:var(--muted);margin-top:5px">
+              adris.tech/blog/<span id="bpSlugPreview">…</span>
+              <strong style="color:var(--muted)">&mdash; don't change this after sharing the link.</strong>
+            </div>
+          </div>
+          <div>
+            <label>Category</label>
+            <select id="bpTag">
+              <option>Product</option>
+              <option>Research</option>
+              <option>Founder life</option>
+              <option>Engineering</option>
+              <option>Notes</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label>Summary <span style="color:var(--muted);font-weight:400">(shown on the blog list and in WhatsApp / LinkedIn previews)</span></label>
+          <textarea id="bpExcerpt" rows="2" placeholder="One or two sentences that make someone want to read it."></textarea>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label>The post</label>
+          <textarea id="bpBody" rows="16" placeholder="Write normally. Leave a blank line between paragraphs.
+
+## A heading looks like this
+
+- a bullet
+- another bullet
+
+**bold**, *italic*, and [a link](https://example.com) all work.
+
+--- puts a divider across the page."></textarea>
+          <div style="font-size:11px;color:var(--muted);margin-top:5px">
+            Blank line between paragraphs &middot; <code>##</code> heading &middot; <code>-</code> bullet &middot;
+            <code>**bold**</code> &middot; <code>[text](link)</code> &middot; <code>&gt;</code> quote &middot; <code>---</code> divider
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div>
+            <label>Video <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <input type="text" id="bpVideo" placeholder="/adris-film.mp4" />
+            <div style="font-size:11px;color:var(--muted);margin-top:5px">A file already on the site. Plays at the top of the post.</div>
+          </div>
+          <div>
+            <label>Image <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <input type="text" id="bpPoster" placeholder="/adris-film-poster.jpg" />
+            <div style="font-size:11px;color:var(--muted);margin-top:5px">Used for the video still and the link preview card.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <button class="btn" id="bpSaveBtn" onclick="savePost()">Save &amp; publish</button>
+          <button class="btn btn-ghost" onclick="resetPostForm()">Clear</button>
+          <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);font-weight:400;margin:0">
+            <input type="checkbox" id="bpDraft" style="width:auto;margin:0" /> Save as draft (not shown on the site)
+          </label>
+          <span id="bpMsg" style="font-size:12.5px;color:var(--muted)"></span>
+        </div>
+      </div>
+
+      <div class="dhead">
+        <h2>Published</h2>
+        <span class="dtag" id="bpCountTag">&mdash;</span>
+      </div>
+      <div id="bpList"><div class="empty">Loading&hellip;</div></div>
+    </div>
     <!-- AFFILIATES TAB -->
     <div id="tab-affiliates" class="tab-panel">
 
@@ -997,7 +1091,7 @@ async function deleteFeedback(id, btn) {
 }
 
 function switchTab(name) {
-  const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers','pilot','reviews'];
+  const tabs = ['overview','users','affiliates','announcements','feedback','revenue','offers','pilot','reviews','blog'];
   document.querySelectorAll('.tab').forEach((t,i) => {
     t.classList.toggle('active', tabs[i]===name);
   });
@@ -1007,6 +1101,7 @@ function switchTab(name) {
   if (name === 'offers') loadOffers();
   if (name === 'pilot') loadPilot();
   if (name === 'reviews') loadReviews();
+  if (name === 'blog') loadPosts();
 }
 
 // ── Pilot program ─────────────────────────────────────────────────────────────
@@ -1887,6 +1982,167 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(() => document.getElementById('pinInput').focus(), 100);
   }
 })();
+
+// ── Blog posts ────────────────────────────────────────────────────────────────
+// Same shape as the reviews section above, and for the same reason: a post is
+// public copy read off the CDN, so it lives in posts.json committed to GitHub
+// rather than in a database. A save takes about a minute to appear because Vercel
+// has to rebuild — the UI says so instead of pretending it was instant.
+let _posts = [];
+
+async function postsApi(payload) {
+  const res = await fetch('/api/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _session.access_token },
+    body: JSON.stringify(payload),
+  });
+  const d = await res.json().catch(function () { return {}; });
+  if (!res.ok) throw new Error(d.message || d.error || ('Request failed (' + res.status + ')'));
+  return d;
+}
+
+function bpSlugify(s) {
+  return String(s || '').toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-')
+    .replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 90);
+}
+// The address follows the title only while the post is NEW. Once it has been
+// saved, the slug is a link people may already have, so typing in the title must
+// not silently move the post to a different URL.
+function bpSyncSlug() {
+  var orig = document.getElementById('bpOriginalSlug').value;
+  var slugEl = document.getElementById('bpSlug');
+  if (!orig) slugEl.value = bpSlugify(document.getElementById('bpTitle').value);
+  document.getElementById('bpSlugPreview').textContent = slugEl.value || '…';
+}
+
+function renderPosts() {
+  var list = document.getElementById('bpList');
+  var tag = document.getElementById('bpCountTag');
+  if (tag) tag.textContent = _posts.length + (_posts.length === 1 ? ' post' : ' posts');
+  if (!_posts.length) {
+    list.innerHTML = '<div class="empty">Nothing published yet. The blog page tells visitors the first post is being written.</div>';
+    return;
+  }
+  list.innerHTML = _posts.map(function (p) {
+    var when = p.date ? new Date(p.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+    var url = '/blog/' + p.slug;
+    var q = String.fromCharCode(39);
+    return '<div class="drow">'
+      + '<div style="flex:1;min-width:0">'
+      +   '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">'
+      +     '<strong>' + esc(p.title) + '</strong>'
+      +     (p.draft ? '<span class="dtag" style="color:#b58900">Draft</span>' : '')
+      +     (p.video ? '<span class="dtag">Video</span>' : '')
+      +     '<span class="dtag">' + esc(p.tag || 'Notes') + '</span>'
+      +   '</div>'
+      +   '<div style="font-size:12px;color:var(--muted);margin-top:4px">' + when + ' &middot; '
+      +     '<a href="' + url + '" target="_blank" rel="noreferrer" style="color:var(--muted)">adris.tech' + esc(url) + '</a>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="rv-acts">'
+      +   '<button class="rv-act" onclick="copyPostLink(' + q + p.slug + q + ')">Copy link</button>'
+      +   '<button class="rv-act" onclick="editPost(' + q + p.slug + q + ')">Edit</button>'
+      +   '<button class="rv-act" onclick="deletePost(' + q + p.slug + q + ')">Delete</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+async function loadPosts() {
+  var list = document.getElementById('bpList');
+  try {
+    const d = await postsApi({ action: 'list' });
+    _posts = d.posts || [];
+    renderPosts();
+  } catch (e) {
+    list.innerHTML = '<div class="empty">Could not load posts: ' + esc(e.message) + '</div>';
+  }
+}
+
+function copyPostLink(slug) {
+  navigator.clipboard.writeText('https://www.adris.tech/blog/' + slug);
+  var m = document.getElementById('bpMsg');
+  m.textContent = 'Link copied.';
+  setTimeout(function () { m.textContent = ''; }, 1800);
+}
+
+function resetPostForm() {
+  ['bpOriginalSlug', 'bpTitle', 'bpSlug', 'bpExcerpt', 'bpBody', 'bpVideo', 'bpPoster'].forEach(function (id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('bpTag').value = 'Product';
+  document.getElementById('bpDraft').checked = false;
+  document.getElementById('bpSlugPreview').textContent = '…';
+  document.getElementById('bpSaveBtn').textContent = 'Save & publish';
+  document.getElementById('bpMsg').textContent = '';
+}
+
+function editPost(slug) {
+  var p = _posts.find(function (x) { return x.slug === slug; });
+  if (!p) return;
+  document.getElementById('bpOriginalSlug').value = p.slug;
+  document.getElementById('bpTitle').value = p.title || '';
+  document.getElementById('bpSlug').value = p.slug || '';
+  document.getElementById('bpExcerpt').value = p.excerpt || '';
+  document.getElementById('bpBody').value = p.body || '';
+  document.getElementById('bpVideo').value = p.video || '';
+  document.getElementById('bpPoster').value = p.poster || '';
+  document.getElementById('bpTag').value = p.tag || 'Notes';
+  document.getElementById('bpDraft').checked = !!p.draft;
+  document.getElementById('bpSlugPreview').textContent = p.slug;
+  document.getElementById('bpSaveBtn').textContent = 'Update post';
+  document.querySelector('#tab-blog .ann-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function savePost() {
+  var btn = document.getElementById('bpSaveBtn');
+  var msg = document.getElementById('bpMsg');
+  var post = {
+    originalSlug: document.getElementById('bpOriginalSlug').value,
+    slug: document.getElementById('bpSlug').value || bpSlugify(document.getElementById('bpTitle').value),
+    title: document.getElementById('bpTitle').value,
+    excerpt: document.getElementById('bpExcerpt').value,
+    body: document.getElementById('bpBody').value,
+    tag: document.getElementById('bpTag').value,
+    video: document.getElementById('bpVideo').value,
+    poster: document.getElementById('bpPoster').value,
+    draft: document.getElementById('bpDraft').checked,
+  };
+  if (!post.title.trim()) { msg.textContent = 'A title is required.'; return; }
+  if (!post.body.trim())  { msg.textContent = 'The post is empty.'; return; }
+
+  btn.disabled = true; msg.textContent = 'Saving…';
+  try {
+    const d = await postsApi({ action: 'save', post: post });
+    _posts = d.posts || [];
+    renderPosts();
+    resetPostForm();
+    msg.textContent = d.note || 'Saved.';
+  } catch (e) {
+    msg.textContent = e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function deletePost(slug) {
+  var p = _posts.find(function (x) { return x.slug === slug; });
+  if (!p) return;
+  // Deleting a post breaks every link anyone has shared to it, so the question
+  // names the post rather than asking a generic "are you sure".
+  if (!confirm('Delete "' + p.title + '"?\n\nAnyone who has shared adris.tech/blog/' + slug + ' will get a "not found" page.')) return;
+  var msg = document.getElementById('bpMsg');
+  msg.textContent = 'Deleting…';
+  try {
+    const d = await postsApi({ action: 'delete', slug: slug });
+    _posts = d.posts || [];
+    renderPosts();
+    msg.textContent = d.note || 'Deleted.';
+  } catch (e) {
+    msg.textContent = e.message;
+  }
+}
+
 </script>
 </body>
 </html>

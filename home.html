@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" href="/icon.png" />
 <link rel="apple-touch-icon" href="/icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>adris.tech</title>
-<meta name="description" content="One platform replaces your AI stack — agents, automation, code, security. Runs locally, your data never leaves your machines. Built in Bengaluru. Free to start." />
+<title>Private AI Office — Local AI Desktop App | adris.tech</title>
+<meta name="description" content="Eight AI products in one desktop app that runs on your own machine — agents, automation, contract review, code and local LLMs. Free to start." />
 
 <!-- Open Graph / Twitter -->
 <meta property="og:type"        content="website" />
@@ -27,6 +27,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","logo":"https://www.adris.tech/icon.png","description":"Local-first AI platform for businesses — eight products in one desktop app that runs on your own machine.","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressRegion":"Karnataka","addressCountry":"IN"},"sameAs":["https://x.com/Amogh_Misra_"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"adris.tech","url":"https://www.adris.tech","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.adris.tech/docs?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows 10, Windows 11, Linux","description":"Eight AI products in one desktop app: AI agents, automation, code editor, local LLM runner, contract scanning, DNS security, device mesh and a shared knowledge graph. Runs locally.","url":"https://www.adris.tech","downloadUrl":"https://www.adris.tech/download","softwareVersion":"1.46.0","offers":[{"@type":"Offer","price":"0","priceCurrency":"INR","name":"Free"},{"@type":"Offer","price":"1499","priceCurrency":"INR","name":"Solo"},{"@type":"Offer","price":"4999","priceCurrency":"INR","name":"Builder"}],"featureList":["AI agents","Workflow automation","AI contract review","Local LLM runner","AI code editor","DNS security","Knowledge graph"]}</script>
 
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="backgrounds.css" />
@@ -127,6 +131,8 @@
    zoom out to see it whole. Cap the HEIGHT against the viewport and let
    the width follow from the ratio, so the whole player is always on
    screen at once. On narrow screens 100% wins and nothing changes. */
+.bh-film-link { display: block; text-decoration: none; color: inherit; cursor: pointer; }
+.bh-film-link:hover .disc { transform: scale(1.07); background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .bh-film-stage {
   margin: 0 auto; position: relative; aspect-ratio: 16 / 9;
   width: min(100%, calc(70vh * 16 / 9));
@@ -459,7 +465,7 @@
         </div>
       </li>
       <li><a href="/pricing">Pricing</a></li>
-      <li><a href="/download">Download</a></li>
+      <li><a href="/blog">Blog</a></li>
       <li><a href="/affiliates">Affiliates</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
@@ -504,6 +510,7 @@
       <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
       <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
       <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
+      <li><a href="/blog" onclick="closeMobileNav()">Blog</a></li>
       <li><a href="/brief"      onclick="closeMobileNav()">Product brief (PDF)</a></li>
       <li><a href="/partner"    onclick="closeMobileNav()">Contact</a></li>
     </ul>
@@ -612,6 +619,14 @@ document.getElementById('themeToggle').addEventListener('click', function () {
      The section is unnumbered, like the marquee band, so the // 01–05
      indexes below keep their numbering.
 ============================================ -->
+<!-- ============================================
+     THE FILM — poster only, links to /film
+
+     The film itself is 43 MB. Loading it here made the homepage — the page most
+     worth ranking — carry that weight, so the band now shows the poster (110 KB)
+     and links to /film, where the player lives. Same band, same design, none of
+     the bytes.
+============================================ -->
 <section class="bh-film" id="film" aria-labelledby="filmTitle">
   <div class="wrap">
     <div class="bh-film-head bh-rv">
@@ -620,46 +635,16 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <h2 id="filmTitle">Fifty-nine seconds. <span class="it">A day of work, done.</span></h2>
       </div>
     </div>
-
     <figure class="bh-film-stage bh-fade">
-      <div class="bh-film-screen is-loading" id="filmScreen">
-        <video id="filmVideo" class="bh-film-video"
-               data-src="/adris-film.mp4"
-               data-poster="/adris-film-poster.jpg"
-               muted playsinline loop preload="none"
-               aria-label="adris.tech product film"></video>
-
+      <a class="bh-film-screen bh-film-link" href="/blog/adris-in-59-seconds" aria-label="Watch the adris.tech film — 59 seconds">
+        <img class="bh-film-video" src="/adris-film-poster.jpg" width="1600" height="900" loading="lazy" decoding="async"
+             alt="adris.tech in use — a verified lead moving to a booked meeting inside the Krew module" />
         <span class="bh-film-badge"><span class="pulse"></span>0:59</span>
-
-        <div class="bh-film-tools">
-          <button type="button" data-film="toggle" data-label="Play" aria-label="Play or pause">
-            <svg class="i-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
-            <svg class="i-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-          </button>
-          <button type="button" data-film="restart" data-label="Restart" aria-label="Play from the start">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-          </button>
-          <button type="button" data-film="pip" class="bh-film-dockonly" data-label="Pop out" aria-label="Pop out into a floating window">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="12" width="8" height="6" rx="1"/></svg>
-          </button>
-          <button type="button" data-film="expand" class="bh-film-inlineonly" data-label="Full screen" aria-label="Watch full screen">
-            <svg class="i-expand" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-            <svg class="i-collapse" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h3a2 2 0 0 0 2-2V3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M21 16h-3a2 2 0 0 0-2 2v3"/></svg>
-          </button>
-          <button type="button" data-film="close" class="bh-film-dockonly" data-label="Close" aria-label="Close the mini player">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
-        </div>
-
-        <button class="bh-film-play" type="button" id="filmPlay" aria-label="Play the adris.tech film">
-          <span class="disc">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
-          </span>
+        <span class="bh-film-play">
+          <span class="disc"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
           <span class="lbl">Watch the film</span>
-        </button>
-
-        <div class="bh-film-bar" aria-hidden="true"><span id="filmProg"></span></div>
-      </div>
+        </span>
+      </a>
     </figure>
   </div>
 </section>
@@ -883,6 +868,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <h3>Company</h3>
         <ul>
           <li><a href="/why-adris">Why adris</a></li>
+          <li><a href="/blog">Blog</a></li>
           <li><a href="/brief">Product brief (PDF)</a></li>
           <li><a href="/how-it-works">How it works</a></li>
           <li><a href="/pricing">Pricing</a></li>
@@ -1073,174 +1059,6 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 })();
 </script>
 
-<!-- ============================================
-     THE FILM — inline / docked / full screen
-
-     The file is 43 MB, so nothing about it is allowed to touch first
-     paint: the poster is attached only when the band gets near the
-     viewport, and the video source only when we actually intend to
-     play. On a metered or slow connection, or with reduced motion on,
-     it never auto-streams — the poster and the play button stand in
-     and the visitor opts in.
-============================================ -->
-<script>
-(function () {
-  var screenEl = document.getElementById('filmScreen');
-  var video    = document.getElementById('filmVideo');
-  var prog     = document.getElementById('filmProg');
-  var section  = document.getElementById('film');
-  if (!screenEl || !video || !section) return;
-
-  var stage = screenEl.parentNode; // .bh-film-stage — keeps the layout box while docked
-
-  var reduce  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var conn    = navigator.connection || navigator.webkitConnection || {};
-  var thrifty = !!conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveType || '');
-  var autoOk  = !reduce && !thrifty;
-
-  var srcSet = false, posterSet = false;
-  var docked = false, dismissed = false, userPaused = false;
-  try { dismissed = sessionStorage.getItem('adris-film-dock') === 'off'; } catch (e) {}
-
-  function attachPoster() {
-    if (posterSet) return; posterSet = true;
-    video.poster = video.getAttribute('data-poster');
-    screenEl.classList.remove('is-loading');
-  }
-  function attachSrc() {
-    attachPoster();
-    if (srcSet) return; srcSet = true;
-    video.preload = 'auto';
-    video.src = video.getAttribute('data-src');
-  }
-  function play() {
-    attachSrc(); userPaused = false;
-    var p = video.play();
-    // Autoplay can still be refused; the poster + play button remain, which is a fine resting state.
-    if (p && p.catch) p.catch(function () {});
-  }
-  function pause(byUser) { if (byUser) userPaused = true; video.pause(); }
-
-  // ── State classes + progress ──
-  var toggleBtn = screenEl.querySelector('[data-film="toggle"]');
-  var expandBtn = screenEl.querySelector('[data-film="expand"]');
-  // The icon swap is CSS; only the words have to be kept in step here.
-  function syncLabels() {
-    if (toggleBtn) {
-      var t = video.paused ? 'Play' : 'Pause';
-      toggleBtn.setAttribute('data-label', t);
-      toggleBtn.setAttribute('aria-label', t);
-    }
-    if (expandBtn) {
-      var f = document.fullscreenElement ? 'Exit full screen' : 'Full screen';
-      expandBtn.setAttribute('data-label', f);
-      expandBtn.setAttribute('aria-label', f);
-    }
-  }
-  video.addEventListener('playing', function () { screenEl.classList.add('is-playing'); syncLabels(); });
-  video.addEventListener('pause',   function () { screenEl.classList.remove('is-playing'); syncLabels(); });
-  video.addEventListener('timeupdate', function () {
-    if (video.duration) prog.style.width = (video.currentTime / video.duration * 100).toFixed(2) + '%';
-  });
-  syncLabels();
-
-  // ── Seek: the progress bar is the only scrubber, since the toolbar
-  //    replaces the native controls in fullscreen too. ──
-  var bar = screenEl.querySelector('.bh-film-bar');
-  function seekFrom(clientX) {
-    if (!video.duration) return;
-    var r = bar.getBoundingClientRect();
-    var pct = Math.min(Math.max((clientX - r.left) / r.width, 0), 1);
-    video.currentTime = pct * video.duration;
-  }
-  bar.addEventListener('click', function (e) { e.stopPropagation(); attachSrc(); seekFrom(e.clientX); });
-
-  // ── Dock / undock (CSS only — the <video> is never re-parented) ──
-  function dock() {
-    if (docked || dismissed || document.fullscreenElement) return;
-    docked = true; screenEl.classList.add('is-docked');
-  }
-  function undock() {
-    if (!docked) return;
-    docked = false; screenEl.classList.remove('is-docked');
-  }
-
-  // Attach the poster a screenful early so the band is never an empty box.
-  var nearIO = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { attachPoster(); nearIO.disconnect(); } });
-  }, { rootMargin: '600px 0px' });
-  nearIO.observe(stage);
-
-  // In view -> play inline. Out of view while playing -> dock to the corner.
-  var viewIO = new IntersectionObserver(function (es) {
-    es.forEach(function (e) {
-      if (e.intersectionRatio >= 0.35) {
-        undock();
-        if (autoOk && !userPaused && video.paused) play();
-      } else if (e.intersectionRatio === 0) {
-        if (!video.paused) dock();
-      }
-    });
-  }, { threshold: [0, 0.35] });
-  viewIO.observe(stage);
-
-  // ── Clicks ──
-  document.getElementById('filmPlay').addEventListener('click', function (e) {
-    e.stopPropagation();
-    if (video.paused) play(); else pause(true);
-  });
-
-  video.addEventListener('click', function () {
-    if (docked) { // clicking the mini player takes you back to the band
-      undock();
-      section.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
-      play();
-      return;
-    }
-    if (video.paused) play(); else pause(true);
-  });
-
-  function enterFull() {
-    if (document.fullscreenElement) { document.exitFullscreen(); return; } // the button toggles
-    attachSrc();
-    undock();
-    var req = screenEl.requestFullscreen || screenEl.webkitRequestFullscreen;
-    if (!req) { // iOS Safari only fullscreens the video element itself
-      if (video.webkitEnterFullscreen) { play(); video.webkitEnterFullscreen(); }
-      return;
-    }
-    var done = req.call(screenEl);
-    // No native controls — the same toolbar carries over into fullscreen.
-    var start = function () { video.currentTime = 0; play(); syncLabels(); };
-    if (done && done.then) done.then(start).catch(function () {}); else start();
-  }
-
-  screenEl.querySelectorAll('[data-film]').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var act = btn.getAttribute('data-film');
-      if (act === 'toggle')       { if (video.paused) play(); else pause(true); }
-      else if (act === 'restart') { attachSrc(); video.currentTime = 0; play(); }
-      else if (act === 'expand')  { enterFull(); }
-      else if (act === 'pip')     { if (video.requestPictureInPicture) video.requestPictureInPicture().catch(function () {}); }
-      else if (act === 'close')   {
-        dismissed = true;
-        try { sessionStorage.setItem('adris-film-dock', 'off'); } catch (e2) {}
-        pause(true); undock();
-      }
-    });
-  });
-
-  document.addEventListener('fullscreenchange', syncLabels);
-
-  // Don't burn bandwidth or CPU in a background tab.
-  var resumeOnReturn = false;
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden) { resumeOnReturn = !video.paused; video.pause(); }
-    else if (resumeOnReturn && !userPaused) play();
-  });
-})();
-</script>
 
 <!-- Globe (same beloved globe as before) -->
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>

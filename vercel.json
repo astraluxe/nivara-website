@@ -3,37 +3,165 @@
   "installCommand": "echo done",
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/",                    "destination": "/home.html" },
-    { "source": "/classic",             "destination": "/NIVARA.html" },
-    { "source": "/pricing",             "destination": "/pricing.html" },
-    { "source": "/models",              "destination": "/models.html" },
-    { "source": "/download",            "destination": "/download.html" },
-    { "source": "/dl/:file",            "destination": "/api/dl?file=:file" },
-    { "source": "/affiliates",          "destination": "/affiliates.html" },
-    { "source": "/partner",             "destination": "/partner.html" },
-    { "source": "/terms",               "destination": "/terms.html" },
-    { "source": "/privacy",             "destination": "/privacy.html" },
-    { "source": "/signin",              "destination": "/signin.html" },
-    { "source": "/join",                "destination": "/join.html" },
-    { "source": "/affiliate-dashboard", "destination": "/affiliate-dashboard.html" },
-    { "source": "/affiliate-terms",    "destination": "/affiliate-terms.html" },
-    { "source": "/admin",              "destination": "/admin.html" },
-    { "source": "/modules/krew",        "destination": "/modules/krew.html" },
-    { "source": "/modules/krew-chat",   "destination": "/modules/krew-chat.html" },
-    { "source": "/modules/automation",  "destination": "/modules/automation.html" },
-    { "source": "/modules/coder",       "destination": "/modules/coder.html" },
-    { "source": "/modules/models",      "destination": "/modules/models.html" },
-    { "source": "/modules/vault",       "destination": "/modules/vault.html" },
-    { "source": "/modules/guard",       "destination": "/modules/guard.html" },
-    { "source": "/modules/mesh",        "destination": "/modules/mesh.html" },
-    { "source": "/modules/brain",       "destination": "/modules/brain.html" },
-    { "source": "/team",               "destination": "/team.html" },
-    { "source": "/team-dashboard",     "destination": "/team-dashboard.html" },
-    { "source": "/enterprise",         "destination": "/enterprise.html" },
-    { "source": "/promo",              "destination": "/promo.html" },
-    { "source": "/why-adris",          "destination": "/why-adris.html" },
-    { "source": "/brief",              "destination": "/brief.html" },
-    { "source": "/how-it-works",       "destination": "/how-it-works.html" },
-    { "source": "/docs",                "destination": "/docs.html" }
+    {
+      "source": "/",
+      "destination": "/home.html"
+    },
+    {
+      "source": "/classic",
+      "destination": "/NIVARA.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/models",
+      "destination": "/models.html"
+    },
+    {
+      "source": "/download",
+      "destination": "/download.html"
+    },
+    {
+      "source": "/dl/:file",
+      "destination": "/api/dl?file=:file"
+    },
+    {
+      "source": "/affiliates",
+      "destination": "/affiliates.html"
+    },
+    {
+      "source": "/partner",
+      "destination": "/partner.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/signin",
+      "destination": "/signin.html"
+    },
+    {
+      "source": "/join",
+      "destination": "/join.html"
+    },
+    {
+      "source": "/affiliate-dashboard",
+      "destination": "/affiliate-dashboard.html"
+    },
+    {
+      "source": "/affiliate-terms",
+      "destination": "/affiliate-terms.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/modules/krew",
+      "destination": "/modules/krew.html"
+    },
+    {
+      "source": "/modules/krew-chat",
+      "destination": "/modules/krew-chat.html"
+    },
+    {
+      "source": "/modules/automation",
+      "destination": "/modules/automation.html"
+    },
+    {
+      "source": "/modules/coder",
+      "destination": "/modules/coder.html"
+    },
+    {
+      "source": "/modules/models",
+      "destination": "/modules/models.html"
+    },
+    {
+      "source": "/modules/vault",
+      "destination": "/modules/vault.html"
+    },
+    {
+      "source": "/modules/guard",
+      "destination": "/modules/guard.html"
+    },
+    {
+      "source": "/modules/mesh",
+      "destination": "/modules/mesh.html"
+    },
+    {
+      "source": "/modules/brain",
+      "destination": "/modules/brain.html"
+    },
+    {
+      "source": "/team",
+      "destination": "/team.html"
+    },
+    {
+      "source": "/team-dashboard",
+      "destination": "/team-dashboard.html"
+    },
+    {
+      "source": "/enterprise",
+      "destination": "/enterprise.html"
+    },
+    {
+      "source": "/promo",
+      "destination": "/promo.html"
+    },
+    {
+      "source": "/why-adris",
+      "destination": "/why-adris.html"
+    },
+    {
+      "source": "/brief",
+      "destination": "/brief.html"
+    },
+    {
+      "source": "/how-it-works",
+      "destination": "/how-it-works.html"
+    },
+    {
+      "source": "/docs",
+      "destination": "/docs.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "/api/blog"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/api/blog?slug=:slug"
+    },
+    {
+      "source": "/contract-review-software",
+      "destination": "/contract-review-software.html"
+    },
+    {
+      "source": "/local-ai-desktop",
+      "destination": "/local-ai-desktop.html"
+    },
+    {
+      "source": "/zapier-alternative",
+      "destination": "/zapier-alternative.html"
+    },
+    {
+      "source": "/private-llm-runner",
+      "destination": "/private-llm-runner.html"
+    },
+    {
+      "source": "/offline-automation-tool",
+      "destination": "/offline-automation-tool.html"
+    },
+    {
+      "source": "/ai-agents-for-business",
+      "destination": "/ai-agents-for-business.html"
+    }
   ]
 }

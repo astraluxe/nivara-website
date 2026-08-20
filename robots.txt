@@ -1,0 +1,14 @@
+# adris.tech — everything here is public marketing.
+User-agent: *
+Allow: /
+
+# The admin dashboard and the signed-in areas are not content and must not be indexed.
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /team-dashboard
+Disallow: /affiliate-dashboard
+Disallow: /signin
+Disallow: /join
+Disallow: /api/
+
+Sitemap: https://www.adris.tech/sitemap.xml

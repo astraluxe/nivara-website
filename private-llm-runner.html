@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Private LLM Runner — Run Llama Locally | adris.tech</title>
+<meta name="description" content="Run open LLMs privately on your own PC. See which of 51 models your hardware can handle, pull them locally and chat offline. No API key, free." />
+<link rel="canonical" href="https://www.adris.tech/private-llm-runner" />
+<meta name="robots" content="index, follow" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Private LLM Runner — Run Llama Locally | adris.tech" />
+<meta property="og:description" content="Run open LLMs privately on your own PC. See which of 51 models your hardware can handle, pull them locally and chat offline. No API key, free." />
+<meta property="og:url" content="https://www.adris.tech/private-llm-runner" />
+<meta property="og:image" content="https://www.adris.tech/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Private LLM Runner — Run Llama Locally | adris.tech" />
+<meta name="twitter:description" content="Run open LLMs privately on your own PC. See which of 51 models your hardware can handle, pull them locally and chat offline. No API key, free." />
+<meta name="twitter:image" content="https://www.adris.tech/og-cover.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"Run open LLMs privately on your own PC. See which of 51 models your hardware can handle, pull them locally and chat offline. No API key, free.","url":"https://www.adris.tech/private-llm-runner","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Private LLM runner","item":"https://www.adris.tech/private-llm-runner"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need a GPU?","acceptedAnswer":{"@type":"Answer","text":"No. A GPU makes local inference faster but is not required. The catalogue marks which models are realistic on CPU."}},{"@type":"Question","name":"Does it use Ollama?","acceptedAnswer":{"@type":"Answer","text":"It can run models through Ollama if you have it, and it manages the pull and the runtime for you if you do not."}},{"@type":"Question","name":"How much RAM do I need?","acceptedAnswer":{"@type":"Answer","text":"8 GB is enough for small models, 16 GB is comfortable for mid-size ones, and Mesh lets you pool memory across your own machines for anything larger."}},{"@type":"Question","name":"Is it really free?","acceptedAnswer":{"@type":"Answer","text":"The Models module is free forever, including on the free tier. Running a model on your own hardware costs nothing per use."}},{"@type":"Question","name":"Can it work with no internet at all?","acceptedAnswer":{"@type":"Answer","text":"Yes, once the model is downloaded. Inference is entirely local after that."}}]}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="/module-pages.css" />
+<link rel="stylesheet" href="/backgrounds.css" />
+<link rel="stylesheet" href="/module-editorial.css" />
+<style>
+/* An inline aside. NOT .callout — that class is a full-bleed dark hero band. */
+.lp-note { border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: 10px;
+  padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
+  background: var(--paper-2); }
+.lp-note strong { color: var(--ink); }
+</style>
+<script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#platform">Platform</a></li>
+      <li class="has-dropdown">
+        <a href="#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
+            <a href="/modules/automation"><span class="nav-dd-tag">02</span>Automation</a>
+            <a href="/modules/coder"><span class="nav-dd-tag">03</span>Coder</a>
+            <a href="/modules/models"><span class="nav-dd-tag">04</span>Models</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
+            <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
+            <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+            <a href="/modules/brain"><span class="nav-dd-tag">08</span>Brain — Knowledge</a>
+          </div>
+        </div>
+      </li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/affiliates">Affiliates</a></li>
+      <li><a href="/why-adris">Why adris</a></li>
+      <li><a href="/brief">Product brief</a></li>
+      <li><a href="/partner">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="/download" class="btn">
+        Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/krew"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Krew — AI Agents</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/automation"  onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Automation</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/coder"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Coder</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/models"      onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Models</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/vault"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Vault</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/guard"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Guard</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/mesh"        onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Mesh</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/brain"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Brain</a></li>
+      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
+      <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
+      <li><a href="/blog" onclick="closeMobileNav()">Blog</a></li>
+      <li><a href="/brief"      onclick="closeMobileNav()">Product brief (PDF)</a></li>
+      <li><a href="/partner"    onclick="closeMobileNav()">Contact</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+document.getElementById('themeToggle').addEventListener('click', function () {
+  var next = (document.documentElement.getAttribute('data-theme') || 'paper') === 'paper' ? 'ink' : 'paper';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (_) {}
+});
+</script>
+
+<div class="hiw-hero">
+  <a href="/" class="hiw-back"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg> adris.tech</a>
+  <h1>A private LLM runner <em>that tells you what your PC can handle.</em></h1>
+  <p class="hiw-hero-sub">Browse open models, see which ones actually fit your machine before you download eight gigabytes, pull them locally and chat with them offline. No API key, no account, no request leaving your computer.</p>
+  <div class="hiw-jump-grid">
+    <a href="#fit" class="hiw-jump"><span class="hiw-jump-num">00</span> Hardware fit</a>
+    <a href="#private" class="hiw-jump"><span class="hiw-jump-num">01</span> What private means</a>
+    <a href="#compare" class="hiw-jump"><span class="hiw-jump-num">02</span> Comparing models</a>
+    <a href="#beyond" class="hiw-jump"><span class="hiw-jump-num">03</span> Beyond chat</a>
+  </div>
+</div>
+
+<div class="hiw-layout">
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav">
+      <li><a href="#fit" class="active"><span class="hiw-nav-num">00</span>Hardware fit</a></li>
+      <li><a href="#private"><span class="hiw-nav-num">01</span>What private means</a></li>
+      <li><a href="#compare"><span class="hiw-nav-num">02</span>Comparing models</a></li>
+      <li><a href="#beyond"><span class="hiw-nav-num">03</span>Beyond chat</a></li>
+    </ul>
+  </aside>
+
+  <main class="hiw-main">
+
+    <section class="hiw-section" id="fit">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> Hardware fit</div>
+      <h2>The part every other tool leaves you to find out the hard way.</h2>
+      <p class="hiw-oneliner">51 curated models · sized against your actual RAM · pulled with one click</p>
+      <p>The usual way to discover a model is too big for your machine is to download it and watch everything freeze. adris reads your available memory and marks each model as comfortable, tight or out of reach before you commit to the download — so the first local model you try is one that runs.</p>
+      <p>The catalogue spans roughly 0.7 GB models that run on a modest laptop up to frontier-scale open weights, including Llama, Mistral, Phi, Gemma and Indic models tuned for Hindi, Tamil and other Indian languages.</p>
+    </section>
+
+    <section class="hiw-section" id="private">
+      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> What private means</div>
+      <h2>No key, no account, <span class="it">no request out.</span></h2>
+      <p>A local model means the weights sit on your disk and inference happens on your processor. There is no API key because there is no API — nothing is being called. That is the difference between "we don't train on your data" (a policy) and "your data never left the building" (a fact about the network).</p>
+      <p>It also means no per-token cost. Once the model is on your machine, running it is free for as long as you use it, which changes what is worth automating.</p>
+    </section>
+
+    <section class="hiw-section" id="compare">
+      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> Comparing models</div>
+      <h2>Ask two models the same thing, side by side.</h2>
+      <p>Model choice is hard to reason about from benchmarks. adris can put two to four models on the same prompt at once and show the answers together with timings, so the comparison is on your work rather than someone else's leaderboard.</p>
+      <p>If a model is too large for one machine, Mesh pools memory across several computers you own so you can run it anyway. <a href="/modules/mesh">See how Mesh works →</a></p>
+    </section>
+
+    <section class="hiw-section" id="beyond">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Beyond chat</div>
+      <h2>A local model that can actually do things.</h2>
+      <p>A chat window is the least interesting thing to do with a local model. In adris the same model drives the agents, the automation steps, the code assistant and the document reading — so the private model is not a sandbox off to one side, it is the engine for the whole application.</p>
+    </section>
+
+    <section class="hiw-section" id="faq">
+      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Questions</div>
+      <h2>Common questions</h2>
+      <h3>Do I need a GPU?</h3>
+      <p>No. A GPU makes local inference faster but is not required. The catalogue marks which models are realistic on CPU.</p>
+      <h3>Does it use Ollama?</h3>
+      <p>It can run models through Ollama if you have it, and it manages the pull and the runtime for you if you do not.</p>
+      <h3>How much RAM do I need?</h3>
+      <p>8 GB is enough for small models, 16 GB is comfortable for mid-size ones, and Mesh lets you pool memory across your own machines for anything larger.</p>
+      <h3>Is it really free?</h3>
+      <p>The Models module is free forever, including on the free tier. Running a model on your own hardware costs nothing per use.</p>
+      <h3>Can it work with no internet at all?</h3>
+      <p>Yes, once the model is downloaded. Inference is entirely local after that.</p>
+    </section>
+
+    <div class="hiw-cta">
+      <h2>Run your first local model <span class="it">tonight.</span></h2>
+      <p>The Models module is free forever, including on the free tier. Pick a model sized for your machine and pull it.</p>
+      <div class="hiw-cta-btns">
+        <a href="/download" class="cta-btn-main">Download — free <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+        <a href="/pricing" class="cta-btn-ghost">See pricing</a>
+        <a href="/modules/models" class="cta-btn-ghost">Models module</a>
+        <a href="/models" class="cta-btn-ghost">Browse the catalogue</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="#top">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris.tech</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="/modules/krew">Krew · agents</a></li>
+          <li><a href="/modules/automation">Studio · automation</a></li>
+          <li><a href="/modules/coder">Coder · dev tools</a></li>
+          <li><a href="/modules/models">Models · open hub</a></li>
+          <li><a href="/modules/vault">Vault · DNS</a></li>
+          <li><a href="/modules/guard">Guard · security</a></li>
+          <li><a href="/modules/mesh">Mesh · devices</a></li>
+          <li><a href="/modules/brain">Brain · knowledge</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/why-adris">Why adris</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/brief">Product brief (PDF)</a></li>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/download">Download app</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/affiliates">Affiliate program</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="/download">Download — free</a></li>
+          <li><a href="/partner">Contact / Partner</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

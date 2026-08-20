@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Offline Automation Tool for Windows | adris.tech</title>
+<meta name="description" content="Build workflows with AI steps that run entirely on your own machine — no cloud, no per-task fees, and no internet connection required." />
+<link rel="canonical" href="https://www.adris.tech/offline-automation-tool" />
+<meta name="robots" content="index, follow" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Offline Automation Tool for Windows | adris.tech" />
+<meta property="og:description" content="Build workflows with AI steps that run entirely on your own machine — no cloud, no per-task fees, and no internet connection required." />
+<meta property="og:url" content="https://www.adris.tech/offline-automation-tool" />
+<meta property="og:image" content="https://www.adris.tech/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Offline Automation Tool for Windows | adris.tech" />
+<meta name="twitter:description" content="Build workflows with AI steps that run entirely on your own machine — no cloud, no per-task fees, and no internet connection required." />
+<meta name="twitter:image" content="https://www.adris.tech/og-cover.png" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"Build workflows with AI steps that run entirely on your own machine — no cloud, no per-task fees, and no internet connection required.","url":"https://www.adris.tech/offline-automation-tool","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Offline automation tool","item":"https://www.adris.tech/offline-automation-tool"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it really work with no internet?","acceptedAnswer":{"@type":"Answer","text":"Yes, provided the AI step uses a local model and no step in the workflow is itself a network action such as sending mail."}},{"@type":"Question","name":"Do I pay per run?","acceptedAnswer":{"@type":"Answer","text":"No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes."}},{"@type":"Question","name":"What happens when my computer is off?","acceptedAnswer":{"@type":"Answer","text":"Local workflows wait until it is on. If a workflow must fire regardless, use a cloud-scheduled run on a paid plan."}}]}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="/module-pages.css" />
+<link rel="stylesheet" href="/backgrounds.css" />
+<link rel="stylesheet" href="/module-editorial.css" />
+<style>
+/* An inline aside. NOT .callout — that class is a full-bleed dark hero band. */
+.lp-note { border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: 10px;
+  padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
+  background: var(--paper-2); }
+.lp-note strong { color: var(--ink); }
+</style>
+<script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#platform">Platform</a></li>
+      <li class="has-dropdown">
+        <a href="#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
+            <a href="/modules/automation"><span class="nav-dd-tag">02</span>Automation</a>
+            <a href="/modules/coder"><span class="nav-dd-tag">03</span>Coder</a>
+            <a href="/modules/models"><span class="nav-dd-tag">04</span>Models</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
+            <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
+            <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+            <a href="/modules/brain"><span class="nav-dd-tag">08</span>Brain — Knowledge</a>
+          </div>
+        </div>
+      </li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/affiliates">Affiliates</a></li>
+      <li><a href="/why-adris">Why adris</a></li>
+      <li><a href="/brief">Product brief</a></li>
+      <li><a href="/partner">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="/download" class="btn">
+        Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/krew"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Krew — AI Agents</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/automation"  onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Automation</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/coder"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Coder</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/models"      onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Models</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/vault"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Vault</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/guard"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Guard</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/mesh"        onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Mesh</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/brain"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Brain</a></li>
+      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
+      <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
+      <li><a href="/blog" onclick="closeMobileNav()">Blog</a></li>
+      <li><a href="/brief"      onclick="closeMobileNav()">Product brief (PDF)</a></li>
+      <li><a href="/partner"    onclick="closeMobileNav()">Contact</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+document.getElementById('themeToggle').addEventListener('click', function () {
+  var next = (document.documentElement.getAttribute('data-theme') || 'paper') === 'paper' ? 'ink' : 'paper';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (_) {}
+});
+</script>
+
+<div class="hiw-hero">
+  <a href="/" class="hiw-back"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg> adris.tech</a>
+  <h1>An offline automation tool. <em>No cloud in the path.</em></h1>
+  <p class="hiw-hero-sub">Workflows that read your files, make a judgement with an AI step and write the result — all executed on your own computer, with a local model, with the network disconnected if you like.</p>
+  <div class="hiw-jump-grid">
+    <a href="#why" class="hiw-jump"><span class="hiw-jump-num">00</span> Why offline</a>
+    <a href="#shape" class="hiw-jump"><span class="hiw-jump-num">01</span> What it can do</a>
+    <a href="#build" class="hiw-jump"><span class="hiw-jump-num">02</span> Setting one up</a>
+  </div>
+</div>
+
+<div class="hiw-layout">
+  <aside class="hiw-sidebar">
+    <div class="hiw-sidebar-label">On this page</div>
+    <ul class="hiw-nav">
+      <li><a href="#why" class="active"><span class="hiw-nav-num">00</span>Why offline</a></li>
+      <li><a href="#shape"><span class="hiw-nav-num">01</span>What it can do</a></li>
+      <li><a href="#build"><span class="hiw-nav-num">02</span>Setting one up</a></li>
+    </ul>
+  </aside>
+
+  <main class="hiw-main">
+
+    <section class="hiw-section" id="why">
+      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> Why offline</div>
+      <h2>Some work is not allowed to go to a data centre.</h2>
+      <p class="hiw-oneliner">Local execution · local model · local storage</p>
+      <p>Patient records, client contracts, payroll, unreleased product plans, anything under an NDA that names a processor list — these are the documents where the automation would help most and the upload is the thing you cannot do.</p>
+      <p>An offline automation tool solves it by not having the step in the first place. The trigger fires on your machine, the file is read from your disk, a local model makes the call, and the output is written where you asked. Nothing in that chain requires a connection.</p>
+    </section>
+
+    <section class="hiw-section" id="shape">
+      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> What it can do</div>
+      <h2>Judgement, not just plumbing.</h2>
+      <ul>
+        <li><strong>Watch a folder</strong> — when a document lands, read it, classify it and file it with a summary.</li>
+        <li><strong>On a schedule</strong> — assemble a weekly digest from files and notes you already keep.</li>
+        <li><strong>Read and decide</strong> — go through a spreadsheet row by row and draft a tailored response for each.</li>
+        <li><strong>Extract to structure</strong> — pull the fields you need out of invoices or agreements into a sheet.</li>
+      </ul>
+      <p>Where a step genuinely needs the internet — sending an email, posting to Slack — that step is the only part that touches the network, and you can see exactly which ones do.</p>
+    </section>
+
+    <section class="hiw-section" id="build">
+      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> Setting one up</div>
+      <h2>Plain English, then adjust.</h2>
+      <p>Describe the automation in a sentence and it is built on the canvas for you to check and edit — nine trigger types, conditions, loops and parallel branches, and fourteen destinations for the output. Nothing has to be written in a scripting language, and nothing is hidden from you afterwards.</p>
+    </section>
+
+    <section class="hiw-section" id="faq">
+      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> Questions</div>
+      <h2>Common questions</h2>
+      <h3>Does it really work with no internet?</h3>
+      <p>Yes, provided the AI step uses a local model and no step in the workflow is itself a network action such as sending mail.</p>
+      <h3>Do I pay per run?</h3>
+      <p>No. Locally executed runs are not metered. Paid plans exist for cloud-scheduled runs and higher volumes.</p>
+      <h3>What happens when my computer is off?</h3>
+      <p>Local workflows wait until it is on. If a workflow must fire regardless, use a cloud-scheduled run on a paid plan.</p>
+    </section>
+
+    <div class="hiw-cta">
+      <h2>Automate the work <span class="it">that cannot leave the building.</span></h2>
+      <p>Included in the free tier, alongside local models that let the whole workflow run offline.</p>
+      <div class="hiw-cta-btns">
+        <a href="/download" class="cta-btn-main">Download — free <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+        <a href="/pricing" class="cta-btn-ghost">See pricing</a>
+        <a href="/modules/automation" class="cta-btn-ghost">Automation module</a>
+        <a href="/zapier-alternative" class="cta-btn-ghost">Compared to Zapier</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="#top">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris.tech</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="/modules/krew">Krew · agents</a></li>
+          <li><a href="/modules/automation">Studio · automation</a></li>
+          <li><a href="/modules/coder">Coder · dev tools</a></li>
+          <li><a href="/modules/models">Models · open hub</a></li>
+          <li><a href="/modules/vault">Vault · DNS</a></li>
+          <li><a href="/modules/guard">Guard · security</a></li>
+          <li><a href="/modules/mesh">Mesh · devices</a></li>
+          <li><a href="/modules/brain">Brain · knowledge</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/why-adris">Why adris</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/brief">Product brief (PDF)</a></li>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/download">Download app</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/affiliates">Affiliate program</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="/download">Download — free</a></li>
+          <li><a href="/partner">Contact / Partner</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
