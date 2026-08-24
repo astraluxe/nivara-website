@@ -127,6 +127,8 @@ Design both the light and the dark version. The desktop app already carries them
 
 **A note for anyone designing these from outside:** the design can come from anywhere — Claude Design, a contractor, whoever — but it gets *built* against the exact stack pinned in [§11](#11-how-it-is-built--and-the-exact-stack). A screen designed with that in mind (real React components, no exotic layout that only a specific design tool can export) turns into working code in hours; one that ignores it turns into a rebuild. Worth sending contributors that section before they start.
 
+**The ready-to-use brief:** [`claude-design-prompt.md`](./claude-design-prompt.md), in this same folder, is the condensed version of this section written specifically to hand to Claude Design (or any designer) — the pitch, the real colours/fonts already used by the desktop app, and all nine screens spelled out with the actual content to put on them.
+
 ---
 
 ## 4. Getting on to it
