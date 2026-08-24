@@ -19,9 +19,11 @@ Written down separately, on top, because everything below is *how*; this is *why
 - **Agents that keep going without being re-asked.** An agent can prompt itself to continue a task, or hand a task off to another agent to carry the next step — a loop, not a single question-and-answer — so something that takes many steps over hours or days keeps advancing without the user re-typing the same instruction each time it needs to continue. This is the mechanism underneath Server mode below and the multi-agent teamwork in [§6](#6-agents-as-citizens-of-the-os) — one OS-level loop primitive, not a separate trick per feature. See [§14.2](#142-looping--an-agent-that-keeps-itself-going) for the shape of it and what's still unresolved.
 - **Server mode.** The lid is down, the screen is off, the laptop is on — and an agent that was already given a task keeps working on it in the background, exactly as if someone were sitting in front of it. Flagged in [§13](#13-not-in-v1--and-when-it-comes) as weeks 6–8, not v1, but it is a target from day one, not an afterthought added later.
 - **Agents (and people) reaching across machines, when it's wanted.** Two adris OS users who know each other — same office, same friend group — can pair their machines, and from then on their agents can ask each other for exactly what a task needs, nothing more, over the network they're already on. People can message each other the same way. Genuinely useful overnight, when several paired machines are all in server mode and nobody is awake to relay anything by hand. Real, wanted, and **not yet scoped** — see [§7](#7-agents-across-machines) for the shape of it and why it stays supervised.
+- **More than one look, chosen the way a wallpaper is chosen.** The widget canvas isn't one fixed design — several genuinely different desktop styles ship, and picking between them is as easy as picking a wallpaper always was, not a settings-menu chore. See [§5](#5-the-desktop) and the new screen in [§3](#3-claude-design-comes-first).
+- **A wallpaper an agent codes for you, not just a picture you upload.** Ask for one and Codex, Claude Code or a local model writes it — small, generative, genuinely "yours" the way nothing off a stock wallpaper site is. It's pure rendering with no privileged access at all, which makes it one of the lowest-risk instances of "a computer that writes its own tools" in this whole document — worth considering for v1 itself rather than automatically deferred. See [§6](#6-agents-as-citizens-of-the-os).
 - **A real, whole-day operating system.** Not a shell wrapped around Windows, not a kiosk mode — something a person actually works their whole day inside, the way they work inside macOS or Windows today.
 - **Non-technical people and small businesses first.** Linux already serves developers well; that is not the gap. The gap — and the actual opportunity — is the business owner who has never opened a terminal and never will. Wherever a choice comes down to "easier for someone technical" versus "safe and clear for someone who is not," the second one wins. Technical users are still genuinely served (see [§9](#9-making-it-yours) — full change-anything power is real), but they are not who the tie-breaks are decided for.
-- **Genuinely well designed, not just functional.** The nine screens in [§3](#3-claude-design-comes-first) exist because "looks and behaves like something Apple would ship" is a target in its own right, not a nice-to-have that happens if there's time left. For the non-technical audience this plan is written for, how it looks *is* how trustworthy it feels — a good-looking, easy-to-use OS is not decoration on top of the real product, it is part of the product.
+- **Genuinely well designed, not just functional.** The screens in [§3](#3-claude-design-comes-first) exist because "looks and behaves like something Apple would ship" is a target in its own right, not a nice-to-have that happens if there's time left. For the non-technical audience this plan is written for, how it looks *is* how trustworthy it feels — a good-looking, easy-to-use OS is not decoration on top of the real product, it is part of the product.
 - **A computer, not a feature.** The measure of success is someone running a full working day on it without thinking about the fact that it is Linux underneath, the same way nobody thinks about Unix while using a Mac.
 
 ---
@@ -111,23 +113,27 @@ Design the front end first, so we can see where we want what — agreed, and it 
 
 Once the shell is code, changing the layout costs a day. Before it is code, it costs a minute. So the whole visual language gets settled while it is still a picture.
 
-### The nine screens to design
+### The screens to design
+
+Started as nine; now eleven — desktop styles and wallpaper are new, added below as their own screens rather than folded into "the desktop."
 
 1. **The startup picker.** Two cards — Windows and adris OS. The first thing anyone sees.
-2. **The desktop.** Rail, widget canvas, wallpaper. The whole product in one image.
-3. **The rail.** What sits in it and in what order: agent input, calendar, running agents, notifications, apps.
+2. **The desktop.** The rail and the widget canvas. The whole product in one image.
+3. **The rail — the home panel.** Pinned to the **right edge** of the screen, always there, working like a home panel: everything in one place — agent input, calendar, running agents, notifications, apps. Calendar and the Council are pinned in it from first boot (see [§5](#5-the-desktop)).
 4. **A widget, in three states.** Resting, working, and finished. Widgets are most of what anyone looks at.
-5. **The launcher.** What appears when you press the key in the corner.
-6. **Files.** Folder colours, folder icons, the padlock, how the Windows drive appears.
-7. **The locked-folder prompt.** One small dialog, but it is the one people judge the security by.
-8. **Settings.** Deliberately small, and written in plain words.
-9. **First run.** The three questions we ask a new person, and nothing more.
+5. **Desktop styles.** Not one fixed look — design **2–3 genuinely different visual treatments** for the widget canvas (spacing, widget chrome, how much is shown at once), switchable the way a wallpaper is. See [§5](#5-the-desktop).
+6. **Wallpaper.** The background itself, separately from desktop style — including the picker for a **generative, agent-coded** wallpaper (see [§6](#6-agents-as-citizens-of-the-os)), not only a static image.
+7. **The launcher.** What appears when you press the key in the corner.
+8. **Files.** Folder colours, folder icons, the padlock, how the Windows drive appears.
+9. **The locked-folder prompt.** One small dialog, but it is the one people judge the security by.
+10. **Settings.** Deliberately small, and written in plain words.
+11. **First run.** The three questions we ask a new person, and nothing more.
 
 Design both the light and the dark version. The desktop app already carries them (`paper` and `ink`), and adris OS should be the same two worlds so anything moved between them still looks right.
 
 **A note for anyone designing these from outside:** the design can come from anywhere — Claude Design, a contractor, whoever — but it gets *built* against the exact stack pinned in [§11](#11-how-it-is-built--and-the-exact-stack). A screen designed with that in mind (real React components, no exotic layout that only a specific design tool can export) turns into working code in hours; one that ignores it turns into a rebuild. Worth sending contributors that section before they start.
 
-**The ready-to-use brief:** [`claude-design-prompt.md`](./claude-design-prompt.md), in this same folder, is the condensed version of this section written specifically to hand to Claude Design (or any designer) — the pitch, the real colours/fonts already used by the desktop app, and all nine screens spelled out with the actual content to put on them.
+**The ready-to-use brief:** [`claude-design-prompt.md`](./claude-design-prompt.md), in this same folder, is the condensed version of this section written specifically to hand to Claude Design (or any designer) — the pitch, the real colours/fonts already used by the desktop app, and every screen spelled out with the actual content to put on them.
 
 ---
 
@@ -157,16 +163,18 @@ Arrow keys or mouse. Whichever you picked last time is the default after ten sec
 Familiar enough that nobody has to be taught, then better than what they left.
 
 **Layout, roughly:**
-- Top/edge: `Ask adris…` input, clock, calendar preview (`10:00 Demo`, `14:30 Vendor call`), `Agents · 2 running`, notifications, apps.
-- Canvas: widgets — e.g. *Today's outreach* (`12 ready · 3 sent`), *Inbox* (`4 need a reply`), *GST due* (`11 days`), *Local model* (`qwen · idle`), *Vendor chaser ✦ — you added this — Tue mornings*, *Disk & battery* (`62% · 4h left`).
+- **Right edge: the rail**, working as a home panel — `Ask adris…` input, clock, calendar preview (`10:00 Demo`, `14:30 Vendor call`), `Agents · 2 running`, notifications, apps, all in one place.
+- **The rest of the screen: the widget canvas** — e.g. *Today's outreach* (`12 ready · 3 sent`), *Inbox* (`4 need a reply`), *GST due* (`11 days`), *Local model* (`qwen · idle`), *Vendor chaser ✦ — you added this — Tue mornings*, *Disk & battery* (`62% · 4h left`).
 - Dashed edges mark widgets that were **added** to a machine, distinguishing them from ones it shipped with.
 
 **Decisions already made:**
 - **No files on the desktop.** The desktop is where widgets live; files live in Files. A wallpaper strewn with icons is the thing every clean desktop is reacting against.
 - **Mouse and keyboard, both, always.** Windows float and overlap exactly as people expect. Shortcuts exist for whoever wants them and are invisible to everyone else.
-- **The rail is the one thing that is always there** — type into it and something happens, and beside it the day's calendar, what the agents are doing, and what needs you.
+- **The rail is the one thing that is always there, on the right edge** — type into it and something happens, and beside it the day's calendar, what the agents are doing, and what needs you.
 - **The known, trusted tools are already on the rail — nobody goes looking for them.** Calendar and the Council sit there from first boot, exactly as they do in the desktop app today, because they are already what people use and already trusted (see [Targets](#targets--what-adris-os-has-to-achieve)). A new person's rail is not empty on day one; it already has real capability pinned to it.
 - **A launcher that behaves like Start.** Corner key, type, enter. Nobody needs teaching.
+- **More than one desktop style, picked the way a wallpaper is picked.** The widget canvas isn't a single fixed look — a handful of genuinely different visual treatments ship (spacing, widget chrome, how dense or spacious it feels), and switching between them is a couple of clicks in Settings, not a rebuild. Which specific styles ship is a design-pass decision, not fixed here.
+- **The wallpaper itself is a separate choice from the desktop style** — pick an image, or have an agent code one (see [§6](#6-agents-as-citizens-of-the-os)).
 
 ---
 
@@ -185,6 +193,12 @@ The desktop app already has this shape — `delegate_to_agent` for a single spec
 ### Agents that touch documents directly
 
 Also already real in the desktop app (`generate_document` and the underlying doc-generation code write actual `.pdf`/`.xlsx`/`.docx`/`.pptx` files, not descriptions of what should go in one). The target here is making that a normal, first-class OS capability rather than a chat feature reached through one app: an agent opening a file in Files, reading it, editing it, or building a new spreadsheet or slide deck as part of finishing a task — the same way a person would, just faster. Ported alongside the rest of the agent runtime in Week 2.
+
+### Wallpapers, coded rather than only chosen
+
+Ask for one — "something calm, dark blue, moving slowly" — and Codex, Claude Code or a local model writes it: a small generative program that renders the desktop background, not a static file pulled from a stock site. It's the most literal instance of "a computer that writes its own tools" ([§1](#1-what-we-are-building)) in the whole plan, and worth calling out separately from the "notices your day and writes you a tool" target because it's simpler and safer than that one in a specific way: **a wallpaper is pure rendering.** It draws to a surface and does nothing else — no file access, no network, no agent permissions to reason about — so it doesn't need the widget sandbox that gates everything else in [§13](#13-not-in-v1--and-when-it-comes) to be safe to ship. That makes it a genuine candidate for v1 (Week 2, Day 14 — "Additions" — already has room for exactly this kind of thing), not something that has to wait for weeks 4–8 the way most agent-written output does.
+
+Sits alongside the desktop-style picker in [§5](#5-the-desktop) as one of the screens in [§3](#3-claude-design-comes-first) — a person can pick a still image, or hand the job to an agent instead.
 
 ---
 
@@ -268,6 +282,7 @@ Anything Claude Code, Codex or a local model can add for you:
 - Automations and scheduled jobs
 - Agents, and what each one is allowed to do
 - Theme, layout, what sits in the rail
+- Desktop style, and the wallpaper — including one an agent codes for you ([§6](#6-agents-as-citizens-of-the-os))
 - Folder colours and icons
 - Anything you install
 
@@ -421,7 +436,7 @@ The full shape of this is written out in [§7](#7-agents-across-machines) — pa
 Five things. The first four are the user's call; the last one can be decided on day one by default if there's no objection.
 
 1. **Approve the three-week scope.** A bootable, installable adris OS with the desktop, Files and widgets — store, agent-written widgets, Hermes, cross-machine agents and server mode land in weeks four onward. If the store needs to be in v1, something else has to come out — say which.
-2. **Design the nine screens.** Days one and two, in Claude Design. Whatever comes out of that gets built exactly as designed, against the stack pinned in [§11](#11-how-it-is-built--and-the-exact-stack) — most leverage, least effort, right here.
+2. **Design the screens.** Days one and two, in Claude Design. Whatever comes out of that gets built exactly as designed, against the stack pinned in [§11](#11-how-it-is-built--and-the-exact-stack) — most leverage, least effort, right here.
 3. **Say what the waitlist perks are.** The Week 1 waitlist ([§2](#2-three-weeks-honestly)) needs a real answer for what a signed-in join and an email-only join each actually get, before the page copy can be written.
 4. **Decide repo visibility now, or decide to decide it later.** Add the MIT `LICENSE` file whenever — it's free — but say whether the ADRIS-OS repo goes public immediately or stays private until the Sealed/Yours-to-change split is real (see [§12](#12-licensing)).
 5. **Fedora as the base, and test Tally in week 1.** Default recommendation for people who cannot rescue a machine that will not boot — say the word for Arch instead and the plan re-targets. The Tally test is half a day and decides whether this is for the businesses already being sold to, or a different audience — worth knowing on day three, not day twenty.
