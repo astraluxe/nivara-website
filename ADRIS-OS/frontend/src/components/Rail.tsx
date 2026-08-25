@@ -16,7 +16,7 @@ import { LINUX_APPS, launchApp, installedApps } from '../lib/linuxApps';
  * - **Hierarchy by weight and space, not borders.** Sections separate with space and a label
  *   rather than a box each, so the panel reads as one surface.
  */
-export default function Rail({ userName = 'Aman Verma' }: { userName?: string }) {
+export default function Rail({ userName = 'Aman Verma', width = 340, scale = 1 }: { userName?: string; width?: number; scale?: number }) {
   const [installed, setInstalled] = useState<Record<string, boolean> | null>(null);
   const [note, setNote] = useState('');
 
@@ -30,14 +30,23 @@ export default function Rail({ userName = 'Aman Verma' }: { userName?: string })
   }
 
   return (
+    // A FLOATING PANEL, not a full-height bar.
+    //
+    // The rail used to run edge to edge, top to bottom, blurring everything behind it — on a
+    // smaller screen that meant a third of the desktop was permanently frosted over. It is now a
+    // card inset from the edges with the wallpaper visible all around it, so the blur only covers
+    // what the panel actually occupies. Same information, a lot less of the screen taken.
     <div style={{
-      position: 'absolute', top: 38, right: 0, bottom: 0, width: 340,
+      position: 'absolute', top: 58, right: 18, bottom: 18, width,
+      borderRadius: 24,
       background: 'var(--rail-bg)',
       backdropFilter: 'blur(var(--glass-blur)) saturate(160%)',
       WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(160%)',
-      borderLeft: '1px solid var(--border)',
-      padding: '20px 20px 18px', boxSizing: 'border-box',
-      display: 'flex', flexDirection: 'column', gap: 26,
+      border: '1px solid var(--border-soft)',
+      boxShadow: '0 1px 0 rgba(255,255,255,.12) inset, 0 22px 48px -22px rgba(0,0,0,.6)',
+      padding: `${Math.round(20 * scale)}px ${Math.round(18 * scale)}px ${Math.round(16 * scale)}px`,
+      boxSizing: 'border-box',
+      display: 'flex', flexDirection: 'column', gap: Math.round(24 * scale),
       color: 'var(--text)', overflowY: 'auto',
     }}>
       <AskField />

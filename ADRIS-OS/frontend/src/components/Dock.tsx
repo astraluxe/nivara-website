@@ -16,10 +16,11 @@ import { PINNED_APPS, launchApp, installedApps, type LinuxApp } from '../lib/lin
  * command, so nothing about what will run is hidden.
  */
 export default function Dock({
-  railWidth, onOpenAllApps,
+  railWidth, onOpenAllApps, iconSize = 54,
 }: {
   railWidth: number;
   onOpenAllApps: () => void;
+  iconSize?: number;
 }) {
   const [note, setNote] = useState('');
   const [installed, setInstalled] = useState<Record<string, boolean> | null>(null);
@@ -65,17 +66,17 @@ export default function Dock({
               disabled={missing}
               onClick={() => void open(app)}
             >
-              <AppIcon id={app.id as AppIconId} size={54} />
+              <AppIcon id={app.id as AppIconId} size={iconSize} />
             </DockButton>
           );
         })}
 
         {/* The divider makes "your apps" and "all apps" read as two different things rather than
             one long row where the last item happens to behave differently. */}
-        <div style={{ width: 1, height: 40, background: 'var(--border)', margin: '0 4px' }} />
+        <div style={{ width: 1, height: Math.round(iconSize * 0.72), background: 'var(--border)', margin: '0 4px' }} />
 
         <DockButton title="All applications" onClick={onOpenAllApps}>
-          <AppIcon id="apps" size={54} />
+          <AppIcon id="apps" size={iconSize} />
         </DockButton>
       </div>
     </div>

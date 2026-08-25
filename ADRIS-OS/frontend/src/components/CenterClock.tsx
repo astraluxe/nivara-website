@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
  * once, here, top-centre; the rail no longer carries its own separate clock underneath it (removed
  * — showing the time twice on one screen is the same complaint as the old duplicate Calendar).
  */
-export default function CenterClock({ railWidth = 340 }: { railWidth?: number }) {
+export default function CenterClock({ railWidth = 340, scale = 1 }: { railWidth?: number; scale?: number }) {
   const [now, setNow] = useState(new Date());
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 1000 * 15);
@@ -21,15 +21,15 @@ export default function CenterClock({ railWidth = 340 }: { railWidth?: number })
 
   return (
     <div style={{
-      position: 'absolute', top: 70, left: 0, right: railWidth, zIndex: 1,
+      position: 'absolute', top: Math.round(62 * scale), left: 0, right: railWidth, zIndex: 1,
       display: 'flex', flexDirection: 'column', alignItems: 'center',
       pointerEvents: 'none', textShadow: '0 2px 24px rgba(0,0,0,.35)',
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10 }}>
-        <div style={{ fontSize: 96, fontWeight: 600, letterSpacing: '-.045em', lineHeight: 0.9 }}>{h}:{m}</div>
-        <div className="mono" style={{ fontSize: 22, color: 'var(--text-muted)', paddingBottom: 15 }}>{ampm}</div>
+        <div style={{ fontSize: Math.round(92 * scale), fontWeight: 600, letterSpacing: '-.045em', lineHeight: 0.9 }}>{h}:{m}</div>
+        <div className="mono" style={{ fontSize: Math.round(21 * scale), color: 'var(--text-muted)', paddingBottom: Math.round(14 * scale) }}>{ampm}</div>
       </div>
-      <div style={{ fontSize: 18, color: 'var(--text-muted)', marginTop: 10, letterSpacing: '.01em' }}>
+      <div style={{ fontSize: Math.round(17 * scale), color: 'var(--text-muted)', marginTop: Math.round(9 * scale), letterSpacing: '.01em' }}>
         {day} · {date}
       </div>
     </div>

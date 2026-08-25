@@ -9,16 +9,16 @@ import { monthGrid } from '../lib/calendarGrid';
  * available without competing. Type is 13px+ throughout — the desktop minimum is 10pt/13px and
  * body should sit at 13pt/17px, which the old 9px grid badly failed.
  */
-export default function CalendarPanel() {
+export default function CalendarPanel({ width = 300, scale = 1 }: { width?: number; scale?: number }) {
   const days = monthGrid();
   const now = new Date();
   const monthName = now.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
 
   return (
     <div style={{
-      width: 300,
-      borderRadius: 20,
-      padding: '18px 20px 20px',
+      width,
+      borderRadius: 22,
+      padding: `${Math.round(16 * scale)}px ${Math.round(18 * scale)}px ${Math.round(18 * scale)}px`,
       background: 'var(--plate-bg)',
       backdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
       WebkitBackdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
@@ -27,8 +27,8 @@ export default function CalendarPanel() {
       color: 'var(--text)',
     }}>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 14 }}>
-        <div style={{ fontSize: 15, fontWeight: 600, letterSpacing: '-.01em' }}>{monthName}</div>
-        <div style={{ fontSize: 13, color: 'var(--text-faint)' }}>Today {now.getDate()}</div>
+        <div style={{ fontSize: Math.round(15 * scale), fontWeight: 600, letterSpacing: '-.01em' }}>{monthName}</div>
+        <div style={{ fontSize: Math.round(12.5 * scale), color: 'var(--text-faint)' }}>Today {now.getDate()}</div>
       </div>
 
       <div style={{
@@ -46,9 +46,9 @@ export default function CalendarPanel() {
             style={{
               // 34px cells: comfortably above the 24pt desktop minimum for anything clickable,
               // and large enough that the numbers are actually readable rather than decorative.
-              height: 34,
+              height: Math.round(32 * scale),
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13,
+              fontSize: Math.round(12.5 * scale),
               borderRadius: 9,
               color: d.isToday ? '#fff' : d.inMonth ? 'var(--text)' : 'var(--text-faint)',
               opacity: d.inMonth ? 1 : 0.35,

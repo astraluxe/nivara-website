@@ -11,8 +11,7 @@ import TodayPage from './widgets/pages/TodayPage';
 import OutreachPage from './widgets/pages/OutreachPage';
 import CouncilPage from './widgets/pages/CouncilPage';
 import { launchApp } from '../lib/linuxApps';
-
-const RAIL_WIDTH = 340;
+import { useScreenScale } from '../lib/useScreenScale';
 
 /**
  * The desktop, fourth pass — rebuilt against Apple HIG desktop conventions after the honest
@@ -41,6 +40,9 @@ export default function Desktop({
   onOpenWallpaper: () => void;
 }) {
   const [allApps, setAllApps] = useState(false);
+  // Every size below comes from the actual screen — see useScreenScale. Nothing here is a fixed
+  // pixel guess against one test window any more.
+  const S = useScreenScale();
 
   async function openApp(id: string, name: string) {
     const r = await launchApp(id);
@@ -51,17 +53,18 @@ export default function Desktop({
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', color: 'var(--text)' }}>
       <WallpaperLayer wallpaperId={wallpaperId} />
       <TopBar theme={theme} onToggleTheme={onToggleTheme} onOpenWallpaper={onOpenWallpaper} />
-      <CenterClock railWidth={RAIL_WIDTH} />
+      <CenterClock railWidth={S.rail + 36} scale={S.scale} />
 
       {/* The widget box, under the clock. Deliberately not vertically centred: sitting it just
           below the clock keeps them reading as one group instead of two things floating apart. */}
       <div style={{
-        position: 'absolute', top: 260, left: 0, right: RAIL_WIDTH,
+        position: 'absolute', top: Math.round(230 * S.scale), left: 0, right: S.rail + 36,
         display: 'flex', justifyContent: 'center', zIndex: 1, pointerEvents: 'none',
       }}>
         <div style={{ pointerEvents: 'auto' }}>
           <WidgetCarousel
-            width={480}
+            width={S.widget}
+            scale={S.scale}
             pages={[
               { id: 'Today', content: <TodayPage /> },
               { id: 'Outreach', content: <OutreachPage /> },
@@ -71,13 +74,17 @@ export default function Desktop({
         </div>
       </div>
 
-      {/* Bottom-left: the calendar, as asked — out of the rail, in a corner of its own. */}
-      <div style={{ position: 'absolute', left: 28, bottom: 28, zIndex: 1 }}>
-        <CalendarPanel />
-      </div>
+      {/* Bottom-left: the calendar, out of the rail, in a corner of its own. Hidden on a screen
+          too small for it to earn the space — the rail still carries the day's agenda, so nothing
+          is actually lost. */}
+      {!S.compact && (
+        <div style={{ position: 'absolute', left: 24, bottom: 24, zIndex: 1 }}>
+          <CalendarPanel width={S.calendar} scale={S.scale} />
+        </div>
+      )}
 
-      <Dock railWidth={RAIL_WIDTH} onOpenAllApps={() => setAllApps(true)} />
-      <Rail />
+      <Dock railWidth={S.rail + 36} iconSize={S.dockIcon} onOpenAllApps={() => setAllApps(true)} />
+      <Rail width={S.rail} scale={S.scale} />
 
       {allApps && <AllApps onOpen={openApp} onClose={() => setAllApps(false)} />}
     </div>

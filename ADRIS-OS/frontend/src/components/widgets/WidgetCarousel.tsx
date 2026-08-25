@@ -24,11 +24,12 @@ export interface CarouselPage {
  * The box is draggable by its top handle and remembers where it was put.
  */
 export default function WidgetCarousel({
-  pages, storageKey = 'adris-os.carousel.pos', width = 480,
+  pages, storageKey = 'adris-os.carousel.pos', width = 480, scale = 1,
 }: {
   pages: CarouselPage[];
   storageKey?: string;
   width?: number;
+  scale?: number;
 }) {
   const [active, setActive] = useState(0);
   const [dir, setDir] = useState<1 | -1>(1);
@@ -143,7 +144,7 @@ export default function WidgetCarousel({
           <div
             key={page?.id}
             style={{
-              padding: 26,
+              padding: Math.round(24 * scale),
               animation: `adrisSlide${dir > 0 ? 'Left' : 'Right'} .26s cubic-bezier(.22,.61,.36,1)`,
             }}
           >
