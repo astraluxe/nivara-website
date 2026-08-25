@@ -85,9 +85,16 @@ echo " ready."
 # Each browser has its own way of saying "no chrome, just the page" — there is no common flag.
 case "$BROWSER" in
   epiphany-browser)
-    # -a = application mode (no address bar, no tabs), -p = private profile so it never inherits
-    # someone's browsing session or restores unrelated tabs over the desktop.
-    "$BROWSER" -a -p --profile="$HOME/.adris-os-session" http://localhost:5173/ \
+    # -a = application mode: no address bar, no tabs — the window is just the page.
+    #
+    # THE PROFILE PATH IS NOT FREE-FORM. Epiphany refuses --application-mode unless the profile
+    # directory already exists AND its name starts with `org.gnome.Epiphany.WebApp_` — it derives
+    # the GApplication ID from that name and hard-errors otherwise. Both rules were found the hard
+    # way: an arbitrary path fails with "must be an existing directory", and creating it under the
+    # wrong name then fails with "Failed to get GApplication ID".
+    EPI_PROFILE="$HOME/.local/share/epiphany/org.gnome.Epiphany.WebApp_adrisos"
+    mkdir -p "$EPI_PROFILE"
+    "$BROWSER" -a --profile="$EPI_PROFILE" http://localhost:5173/ \
       >/tmp/adris-browser.log 2>&1 &
     ;;
   falkon)
