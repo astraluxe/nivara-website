@@ -21,7 +21,7 @@ Everything below this section is the *plan*. This table is the *state*: what is 
 | 3 | Agents drive real applications (never rebuilt) | ✅ **done** — an agent produced a genuine 5KB `.docx` via headless LibreOffice, zero document code of ours | [§6](#6-agents-as-citizens-of-the-os) |
 | 4 | Agents can run anything on the system | ✅ **done** — bridge `/run` executes arbitrary commands; verified writing files and reading real output | [§6](#6-agents-as-citizens-of-the-os) |
 | 5 | adris OS shell (rail, widgets, dock, wallpaper) | ✅ **done** — React/TS, runs fullscreen with no browser chrome | [§5](#5-the-desktop) |
-| 6 | A full desktop session — "a second computer" | 🟡 **in progress** — WSLg gives single windows on the Windows desktop, NOT a separate desktop. XFCE + xrdp being installed to fix this properly | [§5](#5-the-desktop) |
+| 6 | A full desktop session — "a second computer" | ✅ **done** — XFCE over RDP; verified listening on 3390 and reachable from Windows. Connect with Remote Desktop to `localhost:3390` | [§5](#5-the-desktop), `vm/run-desktop.sh` |
 | 7 | Coding agents (Claude Code, Codex) extend the OS | 🟡 **mechanism proven**, not yet wired to those specific tools | [Targets](#targets--what-adris-os-has-to-achieve) |
 | 8 | An adris bar inside every application | ❌ **not started** — needs the compositor work; see [§11](#11-how-it-is-built--and-the-exact-stack) | — |
 | 9 | Windows files openable from adris OS | 🟡 **works in the dev VM** via `/mnt/c`; the real NTFS mount for a booted install is untested | [§8](#8-files-folders-and-locks) |
@@ -51,14 +51,31 @@ Everything below this section is the *plan*. This table is the *state*: what is 
 | Run shell + bridge | `vm/run-os.sh` | ✅ working |
 | Fullscreen session | `vm/run-session.sh` | ✅ working |
 | Status check | `vm/status.sh` | ✅ working |
-| Full desktop session (XFCE/RDP) | `vm/run-desktop.sh` | 🟡 being built now |
+| Full desktop session (XFCE/RDP) | `vm/run-desktop.sh` | ✅ working — verified listening + reachable |
+
+### How to run it
+
+Every command goes through `wsl`, from a normal Windows terminal (or prefixed with `!` in Claude Code). `PLAN` below is `/mnt/c/Users/amogh/OneDrive/Desktop/NIVARA/ADRIS-OS`.
+
+| What you want | Command |
+|---|---|
+| **The full Ubuntu desktop** (a second computer on screen) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/run-desktop.sh` then connect Windows **Remote Desktop** to `localhost:3390` — user `amogh`, your Ubuntu password |
+| Check what's installed / running | `wsl -d Ubuntu -u root -e bash $PLAN/vm/status.sh` |
+| Live status, refreshing | `wsl -d Ubuntu -u root -e watch -n 2 bash $PLAN/vm/status.sh` |
+| Install the real apps (first time) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/setup-desktop.sh` |
+| adris OS fullscreen, no desktop around it | `wsl -d Ubuntu -e bash $PLAN/vm/run-session.sh` |
+| Shell + bridge only, view from a Windows browser | `wsl -d Ubuntu -e bash $PLAN/vm/run-os.sh` → `http://localhost:5173` |
+| Push a code edit into the running VM | `wsl -d Ubuntu -e bash $PLAN/vm/sync-to-wsl.sh` |
+
+**Ports:** `5173` the adris OS shell · `7717` the agent bridge · `3390` the Ubuntu desktop over RDP.
 
 ### Next, in order
 
-1. **Full XFCE desktop over RDP** — so adris OS is a whole screen, not windows scattered on Windows. *(in progress)*
-2. **Permissions model** — all-allowed by default, switchable in Settings, replacing the dev bridge's all-or-nothing.
-3. **The adris bar inside every app** — needs the compositor.
-4. **Files** — colours, icons, locking.
+1. **Permissions model** — everything allowed by default, switchable in Settings, replacing the dev bridge's all-or-nothing. This is the one that has to exist before any of this ships.
+2. **The adris bar inside every app** — a chat/command strip in every window, not only in the shell. Needs compositor work, because it means drawing into applications we did not write.
+3. **Files** — colours and icons derived from folder names, and real per-folder locking.
+4. **Windows files from a booted install** — works in the dev VM via `/mnt/c`; the real NTFS mount is untested.
+5. **Agent-coded wallpaper** — the UI exists; wire it to a real model.
 
 ---
 
@@ -133,6 +150,25 @@ wsl -d Ubuntu -u root -e bash -lc "DEBIAN_FRONTEND=noninteractive apt-get instal
 - **It's draggable.** Grab the handle at its top, put it where you like; the position is remembered.
 - **The clock moved to top-centre**, large, where the eye actually goes — and the rail's duplicate copy of it is gone.
 - **"Calm · Focused · In control" is gone** from the top bar (marketing copy on a desktop), and the awkward floating theme/wallpaper strip is folded into the top bar's right side as proper icon buttons.
+
+**25 Aug, end of day — a real desktop, and three failures worth keeping.**
+
+The apps were installed and running, and it still wasn't right: *"i am on windows i wanted all this in the vm a different screen running on my windows like a different computer."* That was a correct complaint about a real architectural limit, not a misconfiguration.
+
+**WSLg draws individual Linux windows onto the Windows desktop. It does not create a desktop.** So LibreOffice appeared as one more window among the Windows ones, with no Ubuntu behind it — no wallpaper, no panel, nothing that reads as another computer. Genuinely useful for driving one app; useless for showing an operating system.
+
+**The fix: a real desktop environment served over RDP.** `vm/run-desktop.sh` runs XFCE inside the VM and exposes it via xrdp; Windows' built-in Remote Desktop connects to `localhost:3390` and you get a whole Ubuntu desktop in its own window. **Verified**: xrdp and xrdp-sesman running, listening on 3390, and `Test-NetConnection` from Windows returns true. Three things that each fail *silently* and are handled in the script rather than left to be rediscovered:
+- **`~/.xsession` must name the session.** Without it xrdp starts something undefined and lands on a grey screen — the classic "it connects but there's nothing there."
+- **Port 3390, not 3389.** Windows' own Remote Desktop service can hold 3389; the symptom is a connection that opens and instantly closes.
+- **No systemd in WSL2.** `systemctl start xrdp` does nothing at all — it must be started directly, which is most of why this is a script and not a documentation line.
+
+**Three mistakes made today, and what each one changed:**
+
+1. **An install that never ran, reported as running.** `sudo apt-get install` inside the VM sat on a password prompt nobody could answer. With no output, it looks exactly like a slow download — and it was described as "installing" for a long stretch while nothing happened. *Fix:* `wsl -u root` needs no password at all (documented in the Test loop section above), so nothing scripted should ever call `sudo` here.
+2. **"LibreOffice should be opening on your screen" — it had crashed.** The completion check used `command -v libreoffice`, and apt writes binaries to disk well before it configures the package. The binary existed; the program could not run. *Fix:* every check now uses `dpkg -l | grep '^ii'` (installed **and** configured), and `vm/status.sh` shows a distinct `~ unpacking, not usable yet` for exactly that window. This is also where the STATUS BOARD's rule comes from: **a green tick means seen working, not written.**
+3. **Epiphany's application mode, twice.** It refuses `--application-mode` unless the profile directory already exists *and* its name starts with `org.gnome.Epiphany.WebApp_` — two separate hard errors, one after the other. Both messages are now in the script's comments.
+
+**Also proven today, and the most important single result:** an agent wrote content, drove headless LibreOffice, and produced a genuine 5,046-byte `.docx` using the real MS Word 2007 XML filter — **with no document-generation code of ours**. That is [§6](#6-agents-as-citizens-of-the-os)'s whole claim, working. And it is not LibreOffice-specific: the bridge's `/run` executes any command on the system, so "agents use whatever is installed" is the actual mechanism, not an aspiration.
 
 **References checked, as asked, with what was actually found (not guessed):**
 - [**omarchy**](https://github.com/basecamp/omarchy) (Basecamp) — a real, shipped "opinionated Linux distribution," organized into `config/`, `themes/`, `applications/`, with a 51-chapter user manual and a documented "make your own theme" system. Validates two decisions already in this plan rather than changing anything: being *opinionated* rather than maximally configurable ([§1](#1-what-we-are-building)), and treating real, plain-language documentation as part of the product, not an afterthought.
