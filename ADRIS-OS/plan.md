@@ -59,7 +59,7 @@ Every command goes through `wsl`, from a normal Windows terminal (or prefixed wi
 
 | What you want | Command |
 |---|---|
-| **The full Ubuntu desktop** (a second computer on screen) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/run-desktop.sh` then connect Windows **Remote Desktop** to `localhost:3390` — user `amogh`, your Ubuntu password |
+| **The full Ubuntu desktop** (a second computer on screen) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/run-desktop.sh` then connect Windows **Remote Desktop** to `localhost:3390` — user `amogh`. Password is in `vm/.local-credentials.txt` (gitignored — see note below) |
 | Check what's installed / running | `wsl -d Ubuntu -u root -e bash $PLAN/vm/status.sh` |
 | Live status, refreshing | `wsl -d Ubuntu -u root -e watch -n 2 bash $PLAN/vm/status.sh` |
 | Install the real apps (first time) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/setup-desktop.sh` |
@@ -68,6 +68,8 @@ Every command goes through `wsl`, from a normal Windows terminal (or prefixed wi
 | Push a code edit into the running VM | `wsl -d Ubuntu -e bash $PLAN/vm/sync-to-wsl.sh` |
 
 **Ports:** `5173` the adris OS shell · `7717` the agent bridge · `3390` the Ubuntu desktop over RDP.
+
+**Where the VM password lives — and why not here.** The dev VM's Remote Desktop login is in `vm/.local-credentials.txt`, which is gitignored and must stay that way. It is deliberately *not* written into this file: `plan.md` is part of the `nivara-website` repo, which **auto-deploys to the public site on every push** — a password here would be readable at adris.tech and permanent in git history, since removing it from a later commit does not remove it from the earlier ones. To set or reset it: `wsl -d Ubuntu -u root -e passwd amogh` from a normal Windows terminal (a real terminal, because it prompts interactively).
 
 ### Next, in order
 
