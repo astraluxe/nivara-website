@@ -112,3 +112,19 @@ code, .mono {
   0%, 100% { opacity: .3; transform: scale(.85); }
   50% { opacity: 1; transform: scale(1.2); }
 }
+
+/* The carousel's page slide. Direction carries meaning — a hard cut throws away which way you
+   moved — so the incoming page enters from the side you came from. */
+@keyframes adrisSlideLeft {
+  from { opacity: 0; transform: translateX(26px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes adrisSlideRight {
+  from { opacity: 0; transform: translateX(-26px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* HIG: honour a reduced-motion preference rather than animating regardless. */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

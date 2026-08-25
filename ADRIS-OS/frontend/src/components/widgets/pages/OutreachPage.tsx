@@ -12,10 +12,10 @@ export default function OutreachPage({
           width: 7, height: 7, borderRadius: '999px', background: 'var(--accent-light)',
           boxShadow: '0 0 10px var(--accent-light)', animation: 'adrisPulse 1.2s ease-in-out infinite',
         }} />
-        <div style={{ fontSize: 13 }}>Writing to {writingTo}</div>
-        <div className="mono" style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--text-faint)' }}>{doneOf}/{total}</div>
+        <div style={{ fontSize: 16 }}>Writing to {writingTo}</div>
+        <div className="mono" style={{ marginLeft: 'auto', fontSize: 13, color: 'var(--text-faint)' }}>{doneOf}/{total}</div>
       </div>
-      <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 32, marginTop: 14 }}>
+      <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 44, marginTop: 20 }}>
         {BARS.map((h, i) => (
           <div key={i} style={{
             flex: 1, height: h, borderRadius: 2,
@@ -24,7 +24,7 @@ export default function OutreachPage({
           }} />
         ))}
       </div>
-      <div className="mono" style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 13, fontSize: 10, color: 'var(--text-muted)' }}>
+      <div className="mono" style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 18, fontSize: 13, color: 'var(--text-muted)' }}>
         <div style={{ color: 'var(--ok)' }}>✓ pulled last thread</div>
         <div style={{ color: 'var(--ok)' }}>✓ checked pricing sheet</div>
         <div>› drafting reply…</div>

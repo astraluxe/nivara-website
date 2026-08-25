@@ -1,60 +1,108 @@
-import { useState } from 'react';
-import { LINUX_APPS, launchApp, type LinuxApp } from '../lib/linuxApps';
+import { useEffect, useState } from 'react';
+import AppIcon, { type AppIconId } from './AppIcon';
+import { PINNED_APPS, launchApp, installedApps, type LinuxApp } from '../lib/linuxApps';
 
 /**
- * The dock — REAL applications, not decorative icons.
+ * The dock — real applications, real icons.
  *
- * These are the ordinary Ubuntu apps that come with the distribution (see plan.md §11's "Why
- * Ubuntu"): LibreOffice Writer/Calc/Impress, Files, the text editor, the terminal. The whole point
- * of building on a real distribution is that we don't reimplement a word processor — the plan has
- * always been that agents drive these real applications. So the dock launches the real thing.
+ * Two changes from the emoji version, both HIG-driven:
+ * - **Icons are drawn, not typed.** See AppIcon: one tile family, so the row reads as a system.
+ * - **The dock only holds pinned apps, plus a 9-dot button for the rest.** A dock stops being
+ *   useful the moment it becomes a list — the pattern every desktop converged on is "a few you
+ *   use, and a door to everything." The row widens on its own as more apps get pinned; it never
+ *   has to hold all of them.
  *
- * `launchApp` posts to the small local agent bridge (see vm/agent-bridge.mjs) which runs the
- * command inside the VM. When that bridge isn't running — e.g. someone opened this in a plain
- * browser on Windows — the click says so plainly instead of appearing to work.
+ * Tiles are 56px against a 24pt (~32px) desktop minimum, and each has a tooltip naming the real
+ * command, so nothing about what will run is hidden.
  */
-export default function Dock({ railWidth }: { railWidth: number }) {
+export default function Dock({
+  railWidth, onOpenAllApps,
+}: {
+  railWidth: number;
+  onOpenAllApps: () => void;
+}) {
   const [note, setNote] = useState('');
+  const [installed, setInstalled] = useState<Record<string, boolean> | null>(null);
+
+  useEffect(() => { void installedApps().then(setInstalled); }, []);
 
   async function open(app: LinuxApp) {
     setNote(`Opening ${app.name}…`);
     const res = await launchApp(app.id);
     setNote(res.ok ? `${app.name} opened` : res.error);
-    window.setTimeout(() => setNote(''), 4000);
+    window.setTimeout(() => setNote(''), 5000);
   }
 
   return (
-    <div style={{ position: 'absolute', bottom: 14, left: 0, right: railWidth, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 2 }}>
+    <div style={{
+      position: 'absolute', bottom: 22, left: 0, right: railWidth,
+      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, zIndex: 2,
+      pointerEvents: 'none',
+    }}>
       {note && (
         <div style={{
-          fontSize: 11, padding: '5px 12px', borderRadius: 999, color: 'var(--text)',
+          fontSize: 13.5, padding: '9px 18px', borderRadius: 999, color: 'var(--text)',
           background: 'var(--glass-bg)', backdropFilter: 'blur(var(--glass-blur))',
           WebkitBackdropFilter: 'blur(var(--glass-blur))', border: '1px solid var(--border)',
-          maxWidth: 560, textAlign: 'center',
+          maxWidth: 620, textAlign: 'center', pointerEvents: 'auto',
         }}>{note}</div>
       )}
+
       <div style={{
-        display: 'flex', gap: 8, padding: '8px 11px', borderRadius: 18,
+        display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 26,
         background: 'var(--glass-bg)', border: '1px solid var(--border)',
-        backdropFilter: 'blur(var(--glass-blur))', WebkitBackdropFilter: 'blur(var(--glass-blur))',
-        boxShadow: '0 12px 30px -12px rgba(0,0,0,.5)',
+        backdropFilter: 'blur(var(--glass-blur)) saturate(160%)',
+        WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(160%)',
+        boxShadow: '0 16px 40px -14px rgba(0,0,0,.55)',
+        pointerEvents: 'auto',
       }}>
-        {LINUX_APPS.map((app) => (
-          <button
-            key={app.id}
-            title={`${app.name} — ${app.exec}`}
-            onClick={() => void open(app)}
-            style={{
-              width: 40, height: 40, borderRadius: 11, cursor: 'pointer',
-              background: 'var(--well-bg)', border: '1px solid var(--well-border)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 19, lineHeight: 1, padding: 0, transition: 'transform .12s',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; }}
-          >{app.icon}</button>
-        ))}
+        {PINNED_APPS.map((app) => {
+          const missing = installed !== null && !installed[app.id];
+          return (
+            <DockButton
+              key={app.id}
+              title={missing ? `${app.name} — not installed` : `${app.name} — ${app.exec}`}
+              disabled={missing}
+              onClick={() => void open(app)}
+            >
+              <AppIcon id={app.id as AppIconId} size={54} />
+            </DockButton>
+          );
+        })}
+
+        {/* The divider makes "your apps" and "all apps" read as two different things rather than
+            one long row where the last item happens to behave differently. */}
+        <div style={{ width: 1, height: 40, background: 'var(--border)', margin: '0 4px' }} />
+
+        <DockButton title="All applications" onClick={onOpenAllApps}>
+          <AppIcon id="apps" size={54} />
+        </DockButton>
       </div>
     </div>
+  );
+}
+
+function DockButton({
+  title, onClick, disabled, children,
+}: {
+  title: string;
+  onClick: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      title={title}
+      disabled={disabled}
+      onClick={onClick}
+      style={{
+        background: 'transparent', border: 'none', padding: 0, borderRadius: 14,
+        cursor: disabled ? 'default' : 'pointer', opacity: disabled ? 0.32 : 1,
+        transition: 'transform .14s ease',
+        display: 'flex',
+      }}
+      onMouseEnter={(e) => { if (!disabled) e.currentTarget.style.transform = 'translateY(-6px) scale(1.06)'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; }}
+    >{children}</button>
   );
 }

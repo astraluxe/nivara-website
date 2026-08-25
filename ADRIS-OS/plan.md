@@ -26,7 +26,7 @@ Everything below this section is the *plan*. This table is the *state*: what is 
 | 8 | An adris bar inside every application | ❌ **not started** — needs the compositor work; see [§11](#11-how-it-is-built--and-the-exact-stack) | — |
 | 9 | Windows files openable from adris OS | 🟡 **works in the dev VM** via `/mnt/c`; the real NTFS mount for a booted install is untested | [§8](#8-files-folders-and-locks) |
 | 10 | Permissions: everything allowed by default, changeable in Settings | ❌ **not started** — dev bridge is currently all-or-nothing | [§9](#9-making-it-yours) |
-| 20 | **Off switch** — stop adris OS taking over, go back to Windows, without uninstalling | ❌ **not started** — design settled, needs the startup picker first | [§10](#10-going-back-to-windows) |
+| 20 | **Off switch** — stop adris OS taking over, go back to the plain desktop, without uninstalling | 🟡 **works in the VM** — `vm/set-session.sh adris\|ubuntu` flips which session logs in, reversible, nothing deleted. The *Windows*-level version needs the startup picker (target 18) | [§10](#10-going-back-to-windows) |
 | 11 | Files with colours/icons from their names, lockable | ❌ **not started** | [§8](#8-files-folders-and-locks) |
 | 12 | Wallpaper: pick one, or have an agent code it | 🟡 **picker done + one image**; the agent-coded path is UI-only, not wired | [§6](#6-agents-as-citizens-of-the-os) |
 | 13 | Connect other hardware (WiFi/Bluetooth/wired) easily | ❌ **not started** | [§7](#7-agents-across-machines) |
@@ -61,6 +61,8 @@ Every command goes through `wsl`, from a normal Windows terminal (or prefixed wi
 | What you want | Command |
 |---|---|
 | **Just run adris OS** ← start here | **Double-click `ADRIS-OS/START-ADRIS-OS.bat`.** Starts everything and opens Remote Desktop; adris OS then appears fullscreen by itself on login. Nothing else to do. |
+| **adris OS takes over the whole screen** (no Ubuntu desktop behind it) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/set-session.sh adris` — then reconnect. The session runs a minimal WM and adris OS and *nothing else*. |
+| **Go back to the plain Ubuntu desktop** (the off switch) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/set-session.sh ubuntu` — then reconnect. Reversible, nothing deleted. |
 | The same thing, from a terminal | `wsl -d Ubuntu -u root -e bash $PLAN/vm/start-adris-os.sh` then Remote Desktop to `localhost:3390` |
 | The plain Ubuntu desktop, without adris OS auto-opening | `wsl -d Ubuntu -u root -e bash $PLAN/vm/run-desktop.sh` — user `amogh`. Password is in `vm/.local-credentials.txt` (gitignored — see note below) |
 | Check what's installed / running | `wsl -d Ubuntu -u root -e bash $PLAN/vm/status.sh` |

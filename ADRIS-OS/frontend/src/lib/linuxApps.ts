@@ -10,19 +10,25 @@ export interface LinuxApp {
   name: string;
   /** The actual command run inside the VM. Shown in the dock tooltip, so nothing is hidden. */
   exec: string;
-  icon: string;
   /** apt package that provides it — used by vm/setup-desktop.sh to install the set. */
   pkg: string;
+  /** Shown in the dock's front row. Everything else lives behind the 9-dot all-apps button. */
+  pinned?: boolean;
 }
 
 export const LINUX_APPS: LinuxApp[] = [
-  { id: 'writer',   name: 'LibreOffice Writer',  exec: 'libreoffice --writer',  icon: '📝', pkg: 'libreoffice-writer' },
-  { id: 'calc',     name: 'LibreOffice Calc',    exec: 'libreoffice --calc',    icon: '📊', pkg: 'libreoffice-calc' },
-  { id: 'impress',  name: 'LibreOffice Impress', exec: 'libreoffice --impress', icon: '📽️', pkg: 'libreoffice-impress' },
-  { id: 'files',    name: 'Files',               exec: 'nautilus --new-window', icon: '📁', pkg: 'nautilus' },
-  { id: 'text',     name: 'Text Editor',         exec: 'gedit',                 icon: '📄', pkg: 'gedit' },
-  { id: 'terminal', name: 'Terminal',            exec: 'xterm',                 icon: '⌨️', pkg: 'xterm' },
+  { id: 'files',    name: 'Files',               exec: 'nautilus --new-window', pkg: 'nautilus',              pinned: true },
+  { id: 'writer',   name: 'LibreOffice Writer',  exec: 'libreoffice --writer',  pkg: 'libreoffice-writer',    pinned: true },
+  { id: 'calc',     name: 'LibreOffice Calc',    exec: 'libreoffice --calc',    pkg: 'libreoffice-calc',      pinned: true },
+  { id: 'impress',  name: 'LibreOffice Impress', exec: 'libreoffice --impress', pkg: 'libreoffice-impress',   pinned: true },
+  { id: 'browser',  name: 'Web Browser',         exec: 'epiphany-browser',      pkg: 'epiphany-browser',      pinned: true },
+  { id: 'terminal', name: 'Terminal',            exec: 'xterm',                 pkg: 'xterm',                 pinned: true },
+  { id: 'text',     name: 'Text Editor',         exec: 'gedit',                 pkg: 'gedit' },
 ];
+
+/** The dock's front row. The rest are one click away behind the 9-dot button — the dock stays a
+ *  short row of what you actually use, which is the whole reason a dock beats a full app list. */
+export const PINNED_APPS = LINUX_APPS.filter((a) => a.pinned);
 
 export const APP_BY_ID = Object.fromEntries(LINUX_APPS.map((a) => [a.id, a])) as Record<string, LinuxApp>;
 
