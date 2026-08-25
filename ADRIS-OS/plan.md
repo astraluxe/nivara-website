@@ -25,7 +25,11 @@ Everything below this section is the *plan*. This table is the *state*: what is 
 | 7 | Coding agents (Claude Code, Codex) extend the OS | 🟡 **mechanism proven**, not yet wired to those specific tools | [Targets](#targets--what-adris-os-has-to-achieve) |
 | 8 | An adris bar inside every application | ❌ **not started** — needs the compositor work; see [§11](#11-how-it-is-built--and-the-exact-stack) | — |
 | 9 | Windows files openable from adris OS | 🟡 **works in the dev VM** via `/mnt/c`; the real NTFS mount for a booted install is untested | [§8](#8-files-folders-and-locks) |
-| 10 | Permissions: everything allowed by default, changeable in Settings | ❌ **not started** — dev bridge is currently all-or-nothing | [§9](#9-making-it-yours) |
+| 10 | Permissions: everything allowed by default, changeable in Settings | ❌ **not started** — dev bridge is all-or-nothing; biggest known hole | [§12c](#12c-security--what-is-real-and-what-would-be-theatre) |
+| 21 | A real application catalogue, and installing from it | ✅ **done for Linux apps** — 30+ apps, 8 categories, `/install` works and reports honestly. Self-hosted services listed but correctly *not* one-click | [§12a](#12a-applications--what-ships-what-installs-what-is-a-server) |
+| 22 | Live system info (battery, memory, disk) | ✅ **done** — real values from `/system`; null rather than invented when a machine has no battery | [§12a](#12a-applications--what-ships-what-installs-what-is-a-server) |
+| 23 | **Read data from existing Indian business software (Tally etc.)** | ❌ **not started** — the single biggest commercial unlock; route identified (Tally's XML/HTTP gateway), untested | [§12b](#12b-the-real-barrier-in-india-existing-software-and-its-data) |
+| 24 | Zero-cost security (AppArmor, ufw, auto-updates, encryption) | ❌ **not started** — all distribution-native, no per-use cost | [§12c](#12c-security--what-is-real-and-what-would-be-theatre) |
 | 20 | **Off switch** — stop adris OS taking over, go back to the plain desktop, without uninstalling | 🟡 **works in the VM** — `vm/set-session.sh adris\|ubuntu` flips which session logs in, reversible, nothing deleted. The *Windows*-level version needs the startup picker (target 18) | [§10](#10-going-back-to-windows) |
 | 11 | Files with colours/icons from their names, lockable | ❌ **not started** | [§8](#8-files-folders-and-locks) |
 | 12 | Wallpaper: pick one, or have an agent code it | 🟡 **picker done + one image**; the agent-coded path is UI-only, not wired | [§6](#6-agents-as-citizens-of-the-os) |
@@ -78,11 +82,13 @@ Every command goes through `wsl`, from a normal Windows terminal (or prefixed wi
 
 ### Next, in order
 
-1. **Permissions model** — everything allowed by default, switchable in Settings, replacing the dev bridge's all-or-nothing. This is the one that has to exist before any of this ships.
-2. **The adris bar inside every app** — a chat/command strip in every window, not only in the shell. Needs compositor work, because it means drawing into applications we did not write.
-3. **Files** — colours and icons derived from folder names, and real per-folder locking.
-4. **Windows files from a booted install** — works in the dev VM via `/mnt/c`; the real NTFS mount is untested.
-5. **Agent-coded wallpaper** — the UI exists; wire it to a real model.
+1. **The Tally test** ([§12b](#12b-the-real-barrier-in-india-existing-software-and-its-data)) — scoped to *both* questions: does it run under compatibility, and can its data be read via the XML/HTTP gateway. Half a day, and it decides the size of the addressable market. Cheapest high-value thing on this list by a wide margin.
+2. **Permissions model** — everything allowed by default, switchable in Settings, replacing the dev bridge's all-or-nothing. Has to exist before anything ships.
+3. **Zero-cost security baseline** ([§12c](#12c-security--what-is-real-and-what-would-be-theatre)) — `unattended-upgrades` and `ufw` first; both are one afternoon and are the highest-value protection for someone who will never think about security again after day one.
+4. **The adris bar inside every app** — a chat/command strip in every window, not just the shell. Needs compositor work, because it means drawing into applications we did not write.
+5. **Files** — colours and icons from folder names, and real per-folder locking.
+6. **Windows files from a booted install** — works in the dev VM via `/mnt/c`; the real NTFS mount is untested.
+7. **Agent-coded wallpaper** — the UI exists; wire it to a real model.
 
 ---
 
@@ -616,6 +622,60 @@ Raised as a plan: put an MIT licence on the ADRIS-OS GitHub repo, with an open q
 **Practical recommendation, not a legal opinion:** add the MIT `LICENSE` file to the repo now if there's a wish to have it ready — it costs nothing and settles the question in advance. Keep the **repository itself private** until the Sealed/Yours-to-change split above is actually real in the code, not just in this document, then decide visibility deliberately rather than by default. Flipping a private repo public later is one click; un-forking a public one that got copied on day one is not possible at all.
 
 This isn't legal advice — worth a real lawyer's five minutes before the repo actually goes public, especially on anything involving trademarks (the "adris" name itself is not covered by any code license).
+
+---
+
+## 12a. Applications — what ships, what installs, what is a server
+
+The dock's first six apps were never a decision; they were whatever happened to be installed. The real catalogue is `frontend/src/lib/catalogue.ts`, and the split inside it matters more than the list:
+
+| Kind | What it is | How it gets there |
+|---|---|---|
+| `app` | An ordinary Linux program — LibreOffice, GIMP, VLC, Files, a terminal, a camera app | One `apt` command. Runs as a normal window. **Installing works today** — the bridge's `/install`, allow-listed to the catalogue. |
+| `service` | A self-hosted **web application** — Odoo, ERPNext, Twenty, EspoCRM, SuiteCRM, Krayin, Dolibarr, Akaunting, Invoice Ninja | A server stack: database, runtime, usually Docker. **Not one click**, and the UI says so, naming what it needs. |
+
+**Why the second row is listed at all, given it can't be installed yet.** Those are the tools that actually run a small business — a real CRM, a real ERP, real accounting — and every one is open source and runs on the owner's own hardware. That is *exactly* the promise adris.tech already makes about data staying yours, applied to the software a business runs on rather than just its AI. They belong in the catalogue as a statement of where this goes.
+
+**And why they are marked honestly rather than made to look installable.** A business owner clicking "Odoo" and getting a spinner that never resolves — because nobody mentioned it needs a container stack and a database — is the same category of failure as [claiming an app launched when it had crashed](#status-board--read-this-first). Clicking a service opens a panel naming what it needs and where it comes from. When the packaging work is done, that panel becomes a button; until then it tells the truth.
+
+**Still missing, and worth naming**: an office suite is not the whole desktop. Video calling, a proper mail client that a non-technical person can set up unaided, a scanner front-end, printer setup, and Bluetooth/WiFi pairing UI ([§7](#7-agents-across-machines)) are all absent. None are hard; none are done.
+
+---
+
+## 12b. The real barrier in India: existing software and its data
+
+This is the sharpest commercial question in this document, and it deserves a straight answer rather than optimism.
+
+**The problem.** A business considering adris OS does not evaluate it on features. It asks one question: *"does my Tally still work?"* — and for most Indian SMEs the honest answer today is no, because Tally is Windows-only and its data is a proprietary format. The same is true of a long tail of industry software: Busy, Marg, custom VB/Access tools someone's cousin wrote in 2009. **Whoever solves this owns the migration, and nobody has.**
+
+**Three routes, in order of how honest each one is:**
+
+1. **Dual boot — already true, and the reason the startup picker matters.** Windows stays one restart away ([§4](#4-getting-on-to-it)). Not a solution, but it means adopting adris OS is never a bet-the-business decision, and that alone unblocks trying it.
+2. **Run it under Wine/compatibility.** Tally has historically run under Wine with real caveats. **This must be tested, not assumed** — it is already the Week 1 Tally test in [§16](#16-before-i-start), and it decides whether this is for the businesses already being sold to or a different audience. A confident claim here without a test would be exactly the kind of thing this plan keeps catching itself doing.
+3. **Read the data, don't run the program — the one that actually wins.** Tally exposes its data over an **XML/HTTP gateway** (its own integration port), and exports to XML and CSV. That is a documented route into ledgers, vouchers and masters *without* running Tally at all. An agent that can read a business's real accounts is worth more than a compatibility layer, because it turns the OS from "runs your old software" into "understands your business" — and it is the one place where being agent-native is a genuine advantage rather than a feature.
+
+**What this means for the plan.** Route 3 is a first-class product goal, not a migration chore, and it is what the Week 1 Tally test should be scoped to investigate — not only "does the .exe run" but "can we read the data." Nothing here is built yet; this section exists so it is designed deliberately rather than discovered late.
+
+---
+
+## 12c. Security — what is real, and what would be theatre
+
+The instruction was security that costs nothing per use — no tokens, no per-request AI. That rules out an LLM inspecting behaviour, and it rules *in* everything that is already free and proven in Linux, which is most of what actually matters:
+
+| Layer | What it does | Status |
+|---|---|---|
+| **Folder encryption** | The locked folders in [§8](#8-files-folders-and-locks) — real filesystem-level encryption, unlocked by passcode, readable from Windows. | ❌ not started |
+| **Application sandboxing** | AppArmor ships with Ubuntu and confines applications by profile. This is what "an agent can never exceed the permission of the agent that created it" ([§11](#11-how-it-is-built--and-the-exact-stack)) enforces against. | ❌ not started |
+| **Permission model** | Everything allowed by default, switchable in Settings — the model the dev bridge deliberately does *not* implement. | ❌ not started, next in [order](#next-in-order) |
+| **Firewall** | `ufw` is in Ubuntu already. Sensible defaults, one switch. | ❌ not started |
+| **Automatic security updates** | `unattended-upgrades`, also already there. The single highest-value item on this list for a non-technical owner, because it is the one that keeps working when nobody is paying attention. | ❌ not started |
+| **Signed system, unsigned changes** | The Sealed / Yours-to-change line from [§9](#9-making-it-yours), made real rather than documentary. | ❌ not started |
+
+**All of it is zero-cost at runtime** — kernel and distribution features, no model calls, no subscription. That is not a compromise; for this audience it is better, because a protection that costs nothing per use is a protection that is never switched off to save money.
+
+**What would be theatre, and is therefore excluded:** a bundled "antivirus" that scans nothing meaningful on Linux, a security score with no mechanism behind it, and any lock that only hides something from our own file manager while leaving it readable to everything else — the exact failure [§8](#8-files-folders-and-locks) already refuses for locked folders.
+
+**The dev bridge is currently the biggest hole in this document, and it is deliberate**: `/run` executes arbitrary commands with a token, bound to all interfaces. Fine in a throwaway VM, unshippable as-is. It is named in [§6](#6-agents-as-citizens-of-the-os) and replaced by the Rust system layer before anything ships.
 
 ---
 
