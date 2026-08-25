@@ -25,12 +25,19 @@ sudo apt-get update -qq
 echo "→ core GUI bits (xterm, gedit, nautilus)…"
 sudo apt-get install -y -qq xterm gedit nautilus < /dev/null
 
+# epiphany-browser, NOT chromium: on Ubuntu 24.04 chromium-browser and firefox are both snap
+# wrappers, and snap does not work under WSL2 (no systemd) — you would install a browser that
+# cannot start. Epiphany (GNOME Web) is a real .deb.
+echo "→ a browser, so adris OS can run as a real fullscreen session (vm/run-session.sh)…"
+sudo apt-get install -y -qq epiphany-browser < /dev/null || \
+  echo "  (epiphany-browser unavailable here — run-session.sh will say so if it's missing)"
+
 echo "→ LibreOffice (Writer, Calc, Impress) — this is the big one…"
 sudo apt-get install -y -qq libreoffice-writer libreoffice-calc libreoffice-impress < /dev/null
 
 echo ""
 echo "── what actually landed ──"
-for b in xterm gedit nautilus libreoffice; do
+for b in xterm gedit nautilus libreoffice epiphany-browser; do
   if command -v "$b" >/dev/null 2>&1; then
     echo "  ✓ $b   $(command -v "$b")"
   else
@@ -40,4 +47,7 @@ done
 
 echo ""
 echo "Display: ${DISPLAY:-none} / Wayland: ${WAYLAND_DISPLAY:-none}"
-echo "Next: bash vm/run-os.sh  — starts the shell and the app bridge together."
+echo ""
+echo "Next, either:"
+echo "  bash vm/run-session.sh   — adris OS fullscreen, as a real desktop session (what you want to see)"
+echo "  bash vm/run-os.sh        — shell + bridge only; view it in a browser on Windows"

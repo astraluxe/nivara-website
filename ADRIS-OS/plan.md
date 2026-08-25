@@ -46,6 +46,22 @@ Written down separately, on top, because everything below is *how*; this is *why
 
 **Test loop:** `ADRIS-OS/vm/run-in-wsl.sh` runs the frontend entirely inside the WSL2 Ubuntu VM already on this machine — its own native npm install, kept separate from the Windows-side one (sharing `node_modules` across the OS boundary breaks on native binaries like rollup's). Confirmed reachable at `http://localhost:5173` from a normal Windows browser with nothing installed on the Windows side to make it run. **This is not yet the real adris OS VM** from [§2](#2-three-weeks-honestly) — that's a custom-built Ubuntu image booted in QEMU, still Week 1 Day 3 of the actual OS and not started. This is specifically for testing the frontend shell while that doesn't exist yet. A second script, `sync-to-wsl.sh`, re-syncs the running copy after an edit without restarting the dev server (Vite hot-reloads).
 
+**Installing into the VM needs no password — use `wsl -u root`.** Worth writing down because it cost real time to discover. Inside the VM, `sudo` prompts for the Ubuntu account password, so any scripted `sudo apt-get install` simply *hangs forever with no output* — it looks like a slow download and is actually a prompt nobody can answer. WSL sidesteps this entirely: `wsl -d Ubuntu -u root -e bash -lc "…"` runs as root directly, because the Windows side already authenticated the user. So the rule for anything scripted against this VM:
+
+```
+# hangs on an unanswerable prompt — never do this from a script
+wsl -d Ubuntu -e bash -lc "sudo apt-get install -y <pkg>"
+
+# works, no password anywhere
+wsl -d Ubuntu -u root -e bash -lc "DEBIAN_FRONTEND=noninteractive apt-get install -y <pkg>"
+```
+
+`vm/setup-desktop.sh` still uses `sudo`, which is correct when a person runs it themselves in a terminal — it just cannot be driven headlessly. **No password is stored anywhere in this repo, and none should be**: `plan.md` lives in the `nivara-website` repo, which auto-deploys to the public site on push, so anything written here is potentially world-readable.
+
+**GUI works, verified on screen (25 Aug).** WSLg gives the VM a real display (`DISPLAY=:0`, `WAYLAND_DISPLAY=wayland-0`), and Linux windows draw directly onto the Windows desktop. Confirmed by launching an actual Ubuntu window and having it appear. Two findings from doing it:
+- `xterm` is the terminal to use. `zutty` (the one Ubuntu ships by default) needs OpenGL and core-dumps under WSLg's software renderer.
+- Launch GUI apps with `setsid … </dev/null &`, not a bare `nohup … &`. A process started inside `wsl -e bash -lc "…"` is killed when that command returns, so the window flashes up and vanishes — which is exactly what happened on the first attempt.
+
 **Also 25 Aug — first look, and it was too crowded.** Seeing it running surfaced two real problems the design file itself didn't show, because a static canvas doesn't show density the way a running screen does:
 
 - **Widgets read as opaque painted plates, not glass.** The design calls them "plates" and that's exactly what they looked like once real — solid gradients sitting on top of the wallpaper rather than translucent surfaces it showed through. Fixed: `WidgetCard`, the rail, the top bar and the dock now use a genuinely translucent background plus `backdrop-filter: blur(...)`, not an opaque tint. The wallpaper's own dark scrim (originally there so text stayed legible over a bright image) is mostly removed — legibility is the glass blur's job now, not a global darkening of the picture underneath it.
@@ -245,6 +261,10 @@ This is what "agents use the software" means concretely:
 - The **dock launches the real application.** Clicking LibreOffice Writer in adris OS opens LibreOffice Writer — the actual program, in its own window, not a web imitation of one.
 - An **agent asked to build a deck runs Impress**, the same way a person would. The document capability described above (`generate_document` and the rest, ported from the desktop app) is about producing files; this is about driving the applications that open and edit them.
 - Both go through **one bridge**, not two paths — `vm/agent-bridge.mjs` in the dev VM today: the dock POSTs an app id to it, and an agent uses the same service to run a command. One surface, two callers, which is why the dock and the agents can never drift apart in what they're able to do.
+
+**And Ubuntu is fully codeable — that is a reason for the choice, not a caveat.** Ubuntu is an ordinary Linux system: an agent can write a file, install a package, add a script, wire up a scheduled job, or build a small tool, exactly as a developer would. Nothing about picking a friendly distribution locks that down. **Verified working, 25 Aug**: an agent went through the bridge, created a file in the VM's home directory and ran a shell command, and got real output back (`Ubuntu 24.04.2 LTS`). That is the mechanism behind ["it notices your day and writes you a tool for it"](#targets--what-adris-os-has-to-achieve) — the agent isn't confined to a sandbox of our own invention, it is working on a real computer.
+
+The boundary on that power is the one [§9](#9-making-it-yours) already draws, and it is a *permission* boundary rather than a capability one: agent-built things live in the yours-to-change space (widgets, automations, scripts, installed packages) and never rewrite the sealed core (kernel, installer, encryption, the permission model itself).
 
 **On security, stated plainly, because the dev bridge is deliberately permissive:** the development bridge binds to all interfaces and has an unrestricted (token-guarded) `/run`. That is acceptable only inside a throwaway VM. It must never ship that way — the real thing is the Rust system layer in [§11](#11-how-it-is-built--and-the-exact-stack), enforcing the permission model this document has described from the start. The dev bridge already allow-lists `/launch` to a fixed set of applications regardless, so the loose part is exactly one endpoint and it is named.
 
