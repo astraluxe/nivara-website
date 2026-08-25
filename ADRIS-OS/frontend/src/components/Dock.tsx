@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import AppIcon, { type AppIconId } from './AppIcon';
+import AppIcon, { AppLogo, type AppIconId } from './AppIcon';
 import { PINNED, launchApp, installedApps, iconFor, type CatalogueApp } from '../lib/linuxApps';
 
 /**
@@ -15,10 +15,7 @@ import { PINNED, launchApp, installedApps, iconFor, type CatalogueApp } from '..
  * Tiles are 56px against a 24pt (~32px) desktop minimum, and each has a tooltip naming the real
  * command, so nothing about what will run is hidden.
  */
-export default function Dock({
-  railWidth, onOpenAllApps, iconSize = 54,
-}: {
-  railWidth: number;
+export default function Dock({ onOpenAllApps, iconSize = 54 }: {
   onOpenAllApps: () => void;
   iconSize?: number;
 }) {
@@ -36,7 +33,9 @@ export default function Dock({
 
   return (
     <div style={{
-      position: 'absolute', bottom: 22, left: 0, right: railWidth,
+      // Centred on the WHOLE screen. The rail is a floating card now, so centring against the
+      // space left of it pushed the dock visibly off-centre.
+      position: 'absolute', bottom: 22, left: 0, right: 0,
       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, zIndex: 2,
       pointerEvents: 'none',
     }}>
@@ -66,7 +65,7 @@ export default function Dock({
               disabled={missing}
               onClick={() => void open(app)}
             >
-              <AppIcon id={iconFor(app) as AppIconId} size={iconSize} />
+              <AppLogo src={app.iconUrl} id={iconFor(app) as AppIconId} size={iconSize} />
             </DockButton>
           );
         })}

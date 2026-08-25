@@ -77,7 +77,7 @@ export default function Desktop({
         </div>
       )}
 
-      <Dock railWidth={S.rail + 36} iconSize={S.dockIcon} onOpenAllApps={() => setAllApps(true)} />
+      <Dock iconSize={S.dockIcon} onOpenAllApps={() => setAllApps(true)} />
       <Rail width={S.rail} scale={S.scale} />
 
       {allApps && <AllApps onClose={() => setAllApps(false)} />}

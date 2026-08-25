@@ -13,6 +13,8 @@
  * must never be colour-ONLY still holds: every icon also has a distinct glyph and a tooltip.
  */
 
+import { useState } from 'react';
+
 export type AppIconId =
   | 'writer' | 'calc' | 'impress' | 'files' | 'text' | 'terminal'
   | 'council' | 'calendar' | 'settings' | 'browser' | 'mail' | 'apps';
@@ -67,6 +69,33 @@ const TILES: Record<AppIconId, { from: string; to: string; glyph: JSX.Element }>
     glyph: <><circle cx="7" cy="7" r="1.6" /><circle cx="12" cy="7" r="1.6" /><circle cx="17" cy="7" r="1.6" /><circle cx="7" cy="12" r="1.6" /><circle cx="12" cy="12" r="1.6" /><circle cx="17" cy="12" r="1.6" /><circle cx="7" cy="17" r="1.6" /><circle cx="12" cy="17" r="1.6" /><circle cx="17" cy="17" r="1.6" /></>,
   },
 };
+
+/**
+ * When a project has a real logo, show the real logo.
+ *
+ * Every app wearing the same drawn square is exactly the "boring" the design feedback named — an
+ * app store shows each project's own mark, because that mark is how people recognise it. `src` is
+ * tried first and the drawn tile stays underneath as the fallback, so a logo that 404s or an
+ * offline machine degrades to something deliberate rather than a broken-image icon.
+ */
+export function AppLogo({ src, id, size = 52 }: { src?: string; id: AppIconId; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) return <AppIcon id={id} size={size} />;
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: Math.round(size * 0.23), flex: 'none',
+      background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.12)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+    }}>
+      <img
+        src={src}
+        alt=""
+        onError={() => setFailed(true)}
+        style={{ width: '78%', height: '78%', objectFit: 'contain' }}
+      />
+    </div>
+  );
+}
 
 export default function AppIcon({ id, size = 52 }: { id: AppIconId; size?: number }) {
   const tile = TILES[id] ?? TILES.apps;

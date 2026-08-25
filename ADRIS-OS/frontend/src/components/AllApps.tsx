@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import AppIcon, { type AppIconId } from './AppIcon';
+import { AppLogo, type AppIconId } from './AppIcon';
 import {
   CATALOGUE, CATEGORIES, iconFor, installedApps, installApp, launchApp,
+  githubInstall, githubPlan,
   type CatalogueApp, type AppCategory,
 } from '../lib/linuxApps';
 
@@ -52,6 +53,21 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
 
   async function activate(app: CatalogueApp) {
     if (app.kind === 'service') { setDetail(app); return; }
+
+    // A GitHub project: ask what WOULD happen, then do it. Explaining first is the difference
+    // between trust and a progress bar you have to believe.
+    if (app.kind === 'github') {
+      setBusy(app.id);
+      setNote(`Looking at ${app.name}…`);
+      const p = await githubPlan(app.repo || '');
+      if (!p.ok) { setBusy(''); setNote(p.error || `${app.name} can't be installed automatically.`); return; }
+      setNote(`${p.why} Installing…`);
+      const r = await githubInstall(app.repo || '');
+      setBusy('');
+      setNote(r.ok ? `${app.name} installed.` : (r.error || `Could not install ${app.name}.`));
+      refresh();
+      return;
+    }
 
     const isInstalled = installed === null ? true : !!installed[app.id];
     if (isInstalled) {
@@ -143,16 +159,25 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
                 onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.12)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,.05)'; }}
               >
-                <div style={{ opacity: !isService && known && !isInstalled ? 0.5 : 1, flex: 'none' }}>
-                  <AppIcon id={iconFor(app) as AppIconId} size={40} />
+                <div style={{ opacity: app.kind === 'app' && known && !isInstalled ? 0.55 : 1, flex: 'none' }}>
+                  <AppLogo src={app.iconUrl} id={iconFor(app) as AppIconId} size={40} />
                 </div>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.25 }}>{app.name}</div>
-                  <div style={{ fontSize: 11.5, color: 'var(--text-faint)', marginTop: 5, lineHeight: 1.35 }}>
+                  {/* The real product name, small, underneath — someone who knows it as "GIMP" or
+                      "LibreOffice Calc" still finds it, while the big word stays the plain one. */}
+                  {app.realName && (
+                    <div style={{ fontSize: 11, color: 'var(--text-faint)', marginTop: 3 }}>{app.realName}</div>
+                  )}
+                  <div style={{
+                    fontSize: 11.5, marginTop: 5, lineHeight: 1.35,
+                    color: app.kind === 'github' ? 'var(--accent-light)' : 'var(--text-faint)',
+                  }}>
                     {installing ? 'Installing…'
                       : isService ? 'Self-hosted · needs setup'
+                      : app.kind === 'github' ? 'From GitHub · one click'
                       : known && !isInstalled ? 'Click to install'
-                      : app.category}
+                      : 'Installed'}
                   </div>
                 </div>
               </button>
@@ -206,7 +231,7 @@ function ServiceDetail({ app, onClose }: { app: CatalogueApp; onClose: () => voi
         }}
       >
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          <AppIcon id={iconFor(app) as AppIconId} size={56} />
+          <AppLogo src={app.iconUrl} id={iconFor(app) as AppIconId} size={56} />
           <div>
             <div style={{ fontSize: 20, fontWeight: 600 }}>{app.name}</div>
             <div style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.5 }}>{app.blurb}</div>

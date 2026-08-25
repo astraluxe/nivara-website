@@ -20,6 +20,7 @@
 import { createServer } from 'node:http';
 import { spawn, execFile } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
+import { plan as ghPlan, install as ghInstall } from './github-install.mjs';
 
 const PORT = 7717;
 
@@ -35,7 +36,9 @@ const ALLOWED = {
   text:        { name: 'Text Editor',        cmd: 'gedit',            args: [],               probe: 'gedit',            pkg: 'gedit' },
   evince:      { name: 'PDF Viewer',         cmd: 'evince',           args: [],               probe: 'evince',           pkg: 'evince' },
   calendar:    { name: 'Calendar',           cmd: 'gnome-calendar',   args: [],               probe: 'gnome-calendar',   pkg: 'gnome-calendar' },
-  browser:     { name: 'Web Browser',        cmd: 'epiphany-browser', args: [],               probe: 'epiphany-browser', pkg: 'epiphany-browser' },
+    // --new-window is REQUIRED: adris OS itself runs in Epiphany, which is single-instance, so
+  // without it 'open the browser' silently focuses the desktop and looks like nothing happened.
+  browser:     { name: 'Web Browser',        cmd: 'epiphany-browser', args: ['--new-window'], probe: 'epiphany-browser', pkg: 'epiphany-browser' },
   thunderbird: { name: 'Email',              cmd: 'thunderbird',      args: [],               probe: 'thunderbird',      pkg: 'thunderbird' },
   transmission:{ name: 'Downloads',          cmd: 'transmission-gtk', args: [],               probe: 'transmission-gtk', pkg: 'transmission-gtk' },
   vlc:         { name: 'Video Player',       cmd: 'vlc',              args: [],               probe: 'vlc',              pkg: 'vlc' },
@@ -217,6 +220,26 @@ const server = createServer(async (req, res) => {
       });
     });
     return;
+  }
+
+  // POST /github/plan {repo} — what WOULD happen, without doing it.
+  // Separate from installing so the UI can say what it is about to do; an installer that explains
+  // itself first is the difference between trust and a progress bar you have to believe.
+  if (req.method === 'POST' && req.url === '/github/plan') {
+    const { repo } = await readBody(req);
+    try { return json(res, 200, await ghPlan(repo)); }
+    catch (e) { return json(res, 200, { ok: false, error: String(e.message || e) }); }
+  }
+
+  // POST /github/install {repo} — actually install it.
+  if (req.method === 'POST' && req.url === '/github/install') {
+    const { repo } = await readBody(req);
+    try {
+      const out = await ghInstall(repo, (m) => console.log('[github]', m));
+      return json(res, 200, out);
+    } catch (e) {
+      return json(res, 200, { ok: false, error: String(e.message || e) });
+    }
   }
 
   json(res, 404, { ok: false, error: 'Not found' });

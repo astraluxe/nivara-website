@@ -86,3 +86,40 @@ export async function systemStats(): Promise<SystemStats | null> {
     return null;
   }
 }
+
+// ─── GitHub, one click ───────────────────────────────────────────────────────
+
+export interface GhPlan {
+  ok: boolean;
+  method?: 'apt' | 'deb' | 'appimage';
+  why?: string;
+  file?: string;
+  pkg?: string;
+  error?: string;
+}
+
+/** What WOULD happen if this repo were installed — asked before doing it, so the UI can say so. */
+export async function githubPlan(repo: string): Promise<GhPlan> {
+  try {
+    const r = await fetch(`${BRIDGE}/github/plan`, {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ repo }),
+    });
+    return (await r.json()) as GhPlan;
+  } catch {
+    return { ok: false, error: "Can't reach the VM's app bridge." };
+  }
+}
+
+/** Install a GitHub project. See vm/github-install.mjs for which routes are allowed and why. */
+export async function githubInstall(repo: string): Promise<{ ok: boolean; name?: string; error?: string }> {
+  try {
+    const r = await fetch(`${BRIDGE}/github/install`, {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ repo }),
+    });
+    return (await r.json()) as { ok: boolean; name?: string; error?: string };
+  } catch {
+    return { ok: false, error: "Can't reach the VM's app bridge — nothing was installed." };
+  }
+}
