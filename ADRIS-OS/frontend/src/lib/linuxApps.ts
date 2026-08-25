@@ -1,50 +1,34 @@
-// ─── The real Linux applications adris OS ships with ─────────────────────────
+// ─── Talking to the real Linux underneath ────────────────────────────────────
 //
-// This is the concrete form of plan.md's "we don't reimplement a word processor." Every entry is
-// an ordinary Ubuntu application that comes from the distribution — the same binary any Ubuntu
-// user has. adris OS launches them; it does not replace them. The agent story is the same:
-// "agents use the software" means agents run THESE, not that we rebuild each one.
+// The catalogue (what exists) lives in catalogue.ts. This file is only the wire: launching,
+// installing, and asking what is actually there. Keeping them apart matters because the catalogue
+// is edited constantly as apps are added, and this half almost never changes.
 
-export interface LinuxApp {
-  id: string;
-  name: string;
-  /** The actual command run inside the VM. Shown in the dock tooltip, so nothing is hidden. */
-  exec: string;
-  /** apt package that provides it — used by vm/setup-desktop.sh to install the set. */
-  pkg: string;
-  /** Shown in the dock's front row. Everything else lives behind the 9-dot all-apps button. */
-  pinned?: boolean;
-}
-
-export const LINUX_APPS: LinuxApp[] = [
-  { id: 'files',    name: 'Files',               exec: 'nautilus --new-window', pkg: 'nautilus',              pinned: true },
-  { id: 'writer',   name: 'LibreOffice Writer',  exec: 'libreoffice --writer',  pkg: 'libreoffice-writer',    pinned: true },
-  { id: 'calc',     name: 'LibreOffice Calc',    exec: 'libreoffice --calc',    pkg: 'libreoffice-calc',      pinned: true },
-  { id: 'impress',  name: 'LibreOffice Impress', exec: 'libreoffice --impress', pkg: 'libreoffice-impress',   pinned: true },
-  { id: 'browser',  name: 'Web Browser',         exec: 'epiphany-browser',      pkg: 'epiphany-browser',      pinned: true },
-  { id: 'terminal', name: 'Terminal',            exec: 'xterm',                 pkg: 'xterm',                 pinned: true },
-  { id: 'text',     name: 'Text Editor',         exec: 'gedit',                 pkg: 'gedit' },
-];
-
-/** The dock's front row. The rest are one click away behind the 9-dot button — the dock stays a
- *  short row of what you actually use, which is the whole reason a dock beats a full app list. */
-export const PINNED_APPS = LINUX_APPS.filter((a) => a.pinned);
-
-export const APP_BY_ID = Object.fromEntries(LINUX_APPS.map((a) => [a.id, a])) as Record<string, LinuxApp>;
+export { CATALOGUE, BY_ID, PINNED, BASE_APPS, CATEGORIES, iconFor } from './catalogue';
+export type { CatalogueApp, AppCategory, AppKind } from './catalogue';
 
 /** Where the agent bridge listens. Same host the UI is served from, fixed port. */
 const BRIDGE = `http://${location.hostname}:7717`;
 
+export interface SystemStats {
+  ok: boolean;
+  /** null when the machine genuinely has no battery — never a made-up number. */
+  battery: number | null;
+  batteryState: string | null;
+  memoryUsedPct: number | null;
+  diskUsedPct: number | null;
+  uptimeSec: number | null;
+  cpus: number | null;
+}
+
 /**
- * Ask the bridge to launch a real application inside the VM.
+ * Launch a real application inside the VM.
  *
- * Deliberately honest about the failure case: if the bridge isn't reachable (someone opened this
- * page in a plain browser with no VM behind it), say exactly that rather than letting a click look
- * like it worked. A dock that silently does nothing is the worst possible version of this.
+ * Deliberately honest about failure: if the bridge isn't reachable (someone opened this page in a
+ * plain browser with no VM behind it), say exactly that rather than letting a click look like it
+ * worked. A dock that silently does nothing is the worst possible version of this.
  */
 export async function launchApp(id: string): Promise<{ ok: true } | { ok: false; error: string }> {
-  const app = APP_BY_ID[id];
-  if (!app) return { ok: false, error: `No such app: ${id}` };
   try {
     const r = await fetch(`${BRIDGE}/launch`, {
       method: 'POST',
@@ -52,22 +36,52 @@ export async function launchApp(id: string): Promise<{ ok: true } | { ok: false;
       body: JSON.stringify({ id }),
     });
     const data = (await r.json()) as { ok?: boolean; error?: string };
-    if (!r.ok || !data.ok) return { ok: false, error: data.error || `${app.name} failed to start` };
+    if (!r.ok || !data.ok) return { ok: false, error: data.error || 'It did not start.' };
     return { ok: true };
   } catch {
-    return {
-      ok: false,
-      error: `Can't reach the VM's app bridge — ${app.name} not started. Run vm/agent-bridge.mjs inside the VM.`,
-    };
+    return { ok: false, error: `Can't reach the VM's app bridge — nothing was started. Run vm/agent-bridge.mjs inside the VM.` };
   }
 }
 
-/** What the bridge reports as installed — so the UI can grey out what genuinely isn't there. */
+/**
+ * Install an application the OS already knows about.
+ *
+ * Only catalogue entries, only through the distribution's own package manager. Installing anything
+ * from any URL is the app-store thread in plan.md and needs the sandbox first — this is the part
+ * that can be done safely today.
+ */
+export async function installApp(id: string): Promise<{ ok: true; already?: boolean } | { ok: false; error: string }> {
+  try {
+    const r = await fetch(`${BRIDGE}/install`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    const data = (await r.json()) as { ok?: boolean; already?: boolean; error?: string };
+    if (!data.ok) return { ok: false, error: data.error || 'Install failed.' };
+    return { ok: true, already: data.already };
+  } catch {
+    return { ok: false, error: `Can't reach the VM's app bridge — nothing was installed.` };
+  }
+}
+
+/** What the bridge reports as installed — so the UI can tell the truth about what's available. */
 export async function installedApps(): Promise<Record<string, boolean> | null> {
   try {
     const r = await fetch(`${BRIDGE}/apps`);
     if (!r.ok) return null;
     return (await r.json()) as Record<string, boolean>;
+  } catch {
+    return null;
+  }
+}
+
+/** Real battery / memory / disk. Returns null when the bridge is unreachable. */
+export async function systemStats(): Promise<SystemStats | null> {
+  try {
+    const r = await fetch(`${BRIDGE}/system`);
+    if (!r.ok) return null;
+    return (await r.json()) as SystemStats;
   } catch {
     return null;
   }

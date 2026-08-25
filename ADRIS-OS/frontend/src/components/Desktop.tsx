@@ -10,7 +10,6 @@ import WidgetCarousel from './widgets/WidgetCarousel';
 import TodayPage from './widgets/pages/TodayPage';
 import OutreachPage from './widgets/pages/OutreachPage';
 import CouncilPage from './widgets/pages/CouncilPage';
-import { launchApp } from '../lib/linuxApps';
 import { useScreenScale } from '../lib/useScreenScale';
 
 /**
@@ -44,21 +43,16 @@ export default function Desktop({
   // pixel guess against one test window any more.
   const S = useScreenScale();
 
-  async function openApp(id: string, name: string) {
-    const r = await launchApp(id);
-    if (!r.ok) console.warn(`${name}: ${r.error}`);
-  }
-
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', color: 'var(--text)' }}>
       <WallpaperLayer wallpaperId={wallpaperId} />
       <TopBar theme={theme} onToggleTheme={onToggleTheme} onOpenWallpaper={onOpenWallpaper} />
-      <CenterClock railWidth={S.rail + 36} scale={S.scale} />
+      <CenterClock scale={S.scale} />
 
       {/* The widget box, under the clock. Deliberately not vertically centred: sitting it just
           below the clock keeps them reading as one group instead of two things floating apart. */}
       <div style={{
-        position: 'absolute', top: Math.round(230 * S.scale), left: 0, right: S.rail + 36,
+        position: 'absolute', top: Math.round(230 * S.scale), left: 0, right: 0,
         display: 'flex', justifyContent: 'center', zIndex: 1, pointerEvents: 'none',
       }}>
         <div style={{ pointerEvents: 'auto' }}>
@@ -86,7 +80,7 @@ export default function Desktop({
       <Dock railWidth={S.rail + 36} iconSize={S.dockIcon} onOpenAllApps={() => setAllApps(true)} />
       <Rail width={S.rail} scale={S.scale} />
 
-      {allApps && <AllApps onOpen={openApp} onClose={() => setAllApps(false)} />}
+      {allApps && <AllApps onClose={() => setAllApps(false)} />}
     </div>
   );
 }

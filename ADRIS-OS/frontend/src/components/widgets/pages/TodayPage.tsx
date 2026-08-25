@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { systemStats, type SystemStats } from '../../../lib/linuxApps';
 
 /**
  * Page 1 of the single widget box — the "main info" glance: what's next, the running focus
@@ -8,17 +9,30 @@ export default function TodayPage({
   next = { time: '10:00', label: 'Demo with Acme' },
   focusMinutesLeft = 48,
   focusFraction = 0.62,
-  battery = 62,
   needReply = 4,
   agentsRunning = 2,
 }: {
   next?: { time: string; label: string };
   focusMinutesLeft?: number;
   focusFraction?: number;
-  battery?: number;
   needReply?: number;
   agentsRunning?: number;
 }) {
+  // REAL numbers, not decoration. The battery/disk figures used to be hardcoded, which meant the
+  // widget confidently displayed 62% on a machine at 12%. Null until the bridge answers, and a
+  // dash rather than a guess if it never does.
+  const [sys, setSys] = useState<SystemStats | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const tick = () => { void systemStats().then((s) => { if (alive) setSys(s); }); };
+    tick();
+    const id = window.setInterval(tick, 30_000);
+    return () => { alive = false; window.clearInterval(id); };
+  }, []);
+
+  const battery = sys?.battery;
+  const disk = sys?.diskUsedPct;
+
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
@@ -44,7 +58,11 @@ export default function TodayPage({
         </div>
       </div>
       <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-        <Stat icon={<BatteryIcon />} value={`${battery}%`} label="Battery" />
+        <Stat
+          icon={<BatteryIcon />}
+          value={battery != null ? `${battery}%` : disk != null ? `${disk}%` : '—'}
+          label={battery != null ? (sys?.batteryState === 'Charging' ? 'Charging' : 'Battery') : disk != null ? 'Disk used' : 'Battery'}
+        />
         <Stat icon={<InboxIcon />} value={String(needReply)} label="To reply" />
         <Stat icon={<AgentIcon />} value={String(agentsRunning)} label="Agents" />
       </div>

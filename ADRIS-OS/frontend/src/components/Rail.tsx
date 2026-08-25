@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import AppIcon, { type AppIconId } from './AppIcon';
-import { LINUX_APPS, launchApp, installedApps } from '../lib/linuxApps';
+import { PINNED, launchApp, installedApps, iconFor } from '../lib/linuxApps';
 
 /**
  * The right-edge rail — rebuilt against Apple HIG desktop conventions.
@@ -158,7 +158,7 @@ function AppGrid({
 }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-      {LINUX_APPS.map((app) => {
+      {PINNED.map((app) => {
         // null = the bridge hasn't answered; don't pretend to know. Only dim when it has told us
         // the app is genuinely missing.
         const known = installed !== null;
@@ -180,7 +180,7 @@ function AppGrid({
             onMouseEnter={(e) => { if (!missing) { e.currentTarget.style.background = 'rgba(255,255,255,.12)'; } }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--well-bg)'; }}
           >
-            <AppIcon id={app.id as AppIconId} size={34} />
+            <AppIcon id={iconFor(app) as AppIconId} size={34} />
             <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>{short}</span>
           </button>
         );

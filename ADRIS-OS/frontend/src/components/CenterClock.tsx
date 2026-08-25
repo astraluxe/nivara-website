@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
  * once, here, top-centre; the rail no longer carries its own separate clock underneath it (removed
  * — showing the time twice on one screen is the same complaint as the old duplicate Calendar).
  */
-export default function CenterClock({ railWidth = 340, scale = 1 }: { railWidth?: number; scale?: number }) {
+export default function CenterClock({ scale = 1 }: { scale?: number }) {
   const [now, setNow] = useState(new Date());
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 1000 * 15);
@@ -21,7 +21,10 @@ export default function CenterClock({ railWidth = 340, scale = 1 }: { railWidth?
 
   return (
     <div style={{
-      position: 'absolute', top: Math.round(62 * scale), left: 0, right: railWidth, zIndex: 1,
+      // Centred on the WHOLE screen, not on the space left of the rail. The rail is a floating
+      // inset card now, so the wallpaper runs edge to edge behind it — centring against anything
+      // narrower left the clock visibly off to the left, which is exactly how it looked.
+      position: 'absolute', top: Math.round(62 * scale), left: 0, right: 0, zIndex: 1,
       display: 'flex', flexDirection: 'column', alignItems: 'center',
       pointerEvents: 'none', textShadow: '0 2px 24px rgba(0,0,0,.35)',
     }}>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import AppIcon, { type AppIconId } from './AppIcon';
-import { PINNED_APPS, launchApp, installedApps, type LinuxApp } from '../lib/linuxApps';
+import { PINNED, launchApp, installedApps, iconFor, type CatalogueApp } from '../lib/linuxApps';
 
 /**
  * The dock — real applications, real icons.
@@ -27,7 +27,7 @@ export default function Dock({
 
   useEffect(() => { void installedApps().then(setInstalled); }, []);
 
-  async function open(app: LinuxApp) {
+  async function open(app: CatalogueApp) {
     setNote(`Opening ${app.name}…`);
     const res = await launchApp(app.id);
     setNote(res.ok ? `${app.name} opened` : res.error);
@@ -57,7 +57,7 @@ export default function Dock({
         boxShadow: '0 16px 40px -14px rgba(0,0,0,.55)',
         pointerEvents: 'auto',
       }}>
-        {PINNED_APPS.map((app) => {
+        {PINNED.map((app) => {
           const missing = installed !== null && !installed[app.id];
           return (
             <DockButton
@@ -66,7 +66,7 @@ export default function Dock({
               disabled={missing}
               onClick={() => void open(app)}
             >
-              <AppIcon id={app.id as AppIconId} size={iconSize} />
+              <AppIcon id={iconFor(app) as AppIconId} size={iconSize} />
             </DockButton>
           );
         })}
