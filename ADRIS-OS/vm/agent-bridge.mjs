@@ -107,7 +107,7 @@ const server = createServer(async (req, res) => {
 
   // POST /launch {id} — start one allow-listed application.
   if (req.method === 'POST' && req.url === '/launch') {
-    const { id } = await readBody(req);
+    const { id, url } = await readBody(req);
     const app = ALLOWED[id];
     if (!app) return json(res, 400, { ok: false, error: `Unknown app: ${id}` });
     if (!(await which(app.probe))) {
@@ -119,7 +119,10 @@ const server = createServer(async (req, res) => {
     try {
       // Detached so the app outlives this request — closing the bridge shouldn't kill the user's
       // open documents.
-      const child = spawn(app.cmd, app.args, { detached: true, stdio: 'ignore' });
+      // A bundled business app is "opened" by pointing the browser at its local port. Only
+      // localhost is accepted, so this can never be turned into "open any URL you like".
+      const extra = (typeof url === 'string' && /^https?:\/\/localhost:\d+\//.test(url)) ? [url] : [];
+      const child = spawn(app.cmd, [...app.args, ...extra], { detached: true, stdio: 'ignore' });
       child.unref();
       console.log(`[launch] ${app.name} (${app.cmd} ${app.args.join(' ')}) pid=${child.pid}`);
       return json(res, 200, { ok: true, pid: child.pid });
@@ -219,6 +222,25 @@ const server = createServer(async (req, res) => {
         cpus: kv.cpus ? Number(kv.cpus) : null,
       });
     });
+    return;
+  }
+
+  // GET /services — which bundled business apps are actually up.
+  //
+  // Asked before a click so the UI can say "still starting" instead of opening a browser window at
+  // a port nothing is listening on — which looks exactly like a broken product.
+  if (req.method === 'GET' && req.url === '/services') {
+    execFile('bash', ['-lc',
+      "docker ps --format '{{.Names}}' 2>/dev/null | tr '\n' ' '"],
+      { timeout: 8000 }, (err, stdout) => {
+        const running = String(stdout || '');
+        json(res, 200, {
+          ok: !err,
+          crm: /adris-crm/.test(running),
+          accounts: /adris-accounts/.test(running),
+          invoicing: /adris-invoicing/.test(running),
+        });
+      });
     return;
   }
 

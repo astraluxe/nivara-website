@@ -73,6 +73,14 @@ else
     && say "✓ adris OS shell started" || say "✗ shell did not come up — see ~/adris-vite.log"
 fi
 
+# ── 2b. The bundled business apps ────────────────────────────────────────────
+# Runs once and is cheap afterwards (it skips anything already up). Never fatal: a machine without
+# Customer Records is still a working computer, and a half-broken desktop would be far worse than
+# one missing feature.
+if [ -x "$SCRIPT_DIR/provision.sh" ]; then
+  bash "$SCRIPT_DIR/provision.sh" 2>&1 | sed 's/^/  /' || say "· business apps could not be set up — everything else is unaffected"
+fi
+
 # ── 3. adris OS opens itself on login ────────────────────────────────────────
 # THE POINT OF THIS SCRIPT. An autostart entry means the desktop appears with adris OS already on
 # it, fullscreen — rather than a bare XFCE desktop you then have to open a browser inside.

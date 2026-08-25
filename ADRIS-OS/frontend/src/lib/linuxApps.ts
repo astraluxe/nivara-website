@@ -123,3 +123,33 @@ export async function githubInstall(repo: string): Promise<{ ok: boolean; name?:
     return { ok: false, error: "Can't reach the VM's app bridge — nothing was installed." };
   }
 }
+
+/** Which bundled business apps are actually up. Null when the bridge is unreachable. */
+export async function servicesStatus(): Promise<Record<string, boolean> | null> {
+  try {
+    const r = await fetch(`${BRIDGE}/services`);
+    if (!r.ok) return null;
+    return (await r.json()) as Record<string, boolean>;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Open a bundled business app.
+ *
+ * It runs on this machine, on a local port — so "opening" it is opening a browser window at that
+ * address. The user never sees the port, the container, or what is inside.
+ */
+export async function openBundled(port: number): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    const r = await fetch(`${BRIDGE}/launch`, {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id: 'browser', url: `http://localhost:${port}/` }),
+    });
+    const d = (await r.json()) as { ok?: boolean; error?: string };
+    return d.ok ? { ok: true } : { ok: false, error: d.error || 'It did not open.' };
+  } catch {
+    return { ok: false, error: "Can't reach the VM's app bridge." };
+  }
+}

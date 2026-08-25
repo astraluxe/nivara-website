@@ -15,14 +15,16 @@
 //               and installs it. THIS is the point of the OS: thousands of good free tools sit on
 //               GitHub behind a README full of terminal commands, which is a wall for exactly the
 //               people this is built for.
-//    'service'— a self-hosted web app needing a database and a container stack. Real, valuable, and
-//               genuinely not one click — so it says so rather than pretending.
+//    'bundled'— a web application that ships WITH adris OS: set up on first boot, already running,
+//               opened by clicking it like anything else. The user never sees a container, a
+//               database, or the upstream project's name — it is simply Customer Records, or
+//               Invoicing, or Accounts. See vm/provision.sh.
 //
 // Icons: `icon` names a drawn tile from AppIcon.tsx. `iconUrl` points at the project's REAL logo,
 // which is what a store should show — every app wearing the same generic square is exactly the
 // "boring" the design feedback called out.
 
-export type AppKind = 'app' | 'github' | 'service';
+export type AppKind = 'app' | 'github' | 'bundled';
 export type AppCategory =
   | 'Essentials' | 'Office' | 'Internet' | 'Media' | 'Graphics'
   | 'Business' | 'Developer' | 'System';
@@ -41,10 +43,10 @@ export interface CatalogueApp {
   pkg?: string;
   exec?: string;
 
-  /** kind:'github'/'service' — where it comes from. */
+  /** kind:'github' — the project to install from. */
   repo?: string;
-  /** kind:'service' — what it actually needs, stated plainly. */
-  needs?: string;
+  /** kind:'bundled' — the local port provision.sh runs it on. */
+  port?: number;
 
   /** A drawn tile id (see AppIcon.tsx). */
   icon?: string;
@@ -158,21 +160,24 @@ export const CATALOGUE: CatalogueApp[] = [
     iconUrl: 'https://raw.githubusercontent.com/localsend/localsend/main/assets/img/logo-128.png',
     blurb: 'Send files to any phone or laptop on your WiFi. No internet, no account.' },
 
-  // ── Business — self-hosted, honestly labelled ─────────────────────────────
-  // Not installed by default and not pretending to be one click. Listed because they are what a
-  // small business actually runs on, and every one keeps its data on the owner's own hardware.
-  { id: 'odoo', name: 'Business Suite', realName: 'Odoo', category: 'Business', kind: 'service',
-    repo: 'https://github.com/odoo/odoo', needs: 'Docker + PostgreSQL', icon: 'calc',
-    blurb: 'CRM, inventory, sales, projects and HR in one.' },
-  { id: 'erpnext', name: 'Accounting & Stock', realName: 'ERPNext', category: 'Business', kind: 'service',
-    repo: 'https://github.com/frappe/erpnext', needs: 'Docker + MariaDB', icon: 'calc',
-    blurb: 'Accounting, manufacturing, payroll and stock. Widely used in India.' },
-  { id: 'twenty', name: 'Customer Records', realName: 'Twenty CRM', category: 'Business', kind: 'service',
-    repo: 'https://github.com/twentyhq/twenty', needs: 'Docker + PostgreSQL', icon: 'council',
-    blurb: 'A modern CRM. The Salesforce alternative.' },
-  { id: 'akaunting', name: 'Invoicing', realName: 'Akaunting', category: 'Business', kind: 'service',
-    repo: 'https://github.com/akaunting/akaunting', needs: 'PHP + MySQL', icon: 'calc',
-    blurb: 'Invoices and small-business accounting.' },
+  // ── Business — ships with adris OS, already running ───────────────────────
+  //
+  // These are set up on first boot by vm/provision.sh and are simply THERE, the way Mail is on a
+  // Mac. No container to think about, no database to configure, no upstream product name on
+  // screen: what the user sees is Customer Records, Accounts, Invoicing.
+  //
+  // `port` is where provision.sh runs it; clicking opens that address in a browser window.
+  { id: 'crm', name: 'Customer Records', category: 'Business', kind: 'bundled',
+    port: 3010, icon: 'council', base: true,
+    blurb: 'Every customer, lead and deal in one place.' },
+
+  { id: 'accounts', name: 'Accounts', category: 'Business', kind: 'bundled',
+    port: 3011, icon: 'calc', base: true,
+    blurb: 'Bookkeeping, ledgers and reports for the business.' },
+
+  { id: 'invoicing', name: 'Invoicing', category: 'Business', kind: 'bundled',
+    port: 3012, icon: 'calc', base: true,
+    blurb: 'Send invoices, record payments, chase what is owed.' },
 ];
 
 export const BY_ID = Object.fromEntries(CATALOGUE.map((a) => [a.id, a])) as Record<string, CatalogueApp>;

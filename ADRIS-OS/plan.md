@@ -26,7 +26,10 @@ Everything below this section is the *plan*. This table is the *state*: what is 
 | 8 | An adris bar inside every application | ❌ **not started** — needs the compositor work; see [§11](#11-how-it-is-built--and-the-exact-stack) | — |
 | 9 | Windows files openable from adris OS | 🟡 **works in the dev VM** via `/mnt/c`; the real NTFS mount for a booted install is untested | [§8](#8-files-folders-and-locks) |
 | 10 | Permissions: everything allowed by default, changeable in Settings | ❌ **not started** — dev bridge is all-or-nothing; biggest known hole | [§12c](#12c-security--what-is-real-and-what-would-be-theatre) |
-| 21 | A real application catalogue, and installing from it | ✅ **done for Linux apps** — 30+ apps, 8 categories, `/install` works and reports honestly. Self-hosted services listed but correctly *not* one-click | [§12a](#12a-applications--what-ships-what-installs-what-is-a-server) |
+| 21 | A real application catalogue, and installing from it | ✅ **done** — 30+ apps, 8 categories, one-click install via apt | [§12a](#12a-applications--what-ships-what-installs-what-is-a-server) |
+| 25 | **Business software bundled and pre-running** (Customer Records, Accounts, Invoicing) | 🟡 **built, not yet run end-to-end** — `vm/provision.sh` sets them up on first boot; needs a real timed test on a clean machine | [§12a](#12a-applications--what-ships-what-installs-what-is-a-server) |
+| 26 | **Install anything from GitHub, one click** | ✅ **done** — reads what a repo publishes (.deb / AppImage / apt), refuses to build from source unattended | [§12e](#12e-github-as-the-app-store) |
+| 27 | Licensing of bundled upstreams settled | ❌ **not started** — copyleft conditions survive rebranding; a lawyer's afternoon, cheap now, expensive later | [§12d](#12d-licensing--one-thing-to-settle-before-shipping) |
 | 22 | Live system info (battery, memory, disk) | ✅ **done** — real values from `/system`; null rather than invented when a machine has no battery | [§12a](#12a-applications--what-ships-what-installs-what-is-a-server) |
 | 23 | **Read data from existing Indian business software (Tally etc.)** | ❌ **not started** — the single biggest commercial unlock; route identified (Tally's XML/HTTP gateway), untested | [§12b](#12b-the-real-barrier-in-india-existing-software-and-its-data) |
 | 24 | Zero-cost security (AppArmor, ufw, auto-updates, encryption) | ❌ **not started** — all distribution-native, no per-use cost | [§12c](#12c-security--what-is-real-and-what-would-be-theatre) |
@@ -632,13 +635,44 @@ The dock's first six apps were never a decision; they were whatever happened to 
 | Kind | What it is | How it gets there |
 |---|---|---|
 | `app` | An ordinary Linux program — LibreOffice, GIMP, VLC, Files, a terminal, a camera app | One `apt` command. Runs as a normal window. **Installing works today** — the bridge's `/install`, allow-listed to the catalogue. |
-| `service` | A self-hosted **web application** — Odoo, ERPNext, Twenty, EspoCRM, SuiteCRM, Krayin, Dolibarr, Akaunting, Invoice Ninja | A server stack: database, runtime, usually Docker. **Not one click**, and the UI says so, naming what it needs. |
+| `bundled` | **Customer Records, Accounts, Invoicing** — the business software that ships *with* adris OS | Set up on first boot by `vm/provision.sh` and already running. The owner clicks it and it opens. They never see a container, a database, or an upstream product name. |
+| `github` | Any project on GitHub | One click. adris OS reads the repo and installs what it publishes — see [§12e](#12e-github-as-the-app-store). |
 
-**Why the second row is listed at all, given it can't be installed yet.** Those are the tools that actually run a small business — a real CRM, a real ERP, real accounting — and every one is open source and runs on the owner's own hardware. That is *exactly* the promise adris.tech already makes about data staying yours, applied to the software a business runs on rather than just its AI. They belong in the catalogue as a statement of where this goes.
+**The business apps are features, not third-party software.** Customer Records, Accounts and Invoicing arrive set up and running, the way Mail and Calendar are simply present on a Mac. There is no store listing, no setup wizard, and nothing on screen about Docker or databases. That is the whole difference between a business owner having a CRM and a business owner being handed the raw materials for one — and it is the same promise adris.tech already makes about data staying yours, applied to the software the business runs on rather than only its AI.
 
-**And why they are marked honestly rather than made to look installable.** A business owner clicking "Odoo" and getting a spinner that never resolves — because nobody mentioned it needs a container stack and a database — is the same category of failure as [claiming an app launched when it had crashed](#status-board--read-this-first). Clicking a service opens a panel naming what it needs and where it comes from. When the packaging work is done, that panel becomes a button; until then it tells the truth.
+**Honesty is kept where it still matters: readiness.** Provisioning takes a few minutes on first boot, so the catalogue shows "Starting up…" until the app genuinely answers, rather than opening a window at a port nothing is listening on. Hiding the machinery is a product decision; hiding a failure would be [the thing this project keeps catching itself doing](#status-board--read-this-first), and is not the same.
 
 **Still missing, and worth naming**: an office suite is not the whole desktop. Video calling, a proper mail client that a non-technical person can set up unaided, a scanner front-end, printer setup, and Bluetooth/WiFi pairing UI ([§7](#7-agents-across-machines)) are all absent. None are hard; none are done.
+
+---
+
+## 12d. Licensing — one thing to settle before shipping
+
+The bundled business apps are built on copyleft upstreams (AGPL/GPL family). **Running them, bundling them, and putting adris branding on the interface is normal and widely done** — but those licences carry conditions, and rebranding does not remove them. Two that matter here:
+
+- **AGPL** attaches obligations when software is made available to users *over a network*, which is exactly how a bundled web app works, even on the owner's own machine.
+- **Attribution and copyright notices** generally have to survive, even when the product name shown to the user does not.
+
+**This is a lawyer's afternoon, not a blocker**, and it is far cheaper to settle now than after launch. Three routes exist, and the choice is a business decision rather than a technical one: comply as-is (usually straightforward), pick permissively-licensed upstreams instead, or negotiate a commercial licence with the projects that offer one. It is written here so it is chosen deliberately rather than discovered by a letter.
+
+---
+
+## 12e. GitHub as the app store
+
+The point of the OS, stated as a target rather than a nice-to-have: **thousands of genuinely good, genuinely free tools live on GitHub behind a README that opens with "clone the repo and run make."** For a developer that is nothing. For the person this is built for it is a wall — and it is the reason they end up paying for worse software.
+
+`vm/github-install.mjs` makes clicking a GitHub project install it, with no terminal. It looks at what the repo actually ships, in order of how reliable each route is:
+
+| Route | Why it's ranked here |
+|---|---|
+| Already in Ubuntu's package list | Packaged **and maintained** — it gets security updates with everything else. Beats anything assembled locally. |
+| A prebuilt `.deb` on Releases | Installed with `apt-get install ./file.deb`, not `dpkg -i`, so dependencies resolve rather than leaving a half-installed package. |
+| An AppImage on Releases | One file, no install, no dependency risk. |
+| Nothing installable | **Say so.** |
+
+**What it deliberately refuses to do: build from source, or run an install script.** `curl \| sh` and unattended `make` are how a one-click installer becomes a way to own the machine. Every route above installs an artefact the project itself published — the same trust model as any app store — and even that is only acceptable because the sandbox in [§12c](#12c-security--what-is-real-and-what-would-be-theatre) is coming. Until it lands, installation is gated behind catalogue entries rather than accepting any URL a page hands over.
+
+**A real bug this caught on its first live test**, worth recording because it is the exact class of failure that is invisible: it selected `LocalSend-1.18.2-linux-arm-64.deb` on an x86-64 machine, because the obvious pattern `/arm64/` does not match `arm-64`. Installing it would have produced a package that cannot run. The rule is now inverted — an asset must *positively* look like this machine's architecture rather than merely fail to look like another's.
 
 ---
 

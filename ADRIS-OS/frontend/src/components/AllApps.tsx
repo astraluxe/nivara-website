@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AppLogo, type AppIconId } from './AppIcon';
 import {
   CATALOGUE, CATEGORIES, iconFor, installedApps, installApp, launchApp,
-  githubInstall, githubPlan,
+  githubInstall, githubPlan, servicesStatus, openBundled,
   type CatalogueApp, type AppCategory,
 } from '../lib/linuxApps';
 
@@ -26,19 +26,19 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
   const [installed, setInstalled] = useState<Record<string, boolean> | null>(null);
   const [busy, setBusy] = useState<string>('');
   const [note, setNote] = useState('');
-  const [detail, setDetail] = useState<CatalogueApp | null>(null);
+  const [services, setServices] = useState<Record<string, boolean> | null>(null);
 
-  const refresh = () => { void installedApps().then(setInstalled); };
+  const refresh = () => {
+    void installedApps().then(setInstalled);
+    void servicesStatus().then(setServices);
+  };
   useEffect(refresh, []);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      if (detail) setDetail(null); else onClose();
-    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onClose, detail]);
+  }, [onClose]);
 
   const shown = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -52,7 +52,16 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
   }, [q, cat]);
 
   async function activate(app: CatalogueApp) {
-    if (app.kind === 'service') { setDetail(app); return; }
+    // A bundled business app: it ships with the OS and is already running, so clicking it just
+    // opens it. If provisioning hasn't finished, say THAT rather than opening a window at a port
+    // nothing is listening on — which looks exactly like a broken product.
+    if (app.kind === 'bundled') {
+      const up = services === null ? true : !!services[app.id];
+      if (!up) { setNote(`${app.name} is still starting up. Give it a moment and try again.`); return; }
+      const r = await openBundled(app.port || 0);
+      if (r.ok) onClose(); else setNote(r.error);
+      return;
+    }
 
     // A GitHub project: ask what WOULD happen, then do it. Explaining first is the difference
     // between trust and a progress bar you have to believe.
@@ -138,7 +147,6 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(168px, 1fr))', gap: 12 }}>
           {shown.map((app) => {
-            const isService = app.kind === 'service';
             const known = installed !== null;
             const isInstalled = !known || !!installed[app.id];
             const installing = busy === app.id;
@@ -146,7 +154,7 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
             return (
               <button
                 key={app.id}
-                title={isService ? `${app.name} — self-hosted service` : `${app.name}${app.exec ? ` — ${app.exec}` : ''}`}
+                title={app.blurb}
                 onClick={() => void activate(app)}
                 disabled={installing}
                 style={{
@@ -174,7 +182,8 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
                     color: app.kind === 'github' ? 'var(--accent-light)' : 'var(--text-faint)',
                   }}>
                     {installing ? 'Installing…'
-                      : isService ? 'Self-hosted · needs setup'
+                      : app.kind === 'bundled'
+                        ? (services === null || services[app.id] ? 'Included' : 'Starting up…')
                       : app.kind === 'github' ? 'From GitHub · one click'
                       : known && !isInstalled ? 'Click to install'
                       : 'Installed'}
@@ -196,79 +205,6 @@ export default function AllApps({ onClose }: { onClose: () => void }) {
         </p>
       </div>
 
-      {detail && <ServiceDetail app={detail} onClose={() => setDetail(null)} />}
-    </div>
-  );
-}
-
-/**
- * What a self-hosted service actually involves.
- *
- * Shown instead of pretending to install it. Every one of these is genuinely worth running — an
- * open-source CRM or ERP on your own hardware is exactly the "your data stays yours" promise — but
- * each is a server stack, and a business owner deserves to know that before they start rather than
- * after.
- */
-function ServiceDetail({ app, onClose }: { app: CatalogueApp; onClose: () => void }) {
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: 'absolute', inset: 0, zIndex: 40,
-        background: 'rgba(6,5,10,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          width: 'min(560px, 88vw)', borderRadius: 22, padding: 28,
-          background: 'var(--plate-bg)',
-          backdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
-          WebkitBackdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
-          border: '1px solid var(--border-soft)',
-          boxShadow: '0 24px 60px -20px rgba(0,0,0,.7)',
-          color: 'var(--text)',
-        }}
-      >
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          <AppLogo src={app.iconUrl} id={iconFor(app) as AppIconId} size={56} />
-          <div>
-            <div style={{ fontSize: 20, fontWeight: 600 }}>{app.name}</div>
-            <div style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.5 }}>{app.blurb}</div>
-          </div>
-        </div>
-
-        <div style={{
-          marginTop: 22, padding: 16, borderRadius: 14,
-          background: 'rgba(237,174,73,.1)', border: '1px solid rgba(237,174,73,.3)',
-        }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--warn)', marginBottom: 8 }}>
-            Not a one-click install
-          </div>
-          <div style={{ fontSize: 13.5, color: 'var(--text-muted)', lineHeight: 1.55 }}>
-            {app.name} is a web application you run on your own machine — it needs{' '}
-            <b style={{ color: 'var(--text)' }}>{app.needs}</b>, not just a program to open. Once it
-            is running you reach it in the browser, and your data never leaves this computer.
-          </div>
-        </div>
-
-        {app.repo && (
-          <div style={{ marginTop: 18, fontSize: 13, color: 'var(--text-faint)', wordBreak: 'break-all' }}>
-            Source: {app.repo}
-          </div>
-        )}
-
-        <div style={{ marginTop: 24, display: 'flex', justifyContent: 'flex-end' }}>
-          <button
-            onClick={onClose}
-            style={{
-              padding: '11px 22px', borderRadius: 12, fontSize: 14, cursor: 'pointer',
-              background: 'var(--well-bg)', border: '1px solid var(--well-border)',
-              color: 'var(--text)', font: 'inherit',
-            }}
-          >Close</button>
-        </div>
-      </div>
     </div>
   );
 }
