@@ -15,21 +15,31 @@ echo "$(lsb_release -ds 2>/dev/null || echo 'Ubuntu')   $(date '+%H:%M:%S')"
 echo ""
 
 # ── The applications the dock and rail expect ──
+#
+# CHECKED WITH dpkg, NOT `command -v`. During a large install apt unpacks files before it
+# configures the package, so the binary can exist on disk minutes before the program can actually
+# run — and starting it in that window throws a RuntimeException rather than opening. An earlier
+# version of this script used `command -v` and reported LibreOffice as ready while it was still
+# half-installed, which is worse than saying nothing. `dpkg -l` showing `ii` means genuinely
+# installed AND configured.
 echo "APPS"
 apps_ready=0
 apps_total=0
 for entry in \
-  "xterm|Terminal" \
-  "libreoffice|LibreOffice (Writer/Calc/Impress)" \
-  "nautilus|Files" \
-  "gedit|Text Editor" \
-  "epiphany-browser|Browser (for the fullscreen session)"
+  "xterm|xterm|Terminal" \
+  "libreoffice-writer|libreoffice|LibreOffice (Writer/Calc/Impress)" \
+  "nautilus|nautilus|Files" \
+  "gedit|gedit|Text Editor" \
+  "epiphany-browser|epiphany-browser|Browser (for the fullscreen session)"
 do
-  bin="${entry%%|*}"; label="${entry##*|}"
+  pkg="${entry%%|*}"; rest="${entry#*|}"; bin="${rest%%|*}"; label="${rest##*|}"
   apps_total=$((apps_total + 1))
-  if command -v "$bin" >/dev/null 2>&1; then
-    printf '  \033[32m✓\033[0m %-42s %s\n' "$label" "$(command -v "$bin")"
+  if dpkg -l "$pkg" 2>/dev/null | grep -q '^ii'; then
+    printf '  \033[32m✓\033[0m %-42s %s\n' "$label" "$(command -v "$bin" 2>/dev/null || echo installed)"
     apps_ready=$((apps_ready + 1))
+  elif command -v "$bin" >/dev/null 2>&1; then
+    # Binary on disk but package not configured — the trap described above.
+    printf '  \033[33m~\033[0m %-42s unpacking, not usable yet\n' "$label"
   else
     printf '  \033[33m·\033[0m %-42s not installed yet\n' "$label"
   fi
