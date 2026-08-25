@@ -1,0 +1,23 @@
+{
+  "name": "adris-os-shell",
+  "private": true,
+  "version": "0.1.0",
+  "description": "adris OS desktop shell — React + TypeScript, built directly from the Claude Design canvas in ../design of adris.OS.html. See ../plan.md for the whole product; this is only the UI layer.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

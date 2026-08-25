@@ -1,0 +1,110 @@
+/* ── Design tokens, read off the real Claude Design canvas ────────────────────
+ *
+ * These are NOT the flat placeholder palette from claude-design-prompt.md — that was a brief
+ * written BEFORE the design pass, to brief it. This file is what actually came back: richer glass
+ * surfaces, a lit top edge on every widget, radial-gradient window washes. Source of truth is
+ * `../design of adris.OS.html`; if the two ever disagree, that file wins and this one is stale.
+ *
+ * Ink is the default (matches the desktop app's own default), Paper is the light variant —
+ * both themes exist in the real design (screens 01 and 02), not invented here.
+ */
+
+:root,
+[data-theme='ink'] {
+  --bg: #07060b;
+  --window-bg: #0b0912;
+  --wash-1: radial-gradient(75% 55% at 18% 0%, #4b3a6e 0%, transparent 62%);
+  --wash-2: radial-gradient(65% 55% at 82% 12%, #6a4e8f 0%, transparent 60%);
+  --wash-3: radial-gradient(95% 65% at 50% 108%, #120e1c 0%, transparent 62%);
+  --wash-4: linear-gradient(170deg, #241c36, #0b0912);
+
+  --text: #f4f2f8;
+  --text-muted: rgba(244, 242, 248, 0.56);
+  --text-faint: rgba(244, 242, 248, 0.36);
+  --border: rgba(255, 255, 255, 0.075);
+  --border-soft: rgba(255, 255, 255, 0.09);
+
+  /* Glass panels — top bar, dock, rail, launcher */
+  --glass-bg: rgba(24, 20, 34, 0.82);
+  --glass-blur: 30px;
+  --rail-bg: rgba(16, 13, 24, 0.86);
+  --well-bg: rgba(255, 255, 255, 0.05);
+  --well-border: rgba(255, 255, 255, 0.08);
+
+  /* The widget "plate" — every widget is this same object (see WidgetCard.tsx) */
+  --plate-bg: linear-gradient(168deg, #241e36 0%, #191426 52%, #13101d 100%);
+  --plate-edge: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  --plate-tint: radial-gradient(120% 70% at 20% -10%, rgba(180, 158, 255, 0.13), transparent 62%);
+
+  --accent: #7c5cff;
+  --accent-dim: #5b3edf;
+  --accent-light: #b49eff;
+  --accent-mid: #8e6dff;
+
+  --ok: #3fb27f;
+  --warn: #edae49;
+  --danger: #e5484d;
+  --pink: #e5677f;
+  --blue: #5b90f7;
+  --teal: #57c3d3;
+}
+
+[data-theme='paper'] {
+  --bg: #fcfbfe;
+  --window-bg: #fbfafd;
+  --wash-1: radial-gradient(75% 55% at 18% 0%, #e6dff8 0%, transparent 62%);
+  --wash-2: radial-gradient(65% 55% at 82% 12%, #dcd0f3 0%, transparent 60%);
+  --wash-3: radial-gradient(95% 65% at 50% 108%, #faf8fd 0%, transparent 62%);
+  --wash-4: linear-gradient(170deg, #efebf9, #fcfbfe);
+
+  --text: #100e18;
+  --text-muted: rgba(16, 14, 24, 0.58);
+  --text-faint: rgba(16, 14, 24, 0.4);
+  --border: rgba(15, 13, 22, 0.09);
+  --border-soft: rgba(15, 13, 22, 0.1);
+
+  --glass-bg: rgba(255, 255, 255, 0.86);
+  --glass-blur: 24px;
+  --rail-bg: rgba(255, 255, 255, 0.9);
+  --well-bg: rgba(15, 13, 22, 0.04);
+  --well-border: rgba(15, 13, 22, 0.08);
+
+  --plate-bg: linear-gradient(168deg, #ffffff 0%, #f6f3fb 52%, #efeaf7 100%);
+  --plate-edge: linear-gradient(90deg, transparent, rgba(15, 13, 22, 0.14), transparent);
+  --plate-tint: radial-gradient(120% 70% at 20% -10%, rgba(124, 92, 255, 0.06), transparent 62%);
+
+  --accent: #7c5cff;
+  --accent-dim: #5b3edf;
+  --accent-light: #6544d8;
+  --accent-mid: #8e6dff;
+
+  --ok: #2e9a6b;
+  --warn: #b8791f;
+  --danger: #c3383f;
+  --pink: #be4560;
+  --blue: #3f6fd6;
+  --teal: #2b95a6;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, .mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@keyframes adrisPulse {
+  0%, 100% { opacity: .3; transform: scale(.85); }
+  50% { opacity: 1; transform: scale(1.2); }
+}

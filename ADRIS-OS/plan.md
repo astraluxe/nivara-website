@@ -28,6 +28,25 @@ Written down separately, on top, because everything below is *how*; this is *why
 
 ---
 
+## Build log
+
+**25 Aug 2026.** The real Claude Design pass came back — `design of adris.OS.html`, one canvas file, all screens. Richer than the brief in `claude-design-prompt.md` was written to expect, in ways worth recording because they're now the actual reference:
+
+- Every widget is one object — a 20px-radius "plate" with a lit top edge and a floor shadow, so it reads as resting on the wallpaper rather than a flat rectangle — 7 shipped kinds (Clock, Calendar, Focus, Inbox, System, Battery, Council) plus Today's outreach shown in all three states (resting/working/finished) and a user-added variant (same body, dashed border).
+- The rail is confirmed on the **right edge**, 312px, and is a real component tree: `AskField → Clock → MonthCalendar → Agenda → AgentsRow → Notifications → AppButtons → Account`. Calendar and Council are pinned in `AppButtons` from first boot, exactly as [Targets](#targets--what-adris-os-has-to-achieve) says.
+- A bottom-centre floating dock exists alongside the rail — not in the original 9/11-screen brief, but real in the design and now built.
+- Desktop styles and Wallpaper turned out to be genuinely two different screens, not one — matching the split already made in [§5](#5-the-desktop)/[§6](#6-agents-as-citizens-of-the-os) two conversations ago.
+
+**Frontend scaffolded at `ADRIS-OS/frontend/`** — Vite + React + TypeScript, exactly as pinned in [§11](#11-how-it-is-built--and-the-exact-stack). Design tokens in `src/tokens.css` are read directly off the real design file (both Ink and Paper), not the flatter placeholder palette the brief shipped with — that file is now stale where the two disagree.
+
+**Built and working:** `WidgetCard` (the one plate every widget shares) plus all 7 shipped widgets and Today's outreach in its three states; the Rail; TopBar; the bottom Dock; a `Desktop` screen composing all of it; `WallpaperLayer` (the actual background) and `WallpaperPicker` (Gallery tab wired to a real, extensible manifest — one image today, `purple-mountain.png`, the one supplied; more are just a file drop + one line in `lib/wallpapers.ts`). `tsc -b` and `vite build` both clean.
+
+**Honestly not done:** the Generate tab of the wallpaper picker is built exactly as designed but **not wired to a real agent** — pressing Generate shows the intended flow and says plainly that nothing is connected yet, rather than faking a result. Files, the Launcher, Settings and First-run are not built. Only one desktop style exists so far, not the 2-3 the design calls for.
+
+**Test loop:** `ADRIS-OS/vm/run-in-wsl.sh` runs the frontend entirely inside the WSL2 Ubuntu VM already on this machine — its own native npm install, kept separate from the Windows-side one (sharing `node_modules` across the OS boundary breaks on native binaries like rollup's). Confirmed reachable at `http://localhost:5173` from a normal Windows browser with nothing installed on the Windows side to make it run. **This is not yet the real adris OS VM** from [§2](#2-three-weeks-honestly) — that's a custom-built Fedora image booted in QEMU, still Week 1 Day 3 of the actual OS and not started. This is specifically for testing the frontend shell while that doesn't exist yet.
+
+---
+
 ## 1. What we are building
 
 Not a program that runs on Windows. An operating system you choose at startup, that looks and behaves like something Apple would ship, and that is built *around* agents rather than having them bolted on.
