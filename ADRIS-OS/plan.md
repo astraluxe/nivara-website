@@ -26,6 +26,7 @@ Everything below this section is the *plan*. This table is the *state*: what is 
 | 8 | An adris bar inside every application | ❌ **not started** — needs the compositor work; see [§11](#11-how-it-is-built--and-the-exact-stack) | — |
 | 9 | Windows files openable from adris OS | 🟡 **works in the dev VM** via `/mnt/c`; the real NTFS mount for a booted install is untested | [§8](#8-files-folders-and-locks) |
 | 10 | Permissions: everything allowed by default, changeable in Settings | ❌ **not started** — dev bridge is currently all-or-nothing | [§9](#9-making-it-yours) |
+| 20 | **Off switch** — stop adris OS taking over, go back to Windows, without uninstalling | ❌ **not started** — design settled, needs the startup picker first | [§10](#10-going-back-to-windows) |
 | 11 | Files with colours/icons from their names, lockable | ❌ **not started** | [§8](#8-files-folders-and-locks) |
 | 12 | Wallpaper: pick one, or have an agent code it | 🟡 **picker done + one image**; the agent-coded path is UI-only, not wired | [§6](#6-agents-as-citizens-of-the-os) |
 | 13 | Connect other hardware (WiFi/Bluetooth/wired) easily | ❌ **not started** | [§7](#7-agents-across-machines) |
@@ -505,6 +506,30 @@ This has to be genuinely easy or nobody will risk trying it in the first place. 
 - **Your work comes with you.** The desktop app reads the same workspace folder, so your agents, Brain and campaigns are there when you get back.
 - **Removing it completely** is deleting the partition and the startup entry — one screen in Settings, and Windows boots the way it did before.
 - **Locked folders travel as encrypted files** — readable from Windows with the same passcode, not stranded on the other side.
+
+### Taking over the machine, and handing it back
+
+The intended shape, stated plainly because it decides a lot of other things: **adris OS takes over the computer while it is on, and hands it back on request.** Not a program running inside Windows, and not a replacement that burns the bridge behind it.
+
+**While adris OS is running, it is the computer.** It is what boots, what draws the screen, what owns the keyboard. Windows is still there, whole and untouched, on its own partition — it simply is not the thing running. That is the same relationship any two operating systems on one machine have; nothing is being disabled or damaged, it just isn't the one in charge right now.
+
+**Going back is a switch, not an uninstall.** Two levels, and the difference matters for a non-technical owner:
+
+| What they want | What they do | What happens |
+|---|---|---|
+| "Use Windows for a bit" | Restart, pick Windows at the startup screen | Ordinary dual boot. adris OS stays installed, exactly as it was. |
+| "Stop adris OS taking over" | **Settings → Turn off adris OS** — one switch | The machine goes straight back to booting Windows every time. adris OS stays on disk, and the same switch turns it back on. Nothing is deleted, nothing needs reinstalling. |
+| "Remove it entirely" | Settings → Remove adris OS | The partition and the startup entry go. Windows boots exactly as it did before. Their files were never inside adris OS to begin with. |
+
+**Why the middle row exists at all.** For the audience this is built for, "I want to stop using this" and "I want to erase this" are completely different feelings, and offering only the second one makes trying the first one frightening. A single **off switch** — reversible, no data touched, no reinstall to come back — is what makes installing it a low-stakes decision rather than a commitment. **Being easy to leave is what makes it safe to try**, and that is a feature, not a concession.
+
+**The four things this has to be, in the order a non-technical person meets them:**
+1. **Easy to install** — one download, one click, no ISO-burning folklore ([§4](#4-getting-on-to-it)).
+2. **Easy to get into** — it starts itself and shows the desktop; nothing to launch or configure ([§5](#5-the-desktop)).
+3. **Easy to learn** — familiar shapes, plain words, real documentation ([§1](#1-what-we-are-building), and the omarchy note in the Build log).
+4. **Easy to leave** — the table above. One switch to stop, one to remove, files untouched either way.
+
+**Not built yet** — this is the design, not the state. Today the switch does not exist because the startup picker and installer do not exist ([§4](#4-getting-on-to-it), items 18 and 10 on the [status board](#status-board--read-this-first)). It is written down now because it constrains how the installer and Settings get built, and deciding it afterwards would mean rebuilding both.
 
 ---
 

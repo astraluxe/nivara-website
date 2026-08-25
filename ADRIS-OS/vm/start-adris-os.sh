@@ -84,6 +84,21 @@ mkdir -p "$AUTOSTART_DIR"
 EPI_PROFILE="$USER_HOME/.local/share/epiphany/org.gnome.Epiphany.WebApp_adrisos"
 mkdir -p "$EPI_PROFILE"
 
+# AND a matching desktop file must exist where the portal looks for it, or Epiphany aborts with
+# "trying to access web app settings outside web app mode" and the window never appears. Third
+# separate requirement of the same feature, all three found by hitting them.
+PORTAL_DIR="$USER_HOME/.local/share/xdg-desktop-portal/applications"
+mkdir -p "$PORTAL_DIR"
+cat > "$PORTAL_DIR/org.gnome.Epiphany.WebApp_adrisos.desktop" <<PORTAL
+[Desktop Entry]
+Type=Application
+Name=adris OS
+Exec=epiphany-browser -a --profile=$EPI_PROFILE http://localhost:5173/
+StartupWMClass=org.gnome.Epiphany.WebApp_adrisos
+Terminal=false
+PORTAL
+chown -R "$DESKTOP_USER:$DESKTOP_USER" "$USER_HOME/.local/share/xdg-desktop-portal" 2>/dev/null || true
+
 # A short wait, then launch: on a cold login the shell may still be binding its port, and a browser
 # that arrives first shows a connection error and stays there.
 cat > "$AUTOSTART_DIR/adris-os.desktop" <<AUTOSTART
@@ -117,6 +132,20 @@ LOOK
   say "✓ wallpaper and clean desktop set for login"
 else
   say "· wallpaper not found in the VM copy — skipped"
+fi
+
+# ── If a desktop session is ALREADY open, start adris OS in it now ───────────
+#
+# Autostart only fires at login. Someone who is already connected would otherwise run this, see
+# "ready", and find their screen unchanged — which is exactly what happened. So if a session is
+# live, launch into it directly instead of making them log out and back in.
+LIVE_DISPLAY="$(ps -u "$DESKTOP_USER" -o args= 2>/dev/null | grep -o 'Xorg :[0-9]*' | head -1 | cut -d: -f2)"
+if [ -n "${LIVE_DISPLAY:-}" ] && ! pgrep -f 'WebApp_adrisos' >/dev/null; then
+  su - "$DESKTOP_USER" -c "cd ~ && DISPLAY=:$LIVE_DISPLAY XAUTHORITY=$USER_HOME/.Xauthority setsid epiphany-browser -a --profile='$EPI_PROFILE' http://localhost:5173/ >/tmp/adris-epi.log 2>&1 </dev/null &"
+  sleep 4
+  pgrep -f 'WebApp_adrisos' >/dev/null     && say "✓ adris OS opened in your existing session (display :$LIVE_DISPLAY)"     || say "· could not open in the live session — it will open on next login"
+elif pgrep -f 'WebApp_adrisos' >/dev/null; then
+  say "✓ adris OS is already open"
 fi
 
 cat <<INFO
