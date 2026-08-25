@@ -22,15 +22,17 @@ export default function WallpaperLayer({ wallpaperId }: { wallpaperId: string })
         backgroundPosition: 'center',
       }}
     >
-      {/* The same wash the design uses when there's no image (or as a scrim under one, so the
-          top bar and dock read clearly regardless of what's underneath — a bright photo should
-          not make the UI unreadable). */}
+      {/* The same wash the design uses when there's no image. With one, this used to be a heavy
+          dark scrim over the whole picture — which is what glass is FOR: the widgets and rail do
+          their own blur+tint to stay readable, so the wallpaper itself doesn't need darkening to
+          make room for them. A hair of shadow at the very top keeps the top bar's icons legible
+          against a bright sky without touching the rest of the image. */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background: hasImage
-            ? 'linear-gradient(180deg, rgba(7,6,11,.28), rgba(7,6,11,.5))'
+            ? 'linear-gradient(180deg, rgba(0,0,0,.14), transparent 18%)'
             : 'var(--wash-1), var(--wash-2), var(--wash-3), var(--wash-4)',
         }}
       />

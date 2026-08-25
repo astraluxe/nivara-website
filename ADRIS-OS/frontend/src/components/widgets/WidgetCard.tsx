@@ -44,13 +44,14 @@ export default function WidgetCard({
         width,
         borderRadius: 20,
         position: 'relative',
+        // Real glass: a translucent tint, blurred, so the wallpaper reads clearly through it —
+        // not an opaque plate with a blur applied for show. WebkitBackdropFilter is needed for
+        // Safari/older WebKit; harmless where unsupported (falls back to the plain tint).
         background: 'var(--plate-bg)',
+        backdropFilter: `blur(var(--plate-blur)) saturate(150%)`,
+        WebkitBackdropFilter: `blur(var(--plate-blur)) saturate(150%)`,
         border: userAdded ? '1.5px dashed var(--accent-light)' : '1px solid var(--border-soft)',
-        boxShadow:
-          `${glow}0 1px 0 rgba(255,255,255,.09) inset,` +
-          '0 -14px 24px -18px rgba(0,0,0,.9) inset,' +
-          '0 18px 34px -14px rgba(0,0,0,.62),' +
-          '0 3px 8px rgba(0,0,0,.4)',
+        boxShadow: `${glow}0 1px 0 rgba(255,255,255,.14) inset, 0 18px 34px -18px rgba(0,0,0,.5)`,
         overflow: 'hidden',
         color: 'var(--text)',
         display: 'flex',

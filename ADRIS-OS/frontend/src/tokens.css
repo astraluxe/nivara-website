@@ -24,17 +24,20 @@
   --border: rgba(255, 255, 255, 0.075);
   --border-soft: rgba(255, 255, 255, 0.09);
 
-  /* Glass panels — top bar, dock, rail, launcher */
-  --glass-bg: rgba(24, 20, 34, 0.82);
-  --glass-blur: 30px;
-  --rail-bg: rgba(16, 13, 24, 0.86);
-  --well-bg: rgba(255, 255, 255, 0.05);
-  --well-border: rgba(255, 255, 255, 0.08);
+  /* Glass panels — top bar, dock, rail, launcher. Genuinely translucent (not a near-opaque plate
+     wearing a blur for show) — the wallpaper should read clearly through every one of these. */
+  --glass-bg: rgba(30, 25, 44, 0.46);
+  --glass-blur: 28px;
+  --rail-bg: rgba(22, 18, 32, 0.5);
+  --well-bg: rgba(255, 255, 255, 0.06);
+  --well-border: rgba(255, 255, 255, 0.1);
 
-  /* The widget "plate" — every widget is this same object (see WidgetCard.tsx) */
-  --plate-bg: linear-gradient(168deg, #241e36 0%, #191426 52%, #13101d 100%);
-  --plate-edge: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
-  --plate-tint: radial-gradient(120% 70% at 20% -10%, rgba(180, 158, 255, 0.13), transparent 62%);
+  /* The widget "plate" — every widget is this same object (see WidgetCard.tsx). Real glass: a
+     translucent tint plus blur, not an opaque gradient painted over the wallpaper. */
+  --plate-bg: rgba(36, 30, 54, 0.4);
+  --plate-blur: 22px;
+  --plate-edge: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+  --plate-tint: radial-gradient(120% 70% at 20% -10%, rgba(180, 158, 255, 0.16), transparent 62%);
 
   --accent: #7c5cff;
   --accent-dim: #5b3edf;
@@ -63,15 +66,16 @@
   --border: rgba(15, 13, 22, 0.09);
   --border-soft: rgba(15, 13, 22, 0.1);
 
-  --glass-bg: rgba(255, 255, 255, 0.86);
+  --glass-bg: rgba(255, 255, 255, 0.5);
   --glass-blur: 24px;
-  --rail-bg: rgba(255, 255, 255, 0.9);
-  --well-bg: rgba(15, 13, 22, 0.04);
-  --well-border: rgba(15, 13, 22, 0.08);
+  --rail-bg: rgba(255, 255, 255, 0.55);
+  --well-bg: rgba(15, 13, 22, 0.05);
+  --well-border: rgba(15, 13, 22, 0.09);
 
-  --plate-bg: linear-gradient(168deg, #ffffff 0%, #f6f3fb 52%, #efeaf7 100%);
-  --plate-edge: linear-gradient(90deg, transparent, rgba(15, 13, 22, 0.14), transparent);
-  --plate-tint: radial-gradient(120% 70% at 20% -10%, rgba(124, 92, 255, 0.06), transparent 62%);
+  --plate-bg: rgba(255, 255, 255, 0.44);
+  --plate-blur: 20px;
+  --plate-edge: linear-gradient(90deg, transparent, rgba(15, 13, 22, 0.16), transparent);
+  --plate-tint: radial-gradient(120% 70% at 20% -10%, rgba(124, 92, 255, 0.08), transparent 62%);
 
   --accent: #7c5cff;
   --accent-dim: #5b3edf;
