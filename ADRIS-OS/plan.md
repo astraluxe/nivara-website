@@ -44,16 +44,27 @@ Written down separately, on top, because everything below is *how*; this is *why
 
 **Honestly not done:** the Generate tab of the wallpaper picker is built exactly as designed but **not wired to a real agent** — pressing Generate shows the intended flow and says plainly that nothing is connected yet, rather than faking a result. Files, the Launcher, Settings and First-run are not built. Only one desktop style exists so far, not the 2-3 the design calls for.
 
-**Test loop:** `ADRIS-OS/vm/run-in-wsl.sh` runs the frontend entirely inside the WSL2 Ubuntu VM already on this machine — its own native npm install, kept separate from the Windows-side one (sharing `node_modules` across the OS boundary breaks on native binaries like rollup's). Confirmed reachable at `http://localhost:5173` from a normal Windows browser with nothing installed on the Windows side to make it run. **This is not yet the real adris OS VM** from [§2](#2-three-weeks-honestly) — that's a custom-built Fedora image booted in QEMU, still Week 1 Day 3 of the actual OS and not started. This is specifically for testing the frontend shell while that doesn't exist yet. A second script, `sync-to-wsl.sh`, re-syncs the running copy after an edit without restarting the dev server (Vite hot-reloads).
+**Test loop:** `ADRIS-OS/vm/run-in-wsl.sh` runs the frontend entirely inside the WSL2 Ubuntu VM already on this machine — its own native npm install, kept separate from the Windows-side one (sharing `node_modules` across the OS boundary breaks on native binaries like rollup's). Confirmed reachable at `http://localhost:5173` from a normal Windows browser with nothing installed on the Windows side to make it run. **This is not yet the real adris OS VM** from [§2](#2-three-weeks-honestly) — that's a custom-built Ubuntu image booted in QEMU, still Week 1 Day 3 of the actual OS and not started. This is specifically for testing the frontend shell while that doesn't exist yet. A second script, `sync-to-wsl.sh`, re-syncs the running copy after an edit without restarting the dev server (Vite hot-reloads).
 
 **Also 25 Aug — first look, and it was too crowded.** Seeing it running surfaced two real problems the design file itself didn't show, because a static canvas doesn't show density the way a running screen does:
 
 - **Widgets read as opaque painted plates, not glass.** The design calls them "plates" and that's exactly what they looked like once real — solid gradients sitting on top of the wallpaper rather than translucent surfaces it showed through. Fixed: `WidgetCard`, the rail, the top bar and the dock now use a genuinely translucent background plus `backdrop-filter: blur(...)`, not an opaque tint. The wallpaper's own dark scrim (originally there so text stayed legible over a bright image) is mostly removed — legibility is the glass blur's job now, not a global darkening of the picture underneath it.
 - **Eight widgets on one canvas was too many, and two were pure duplicates.** Clock and Calendar each said something the rail was *already saying*, permanently, on the right edge of the same screen. Cut down to three things: one **TodayPanel** — a single "main info" card (what's next, the running focus session, battery/inbox/agents as three small numbers) that replaces what used to be five separate cards (Clock, Calendar, Focus, Inbox, System, Battery) — plus **Today's outreach** (the clearest demonstration of an agent visibly working) and **Council** (a real, distinct feature, not a duplicate of anything in the rail). The removed individual widget components (`ClockWidget.tsx`, `CalendarWidget.tsx`, etc.) are not deleted — they're real, working components, just not all crammed onto the canvas at once. They're the natural start of a widget catalogue once [§13](#13-not-in-v1--and-when-it-comes)'s app store exists.
 
+**25 Aug, later — the base flips to Ubuntu, and the VM becomes a real computer.** Two things changed, and the second is the bigger one:
+
+- **Ubuntu LTS replaces Fedora as the base**, for the reason set out in ["Why Ubuntu, specifically"](#why-ubuntu-specifically--and-what-linux-vs-ubuntu-actually-means) in §11 — it is the most-used desktop Linux by a wide margin, which for a non-technical audience is a support argument, not a popularity one. Worth noting the plan had said Fedora while *every actual test so far ran on Ubuntu 24.04* in the WSL VM; this makes the document agree with reality.
+- **The shell stopped being a picture of an OS.** Until now the frontend was a UI with nothing behind it. Added `vm/agent-bridge.mjs` (launches real applications, and is the same surface an agent uses — see [§6](#6-agents-as-citizens-of-the-os)), `vm/setup-desktop.sh` (installs LibreOffice Writer/Calc/Impress, Files, a text editor, a terminal), and `vm/run-os.sh` (starts the bridge and the shell together). The dock now launches **the real LibreOffice**, through WSLg, in its own window.
+
+**Third UI pass, same day** — the "still crowded" feedback:
+- **One widget box, not several.** Everything that was a separate card is now a *page* inside a single box, with dots underneath showing which page you're on (solid = here, faint = elsewhere). Adding a page is one array entry — deliberately the shape an agent extending the stack would use.
+- **It's draggable.** Grab the handle at its top, put it where you like; the position is remembered.
+- **The clock moved to top-centre**, large, where the eye actually goes — and the rail's duplicate copy of it is gone.
+- **"Calm · Focused · In control" is gone** from the top bar (marketing copy on a desktop), and the awkward floating theme/wallpaper strip is folded into the top bar's right side as proper icon buttons.
+
 **References checked, as asked, with what was actually found (not guessed):**
 - [**omarchy**](https://github.com/basecamp/omarchy) (Basecamp) — a real, shipped "opinionated Linux distribution," organized into `config/`, `themes/`, `applications/`, with a 51-chapter user manual and a documented "make your own theme" system. Validates two decisions already in this plan rather than changing anything: being *opinionated* rather than maximally configurable ([§1](#1-what-we-are-building)), and treating real, plain-language documentation as part of the product, not an afterthought.
-- [**LinuxKit**](https://github.com/linuxkit/linuxkit) — a genuinely interesting architecture (the OS is composed from small container images, declared in YAML, "everything replaceable") — but by its own documentation, built for container/Kubernetes workloads, not general-purpose desktop use. Considered and **not adopted**: Fedora + osbuild ([§11](#11-how-it-is-built--and-the-exact-stack)) stays the right tool for a desktop OS with a GUI that ordinary files and ordinary apps have to run on.
+- [**LinuxKit**](https://github.com/linuxkit/linuxkit) — a genuinely interesting architecture (the OS is composed from small container images, declared in YAML, "everything replaceable") — but by its own documentation, built for container/Kubernetes workloads, not general-purpose desktop use. Considered and **not adopted**: an Ubuntu base ([§11](#11-how-it-is-built--and-the-exact-stack)) stays the right tool for a desktop OS with a GUI that ordinary files and ordinary apps have to run on.
 - [**Akira**](https://github.com/akiraux/Akira) — a native Linux design app (Vala + GTK), explicitly labelled by its own README as early-development, not production-ready. The lesson taken is the one already practiced here: say plainly what isn't finished (see the wallpaper Generate tab above) rather than letting a UI imply a capability that isn't real yet.
 - [**torvalds/linux**](https://github.com/torvalds/linux) — the kernel itself, organised by subsystem (`arch/`, `drivers/`, `fs/`, `net/`, `mm/`). Confirms the *Sealed* line already drawn in [§9](#9-making-it-yours): this is proven work being used, not rewritten.
 
@@ -83,7 +94,7 @@ Better to say that now than hand over something half-finished on 14 September.
 Re-flashing a USB stick or reinstalling a partition to test one change would make three weeks impossible — that loop alone can take longer than the change did. So the everyday loop through Weeks 1 and 2 is a **virtual machine**, not a physical install:
 
 - Every build boots straight into a VM from the command line — `qemu-system-x86_64 -enable-kvm -m 4G -cdrom adris-os.iso` against the day's ISO, or booting the built disk image directly. No GUI VM manager, no manual clicking through a wizard — one command, a boot in seconds, and it can be scripted so an agent (Claude Code included) can boot its own build, check it actually came up, and report back without a human doing it by hand each time.
-- This is also *why* the language pin in [§11](#11-how-it-is-built--and-the-exact-stack) matters as much as it does: a VM-first loop only pays off if the same command works unattended, twenty times a day, which means the build has to be scriptable and reproducible — Fedora's own image-builder tooling is built with exactly this workflow in mind.
+- This is also *why* the language pin in [§11](#11-how-it-is-built--and-the-exact-stack) matters as much as it does: a VM-first loop only pays off if the same command works unattended, twenty times a day, which means the build has to be scriptable and reproducible — Ubuntu's own image-building tooling (live-build / Cubic) is built with exactly this workflow in mind.
 - **What a VM cannot tell us**, and why Week 3 still tests on real machines: actual wifi chips, sleep/resume, screen brightness and multi-monitor behaviour, real BitLocker/Secure Boot interaction, and whether the installer genuinely behaves on a disk that isn't emulated. That is precisely what Week 3's "test and fix, on at least three different real machines" step ([below](#week-3--make-it-something-a-stranger-can-install-814-sep)) exists for. **The VM is the everyday loop; real hardware is the last-mile check before anyone else touches this — one does not replace the other.**
 - Practical effect on the schedule: Days 1–14 (Weeks 1–2) run almost entirely in a VM, which is what makes iterating on the desktop, Files and widgets fast enough to fit the three weeks at all. Only Week 3 needs a physical machine, and by then the thing being tested has already been through hundreds of VM boots.
 
@@ -92,7 +103,7 @@ Re-flashing a USB stick or reinstalling a partition to test one change would mak
 | Day | Work |
 |---|---|
 | 1–2 | **Claude Design.** Every screen, before a line of code: startup picker, desktop, rail, widget canvas, Files window, locked-folder prompt, settings. See [§3](#3-claude-design-comes-first). |
-| 3 | **The base.** A Fedora image that builds reliably and boots on real hardware. Wayland, floating windows, no tiling. |
+| 3 | **The base.** An Ubuntu image that builds reliably and boots on real hardware. Wayland, floating windows, no tiling. See [§11](#11-how-it-is-built--and-the-exact-stack) for why Ubuntu. |
 | 4 | **The shell lives.** The adris rail pinned to the screen edge as a real desktop panel, not a window. |
 | 5–7 | **The desktop.** Widget canvas, launcher, tray, calendar and agent input wired to the real agents. |
 
@@ -224,6 +235,18 @@ The desktop app already has this shape — `delegate_to_agent` for a single spec
 ### Agents that touch documents directly
 
 Also already real in the desktop app (`generate_document` and the underlying doc-generation code write actual `.pdf`/`.xlsx`/`.docx`/`.pptx` files, not descriptions of what should go in one). The target here is making that a normal, first-class OS capability rather than a chat feature reached through one app: an agent opening a file in Files, reading it, editing it, or building a new spreadsheet or slide deck as part of finishing a task — the same way a person would, just faster. Ported alongside the rest of the agent runtime in Week 2.
+
+### Agents drive the real applications — we don't rebuild them
+
+The single most important consequence of building on a real distribution ([§11](#11-how-it-is-built--and-the-exact-stack)): **adris OS never reimplements a word processor, a spreadsheet or a presentation tool.** Ubuntu already ships LibreOffice Writer, Calc and Impress, a file manager, a text editor and a terminal — the same binaries every Ubuntu user has, maintained by people who have been doing it for two decades. Our job is to launch and drive them, not to compete with them.
+
+This is what "agents use the software" means concretely:
+
+- The **dock launches the real application.** Clicking LibreOffice Writer in adris OS opens LibreOffice Writer — the actual program, in its own window, not a web imitation of one.
+- An **agent asked to build a deck runs Impress**, the same way a person would. The document capability described above (`generate_document` and the rest, ported from the desktop app) is about producing files; this is about driving the applications that open and edit them.
+- Both go through **one bridge**, not two paths — `vm/agent-bridge.mjs` in the dev VM today: the dock POSTs an app id to it, and an agent uses the same service to run a command. One surface, two callers, which is why the dock and the agents can never drift apart in what they're able to do.
+
+**On security, stated plainly, because the dev bridge is deliberately permissive:** the development bridge binds to all interfaces and has an unrestricted (token-guarded) `/run`. That is acceptable only inside a throwaway VM. It must never ship that way — the real thing is the Rust system layer in [§11](#11-how-it-is-built--and-the-exact-stack), enforcing the permission model this document has described from the start. The dev bridge already allow-lists `/launch` to a fixed set of applications regardless, so the loose part is exactly one endpoint and it is named.
 
 ### Wallpapers, coded rather than only chosen
 
@@ -366,7 +389,7 @@ Everything above the line is ours; everything below it is proven work we are not
 | The system layer — permissions, the widget sandbox, native glue to the compositor | A thin native layer, Tauri-style | **Rust** | Memory-safe, fast, and already exactly how `nivara-desktop`'s backend is built — the same skillset and the same agents carry straight over. This is also where the agent-permission rule below gets *enforced*, not just stated, so it has to be a language that makes that safe to write. |
 | Screen and windows | An existing, proven Wayland compositor (wlroots-based — e.g. a configured/extended minimal compositor such as `labwc` or `sway`, set to float, not tile) | Mostly C (upstream) + our config/glue in Rust | We are not writing a compositor from scratch — that is its own multi-year project. We configure and lightly extend a proven one. Tiling is a setting, not a law; floating is what everyone already understands. |
 | Panels on the screen edge | Layer-shell | Rust bindings over the C protocol | What turns a window into a real desktop panel. Confirmed working from a native package — but **not** from an AppImage, which forces a compatibility mode that breaks it. |
-| Base system + the custom ISO | Fedora + its own image builder (osbuild) | Python/shell (Fedora's own tooling — we are not introducing a new one) | Steadier than a rolling release for people who cannot rescue a broken update; its image builder makes a custom, reproducible ISO straightforward. |
+| Base system + the custom ISO | **Ubuntu LTS** + its own image tooling (live-build / Cubic) | Python/shell (Ubuntu's own tooling — we are not introducing a new one) | The most-used desktop Linux by a wide margin, which is the whole argument — see "Why Ubuntu, specifically" below. LTS releases are supported for years, so a machine we ship does not need re-basing every nine months. |
 | Locked folders | Filesystem-level encryption | Rust (calling proven system libraries — not reimplementing crypto) | Real encryption per folder, unlocked by passcode, readable from Windows too. |
 | Windows files | The kernel's own NTFS support | — (kernel-level, no app code) | Read and write the Windows disk directly. No copying, no sync, nothing to go wrong. |
 | Your workspace (settings, widgets, agent config, undo history) | A single version-controlled folder | Git itself + a thin TypeScript layer for the undo UI | Gives us undo, history and portability without building any of them from scratch. |
@@ -375,7 +398,31 @@ Everything above the line is ours; everything below it is proven work we are not
 | Cross-machine pairing and connections ([§7](#7-agents-across-machines), not yet scoped) | A peer-to-peer connection layer, once designed | **Rust** | Anything that opens a network connection to another person's machine is exactly the kind of privileged, trust-sensitive operation the system layer exists for — never left to the widget layer. |
 | The public website / waitlist ([§2](#2-three-weeks-honestly)) | The existing adris.tech site | HTML/CSS/vanilla **JavaScript** + **Supabase** | Not part of the OS build — matches what the rest of the live site already is. No reason to introduce anything new for one page. |
 
-**In short, for anyone joining from outside: if it renders on screen, it's TypeScript/React. If it touches the system, the disk, a permission, or another machine, it's Rust. If it's OS-image plumbing, it's Fedora's own Python/shell tooling. If it's the public website, it's what the website already is. Nothing else.**
+**In short, for anyone joining from outside: if it renders on screen, it's TypeScript/React. If it touches the system, the disk, a permission, or another machine, it's Rust. If it's OS-image plumbing, it's Ubuntu's own Python/shell tooling. If it's the public website, it's what the website already is. Nothing else.**
+
+### Why Ubuntu, specifically — and what "Linux vs Ubuntu" actually means
+
+Worth settling in plain words, because the question comes up constantly and the two names get used as if they were alternatives:
+
+**They are not two competing things.** Linux is the *kernel* — the core that talks to the hardware. It is not something a person uses directly; on its own it has no desktop, no windows, no file manager, no way to install an app. **Ubuntu is a distribution**: the Linux kernel *plus* everything that makes it a usable computer — a desktop, drivers, an installer, an app store, a package manager, and years of work making all of it hold together. Asking "Ubuntu or Linux" is like asking "a car or an engine." **You cannot ship "Linux" to a business owner. You ship a distribution.**
+
+So the real question was only ever *which* distribution, and the answer follows straight from [Targets](#targets--what-adris-os-has-to-achieve) — non-technical people first:
+
+- **Ubuntu is the most-used desktop Linux by a wide margin**, and that is not a popularity contest, it's a support argument: the largest pool of existing users, the most "how do I…" answers already written, the most third-party software that ships an Ubuntu build first (usually a `.deb`), and the most hardware vendors who certify against it. For an audience that will search the web the moment something goes wrong, being on the distribution the entire internet already writes about is a genuine feature.
+- **LTS releases are supported for years.** A machine sold to a business cannot need re-basing every nine months. This is also why the earlier Fedora pick was wrong for this specific audience — Fedora moves fast and is superb for developers, which is exactly the audience we already said we are *not* optimising the tie-breaks for.
+- **It's what we're already testing on.** The WSL VM the frontend runs in today is Ubuntu 24.04 LTS. The plan said Fedora while every actual test ran on Ubuntu — this section makes the document agree with reality rather than the other way round.
+
+**And "the tech requirements from Linux" still hold, because Ubuntu *is* Linux.** Nothing about choosing Ubuntu gives up kernel-level capability — the same kernel, the same drivers, the same terminal, the same ability to run anything Linux runs. A technical user who wants to go straight down to the metal has every bit of that available. Ubuntu adds a well-maintained, well-tested layer on top; it removes nothing from underneath.
+
+**Where adris OS sits in that stack:**
+
+| Layer | What it is | Who it's for |
+|---|---|---|
+| Linux kernel | Hardware, drivers, processes, filesystems | Nobody uses this directly |
+| **Ubuntu LTS** | Desktop plumbing, drivers, package manager, the ordinary Linux apps (LibreOffice and the rest) | The proven base we don't rewrite ([§9 Sealed](#9-making-it-yours)) |
+| **adris OS** | Our shell, rail, widgets, Files, the agent runtime, the installer and startup picker | **This is the part that is ours** |
+
+Ordinary Ubuntu applications keep working, and are meant to — see [§6](#6-agents-as-citizens-of-the-os): the plan has never been to re-code a word processor. LibreOffice, a PDF viewer, a browser and the rest are already there because they are part of the distribution, and the agents *drive those real applications* rather than us reimplementing them.
 
 **One rule worth writing down now, because it is cheap today and expensive later:**
 > An agent can never be given more permission than the agent that created it.
@@ -463,7 +510,7 @@ The full shape of this is written out in [§7](#7-agents-across-machines) — pa
 | Tally and other Windows-only business software | High | Test it in week 1, not week 3. Either way Windows stays on the startup screen, which is why this changes the pitch rather than the plan. |
 | The installer damages someone's Windows | High | Refuse to resize until the BitLocker key is confirmed saved. Test on three real machines in week 3. Offer "install to a second drive" as the safe route. |
 | An unsupervised agent-to-agent decision, once [§7](#7-agents-across-machines) exists, does something wrong on someone's machine | High | This is exactly why §7 is not in v1 and stays an open thread rather than a scoped feature: the server-mode-safe / needs-a-human split has to be designed and tested before any cross-machine agent action runs without a person watching. |
-| Hardware that does not work — wifi, sleep, screens | Medium | Fedora carries the broadest driver support of the sensible bases. Ship a list of machines actually tested rather than claiming it runs everywhere. |
+| Hardware that does not work — wifi, sleep, screens | Medium | Ubuntu has the broadest hardware support and the most certified machines of any desktop Linux, and is what most vendors test against. Ship a list of machines actually tested rather than claiming it runs everywhere. |
 | Three weeks is not enough | Medium | The order is the mitigation: week 1 gives something that boots, week 2 something usable, week 3 something installable. A slip loses the last item, never the whole thing. The [VM-first loop](#the-day-to-day-loop--a-vm-first-real-hardware-as-the-last-mile-check) is what makes Weeks 1–2 fast enough to actually hold that order. |
 | Panels do not work with our shell | Low | Evidence says they do from a native package. Day 4 settles it, and the fallback — a full-screen window — costs almost nothing. |
 | A repo goes public before the Sealed/Yours-to-change split is real (see [§12 Licensing](#12-licensing)) | Medium | Keep the repo private by default; only make it public as a deliberate decision once the split actually exists in code. |
@@ -478,7 +525,7 @@ Five things. The first four are the user's call; the last one can be decided on 
 2. **Design the screens.** Days one and two, in Claude Design. Whatever comes out of that gets built exactly as designed, against the stack pinned in [§11](#11-how-it-is-built--and-the-exact-stack) — most leverage, least effort, right here.
 3. **Say what the waitlist perks are.** The Week 1 waitlist ([§2](#2-three-weeks-honestly)) needs a real answer for what a signed-in join and an email-only join each actually get, before the page copy can be written.
 4. **Decide repo visibility now, or decide to decide it later.** Add the MIT `LICENSE` file whenever — it's free — but say whether the ADRIS-OS repo goes public immediately or stays private until the Sealed/Yours-to-change split is real (see [§12](#12-licensing)).
-5. **Fedora as the base, and test Tally in week 1.** Default recommendation for people who cannot rescue a machine that will not boot — say the word for Arch instead and the plan re-targets. The Tally test is half a day and decides whether this is for the businesses already being sold to, or a different audience — worth knowing on day three, not day twenty.
+5. **Test Tally in week 1.** Half a day, and it decides whether this is for the businesses already being sold to, or a different audience — worth knowing on day three, not day twenty. (The base is settled: Ubuntu LTS — see [§11](#11-how-it-is-built--and-the-exact-stack).)
 
 ---
 

@@ -1,43 +1,60 @@
-import type { ReactNode } from 'react';
+import { useState } from 'react';
+import { LINUX_APPS, launchApp, type LinuxApp } from '../lib/linuxApps';
 
-/** The bottom-centre floating dock — a launcher shortcut, today's date, and a few pinned apps. */
+/**
+ * The dock — REAL applications, not decorative icons.
+ *
+ * These are the ordinary Ubuntu apps that come with the distribution (see plan.md §11's "Why
+ * Ubuntu"): LibreOffice Writer/Calc/Impress, Files, the text editor, the terminal. The whole point
+ * of building on a real distribution is that we don't reimplement a word processor — the plan has
+ * always been that agents drive these real applications. So the dock launches the real thing.
+ *
+ * `launchApp` posts to the small local agent bridge (see vm/agent-bridge.mjs) which runs the
+ * command inside the VM. When that bridge isn't running — e.g. someone opened this in a plain
+ * browser on Windows — the click says so plainly instead of appearing to work.
+ */
 export default function Dock({ railWidth }: { railWidth: number }) {
+  const [note, setNote] = useState('');
+
+  async function open(app: LinuxApp) {
+    setNote(`Opening ${app.name}…`);
+    const res = await launchApp(app.id);
+    setNote(res.ok ? `${app.name} opened` : res.error);
+    window.setTimeout(() => setNote(''), 4000);
+  }
+
   return (
-    <div style={{ position: 'absolute', bottom: 14, left: 0, right: railWidth, display: 'flex', justifyContent: 'center', zIndex: 2 }}>
-      <div style={{ display: 'flex', gap: 9, padding: '8px 11px', borderRadius: 16, background: 'var(--glass-bg)', border: '1px solid var(--border)', backdropFilter: 'blur(30px)' }}>
-        <Slot bg="var(--accent)">
-          <svg width="18" height="15" viewBox="0 0 28 24" fill="#F1EFEA"><path d="M2 3h6.6l8 9-8 9H2l8-9z" /><path d="M12 3h6.6l8 9-8 9H12l8-9z" /></svg>
-        </Slot>
-        <Slot>
-          <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
-            <div style={{ background: 'var(--danger)', color: '#fff', fontSize: 6.5, textAlign: 'center', letterSpacing: '.06em', padding: '1px 0' }}>AUG</div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600 }}>24</div>
-          </div>
-        </Slot>
-        <Slot><Icon d="M5 12.5l4.5 4.5L19 7.5" /></Slot>
-        <Slot><Icon d="M3.6 7.2L12 13l8.4-5.8" rect /></Slot>
-        <Slot><Icon d="M7 10l2.5 2L7 14M12 15h5" rect2 /></Slot>
+    <div style={{ position: 'absolute', bottom: 14, left: 0, right: railWidth, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 2 }}>
+      {note && (
+        <div style={{
+          fontSize: 11, padding: '5px 12px', borderRadius: 999, color: 'var(--text)',
+          background: 'var(--glass-bg)', backdropFilter: 'blur(var(--glass-blur))',
+          WebkitBackdropFilter: 'blur(var(--glass-blur))', border: '1px solid var(--border)',
+          maxWidth: 560, textAlign: 'center',
+        }}>{note}</div>
+      )}
+      <div style={{
+        display: 'flex', gap: 8, padding: '8px 11px', borderRadius: 18,
+        background: 'var(--glass-bg)', border: '1px solid var(--border)',
+        backdropFilter: 'blur(var(--glass-blur))', WebkitBackdropFilter: 'blur(var(--glass-blur))',
+        boxShadow: '0 12px 30px -12px rgba(0,0,0,.5)',
+      }}>
+        {LINUX_APPS.map((app) => (
+          <button
+            key={app.id}
+            title={`${app.name} — ${app.exec}`}
+            onClick={() => void open(app)}
+            style={{
+              width: 40, height: 40, borderRadius: 11, cursor: 'pointer',
+              background: 'var(--well-bg)', border: '1px solid var(--well-border)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 19, lineHeight: 1, padding: 0, transition: 'transform .12s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; }}
+          >{app.icon}</button>
+        ))}
       </div>
     </div>
-  );
-}
-
-function Slot({ bg, children }: { bg?: string; children: ReactNode }) {
-  return (
-    <div style={{
-      width: 36, height: 36, borderRadius: 10, overflow: 'hidden',
-      background: bg ?? 'var(--well-bg)', border: bg ? undefined : '1px solid var(--well-border)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-    }}>{children}</div>
-  );
-}
-
-function Icon({ d, rect, rect2 }: { d: string; rect?: boolean; rect2?: boolean }) {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-      {rect && <rect x="3" y="6" width="18" height="12" rx="2.4" />}
-      {rect2 && <rect x="3" y="4.5" width="18" height="15" rx="2.4" />}
-      <path d={d} />
-    </svg>
   );
 }

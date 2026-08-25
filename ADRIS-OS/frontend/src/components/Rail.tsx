@@ -25,12 +25,13 @@ export default function Rail({ userName = 'Aman Verma' }: { userName?: string })
   return (
     <div style={{
       position: 'absolute', top: 38, right: 0, bottom: 0, width: 312,
-      background: 'var(--rail-bg)', backdropFilter: 'blur(38px)',
+      background: 'var(--rail-bg)', backdropFilter: 'blur(var(--glass-blur))', WebkitBackdropFilter: 'blur(var(--glass-blur))',
       borderLeft: '1px solid var(--border)', padding: 12, boxSizing: 'border-box',
       display: 'flex', flexDirection: 'column', gap: 8, color: 'var(--text)', overflow: 'hidden',
     }}>
       <AskField />
-      <Clock />
+      {/* The clock lives once now — see CenterClock, top-centre of the desktop — so it isn't
+          repeated here the way it used to be. */}
       <Panel>
         <PanelHead title="August 2026" nav />
         <MonthGrid />
@@ -54,23 +55,6 @@ function AskField() {
       <div style={{ marginLeft: 'auto', width: 26, height: 26, borderRadius: 8, background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h13M13 7l5 5-5 5" /></svg>
       </div>
-    </div>
-  );
-}
-
-function Clock() {
-  const now = new Date();
-  const h = now.getHours() % 12 || 12;
-  const m = String(now.getMinutes()).padStart(2, '0');
-  const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
-  const date = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
-  return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-        <div style={{ fontSize: 34, fontWeight: 600, letterSpacing: '-.03em', lineHeight: 1 }}>{h}:{m}</div>
-        <div className="mono" style={{ fontSize: 11, color: 'var(--text-muted)', paddingTop: 5 }}>{ampm}</div>
-      </div>
-      <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 5 }}>{date}</div>
     </div>
   );
 }
