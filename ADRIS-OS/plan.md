@@ -6,6 +6,62 @@
 
 ---
 
+## STATUS BOARD — read this first
+
+Everything below this section is the *plan*. This table is the *state*: what is genuinely working, what is half-done, what has not been started. It is the thing to check before picking up work, and the thing to update when finishing any.
+
+**Rule for this table: `✅` means seen working, not written.** A thing is only ✅ when it has actually been run and observed doing what it claims. Anything believed-to-work-but-unverified is `🟡`. This rule exists because it was broken once (25 Aug: LibreOffice reported as launched when it had crashed — the check trusted a file appearing on disk rather than the program running), and that cost more time than being cautious would have.
+
+### The targets
+
+| # | Target | State | Where |
+|---|---|---|---|
+| 1 | Real bootable OS, Linux underneath | 🟡 **partial** — running on WSL2 Ubuntu 24.04 as the dev VM; the custom bootable ISO is not started | [§2](#2-three-weeks-honestly), [§11](#11-how-it-is-built--and-the-exact-stack) |
+| 2 | Ordinary Ubuntu apps present and working | ✅ **done** — LibreOffice Writer/Calc/Impress, Files, text editor, terminal, browser: all installed, configured, verified running | [§6](#6-agents-as-citizens-of-the-os) |
+| 3 | Agents drive real applications (never rebuilt) | ✅ **done** — an agent produced a genuine 5KB `.docx` via headless LibreOffice, zero document code of ours | [§6](#6-agents-as-citizens-of-the-os) |
+| 4 | Agents can run anything on the system | ✅ **done** — bridge `/run` executes arbitrary commands; verified writing files and reading real output | [§6](#6-agents-as-citizens-of-the-os) |
+| 5 | adris OS shell (rail, widgets, dock, wallpaper) | ✅ **done** — React/TS, runs fullscreen with no browser chrome | [§5](#5-the-desktop) |
+| 6 | A full desktop session — "a second computer" | 🟡 **in progress** — WSLg gives single windows on the Windows desktop, NOT a separate desktop. XFCE + xrdp being installed to fix this properly | [§5](#5-the-desktop) |
+| 7 | Coding agents (Claude Code, Codex) extend the OS | 🟡 **mechanism proven**, not yet wired to those specific tools | [Targets](#targets--what-adris-os-has-to-achieve) |
+| 8 | An adris bar inside every application | ❌ **not started** — needs the compositor work; see [§11](#11-how-it-is-built--and-the-exact-stack) | — |
+| 9 | Windows files openable from adris OS | 🟡 **works in the dev VM** via `/mnt/c`; the real NTFS mount for a booted install is untested | [§8](#8-files-folders-and-locks) |
+| 10 | Permissions: everything allowed by default, changeable in Settings | ❌ **not started** — dev bridge is currently all-or-nothing | [§9](#9-making-it-yours) |
+| 11 | Files with colours/icons from their names, lockable | ❌ **not started** | [§8](#8-files-folders-and-locks) |
+| 12 | Wallpaper: pick one, or have an agent code it | 🟡 **picker done + one image**; the agent-coded path is UI-only, not wired | [§6](#6-agents-as-citizens-of-the-os) |
+| 13 | Connect other hardware (WiFi/Bluetooth/wired) easily | ❌ **not started** | [§7](#7-agents-across-machines) |
+| 14 | Agents across machines | ❌ **not started** — open thread, deliberately unscoped | [§14.3](#143-agents-across-machines) |
+| 15 | Server mode (lid shut, work continues) | ❌ **not started** | [§13](#13-not-in-v1--and-when-it-comes) |
+| 16 | Looping — agents that keep themselves going | ❌ **not started** | [§14.2](#142-looping--an-agent-that-keeps-itself-going) |
+| 17 | App store — install from GitHub | ❌ **not started** | [§13](#13-not-in-v1--and-when-it-comes) |
+| 18 | Startup picker + installer (Windows or adris OS) | ❌ **not started** | [§4](#4-getting-on-to-it) |
+| 19 | adris.tech website waitlist | ❌ **not started** — blocked on deciding the perks | [§2](#2-three-weeks-honestly) |
+
+### What's built, file by file
+
+| Piece | File | State |
+|---|---|---|
+| Desktop shell | `frontend/src/components/Desktop.tsx` | ✅ working |
+| Rail (right-edge home panel) | `frontend/src/components/Rail.tsx` | ✅ working, launches real apps |
+| One widget box, paged, draggable | `frontend/src/components/widgets/WidgetCarousel.tsx` | ✅ working |
+| Centre clock | `frontend/src/components/CenterClock.tsx` | ✅ working |
+| Dock | `frontend/src/components/Dock.tsx` | ✅ working, launches real apps |
+| Wallpaper layer + picker | `frontend/src/components/Wallpaper*.tsx` | ✅ gallery works; Generate tab is UI-only |
+| Agent ↔ Linux bridge | `vm/agent-bridge.mjs` | ✅ working (`/launch`, `/run`, `/apps`, `/health`) |
+| Install the real apps | `vm/setup-desktop.sh` | ✅ working |
+| Run shell + bridge | `vm/run-os.sh` | ✅ working |
+| Fullscreen session | `vm/run-session.sh` | ✅ working |
+| Status check | `vm/status.sh` | ✅ working |
+| Full desktop session (XFCE/RDP) | `vm/run-desktop.sh` | 🟡 being built now |
+
+### Next, in order
+
+1. **Full XFCE desktop over RDP** — so adris OS is a whole screen, not windows scattered on Windows. *(in progress)*
+2. **Permissions model** — all-allowed by default, switchable in Settings, replacing the dev bridge's all-or-nothing.
+3. **The adris bar inside every app** — needs the compositor.
+4. **Files** — colours, icons, locking.
+
+---
+
 ## Targets — what adris OS has to achieve
 
 Written down separately, on top, because everything below is *how*; this is *why*, and it is what every later decision gets checked against.
