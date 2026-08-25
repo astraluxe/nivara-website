@@ -1,6 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import AppIcon, { type AppIconId } from './AppIcon';
-import { PINNED, launchApp, installedApps, iconFor } from '../lib/linuxApps';
+import type { ReactNode } from 'react';
 
 /**
  * The right-edge rail — rebuilt against Apple HIG desktop conventions.
@@ -17,18 +15,6 @@ import { PINNED, launchApp, installedApps, iconFor } from '../lib/linuxApps';
  *   rather than a box each, so the panel reads as one surface.
  */
 export default function Rail({ userName = 'Aman Verma', width = 340, scale = 1 }: { userName?: string; width?: number; scale?: number }) {
-  const [installed, setInstalled] = useState<Record<string, boolean> | null>(null);
-  const [note, setNote] = useState('');
-
-  useEffect(() => { void installedApps().then(setInstalled); }, []);
-
-  async function open(id: string, name: string) {
-    setNote(`Opening ${name}…`);
-    const r = await launchApp(id);
-    setNote(r.ok ? `${name} opened` : r.error);
-    window.setTimeout(() => setNote(''), 5000);
-  }
-
   return (
     // A FLOATING PANEL, not a full-height bar.
     //
@@ -37,7 +23,12 @@ export default function Rail({ userName = 'Aman Verma', width = 340, scale = 1 }
     // card inset from the edges with the wallpaper visible all around it, so the blur only covers
     // what the panel actually occupies. Same information, a lot less of the screen taken.
     <div style={{
-      position: 'absolute', top: 58, right: 18, bottom: 18, width,
+      // HEIGHT FITS THE CONTENT, rather than stretching to the bottom of the screen. Once the
+      // duplicated Applications grid was removed the panel kept its full height and held a large
+      // void above the account row — a panel with a void in it reads as broken, not as spacious.
+      // maxHeight keeps it scrollable if the agenda ever grows long.
+      position: 'absolute', top: 58, right: 18, width,
+      maxHeight: 'calc(100vh - 130px)',
       borderRadius: 24,
       background: 'var(--rail-bg)',
       backdropFilter: 'blur(var(--glass-blur)) saturate(160%)',
@@ -59,12 +50,11 @@ export default function Rail({ userName = 'Aman Verma', width = 340, scale = 1 }
         <Running />
       </Section>
 
-      <Section label="Applications">
-        <AppGrid installed={installed} onOpen={open} />
-        {note && (
-          <p style={{ fontSize: 12.5, color: 'var(--text-muted)', marginTop: 12, lineHeight: 1.5 }}>{note}</p>
-        )}
-      </Section>
+      {/* NO APPLICATIONS GRID HERE.
+          It used to repeat the dock's six apps exactly — the same duplication the clock and the
+          calendar were guilty of, and the reason both were moved. The dock IS the app launcher, and
+          everything else is behind its 9-dot button. The rail is for what needs attention NOW:
+          what's next, what's running, and who you are. */}
 
       <Account name={userName} />
     </div>
@@ -150,50 +140,11 @@ function Running() {
   );
 }
 
-function AppGrid({
-  installed, onOpen,
-}: {
-  installed: Record<string, boolean> | null;
-  onOpen: (id: string, name: string) => void;
-}) {
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-      {PINNED.map((app) => {
-        // null = the bridge hasn't answered; don't pretend to know. Only dim when it has told us
-        // the app is genuinely missing.
-        const known = installed !== null;
-        const missing = known && !installed[app.id];
-        const short = app.name.replace('LibreOffice ', '');
-        return (
-          <button
-            key={app.id}
-            title={missing ? `${app.name} — not installed` : `${app.name} — ${app.exec}`}
-            disabled={missing}
-            onClick={() => onOpen(app.id, app.name)}
-            style={{
-              height: 76, borderRadius: 15, cursor: missing ? 'default' : 'pointer',
-              background: 'var(--well-bg)', border: '1px solid var(--well-border)',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 7,
-              opacity: missing ? 0.3 : 1, padding: 0, color: 'var(--text)',
-              transition: 'background .12s, transform .12s',
-            }}
-            onMouseEnter={(e) => { if (!missing) { e.currentTarget.style.background = 'rgba(255,255,255,.12)'; } }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--well-bg)'; }}
-          >
-            <AppIcon id={iconFor(app) as AppIconId} size={34} />
-            <span style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>{short}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 function Account({ name }: { name: string }) {
   return (
     <div style={{
-      marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 13,
-      paddingTop: 16, borderTop: '1px solid var(--border)',
+      display: 'flex', alignItems: 'center', gap: 13,
+      marginTop: 4, paddingTop: 16, borderTop: '1px solid var(--border)',
     }}>
       <div style={{ width: 34, height: 34, borderRadius: 999, flex: 'none', background: 'linear-gradient(150deg,#B49EFF,#6544D8)' }} />
       <div style={{ fontSize: 14 }}>{name}</div>

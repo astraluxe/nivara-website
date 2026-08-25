@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 export interface CarouselPage {
   id: string;
@@ -6,46 +6,31 @@ export interface CarouselPage {
 }
 
 /**
- * ONE widget box holding several pages — the answer to "the widgets make the page crowded."
+ * ONE widget box holding several pages.
  *
- * The first version had a real problem: there was no obvious way to change page. Dots existed but
- * read as decoration, and nothing else responded. HIG is explicit that an interface must show what
- * it can do, so navigation is now four ways, all doing the same thing:
+ * **It no longer moves.** Dragging was solving a problem nobody actually has — and it caused a real
+ * one: a position saved against an older layout dropped the box on top of the calendar. A desktop
+ * that puts things where they belong is worth more than one that lets you rearrange it badly, so
+ * the box sits where the layout puts it and the grab handle is gone with it.
  *
- *   - **arrows** on either side (visible on hover, always keyboard-reachable)
- *   - **swipe/drag** horizontally across the body
- *   - **← →** arrow keys
- *   - **dots**, which were always clickable and now look it — bigger, with a hit area to match
+ * **Every page is the same height.** The card used to grow and shrink between pages, which made the
+ * whole thing jump and slid the dots out from under the cursor — that reads as a glitch, not a
+ * transition.
  *
- * The page also *slides* rather than swapping instantly. That is not decoration: the movement is
- * what tells you a sideways thing happened and which direction it went, which is exactly the
- * information a hard cut throws away.
- *
- * The box is draggable by its top handle and remembers where it was put.
+ * Changing page: **arrows** (on hover, and always keyboard-reachable), **swipe**, **← →** keys, or
+ * the **dots**. Four routes to the same thing, because an interface has to show what it can do.
  */
 export default function WidgetCarousel({
-  pages, storageKey = 'adris-os.carousel.pos', width = 480, scale = 1,
+  pages, width = 480, scale = 1,
 }: {
   pages: CarouselPage[];
-  storageKey?: string;
   width?: number;
   scale?: number;
 }) {
   const [active, setActive] = useState(0);
   const [dir, setDir] = useState<1 | -1>(1);
   const [hover, setHover] = useState(false);
-
-  const [pos, setPos] = useState<{ x: number; y: number }>(() => {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) return JSON.parse(saved);
-    } catch { /* default below */ }
-    return { x: 0, y: 0 };
-  });
-
-  const dragRef = useRef<{ startX: number; startY: number; baseX: number; baseY: number } | null>(null);
-  const swipeRef = useRef<{ x: number; y: number } | null>(null);
-  const [dragging, setDragging] = useState(false);
+  const [swipeFrom, setSwipeFrom] = useState<{ x: number; y: number } | null>(null);
 
   const go = (next: number) => {
     const n = (next + pages.length) % pages.length;
@@ -53,8 +38,8 @@ export default function WidgetCarousel({
     setActive(n);
   };
 
-  // ← → change page whenever the box is hovered or focused. Scoped rather than global so it can
-  // never steal arrow keys from a text field elsewhere on the desktop.
+  // ← → while hovered. Scoped rather than global so it can never steal arrow keys from a text
+  // field elsewhere on the desktop.
   useEffect(() => {
     if (!hover) return;
     const onKey = (e: KeyboardEvent) => {
@@ -67,151 +52,139 @@ export default function WidgetCarousel({
 
   function onPointerDown(e: React.PointerEvent) {
     const el = e.target as HTMLElement;
-    if (el.closest('[data-drag-handle]')) {
-      el.setPointerCapture(e.pointerId);
-      dragRef.current = { startX: e.clientX, startY: e.clientY, baseX: pos.x, baseY: pos.y };
-      setDragging(true);
-      return;
-    }
-    // Anywhere else in the body starts a potential swipe — but not on a control, or a click on the
-    // Council "Ask" button would also count as a page change.
-    if (!el.closest('button, input, textarea, a')) {
-      swipeRef.current = { x: e.clientX, y: e.clientY };
-    }
-  }
-
-  function onPointerMove(e: React.PointerEvent) {
-    if (!dragRef.current) return;
-    setPos({
-      x: dragRef.current.baseX + (e.clientX - dragRef.current.startX),
-      y: dragRef.current.baseY + (e.clientY - dragRef.current.startY),
-    });
+    // Not on a control — otherwise clicking the Council "Ask" button would also count as a swipe.
+    if (el.closest('button, input, textarea, a')) return;
+    setSwipeFrom({ x: e.clientX, y: e.clientY });
   }
 
   function onPointerUp(e: React.PointerEvent) {
-    if (dragRef.current) {
-      dragRef.current = null;
-      setDragging(false);
-      try { localStorage.setItem(storageKey, JSON.stringify(pos)); } catch { /* not fatal */ }
-      return;
-    }
-    if (swipeRef.current) {
-      const dx = e.clientX - swipeRef.current.x;
-      const dy = e.clientY - swipeRef.current.y;
-      swipeRef.current = null;
-      // Horizontal intent only, and past a threshold — otherwise an ordinary click would flick the
-      // page over.
-      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) go(active + (dx < 0 ? 1 : -1));
-    }
+    if (!swipeFrom) return;
+    const dx = e.clientX - swipeFrom.x;
+    const dy = e.clientY - swipeFrom.y;
+    setSwipeFrom(null);
+    // Horizontal intent, past a threshold — so an ordinary click never flicks the page over.
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) go(active + (dx < 0 ? 1 : -1));
   }
 
   const page = pages[Math.min(active, pages.length - 1)];
 
   return (
     <div
-      style={{ transform: `translate(${pos.x}px, ${pos.y}px)`, width, cursor: dragging ? 'grabbing' : undefined }}
+      style={{ width, position: 'relative' }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <div style={{ position: 'relative' }}>
+      <div
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        style={{
+          width, borderRadius: 24, position: 'relative', overflow: 'hidden',
+          background: 'var(--plate-bg)',
+          backdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
+          WebkitBackdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
+          border: '1px solid var(--border-soft)',
+          boxShadow: '0 1px 0 rgba(255,255,255,.14) inset, 0 22px 44px -20px rgba(0,0,0,.55)',
+          color: 'var(--text)',
+        }}
+      >
+        {/* One height for every page — see the note above. Content is top-aligned so a shorter page
+            leaves space at the bottom rather than floating in the middle. */}
         <div
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
+          key={page?.id}
           style={{
-            width, borderRadius: 24, position: 'relative', overflow: 'hidden',
-            background: 'var(--plate-bg)',
-            backdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
-            WebkitBackdropFilter: 'blur(var(--plate-blur)) saturate(150%)',
-            border: '1px solid var(--border-soft)',
-            boxShadow: '0 1px 0 rgba(255,255,255,.14) inset, 0 22px 44px -20px rgba(0,0,0,.55)',
-            color: 'var(--text)',
+            padding: Math.round(26 * scale),
+            minHeight: Math.round(206 * scale),
+            boxSizing: 'border-box',
+            display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
+            animation: `adrisSlide${dir > 0 ? 'Left' : 'Right'} .26s cubic-bezier(.22,.61,.36,1)`,
           }}
         >
-          <div
-            data-drag-handle
-            title="Drag to move"
-            style={{
-              height: 20, cursor: 'grab', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'rgba(255,255,255,.04)',
-            }}
-          >
-            <div style={{ width: 36, height: 4, borderRadius: 999, background: 'rgba(255,255,255,.22)' }} />
-          </div>
-
-          {/* key on the page id re-runs the slide animation on every change, which is what makes
-              the direction legible. */}
-          <div
-            key={page?.id}
-            style={{
-              padding: Math.round(24 * scale),
-              animation: `adrisSlide${dir > 0 ? 'Left' : 'Right'} .26s cubic-bezier(.22,.61,.36,1)`,
-            }}
-          >
-            {page?.content}
-          </div>
+          {page?.content}
         </div>
-
-        {pages.length > 1 && (
-          <>
-            <Arrow side="left"  show={hover} onClick={() => go(active - 1)} />
-            <Arrow side="right" show={hover} onClick={() => go(active + 1)} />
-          </>
-        )}
       </div>
 
       {pages.length > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginTop: 16 }}>
-          {pages.map((p, i) => (
-            <button
-              key={p.id}
-              onClick={() => go(i)}
-              title={p.id}
-              aria-label={`Show ${p.id}`}
-              aria-current={i === active}
-              style={{
-                // A generous invisible hit area around a small dot — the dot is the signal, the
-                // padding is the target, which is how you satisfy a 24pt minimum without drawing
-                // 24pt circles.
-                background: 'transparent', border: 'none', padding: '8px 6px',
-                cursor: 'pointer', display: 'flex', alignItems: 'center',
-              }}
-            >
-              <span style={{
-                display: 'block',
-                width: i === active ? 26 : 9, height: 9, borderRadius: 999,
-                background: i === active ? '#fff' : 'rgba(255,255,255,.38)',
-                boxShadow: i === active ? '0 0 10px rgba(255,255,255,.5)' : undefined,
-                transition: 'width .24s cubic-bezier(.22,.61,.36,1), background .18s',
-              }} />
-            </button>
-          ))}
-        </div>
+        <>
+          <Arrow side="left"  show={hover} onClick={() => go(active - 1)} />
+          <Arrow side="right" show={hover} onClick={() => go(active + 1)} />
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginTop: 16 }}>
+            {pages.map((p, i) => (
+              <button
+                key={p.id}
+                onClick={() => go(i)}
+                title={p.id}
+                aria-label={`Show ${p.id}`}
+                aria-current={i === active}
+                style={{
+                  // A generous invisible hit area around a small dot: the dot is the signal, the
+                  // padding is the target — how you meet a 24pt minimum without drawing 24pt circles.
+                  background: 'transparent', border: 'none', padding: '8px 6px',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center',
+                }}
+              >
+                <span style={{
+                  display: 'block',
+                  width: i === active ? 26 : 9, height: 9, borderRadius: 999,
+                  background: i === active ? '#fff' : 'rgba(255,255,255,.38)',
+                  boxShadow: i === active ? '0 0 10px rgba(255,255,255,.5)' : undefined,
+                  transition: 'width .24s cubic-bezier(.22,.61,.36,1), background .18s',
+                }} />
+              </button>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
 }
 
+/**
+ * The page arrows.
+ *
+ * The first version was a grey circle bolted to the side of the card and read as a leftover browser
+ * control. This one belongs to the plate: it half-overlaps the edge, uses the same glass as
+ * everything else, and grows slightly under the cursor so it feels like a physical control rather
+ * than a hit target. It fades in on hover but stays in the tab order and appears on focus, because
+ * a control that only exists on hover is invisible to the keyboard.
+ */
 function Arrow({ side, show, onClick }: { side: 'left' | 'right'; show: boolean; onClick: () => void }) {
+  const [over, setOver] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const visible = show || focused;
+
   return (
     <button
       onClick={onClick}
       aria-label={side === 'left' ? 'Previous' : 'Next'}
+      onMouseEnter={() => setOver(true)}
+      onMouseLeave={() => setOver(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
       style={{
-        position: 'absolute', top: '50%', [side]: -20, transform: 'translateY(-50%)',
-        width: 40, height: 40, borderRadius: 999, cursor: 'pointer',
-        background: 'var(--glass-bg)', border: '1px solid var(--border)',
-        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-        color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        // Fades in on hover but never leaves the tab order — a control that only exists on hover
-        // is invisible to the keyboard, which HIG treats as an accessibility failure.
-        opacity: show ? 1 : 0, transition: 'opacity .18s',
-        boxShadow: '0 6px 18px -6px rgba(0,0,0,.5)',
+        position: 'absolute',
+        top: 'calc(50% - 40px)',
+        [side]: -17,
+        width: 44, height: 44, borderRadius: 999, padding: 0,
+        cursor: 'pointer',
+        background: over ? 'rgba(255,255,255,.2)' : 'var(--glass-bg)',
+        border: '1px solid ' + (over ? 'rgba(255,255,255,.34)' : 'var(--border-soft)'),
+        backdropFilter: 'blur(22px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(22px) saturate(160%)',
+        color: 'var(--text)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: over
+          ? '0 10px 26px -8px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.22) inset'
+          : '0 6px 18px -8px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.14) inset',
+        opacity: visible ? 1 : 0,
+        transform: visible ? `scale(${over ? 1.08 : 1})` : 'scale(.9)',
+        transition: 'opacity .18s ease, transform .18s cubic-bezier(.22,.61,.36,1), background .18s',
+        // Not clickable while invisible, so a click on the wallpaper never turns a page.
+        pointerEvents: visible ? 'auto' : 'none',
       } as React.CSSProperties}
-      onFocus={(e) => { e.currentTarget.style.opacity = '1'; }}
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-        <path d={side === 'left' ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6'} />
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d={side === 'left' ? 'M14.5 6.5l-5.5 5.5 5.5 5.5' : 'M9.5 6.5l5.5 5.5-5.5 5.5'} />
       </svg>
     </button>
   );
