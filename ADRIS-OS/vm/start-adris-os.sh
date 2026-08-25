@@ -79,40 +79,87 @@ fi
 AUTOSTART_DIR="$USER_HOME/.config/autostart"
 mkdir -p "$AUTOSTART_DIR"
 
-# Epiphany refuses --application-mode unless this directory exists AND its name starts with
-# org.gnome.Epiphany.WebApp_ (it derives the app id from the name). Both rules found the hard way.
-EPI_PROFILE="$USER_HOME/.local/share/epiphany/org.gnome.Epiphany.WebApp_adrisos"
-mkdir -p "$EPI_PROFILE"
+# ── HOW adris OS IS OPENED, and why it is not "app mode" ─────────────────────
+#
+# Epiphany has a --application-mode that gives a chromeless window, and it was the obvious choice.
+# It does not work here. It has THREE separate hidden requirements — the profile directory must
+# exist, its name must start with org.gnome.Epiphany.WebApp_, AND a matching .desktop file must be
+# registered with xdg-desktop-portal — and even with all three satisfied it still aborted with
+# "trying to access web app settings outside web app mode" and no window ever appeared. Each
+# attempt LOOKED like it worked, because the process lives for a second or two before dying, so a
+# pgrep check right after launching reports success on a browser that is already gone. (That is
+# how "adris OS is running" got said twice about a screen that showed a bare desktop.)
+#
+# So: launch Epiphany normally, then have the window manager fullscreen it. wmctrl does what app
+# mode was supposed to do — no toolbar visible, fills the screen — and it is not fragile. The
+# window also has to be pulled onto the CURRENT workspace: XFCE opened it on workspace 3, where it
+# was invisible and looked like nothing had launched at all.
+ADRIS_URL="http://localhost:5173/"
 
-# AND a matching desktop file must exist where the portal looks for it, or Epiphany aborts with
-# "trying to access web app settings outside web app mode" and the window never appears. Third
-# separate requirement of the same feature, all three found by hitting them.
-PORTAL_DIR="$USER_HOME/.local/share/xdg-desktop-portal/applications"
-mkdir -p "$PORTAL_DIR"
-cat > "$PORTAL_DIR/org.gnome.Epiphany.WebApp_adrisos.desktop" <<PORTAL
-[Desktop Entry]
-Type=Application
-Name=adris OS
-Exec=epiphany-browser -a --profile=$EPI_PROFILE http://localhost:5173/
-StartupWMClass=org.gnome.Epiphany.WebApp_adrisos
-Terminal=false
-PORTAL
-chown -R "$DESKTOP_USER:$DESKTOP_USER" "$USER_HOME/.local/share/xdg-desktop-portal" 2>/dev/null || true
+# The launcher both the autostart entry and the live-session path use. Written once, to a file, so
+# there is exactly one definition of "open adris OS" rather than two that drift.
+LAUNCHER="$USER_HOME/.local/bin/adris-os-open"
+mkdir -p "$USER_HOME/.local/bin"
+cat > "$LAUNCHER" <<'LAUNCH'
+#!/usr/bin/env bash
+# Open adris OS fullscreen on whichever display this session is using.
+URL="http://localhost:5173/"
 
-# A short wait, then launch: on a cold login the shell may still be binding its port, and a browser
-# that arrives first shows a connection error and stays there.
+# Wait for the shell to answer. On a cold login the browser otherwise arrives first, shows a
+# connection error, and sits there looking exactly like a broken product.
+for _ in $(seq 1 45); do
+  curl -sf -o /dev/null "$URL" && break
+  sleep 1
+done
+
+pgrep -f "epiphany.*5173" >/dev/null && exit 0   # already open
+
+setsid epiphany-browser "$URL" >/tmp/adris-epi.log 2>&1 </dev/null &
+
+# Give the window time to exist, then claim it: onto THIS workspace (XFCE has been seen opening it
+# on workspace 3, invisible), focused, and fullscreen — which is what app mode was meant to do.
+for _ in $(seq 1 25); do
+  WID=$(wmctrl -l 2>/dev/null | grep -iE 'adris OS|Blank page' | head -1 | awk '{print $1}')
+  [ -n "$WID" ] && break
+  sleep 1
+done
+if [ -n "${WID:-}" ]; then
+  wmctrl -i -r "$WID" -t 0
+  wmctrl -i -a "$WID"
+  sleep 1
+  wmctrl -i -r "$WID" -b add,fullscreen
+fi
+LAUNCH
+chmod +x "$LAUNCHER"
+chown -R "$DESKTOP_USER:$DESKTOP_USER" "$USER_HOME/.local/bin"
+
 cat > "$AUTOSTART_DIR/adris-os.desktop" <<AUTOSTART
 [Desktop Entry]
 Type=Application
 Name=adris OS
 Comment=The adris OS shell, fullscreen
-Exec=bash -c 'for i in \$(seq 1 40); do curl -sf -o /dev/null http://localhost:5173/ && break; sleep 1; done; epiphany-browser -a --profile=$EPI_PROFILE http://localhost:5173/'
+Exec=$LAUNCHER
 X-GNOME-Autostart-enabled=true
 Terminal=false
 AUTOSTART
+chown -R "$DESKTOP_USER:$DESKTOP_USER" "$AUTOSTART_DIR"
 
-chown -R "$DESKTOP_USER:$DESKTOP_USER" "$AUTOSTART_DIR" "$USER_HOME/.local/share/epiphany" 2>/dev/null || true
-say "✓ adris OS set to open automatically on login"
+# A launcher they can click, for when a session is already open (autostart only runs at login).
+mkdir -p "$USER_HOME/.local/share/applications" "$USER_HOME/Desktop"
+cat > "$USER_HOME/.local/share/applications/adris-os.desktop" <<SHORTCUT
+[Desktop Entry]
+Type=Application
+Name=adris OS
+Comment=Open the adris OS desktop shell
+Exec=$LAUNCHER
+Icon=preferences-desktop-display
+Terminal=false
+Categories=System;
+SHORTCUT
+cp "$USER_HOME/.local/share/applications/adris-os.desktop" "$USER_HOME/Desktop/adris-os.desktop"
+chmod +x "$USER_HOME/Desktop/adris-os.desktop"
+chown -R "$DESKTOP_USER:$DESKTOP_USER" "$USER_HOME/.local/share/applications" "$USER_HOME/Desktop"
+say "✓ adris OS set to open automatically on login (and an icon on the desktop)"
 
 # ── 4 & 5. make the desktop itself look like the product ─────────────────────
 # xfconf needs a running session bus to talk to, so this is written into the session startup rather
@@ -134,18 +181,21 @@ else
   say "· wallpaper not found in the VM copy — skipped"
 fi
 
-# ── If a desktop session is ALREADY open, start adris OS in it now ───────────
+# ── An already-open session ──────────────────────────────────────────────────
 #
-# Autostart only fires at login. Someone who is already connected would otherwise run this, see
-# "ready", and find their screen unchanged — which is exactly what happened. So if a session is
-# live, launch into it directly instead of making them log out and back in.
-LIVE_DISPLAY="$(ps -u "$DESKTOP_USER" -o args= 2>/dev/null | grep -o 'Xorg :[0-9]*' | head -1 | cut -d: -f2)"
-if [ -n "${LIVE_DISPLAY:-}" ] && ! pgrep -f 'WebApp_adrisos' >/dev/null; then
-  su - "$DESKTOP_USER" -c "cd ~ && DISPLAY=:$LIVE_DISPLAY XAUTHORITY=$USER_HOME/.Xauthority setsid epiphany-browser -a --profile='$EPI_PROFILE' http://localhost:5173/ >/tmp/adris-epi.log 2>&1 </dev/null &"
-  sleep 4
-  pgrep -f 'WebApp_adrisos' >/dev/null     && say "✓ adris OS opened in your existing session (display :$LIVE_DISPLAY)"     || say "· could not open in the live session — it will open on next login"
-elif pgrep -f 'WebApp_adrisos' >/dev/null; then
-  say "✓ adris OS is already open"
+# Autostart only fires at LOGIN, so someone already connected sees no change when this runs. The
+# obvious fix — launch into their live session from here — was tried and abandoned, for a reason
+# worth recording: a GUI app started by root for another user fights dconf, D-Bus and
+# xdg-desktop-portal all at once (`unable to create directory /run/user/0/dconf`, `Failed to create
+# XdpPortal instance`), and even importing the session's real DISPLAY/DBUS/XDG_RUNTIME_DIR out of
+# /proc/<session-pid>/environ did not get a window on screen reliably. The same launcher run from
+# inside the session works every time.
+#
+# So the honest answer is not to launch from root at all: log in (autostart handles it), or use the
+# "adris OS" icon on the desktop / in the applications menu, which runs in-session where it works.
+if pgrep -u "$DESKTOP_USER" -x xfce4-session >/dev/null 2>&1; then
+  say "· a desktop session is already open — log out and back in, or use the"
+  say "  \"adris OS\" icon on its desktop (autostart only runs at login)"
 fi
 
 cat <<INFO

@@ -1,28 +1,29 @@
 @echo off
-REM ─── Double-click this. That's the whole thing. ──────────────────────────────
+REM ─── Double-click this to run adris OS. ─────────────────────────────────────
 REM
-REM Starts the Ubuntu VM's desktop server, the adris OS shell and the agent
-REM bridge, then opens Remote Desktop. adris OS appears fullscreen by itself
-REM once you log in — no browser to open, no URL to type.
+REM Starts the Ubuntu VM's desktop, the adris OS shell and the agent bridge,
+REM then opens Remote Desktop. adris OS opens by itself when you log in.
 REM
-REM Login:  amogh  /  the password set for the Ubuntu account
-REM         (see vm\.local-credentials.txt — gitignored)
+REM Login:  amogh  /  the Ubuntu password (see vm\.local-credentials.txt)
+REM
+REM IF YOU ARE ALREADY CONNECTED when you run this: log out of the Ubuntu
+REM desktop and back in, or double-click the "adris OS" icon on its desktop.
+REM Autostart only fires at LOGIN, so an already-open session won't change
+REM on its own.
 
 setlocal
 title Starting adris OS
 
 echo.
 echo   Starting adris OS...
-echo   (first run after a reboot takes ~20 seconds)
+echo   (about 20 seconds on the first run after a reboot)
 echo.
 
-REM Everything inside the VM. -u root so no password is needed for the parts
-REM that bind ports and switch user.
 wsl -d Ubuntu -u root -e bash /mnt/c/Users/amogh/OneDrive/Desktop/NIVARA/ADRIS-OS/vm/start-adris-os.sh
 
 if errorlevel 1 (
   echo.
-  echo   Something did not start. The lines above say which part.
+  echo   Something did not start - the lines above say which part.
   echo.
   pause
   exit /b 1
@@ -32,8 +33,15 @@ echo   Opening Remote Desktop...
 start "" mstsc.exe /v:localhost:3390
 
 echo.
-echo   Log in as: amogh
-echo   adris OS opens by itself once you are in.
+echo   ============================================================
+echo     Log in as:  amogh
 echo.
-timeout /t 6 >nul
+echo     adris OS opens by itself once you are logged in.
+echo.
+echo     Already logged in from before? Either log out and back
+echo     in, or double-click the "adris OS" icon on the Ubuntu
+echo     desktop. Autostart only runs at login.
+echo   ============================================================
+echo.
+timeout /t 8 >nul
 endlocal

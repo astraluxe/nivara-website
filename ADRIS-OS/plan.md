@@ -190,6 +190,20 @@ Two details that make it work rather than half-work:
 
 **Autostart only applies at login.** After running the script the first time, log out and back in (or reconnect RDP) — an already-open session will not retroactively run it.
 
+**25 Aug, evening — adris OS verified ON SCREEN, by screenshot.**
+
+Twice in a row it was reported as running while the screen showed a bare XFCE desktop. The fix for that was not another check — it was **looking**: `scrot` installed in the VM, capture display `:10`, open the PNG. That is now the standard for anything visual, and it immediately proved both the failure and, after the fixes, the success. **A screenshot is the only acceptable evidence that a UI works.**
+
+**What the screenshots showed:** first a bare XFCE desktop with its mouse logo and no adris OS at all; then, after the fixes, adris OS filling the screen — purple-mountain wallpaper, the centred clock, the Today widget with its page dots, the rail with agenda / running agents / apps, and the dock. Also caught a real bug no status check would have: **every app icon was a broken-square glyph**, because the VM had no emoji font (`fonts-noto-color-emoji`, now installed).
+
+**Why "app mode" was abandoned.** Epiphany's `--application-mode` gives a chromeless window and has *three* separate hidden requirements — profile directory must exist, must be named `org.gnome.Epiphany.WebApp_*`, and a matching `.desktop` file must be registered with xdg-desktop-portal. With all three satisfied it still aborted (`trying to access web app settings outside web app mode`). Replaced with: launch the browser normally, then have **wmctrl** move the window to the current workspace and fullscreen it. Not fragile, and it does exactly what app mode was for.
+
+**Two traps that made failure look like success:**
+- **`pgrep` is not proof of a window.** A crashed browser sits un-reaped in the process table, so a process check reports "running" for something with no window and no future. Worse, the launcher's own "already open?" guard used `pgrep` and matched one of these husks — so it exited immediately and opened nothing, silently. Both now ask **wmctrl** whether a window exists.
+- **XFCE opened the window on workspace 3**, where it was invisible. Looked identical to nothing having launched.
+
+**Launching into an already-open session was tried and deliberately abandoned.** A GUI app started by root for another user fights dconf, D-Bus and xdg-desktop-portal simultaneously (`unable to create directory /run/user/0/dconf`, `Failed to create XdpPortal instance: Permission denied`), and even importing the session's real `DISPLAY`/`DBUS_SESSION_BUS_ADDRESS`/`XDG_RUNTIME_DIR` out of `/proc/<session-pid>/environ` did not put a window on screen reliably. The identical launcher run *inside* the session works every time. So the script no longer pretends: if a session is open it says to log out and back in, or to use the **"adris OS" icon now placed on the desktop and in the applications menu**. Honest instruction beats a clever mechanism that works four times in five.
+
 **References checked, as asked, with what was actually found (not guessed):**
 - [**omarchy**](https://github.com/basecamp/omarchy) (Basecamp) — a real, shipped "opinionated Linux distribution," organized into `config/`, `themes/`, `applications/`, with a 51-chapter user manual and a documented "make your own theme" system. Validates two decisions already in this plan rather than changing anything: being *opinionated* rather than maximally configurable ([§1](#1-what-we-are-building)), and treating real, plain-language documentation as part of the product, not an afterthought.
 - [**LinuxKit**](https://github.com/linuxkit/linuxkit) — a genuinely interesting architecture (the OS is composed from small container images, declared in YAML, "everything replaceable") — but by its own documentation, built for container/Kubernetes workloads, not general-purpose desktop use. Considered and **not adopted**: an Ubuntu base ([§11](#11-how-it-is-built--and-the-exact-stack)) stays the right tool for a desktop OS with a GUI that ordinary files and ordinary apps have to run on.
