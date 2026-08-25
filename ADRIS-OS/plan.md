@@ -59,7 +59,9 @@ Every command goes through `wsl`, from a normal Windows terminal (or prefixed wi
 
 | What you want | Command |
 |---|---|
-| **The full Ubuntu desktop** (a second computer on screen) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/run-desktop.sh` then connect Windows **Remote Desktop** to `localhost:3390` — user `amogh`. Password is in `vm/.local-credentials.txt` (gitignored — see note below) |
+| **Just run adris OS** ← start here | **Double-click `ADRIS-OS/START-ADRIS-OS.bat`.** Starts everything and opens Remote Desktop; adris OS then appears fullscreen by itself on login. Nothing else to do. |
+| The same thing, from a terminal | `wsl -d Ubuntu -u root -e bash $PLAN/vm/start-adris-os.sh` then Remote Desktop to `localhost:3390` |
+| The plain Ubuntu desktop, without adris OS auto-opening | `wsl -d Ubuntu -u root -e bash $PLAN/vm/run-desktop.sh` — user `amogh`. Password is in `vm/.local-credentials.txt` (gitignored — see note below) |
 | Check what's installed / running | `wsl -d Ubuntu -u root -e bash $PLAN/vm/status.sh` |
 | Live status, refreshing | `wsl -d Ubuntu -u root -e watch -n 2 bash $PLAN/vm/status.sh` |
 | Install the real apps (first time) | `wsl -d Ubuntu -u root -e bash $PLAN/vm/setup-desktop.sh` |
@@ -171,6 +173,21 @@ The apps were installed and running, and it still wasn't right: *"i am on window
 3. **Epiphany's application mode, twice.** It refuses `--application-mode` unless the profile directory already exists *and* its name starts with `org.gnome.Epiphany.WebApp_` — two separate hard errors, one after the other. Both messages are now in the script's comments.
 
 **Also proven today, and the most important single result:** an agent wrote content, drove headless LibreOffice, and produced a genuine 5,046-byte `.docx` using the real MS Word 2007 XML filter — **with no document-generation code of ours**. That is [§6](#6-agents-as-citizens-of-the-os)'s whole claim, working. And it is not LibreOffice-specific: the bridge's `/run` executes any command on the system, so "agents use whatever is installed" is the actual mechanism, not an aspiration.
+
+**25 Aug, later still — one command, and adris OS actually on screen.**
+
+The desktop worked and it still wasn't the product: *"idk if that is ubuntu or not… this one looks normal to me, the background isn't good nor i find anything related to adris-os in this."* Both halves fair.
+
+- **It looked unfamiliar because it is XFCE, not GNOME.** Ubuntu's default desktop is GNOME (what most people have seen); XFCE was chosen here because it is far lighter and much more reliable over RDP. Same Ubuntu underneath, different face — but that was never said out loud, so it just looked wrong. **If the familiar Ubuntu look matters more than RDP smoothness, `ubuntu-desktop` can be installed instead** — heavier, and GNOME over xrdp is known to be fussier, which is the trade.
+- **There was no adris OS on it because nothing started it.** The shell was served at a URL, and finding it meant opening a browser and typing that URL — homework, not an operating system.
+
+**`vm/start-adris-os.sh` + `START-ADRIS-OS.bat` fix the second properly.** One double-click now: starts xrdp, the bridge and the shell, opens Remote Desktop — and writes two XFCE autostart entries so that on login **adris OS opens itself, fullscreen**, with the adris wallpaper behind it and XFCE's own desktop icons hidden. Nothing to click, no URL to type.
+
+Two details that make it work rather than half-work:
+- The autostart entry **waits for the shell's port** before launching the browser (up to 40s). On a cold login the browser otherwise arrives first, shows a connection error, and sits there — looking exactly like the product is broken.
+- The wallpaper is set from a **second autostart entry, not from the script**. `xfconf-query` needs a live session bus, so setting it at script time fails on a desktop that has not started yet.
+
+**Autostart only applies at login.** After running the script the first time, log out and back in (or reconnect RDP) — an already-open session will not retroactively run it.
 
 **References checked, as asked, with what was actually found (not guessed):**
 - [**omarchy**](https://github.com/basecamp/omarchy) (Basecamp) — a real, shipped "opinionated Linux distribution," organized into `config/`, `themes/`, `applications/`, with a 51-chapter user manual and a documented "make your own theme" system. Validates two decisions already in this plan rather than changing anything: being *opinionated* rather than maximally configurable ([§1](#1-what-we-are-building)), and treating real, plain-language documentation as part of the product, not an afterthought.
