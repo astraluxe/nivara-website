@@ -74,6 +74,28 @@
 .bh-btn-ghost { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 20px; border: 1px solid var(--rule-strong, rgba(14,14,12,.2)); border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--ink); text-decoration: none; transition: all .15s; }
 .bh-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 .bh-hero .btn { height: 40px; padding: 0 22px; font-size: 13.5px; }
+
+/* ── The bridge band ──────────────────────────────────────────────────── */
+.bh-bridge { padding: clamp(56px,7vw,96px) 0; border-bottom: 1px solid var(--rule); }
+.bhb-inner { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,.85fr); gap: clamp(28px,5vw,72px); align-items: center; }
+.bhb-h .it { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+.bhb-h .acc { color: var(--accent); }
+.bhb-h { font-size: clamp(26px,3.6vw,46px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; color: var(--ink); margin: 14px 0 16px; }
+.bhb-sub { font-size: 15px; line-height: 1.75; color: var(--muted); margin: 0 0 14px; max-width: 560px; }
+.bhb-ways { display: grid; gap: 10px; }
+.bhb-way { display: grid; grid-template-columns: 8px 1fr; column-gap: 12px; align-items: baseline;
+           border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; }
+.bhb-way b { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.bhb-way em { grid-column: 2; font-style: normal; font-family: var(--font-mono); font-size: 10.5px;
+              letter-spacing: .08em; text-transform: uppercase; color: var(--muted-2); margin-top: 3px; }
+.bhb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); align-self: center; }
+/* The first way is the one the section is about. */
+.bhb-way:first-child { border-color: var(--accent); }
+.bhb-way:first-child em { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .bhb-inner { grid-template-columns: 1fr; }
+}
 .bh-cta-note { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-2); width: 100%; margin-top: 2px; }
 
 /* Stat bar — the "important info first" strip */
@@ -467,6 +489,7 @@
       <li><a href="/pricing">Pricing</a></li>
       <li><a href="/blog">Blog</a></li>
       <li><a href="/affiliates">Affiliates</a></li>
+      <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
       <li><a href="/partner">Contact</a></li>
@@ -556,6 +579,9 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <p class="bh-sub bh-rv d2">
         AI agents that find leads and write outreach. Automations that run 24/7. A code editor, security scanning, and local AI models — <b>eight products in one desktop app</b>, replacing <b>₹2–3 lakh/month</b> of tools and hiring. Everything runs on your machines. Nothing leaves them.
       </p>
+      <p class="bh-sub bh-rv d2" style="margin-top:14px;">
+        And it runs on the AI you <em>already pay for</em> — plug in your <b>Claude</b> or <b>ChatGPT&nbsp;Plus</b> subscription and <b>there is no second AI bill</b>. <a href="/bridge" style="color:var(--accent);text-decoration:none;border-bottom:1px solid currentColor;">See how the bridge works&nbsp;→</a>
+      </p>
       <div class="bh-ctas bh-rv d3">
         <a href="/download" class="btn">
           Download — free
@@ -570,7 +596,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <div class="bh-stats bh-rv d4">
         <div class="bh-stat"><div class="v"><span data-count="8">0</span> <em>products</em></div><div class="k">One login</div></div>
         <div class="bh-stat"><div class="v">₹<span data-count="3" data-prefix="2–">0</span><em>L/mo</em></div><div class="k">Stack it replaces</div></div>
-        <div class="bh-stat"><div class="v"><span data-count="48">0</span> <em>agents</em></div><div class="k">Your AI workforce</div></div>
+        <div class="bh-stat"><div class="v"><span data-count="57">0</span> <em>agents</em></div><div class="k">Your AI workforce</div></div>
         <div class="bh-stat"><div class="v"><span data-count="100">0</span><em>%</em></div><div class="k">Runs on your device</div></div>
       </div>
     </div>
@@ -603,6 +629,44 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <span class="bh-chip">Social media exec <s>₹25,000/mo</s></span>
       <span class="bh-chip">Model playground <s>₹1,600/mo</s></span>
       <span class="bh-chip one">adris.tech — from ₹0</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     THE BRIDGE — the line nothing else in the market can say
+
+     Placed directly after the "replaces the whole stack" marquee on
+     purpose. That band answers "what does it save me"; the obvious next
+     objection is "so what does the AI itself cost me" — and the honest
+     answer, for anyone already paying Anthropic or OpenAI, is nothing.
+     Saying it here rather than on the pricing page is deliberate: hiding
+     it behind a price table to protect revenue would be exactly the
+     dishonesty the product refuses everywhere else.
+============================================ -->
+<section class="bh-bridge" aria-labelledby="bridge-h">
+  <div class="wrap">
+    <div class="bhb-inner">
+      <div class="bhb-copy">
+        <div class="bh-eyebrow"><span class="pulse"></span>The bridge</div>
+        <h2 id="bridge-h" class="bhb-h">Already paying for Claude<br/>or ChatGPT? <span class="it acc">Plug it in.</span></h2>
+        <p class="bhb-sub">
+          adris runs on the subscription you already have. Your <b>₹2,000/mo Claude</b> plan or
+          <b>₹400/mo ChatGPT&nbsp;Plus</b> becomes the brain behind all 57 agents — no API key to buy,
+          no tokens to top up, <b>no second AI bill</b>.
+        </p>
+        <p class="bhb-sub" style="color:var(--muted-2);font-size:13.5px;">
+          adris installs and connects it for you. You never open a terminal, and your business data
+          still never comes to us.
+        </p>
+        <a href="/bridge" class="bh-btn-ghost" style="margin-top:6px;">How the bridge works →</a>
+      </div>
+      <div class="bhb-ways">
+        <div class="bhb-way"><span class="bhb-dot"></span><b>Your subscription</b><em>Already paid for</em></div>
+        <div class="bhb-way"><span class="bhb-dot"></span><b>Your own API key</b><em>Billed by them, not us</em></div>
+        <div class="bhb-way"><span class="bhb-dot"></span><b>A local model</b><em>Free · works offline</em></div>
+        <div class="bhb-way"><span class="bhb-dot"></span><b>adris.tech's own AI</b><em>Pay per use</em></div>
+      </div>
     </div>
   </div>
 </section>

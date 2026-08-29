@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Use your own Claude or ChatGPT subscription · adris.tech</title>
+<meta name="description" content="adris runs on the AI subscription you already pay for. Connect Claude Code or Codex in three clicks — no API key, no second AI bill, no terminal." />
+<meta property="og:title" content="Already paying for Claude or ChatGPT? Plug it in." />
+<meta property="og:description" content="adris runs 57 agents on the AI subscription you already have. No API key. No second AI bill." />
+<meta property="og:type" content="website" />
+<link rel="canonical" href="https://www.adris.tech/bridge" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="module-pages.css" />
+<link rel="stylesheet" href="backgrounds.css" />
+<style>
+/* ── The bridge page ─────────────────────────────────────────────────────
+   Local styles only. Everything structural — nav, footer, buttons, the two
+   themes — comes from styles.css and module-pages.css, so this page cannot
+   drift away from the rest of the site. */
+.br-hero { max-width: 780px; }
+.br-hero .bh-eyebrow { margin-bottom: 18px; }
+.br-hero .bh-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+.br-h2 { font-size: clamp(21px,2.4vw,30px); font-weight: 600; letter-spacing: -0.028em; color: var(--ink); margin: 0 0 12px; }
+.br-lede { font-size: 15px; line-height: 1.75; color: var(--muted); max-width: 640px; margin: 0 0 32px; }
+.br-band { padding: clamp(56px,7vw,96px) 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--surface-2, transparent); }
+
+/* The three numbers */
+.br-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+.br-card { border: 1px solid var(--rule); border-radius: 12px; padding: 22px 20px; background: var(--surface, transparent); }
+.br-card-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 14px; }
+.br-card-num { font-size: clamp(28px,3.4vw,40px); font-weight: 600; letter-spacing: -0.03em; color: var(--ink); line-height: 1; margin-bottom: 12px; }
+.br-card-num span { font-size: 14px; font-weight: 400; color: var(--muted-2); letter-spacing: 0; }
+.br-card p { font-size: 13.5px; line-height: 1.7; color: var(--muted); margin: 0; }
+.br-fineprint { font-size: 12px; line-height: 1.7; color: var(--muted-2); margin: 18px 0 0; max-width: 640px; }
+
+/* Steps */
+.br-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; max-width: 720px; }
+.br-steps li { display: flex; gap: 18px; align-items: flex-start; }
+.br-step-n { font-family: var(--font-mono); font-size: 11px; color: var(--accent); padding-top: 3px; flex-shrink: 0; letter-spacing: .08em; }
+.br-steps h3 { font-size: 15.5px; font-weight: 600; color: var(--ink); margin: 0 0 6px; }
+.br-steps p { font-size: 14px; line-height: 1.75; color: var(--muted); margin: 0; }
+
+/* The honest section */
+.br-honest { display: grid; gap: 0; max-width: 760px; border-top: 1px solid var(--rule); }
+.br-honest-row { padding: 24px 0; border-bottom: 1px solid var(--rule); }
+.br-honest-row h3 { font-size: 15.5px; font-weight: 600; color: var(--ink); margin: 0 0 8px; }
+.br-honest-row p { font-size: 14px; line-height: 1.8; color: var(--muted); margin: 0; }
+.br-honest-row a { color: var(--accent); }
+
+/* The four ways */
+.br-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 16px; }
+.br-opt { border: 1px solid var(--rule); border-radius: 12px; padding: 20px; }
+.br-opt h3 { font-size: 14.5px; font-weight: 600; color: var(--ink); margin: 0 0 4px; }
+.br-opt-cost { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+.br-opt p { font-size: 13px; line-height: 1.7; color: var(--muted); margin: 0; }
+
+@media (max-width: 640px) {
+  .br-steps li { gap: 12px; }
+  .br-hero .bh-ctas .btn, .br-hero .bh-ctas .bh-btn-ghost { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color:var(--muted-2);font-weight:400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#platform">Platform</a></li>
+      <li class="has-dropdown">
+        <a href="/#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
+            <a href="/modules/automation"><span class="nav-dd-tag">02</span>Automation</a>
+            <a href="/modules/coder"><span class="nav-dd-tag">03</span>Coder</a>
+            <a href="/modules/models"><span class="nav-dd-tag">04</span>Models</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
+            <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
+            <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+            <a href="/modules/brain"><span class="nav-dd-tag">08</span>Brain — Knowledge</a>
+          </div>
+        </div>
+      </li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/affiliates">Affiliates</a></li>
+      <li><a href="/bridge">Bridge</a></li>
+      <li><a href="/why-adris">Why adris</a></li>
+      <li><a href="/brief">Product brief</a></li>
+      <li><a href="/partner">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="/download" class="btn">Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="/#platform" onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="/pricing"   onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"  onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+</script>
+
+<section class="crumb">
+  <div class="wrap">
+    <div class="crumb-row">
+      <a href="/"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Home</a>
+      <span class="sep">/</span>
+      <span class="here">Use your own subscription</span>
+    </div>
+  </div>
+</section>
+
+<section class="mhero" style="padding-bottom:clamp(36px,4vw,56px);">
+  <div class="wrap">
+    <div class="br-hero">
+      <div class="bh-eyebrow"><span class="pulse"></span>The bridge &nbsp;·&nbsp; Claude Code &amp; Codex</div>
+      <h1 class="mhero-h1">Already paying for<br/>Claude or ChatGPT?<br/><span class="it acc">Plug it in.</span></h1>
+      <p class="mhero-sub">
+        adris runs on the AI subscription you already have. Your <b>Claude</b> or <b>ChatGPT&nbsp;Plus</b> plan
+        becomes the brain behind 57 agents, your automations, your documents and your outreach —
+        <b>with no second AI bill</b> and no API key to buy.
+      </p>
+      <div class="bh-ctas">
+        <a href="/download" class="btn">Download adris
+          <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        </a>
+        <a href="#how" class="bh-btn-ghost">How it works</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── The number that makes the argument ─────────────────────────────── -->
+<section style="padding:0 0 clamp(56px,6vw,88px);">
+  <div class="wrap">
+    <div class="br-grid">
+      <div class="br-card">
+        <div class="br-card-tag">What you already pay</div>
+        <div class="br-card-num">₹400<span>/mo</span></div>
+        <p>ChatGPT Plus, which includes <b>Codex</b>. Or <b>₹2,000/mo</b> for Claude, which includes Claude&nbsp;Code.</p>
+      </div>
+      <div class="br-card">
+        <div class="br-card-tag">What adris adds to that bill</div>
+        <div class="br-card-num">₹0</div>
+        <p>Connect the subscription and the AI is <b>already paid for</b>. adris does not resell you tokens on top of it.</p>
+      </div>
+      <div class="br-card">
+        <div class="br-card-tag">What an API key would have cost</div>
+        <div class="br-card-num">varies<span>, per token</span></div>
+        <p>The same work billed through an API key is metered. A subscription is not — that is the whole point.</p>
+      </div>
+    </div>
+    <p class="br-fineprint">
+      Prices are the published Indian subscription prices at the time of writing and are set by
+      Anthropic and OpenAI, not by us. Check them before you buy.
+    </p>
+  </div>
+</section>
+
+<!-- ── How it works ───────────────────────────────────────────────────── -->
+<section id="how" class="br-band">
+  <div class="wrap">
+    <h2 class="br-h2">Three clicks, and no terminal</h2>
+    <p class="br-lede">
+      adris is built for people who run a business, not a build server. You never open a command
+      line, and you never paste an API key.
+    </p>
+
+    <ol class="br-steps">
+      <li>
+        <span class="br-step-n">01</span>
+        <div>
+          <h3>Pick your AI at the top of the window</h3>
+          <p>One menu in the title bar decides what the <em>whole app</em> runs on — the chat, the
+             agents, the automations, every module. Choose <b>Your Claude Code</b> or <b>Your Codex</b>.</p>
+        </div>
+      </li>
+      <li>
+        <span class="br-step-n">02</span>
+        <div>
+          <h3>adris installs it for you</h3>
+          <p>If the tool is not on your machine, adris fetches and sets it up in <b>its own folder</b>
+             — nothing is installed system-wide and nothing else on your computer is touched.</p>
+        </div>
+      </li>
+      <li>
+        <span class="br-step-n">03</span>
+        <div>
+          <h3>Sign in once, with the account you already have</h3>
+          <p>You sign in to <b>Anthropic or OpenAI directly</b>. adris never sees your password, and
+             the login is the normal one you would use anywhere else.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ── The honest part ────────────────────────────────────────────────── -->
+<section style="padding:clamp(56px,7vw,96px) 0;">
+  <div class="wrap">
+    <h2 class="br-h2">What we will not pretend</h2>
+    <p class="br-lede">
+      A page like this is usually where the caveats get buried. Here they are instead.
+    </p>
+
+    <div class="br-honest">
+      <div class="br-honest-row">
+        <h3>Your subscription is billed as a subscription — we check</h3>
+        <p>
+          There is a real trap here, and it has cost people money: running these tools the wrong way
+          bills them as <b>API usage</b> rather than against the subscription you already pay for.
+          adris checks which one you are on and <b>refuses to run</b> if connecting would quietly put
+          your work on a metered API bill. If we cannot confirm it is your subscription, we stop and
+          tell you, rather than spending your money to find out.
+        </p>
+      </div>
+      <div class="br-honest-row">
+        <h3>Your limits are yours, and you can see them</h3>
+        <p>
+          A subscription has usage windows. adris reads them from the tool's own records on your
+          machine and shows you where you are in the <b>5-hour</b> and <b>weekly</b> window, so
+          running out is something you see coming instead of something that happens mid-task.
+        </p>
+      </div>
+      <div class="br-honest-row">
+        <h3>What leaves your computer, exactly</h3>
+        <p>
+          When you use the bridge, what you ask goes to <b>Anthropic or OpenAI</b> under your own
+          account and their terms — the same as if you had typed it into their app yourself.
+          <b>It does not come to us.</b> adris.tech stores none of your business data, on this path
+          or any other. If you would rather nothing left the machine at all, run a
+          <a href="/modules/models">local model</a> instead and the app works offline.
+        </p>
+      </div>
+      <div class="br-honest-row">
+        <h3>You can disconnect</h3>
+        <p>
+          One button, in the same menu. It signs the tool out and adris goes back to whatever you
+          choose next. Nothing is held hostage.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── The alternatives, plainly ──────────────────────────────────────── -->
+<section class="br-band">
+  <div class="wrap">
+    <h2 class="br-h2">Or don't use it at all</h2>
+    <p class="br-lede">
+      The bridge is one of four ways to power adris. The menu is the same for all of them, and you
+      can change your mind at any time.
+    </p>
+
+    <div class="br-opts">
+      <div class="br-opt">
+        <h3>Your subscription</h3>
+        <p class="br-opt-cost">Already paid for</p>
+        <p>Claude Code or Codex, through the plan you have. No extra AI bill.</p>
+      </div>
+      <div class="br-opt">
+        <h3>Your own API key</h3>
+        <p class="br-opt-cost">Billed by them, not us</p>
+        <p>NVIDIA, Gemini, OpenAI, Groq and more. adris takes no cut and adds no markup.</p>
+      </div>
+      <div class="br-opt">
+        <h3>A local model</h3>
+        <p class="br-opt-cost">Free · works offline</p>
+        <p>Runs on your own machine. Nothing leaves it, including when the internet is down.</p>
+      </div>
+      <div class="br-opt">
+        <h3>adris.tech's own AI</h3>
+        <p class="br-opt-cost">Pay per use</p>
+        <p>Nothing to set up. For when you would rather not think about any of the above.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────────────────────── -->
+<section class="roi-cta">
+  <div class="wrap" style="text-align:center;">
+    <h2 class="br-h2" style="margin-bottom:10px;">Your team, on the plan you already bought</h2>
+    <p class="br-lede" style="margin:0 auto 26px;">
+      Windows. Runs on your machine. Your business data stays on it.
+    </p>
+    <a href="/download" class="btn">Download adris
+      <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="/">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/affiliates">Affiliate Terms</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="/#platform">About</a></li>
+          <li><a href="/#modules">Modules</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/download">Download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="/partner">Contact us</a></li>
+          <li><a href="/affiliates">Affiliate program</a></li>
+          <li><a href="/why-adris" style="color:var(--accent);">ROI calculator</a></li>
+          <li><a href="/brief">Product brief (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var _nb=window.supabase.createClient('https://xkkqcqsacgdrfwbwdqsp.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0');
+  function _nu(s){var el=document.getElementById('navSignIn');if(!el||!s)return;var m=s.user.user_metadata||{};var av=m.avatar_url||m.picture;var nm=m.full_name||m.name||s.user.email;el.removeAttribute('onmouseover');el.removeAttribute('onmouseout');if(av){el.style.cssText='padding:2px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;';el.innerHTML='<img src="'+av+'" alt="'+nm+'" title="'+nm+'" style="width:26px;height:26px;border-radius:50%;display:block;object-fit:cover;">';}else{el.style.cssText='width:30px;height:30px;border:2px solid var(--rule-strong,#e5e5e5);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink);';el.textContent=(nm||'U').charAt(0).toUpperCase();}}
+  _nb.auth.getSession().then(function(r){_nu(r.data.session);});
+  _nb.auth.onAuthStateChange(function(_,s){_nu(s);});
+})();
+</script>
+<script src="/affiliate-welcome.js" defer></script>
+<!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/nav-auth.js" defer></script>
+
+</body>
+</html>

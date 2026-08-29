@@ -120,6 +120,10 @@
       "destination": "/why-adris.html"
     },
     {
+      "source": "/bridge",
+      "destination": "/bridge.html"
+    },
+    {
       "source": "/brief",
       "destination": "/brief.html"
     },
