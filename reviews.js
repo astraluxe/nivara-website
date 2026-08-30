@@ -121,11 +121,21 @@
     used: 'Has used adris.tech',
   };
 
+  // ── WHY THE CLAMP IS CONDITIONAL ──────────────────────────────────────────
+  //
+  // Quotes are clamped to eight lines so a ROW OF CARDS stays the same height — a carousel where
+  // every card is a different length reads as broken. That reasoning does not survive contact with
+  // a single review: there is nothing to line it up with, and clamping it just puts a long,
+  // thoughtful quote in a small box behind a "Read more" nobody should have to press.
+  //
+  // So the clamp applies from two cards upward, and one review is simply shown.
+  var manyCards = false;
+
   function cardHtml(r) {
     var url = safeUrl(r.linkedin);
     return '<figure class="rvx-card">'
       + '<span class="rvx-mark" aria-hidden="true">&ldquo;</span>'
-      + '<blockquote class="rvx-q clamp">' + esc(r.quote) + '</blockquote>'
+      + '<blockquote class="rvx-q' + (manyCards ? ' clamp' : '') + '">' + esc(r.quote) + '</blockquote>'
       + '<figcaption class="rvx-cite">'
       +   '<span class="rvx-av" aria-hidden="true">' + esc(initials(r.name)) + '</span>'
       +   '<span class="rvx-who">'
@@ -158,11 +168,18 @@
 
     injectCss();
 
-    var vis = visibleCount();
+    // NEVER MORE COLUMNS THAN THERE ARE REVIEWS. visibleCount() answers "how many fit on this
+    // screen", which is the right question for a full carousel and the wrong one for a single
+    // quote: the row was still divided into three, so one review sat in a third-width column as a
+    // tall thin ribbon of text. With one review the row is one column.
+    var vis = Math.min(visibleCount(), reviews.length);
     var loop = reviews.length > vis;
     // Clones make the wrap-around seamless; without a loop they would just be
     // duplicate cards sitting in the DOM for no reason.
     var items = loop ? reviews.concat(reviews.slice(0, vis)) : reviews;
+    // Set BEFORE the cards are built: with one review there is no row to keep even, so it is shown
+    // whole rather than cut off behind a "Read more".
+    manyCards = reviews.length > 1;
 
     host.className = 'rvx';
     host.innerHTML =
@@ -182,6 +199,12 @@
     function layout() {
       var g = gap();
       var w = (vp.clientWidth - g * (vis - 1)) / vis;
+      // …but not the FULL width either. A single quote stretched across 1200px is one long line per
+      // sentence, which is harder to read than the narrow column it replaced. Capped and centred.
+      if (reviews.length === 1) {
+        w = Math.min(w, 760);
+        track.style.justifyContent = 'center';
+      }
       Array.prototype.forEach.call(track.children, function (c) { c.style.width = w + 'px'; });
       return w + g;
     }

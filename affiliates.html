@@ -512,12 +512,18 @@
     background: #161614;
     padding: 16px 18px;
   }
+  /* BLOCK, not inline. These are <span>s, and a span is inline — so the label and the value flowed
+     into ONE line, wrapped, and printed on top of each other: "// REFERRALS" sat across "15
+     paying". `margin-top` on the value did nothing either, because margin-top does not apply to an
+     inline box. Two words fixed a label overlapping its own number. */
   .e-breakdown .eb .ll {
+    display: block;
     font-family: var(--font-mono); font-size: 10px;
     letter-spacing: 0.14em; text-transform: uppercase;
     color: rgba(242,239,233,0.5);
   }
   .e-breakdown .eb .vv {
+    display: block;
     font-size: 26px; font-weight: 500; letter-spacing: -0.02em;
     margin-top: 4px;
     color: var(--paper);
