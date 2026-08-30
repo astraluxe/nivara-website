@@ -80,9 +80,23 @@ export default async function handler(req) {
   // A released asset never changes, so it is safe to cache hard at the edge — the second person on
   // the same release does not pay for the round trip to GitHub. "latest" is deliberately shorter:
   // it points at a different file the moment a release ships.
-  headers.set('cache-control', tag === 'latest'
-    ? 'public, max-age=300, s-maxage=300'
-    : 'public, max-age=31536000, s-maxage=31536000, immutable');
+  //
+  // BUT A PARTIAL RESPONSE MUST NEVER BE CACHED. The edge keys its cache on the URL, and a 206
+  // stored under that key is then handed to everyone who asks for the WHOLE file. Reproduced
+  // against production: one `curl -r 0-1048575` on the installer URL, and the very next full
+  // download of the same URL came back 206 with 1 MB instead of 200 with 25 MB. A truncated
+  // installer fails the updater's signature check, and anyone who saved it by hand would be
+  // running a corrupt file — so this is a correctness bug, not a performance one.
+  //
+  // A browser resuming a download, a download manager, or an updater retrying is enough to poison
+  // it. `vary` is set for caches that honour it; the no-store on 206 is what actually protects us.
+  const partial = upstream.status === 206 || !!range;
+  headers.set('cache-control', partial
+    ? 'private, no-store'
+    : tag === 'latest'
+      ? 'public, max-age=300, s-maxage=300'
+      : 'public, max-age=31536000, s-maxage=31536000, immutable');
+  headers.set('vary', 'range');
   headers.set('access-control-allow-origin', '*');
 
   return new Response(upstream.body, { status: upstream.status, headers });
