@@ -366,7 +366,10 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
      carried "Solo" and "Builder" and were missed. So this states what SHOULD be on the page
      instead: the nav, the new tiers, and the footer. Anything else on the 2025 page stays down,
      whatever it happens to be called. */
-  body > *:not(nav):not(style):not(script):not(link):not(footer):not([data-pricing-v2]):not([data-pricing-lock]):not(.mobile-nav-drawer):not(.mobile-nav-overlay) {
+  /* `[data-overlay]` is the hook for anything appended to <body> at runtime — the subscription
+     panel, banners, dialogs. Without it this rule silently kills them: it carries !important, so an
+     inline display:flex cannot win, and the button that opens them does nothing at all. */
+  body > *:not(nav):not(style):not(script):not(link):not(footer):not([data-pricing-v2]):not([data-pricing-lock]):not([data-overlay]):not(.mobile-nav-drawer):not(.mobile-nav-overlay) {
     display: none !important;
   }
 </style>
@@ -1574,6 +1577,8 @@ function subPanelEl() {
   if (el) return el;
   el = document.createElement('div');
   el.id = 'subPanel';
+  // Kept visible past the rule that buries the 2025 page — see the note on it.
+  el.dataset.overlay = '1';
   // The site's own tokens, not hardcoded colours. This panel was built dark (#12121c on #f2f2f7)
   // and so ignored the theme toggle entirely -- on the light theme it arrived as a black box in
   // the middle of a white page. --paper/--ink/--rule flip with [data-theme], so it now matches
@@ -1857,6 +1862,7 @@ const serverLockChecked = (async function applyServerLock() {
     // know the buttons are live for them and nobody else, and that the charge is not real.
     var note = document.createElement('div');
     note.id = 'payTesterNote';
+    note.dataset.overlay = '1';
     note.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:9998;'
       + 'background:var(--accent);color:var(--accent-ink);font-family:var(--font-mono);font-size:11.5px;'
       + 'letter-spacing:.03em;padding:9px 16px;border-radius:999px;box-shadow:0 8px 28px rgba(124,92,255,.35);';
