@@ -384,15 +384,23 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   .pv-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; align-items: stretch; }
   @media (max-width: 1080px) { .pv-grid { grid-template-columns: repeat(2,1fr); } }
   @media (max-width: 620px)  { .pv-grid { grid-template-columns: 1fr; } }
-  .pv-card { border: 1px solid var(--rule); border-radius: 14px; padding: 24px 22px; display: flex;
-    flex-direction: column; background: var(--paper, #fff); }
+  .pv-card { border: 1px solid var(--rule); border-radius: 16px; padding: 26px 22px; display: flex;
+    flex-direction: column; background: var(--paper, #fff);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .pv-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(14,14,12,.07);
+    border-color: var(--rule-strong, rgba(14,14,12,.22)); }
+  .pv-card.pop:hover { box-shadow: 0 18px 50px rgba(124,92,255,.20); }
   .pv-card.pop { border-color: var(--accent); box-shadow: 0 14px 44px rgba(124,92,255,.16); position: relative; }
   .pv-tag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--accent);
     color: #fff; font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
     padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
   .pv-name { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; opacity: .62; }
-  .pv-price { font-size: clamp(28px,3.2vw,38px); font-weight: 600; letter-spacing: -.03em; margin: 12px 0 2px; }
-  .pv-price span { font-size: 14px; font-weight: 400; opacity: .55; letter-spacing: 0; }
+  .pv-price { font-size: clamp(23px,2.4vw,29px); font-weight: 600; letter-spacing: -.025em; margin: 12px 0 3px; }
+  /* The SUFFIX is small; the amount is not. Wrapping the figure in a span made it inherit this
+     rule, so ₹6,499 rendered at the same size as "/mo" while Free’s ₹0 — which has no span —
+     stayed large. Four cards, two different price sizes, and the odd one out was the free one. */
+  .pv-price > span { font-size: 13px; font-weight: 400; opacity: .5; letter-spacing: 0; }
+  .pv-price > span.amt { font-size: inherit; font-weight: inherit; opacity: 1; letter-spacing: inherit; }
   .pv-intl { font-size: 12px; opacity: .5; font-family: var(--font-mono, monospace); }
   .pv-cta { display: block; text-align: center; margin: 18px 0 20px; padding: 11px 16px; border-radius: 10px;
     font-size: 13.5px; font-weight: 600; text-decoration: none; border: 1px solid var(--rule-strong); color: inherit; }
@@ -411,7 +419,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   .pv-table th, .pv-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--rule); }
   .pv-table th { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .5; font-weight: 600; }
   .pv-table td.num { font-family: var(--font-mono, monospace); }
-  .pv-save { color: var(--accent); font-weight: 600; }
+  .pv-save { color: #1F9D55; font-weight: 600; }
   .pv-scroll { overflow-x: auto; }
 
   .pv-bridge { max-width: 1180px; margin: clamp(44px,5vw,72px) auto 0; padding: 26px 24px;
@@ -458,7 +466,11 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   .pv-term { appearance: none; background: none; border: 0; cursor: pointer; font: inherit;
     font-size: 13px; font-weight: 500; color: inherit; opacity: .62; padding: 8px 16px;
     border-radius: 999px; white-space: nowrap; transition: background .15s, opacity .15s; }
-  .pv-term i { font-style: normal; font-size: 11.5px; opacity: .8; margin-left: 4px; }
+  /* The saving is the reason to look at this control at all, so it is the thing that stands out.
+     Green because that is what "you pay less" looks like everywhere else a person shops. */
+  .pv-term i { font-style: normal; font-size: 11.5px; margin-left: 5px; font-weight: 600;
+    color: #1F9D55; opacity: 1; }
+  .pv-term.is-on i { color: #C9F7D8; }
   .pv-term:hover { opacity: .9; }
   .pv-term.is-on { background: var(--accent); color: #fff; opacity: 1; }
   .pv-termnote { margin: 12px auto 0; font-size: 13px; opacity: .6; }
@@ -483,12 +495,12 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         which modules are included.
       </p>
       <div class="pv-terms" role="group" aria-label="Billing term">
-        <button class="pv-term is-on" data-term="1"  data-off="0">Monthly</button>
+        <button class="pv-term" data-term="1"  data-off="0">Monthly</button>
         <button class="pv-term"       data-term="3"  data-off="10">3 months <i>−10%</i></button>
         <button class="pv-term"       data-term="6"  data-off="20">6 months <i>−20%</i></button>
-        <button class="pv-term"       data-term="12" data-off="35">12 months <i>−35%</i></button>
+        <button class="pv-term is-on" data-term="12" data-off="35">12 months <i>−35%</i></button>
       </div>
-      <p class="pv-termnote" id="termNote">Billed monthly. Longer terms are billed upfront and cost less per month.</p>
+      <p class="pv-termnote" id="termNote">Billed upfront for 12 months — 35% off, about four months free. Locks in today's rate for the year.</p>
 
       <p class="pv-hold">
         <b>Self-serve checkout opens shortly.</b> Until then, download and start free — and if you
@@ -498,7 +510,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
 
     <div class="pv-grid">
       <!-- Free -->
-      <div class="pv-card">
+      <div data-tier="free" class="pv-card">
         <div class="pv-name">Free</div>
         <div class="pv-price">₹0 <span>forever</span></div>
         <div class="pv-intl">$0 · no card</div>
@@ -515,10 +527,10 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       </div>
 
       <!-- Business -->
-      <div class="pv-card">
+      <div data-tier="business" class="pv-card">
         <div class="pv-name">Business</div>
-        <div class="pv-price" data-base="9999"><span class="amt">₹9,999</span> <span>/mo</span></div>
-        <div class="pv-intl" data-intl="99"><span class="amt">$99/mo</span> · self-serve</div>
+        <div class="pv-price" data-base="9999"><span class="amt">₹6,499</span> <span>/mo</span></div>
+        <div class="pv-intl" data-intl="99"><span class="amt">$64/mo</span> · self-serve</div>
         <a class="pv-cta" href="#pilot">Request access</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>8,000 AI tasks</b> a month</span></li>
@@ -528,15 +540,15 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Guard security scanner</span></li>
           <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Single sign-on</span></li>
         </ul>
-        <p class="pv-note pv-billed" data-base="9999">Billed ₹9,999 monthly.</p>
+        <p class="pv-note pv-billed" data-base="9999">Billed ₹77,988 every 12 months.</p>
       </div>
 
       <!-- Growth -->
-      <div class="pv-card pop">
+      <div data-tier="growth" class="pv-card pop">
         <span class="pv-tag">Most popular</span>
         <div class="pv-name">Growth</div>
-        <div class="pv-price" data-base="19999"><span class="amt">₹19,999</span> <span>/mo</span></div>
-        <div class="pv-intl" data-intl="199"><span class="amt">$199/mo</span> · self-serve</div>
+        <div class="pv-price" data-base="19999"><span class="amt">₹12,999</span> <span>/mo</span></div>
+        <div class="pv-intl" data-intl="199"><span class="amt">$129/mo</span> · self-serve</div>
         <a class="pv-cta solid" href="#pilot">Request access</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>25,000 AI tasks</b> a month</span></li>
@@ -546,11 +558,11 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Team workspace</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Priority support</span></li>
         </ul>
-        <p class="pv-note pv-billed" data-base="19999">Billed ₹19,999 monthly.</p>
+        <p class="pv-note pv-billed" data-base="19999">Billed ₹1,55,988 every 12 months.</p>
       </div>
 
       <!-- Enterprise -->
-      <div class="pv-card">
+      <div data-tier="enterprise" class="pv-card">
         <div class="pv-name">Enterprise</div>
         <div class="pv-price">Custom</div>
         <div class="pv-intl">PO / NET-30 · invoiced</div>
@@ -1467,46 +1479,52 @@ async function signInWithGoogle(pendingPlan) {
     const { data } = await _supa.from('users').select('plan').eq('id', session.user.id).single();
     const plan = (data && data.plan) || 'free';
     if (!plan || plan === 'free' || plan === 'explore') return;
-    // DB plan values do not all match the card ids (business is the 'Team' card).
-    const CARD_ID = { solo: 'planSolo', builder: 'planBuilder', business: 'planTeam', custom: 'planFinder' };
-    const card = document.getElementById(CARD_ID[plan] || ('plan' + plan.charAt(0).toUpperCase() + plan.slice(1)));
+    // ONE MAPPING, SHARED WITH THE APP.
+    // The stored plan is the legacy vocabulary and the cards are the new tiers, and `business`
+    // means opposite things in the two — the old Team, and the new cheapest paid tier. This is the
+    // same map as tierOf() in src/lib/entitlement.ts, so the site and the app can never disagree
+    // about which plan somebody is on.
+    var TIER = { free: 'free', explore: 'free', solo: 'business',
+                 builder: 'growth', business: 'growth', custom: 'enterprise' };
+    var tier = TIER[plan] || 'free';
+    var card = document.querySelector('[data-tier="' + tier + '"]');
     if (!card) return;
-    const btns = card.querySelector('.bts');
-    if (!btns) return;
+    var cta = card.querySelector('.pv-cta');
+    if (!cta) return;
 
-    // FLAG IT BEFORE TOUCHING ANYTHING. The checkout-lock handler below rewrites every pay button
-    // on DOMContentLoaded, and this function is async, so the two used to race and whichever ran
-    // last won. The visible result was a card reading "Your current plan" above two buttons both
-    // saying "Reopens Fri 31 Jul" -- the lock had overwritten the disabled buttons this function
-    // had just set. The lock now skips a card carrying this flag, so the order stops mattering.
     card.dataset.currentPlan = '1';
+    card.style.borderColor = 'var(--accent)';
 
-    // SAY IT ONCE. There used to be a purple pill reading "Your current plan" AND a button under
-    // it reading the same thing, so the card announced itself twice and neither was where the eye
-    // goes -- the price. The label now IS the button, in the place the price occupied.
-    //
-    // Nothing here is optimistic: this runs off users.plan, which only becomes a paid value when
-    // the Razorpay webhook confirms the charge. A card that failed, or a checkout the user
-    // abandoned, leaves the plan as it was and this never fires.
-    btns.innerHTML = '';
+    // SAY IT ONCE, WHERE THE BUTTON WAS. A pill saying "your plan" above a button still inviting
+    // you to buy it is the page arguing with itself.
+    cta.textContent = '✓ Your current plan';
+    cta.removeAttribute('href');
+    cta.style.cssText = 'background:var(--accent);border-color:var(--accent);color:#fff;cursor:default;';
 
-    const owned = document.createElement('button');
-    owned.className = 'bi';
-    owned.innerHTML = '&#10003; Your current plan';
-    owned.disabled = true;
-    // Purple, and stated as fact rather than greyed out like something broken. Inline so it wins
-    // over .bi and over the featured card's .pc.ft .bi override.
-    owned.style.cssText = 'background:var(--accent);color:var(--accent-ink);opacity:1;cursor:default;';
-    owned.title = "You are already on this plan";
-
-    const manage = document.createElement('button');
-    manage.className = 'bu';
-    manage.textContent = 'Manage subscription';
+    // And the way to change it, immediately under — details, renewal date, and cancelling, all from
+    // the subscription panel that already exists.
+    var manage = document.createElement('button');
+    manage.className = 'pv-cta';
+    manage.type = 'button';
+    manage.textContent = 'Manage plan';
+    manage.style.cssText = 'width:100%;margin:-8px 0 20px;cursor:pointer;';
     manage.onclick = openSubPanel;
+    cta.insertAdjacentElement('afterend', manage);
 
-    btns.appendChild(owned);
-    btns.appendChild(manage);
-  } catch (e) { /* not signed in, or offline -- leave the page exactly as it is */ }
+    // Seats live in the workspace, which is its own screen and already built.
+    try {
+      var owned = await _supa.from('teams').select('id').eq('owner_id', session.user.id).maybeSingle();
+      var member = await _supa.from('users').select('team_id').eq('id', session.user.id).maybeSingle();
+      if ((owned && owned.data) || (member && member.data && member.data.team_id)) {
+        var team = document.createElement('a');
+        team.className = 'pv-cta';
+        team.href = '/team-dashboard';
+        team.textContent = 'Your workspace & seats';
+        team.style.cssText = 'margin:-8px 0 20px;';
+        manage.insertAdjacentElement('afterend', team);
+      }
+    } catch (e) { /* no workspace, or offline — the manage button is enough on its own */ }
+  } catch (e) { /* not signed in, or offline — leave the page exactly as it is */ }
 })();
 
 // -- Subscription details, and the way out ----------------------------------
