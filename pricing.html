@@ -384,7 +384,10 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   .pv-h1 { font-size: clamp(32px,4.6vw,54px); font-weight: 600; letter-spacing: -.035em; line-height: 1.05; margin: 0; }
   .pv-sub { margin: 16px auto 0; font-size: 16px; line-height: 1.7; opacity: .72; }
   .pv-sub b { opacity: 1; }
-  .pv-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; align-items: stretch; }
+  /* Five tiers. At full width they sit in one row; below that they wrap in pairs rather than
+     shrinking into columns too narrow to read a feature line in. */
+  .pv-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; align-items: stretch; }
+  @media (max-width: 1280px) { .pv-grid { grid-template-columns: repeat(3,1fr); } }
   @media (max-width: 1080px) { .pv-grid { grid-template-columns: repeat(2,1fr); } }
   @media (max-width: 620px)  { .pv-grid { grid-template-columns: 1fr; } }
   .pv-card { border: 1px solid var(--rule); border-radius: 16px; padding: 26px 22px; display: flex;
@@ -524,9 +527,26 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Up to 2 seats</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Full agent library, capped</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Local models — unlimited, free</b></span></li>
-          <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Guard, SSO, multi-device Mesh</span></li>
+          <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Guard, shared workspace, multi-device Mesh</span></li>
         </ul>
         <p class="pv-note">A one-time allowance — it does not refill. Your own key and local models stay free, always.</p>
+      </div>
+
+      <!-- Starter -->
+      <div data-tier="starter" class="pv-card">
+        <div class="pv-name">Starter</div>
+        <div class="pv-price" data-base="4999"><span class="amt">₹3,249</span> <span>/mo</span></div>
+        <div class="pv-intl" data-intl="49"><span class="amt">$32/mo</span> · self-serve</div>
+        <a class="pv-cta" href="#pilot">Request access</a>
+        <ul class="pv-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>4,000 AI tasks</b> a month</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>50 AI images · 750 automation runs</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Up to 5 seats · 12 Mesh devices</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Every module, in full</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Guard security scanner</span></li>
+          <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Admin controls, priority support</span></li>
+        </ul>
+        <p class="pv-note pv-billed" data-base="4999">Billed ₹38,988 every 12 months.</p>
       </div>
 
       <!-- Business -->
@@ -541,7 +561,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Up to 10 seats · 25 Mesh devices</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Every module, in full</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Guard security scanner</span></li>
-          <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Single sign-on</span></li>
+          <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Admin controls, priority support</span></li>
         </ul>
         <p class="pv-note pv-billed" data-base="9999">Billed ₹77,988 every 12 months.</p>
       </div>
@@ -557,7 +577,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>25,000 AI tasks</b> a month</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>400 AI images · 5,000 automation runs</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Up to 25 seats · 50 Mesh devices</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Single sign-on + admin controls</b></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Admin controls across every seat</b></span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Team workspace</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Priority support</span></li>
         </ul>
@@ -650,12 +670,12 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <p class="lede">Billed upfront for the term. The discount applies to the licence price.</p>
       <div class="pv-scroll">
         <table class="pv-table">
-          <thead><tr><th>Term</th><th>Discount</th><th>Business</th><th>Growth</th></tr></thead>
+          <thead><tr><th>Term</th><th>Discount</th><th>Starter</th><th>Business</th><th>Growth</th></tr></thead>
           <tbody>
-            <tr><td>1 month</td><td>—</td><td class="num">₹9,999/mo</td><td class="num">₹19,999/mo</td></tr>
-            <tr><td>3 months</td><td class="pv-save">10% off</td><td class="num">₹8,999/mo</td><td class="num">₹17,999/mo</td></tr>
-            <tr><td>6 months</td><td class="pv-save">20% off</td><td class="num">₹7,999/mo</td><td class="num">₹15,999/mo</td></tr>
-            <tr><td>12 months</td><td class="pv-save">35% off — about 4 months free</td><td class="num">₹6,499/mo</td><td class="num">₹12,999/mo</td></tr>
+            <tr><td>1 month</td><td>—</td><td class="num">₹4,999/mo</td><td class="num">₹9,999/mo</td><td class="num">₹19,999/mo</td></tr>
+            <tr><td>3 months</td><td class="pv-save">10% off</td><td class="num">₹4,499/mo</td><td class="num">₹8,999/mo</td><td class="num">₹17,999/mo</td></tr>
+            <tr><td>6 months</td><td class="pv-save">20% off</td><td class="num">₹3,999/mo</td><td class="num">₹7,999/mo</td><td class="num">₹15,999/mo</td></tr>
+            <tr><td>12 months</td><td class="pv-save">35% off — about 4 months free</td><td class="num">₹3,249/mo</td><td class="num">₹6,499/mo</td><td class="num">₹12,999/mo</td></tr>
           </tbody>
         </table>
       </div>
@@ -736,7 +756,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           </p>
           <ul class="pv-list" style="max-width:520px">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Security review and deployment questions answered by a person</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Single sign-on and admin controls across every seat</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Admin controls across every seat</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Whatever your finance team needs on the invoice</span></li>
           </ul>
         </div>
@@ -753,7 +773,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
             <label>Phone<input name="phone" inputmode="tel" placeholder="optional" /></label>
           </div>
           <label>Seats needed<input name="seats" required inputmode="numeric" placeholder="e.g. 60" /></label>
-          <label>What you need from us<input name="need" required placeholder="e.g. SSO, security review, invoicing" /></label>
+          <label>What you need from us<input name="need" required placeholder="e.g. security review, invoicing, custom terms" /></label>
           <button type="submit" class="pv-btn">Send</button>
           <p class="pv-form-note" id="entNote">We reply within one working day.</p>
         </form>
@@ -1610,9 +1630,12 @@ async function openSubPanel() {
   }
 
   const d = r.body;
-  const PLAN_NAME = { solo: 'Solo', builder: 'Builder', business: 'Team', custom: 'Custom' };
-  const PLAN_PRICE = { solo: '\u20b91,499', builder: '\u20b94,999', business: '\u20b919,999' };
-  const name = PLAN_NAME[d.plan] || d.plan;
+  // The same legacy→tier map as the cards above and src/lib/entitlement.ts in the app, so the
+  // billing screen, the pricing page and the exe cannot name a customer's plan three different ways.
+  const TIER_NAME = { free: 'Free', explore: 'Free', starter: 'Starter', solo: 'Business',
+                      builder: 'Growth', business: 'Growth', growth: 'Growth',
+                      custom: 'Enterprise', enterprise: 'Enterprise' };
+  const name = TIER_NAME[d.plan] || d.plan;
   const cancelled = d.cancel_scheduled || d.subscription_status === 'cancelled';
   const endDate = fmtDate(d.grace_period_end || d.current_end);
   const nextDate = fmtDate(d.next_charge_at || d.current_end);
@@ -1644,7 +1667,15 @@ async function openSubPanel() {
         : '<div style="height:14px;"></div>');
 
   html += '<div style="border-top:1px solid var(--rule);margin-bottom:18px;">';
-  if (PLAN_PRICE[d.plan]) html += row('Price', PLAN_PRICE[d.plan] + ' / month');
+  // ONLY A PRICE WE ACTUALLY KNOW. What a customer pays depends on the term they bought, and this
+  // endpoint does not report it — so the figure was hardcoded and told people on ₹6,499 that they
+  // were paying ₹1,499. If Razorpay gives us the amount, show it; otherwise say where to look.
+  if (d.amount != null && !isNaN(Number(d.amount))) {
+    html += row('Price', '\u20b9' + Number(d.amount).toLocaleString('en-IN')
+      + (d.period ? ' / ' + d.period : ''));
+  } else {
+    html += row('Price', 'As on your invoice');
+  }
 
   if (cancelled) {
     html += row('Renews', 'No \u2014 billing stopped');
