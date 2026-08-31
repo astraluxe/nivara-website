@@ -444,6 +444,34 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
     background: var(--accent); color: #fff; font: inherit; font-size: 14px; font-weight: 600; }
   .pv-btn:disabled { opacity: .55; cursor: default; }
   .pv-form-note { margin: 4px 0 0; font-size: 12px; opacity: .55; }
+
+  .pv-assure { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  @media (max-width: 1000px) { .pv-assure { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .pv-assure { grid-template-columns: 1fr; } }
+  .pv-a { display: flex; gap: 12px; align-items: flex-start; }
+  .pv-a svg { flex: 0 0 auto; width: 20px; height: 20px; margin-top: 2px; color: var(--accent); }
+  .pv-a b { display: block; font-size: 13.5px; margin-bottom: 4px; }
+  .pv-a p { margin: 0; font-size: 12.5px; line-height: 1.6; opacity: .66; }
+
+  .pv-terms { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--rule);
+    border-radius: 999px; margin: 26px auto 0; }
+  .pv-term { appearance: none; background: none; border: 0; cursor: pointer; font: inherit;
+    font-size: 13px; font-weight: 500; color: inherit; opacity: .62; padding: 8px 16px;
+    border-radius: 999px; white-space: nowrap; transition: background .15s, opacity .15s; }
+  .pv-term i { font-style: normal; font-size: 11.5px; opacity: .8; margin-left: 4px; }
+  .pv-term:hover { opacity: .9; }
+  .pv-term.is-on { background: var(--accent); color: #fff; opacity: 1; }
+  .pv-termnote { margin: 12px auto 0; font-size: 13px; opacity: .6; }
+  @media (max-width: 620px) {
+    .pv-terms { flex-wrap: wrap; border-radius: 14px; justify-content: center; }
+    .pv-term { padding: 7px 12px; font-size: 12.5px; }
+  }
+
+  .pv-feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 26px; }
+  @media (max-width: 900px) { .pv-feats { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .pv-feats { grid-template-columns: 1fr; } }
+  .pv-f b { display: block; font-size: 13.5px; margin-bottom: 5px; }
+  .pv-f p { margin: 0; font-size: 12.5px; line-height: 1.6; opacity: .66; }
 </style>
 
 <section data-pricing-v2>
@@ -454,6 +482,14 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <b>The same AI on every plan.</b> Plans differ only in how much monthly capacity you get and
         which modules are included.
       </p>
+      <div class="pv-terms" role="group" aria-label="Billing term">
+        <button class="pv-term is-on" data-term="1"  data-off="0">Monthly</button>
+        <button class="pv-term"       data-term="3"  data-off="10">3 months <i>−10%</i></button>
+        <button class="pv-term"       data-term="6"  data-off="20">6 months <i>−20%</i></button>
+        <button class="pv-term"       data-term="12" data-off="35">12 months <i>−35%</i></button>
+      </div>
+      <p class="pv-termnote" id="termNote">Billed monthly. Longer terms are billed upfront and cost less per month.</p>
+
       <p class="pv-hold">
         <b>Self-serve checkout opens shortly.</b> Until then, download and start free — and if you
         want Business or Growth for a team, ask us and we will set you up by hand.
@@ -481,8 +517,8 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <!-- Business -->
       <div class="pv-card">
         <div class="pv-name">Business</div>
-        <div class="pv-price">₹9,999 <span>/mo</span></div>
-        <div class="pv-intl">$99/mo · self-serve</div>
+        <div class="pv-price" data-base="9999"><span class="amt">₹9,999</span> <span>/mo</span></div>
+        <div class="pv-intl" data-intl="99"><span class="amt">$99/mo</span> · self-serve</div>
         <a class="pv-cta" href="#pilot">Request access</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>8,000 AI tasks</b> a month</span></li>
@@ -492,15 +528,15 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Guard security scanner</span></li>
           <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Single sign-on</span></li>
         </ul>
-        <p class="pv-note">From ₹6,499/mo on a 12-month term.</p>
+        <p class="pv-note pv-billed" data-base="9999">Billed ₹9,999 monthly.</p>
       </div>
 
       <!-- Growth -->
       <div class="pv-card pop">
         <span class="pv-tag">Most popular</span>
         <div class="pv-name">Growth</div>
-        <div class="pv-price">₹19,999 <span>/mo</span></div>
-        <div class="pv-intl">$199/mo · self-serve</div>
+        <div class="pv-price" data-base="19999"><span class="amt">₹19,999</span> <span>/mo</span></div>
+        <div class="pv-intl" data-intl="199"><span class="amt">$199/mo</span> · self-serve</div>
         <a class="pv-cta solid" href="#pilot">Request access</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>25,000 AI tasks</b> a month</span></li>
@@ -510,7 +546,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Team workspace</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Priority support</span></li>
         </ul>
-        <p class="pv-note">From ₹12,999/mo on a 12-month term.</p>
+        <p class="pv-note pv-billed" data-base="19999">Billed ₹19,999 monthly.</p>
       </div>
 
       <!-- Enterprise -->
@@ -518,7 +554,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <div class="pv-name">Enterprise</div>
         <div class="pv-price">Custom</div>
         <div class="pv-intl">PO / NET-30 · invoiced</div>
-        <a class="pv-cta" href="#pilot">Talk to us</a>
+        <a class="pv-cta" href="#enterprise">Talk to us</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Custom token pool</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Unlimited seats and Mesh devices <i>(fair use)</i></span></li>
@@ -540,6 +576,58 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         machine. Work that runs on any of those <b>never touches your monthly allowance</b>, because
         it costs us nothing. You are paying for the software that does the work, not for tokens.
       </p>
+    </div>
+
+    <!-- ── THE FOUR THINGS A BUSINESS ASKS BEFORE PRICE ─────────────────────
+         Data, overspend, what it runs on, and how to leave. All four were buried in the FAQ at the
+         bottom of the page, which is past the point where most buyers stop reading. -->
+    <!-- ── WHAT IT ACTUALLY DOES ────────────────────────────────────────────
+         Every line here is a module you can open in the shipped app today. Nothing planned, nothing
+         in progress. Studio is not listed on purpose: it exists in the source but is not reachable,
+         and a plan page is the last place to advertise something that cannot be opened. -->
+    <div class="pv-band">
+      <h2>What you get, on every plan</h2>
+      <p class="lede">The same app either way. Plans differ in how much monthly capacity you have — not in what it can do.</p>
+      <div class="pv-feats">
+        <div class="pv-f"><b>Krew · 57 agents</b><p>A team you brief in one message. It splits the work across specialists — research, writing, outreach, calendar — and each reports back.</p></div>
+        <div class="pv-f"><b>Your own Office</b><p>Real Word, Excel and PowerPoint on your machine, driven by the app, so documents come out in your template. Decks are designed, not typed.</p></div>
+        <div class="pv-f"><b>Automation</b><p>Workflows that run on a schedule, on your machine or in the cloud, and tell you what happened.</p></div>
+        <div class="pv-f"><b>Coder</b><p>A real editor with a file tree, terminal and an assistant that reads the project you have open.</p></div>
+        <div class="pv-f"><b>Brain</b><p>A knowledge graph of everything the agents learn and everything you attach, so the next task starts from what the last one found.</p></div>
+        <div class="pv-f"><b>Guard</b><p>Reads contracts, checks compliance and flags suspicious mail, in plain language, on the paid plans.</p></div>
+        <div class="pv-f"><b>Mesh</b><p>Pool memory across two or more machines in your office to run larger local models.</p></div>
+        <div class="pv-f"><b>Models &amp; Connect Apps</b><p>Bring your own Gemini, OpenAI, Claude or NVIDIA key, run a model locally, or connect Gmail, Notion, Slack, GitHub and the rest.</p></div>
+        <div class="pv-f"><b>Vault</b><p>System-level DNS protection you can turn on and off from the tray.</p></div>
+      </div>
+    </div>
+
+    <div class="pv-band">
+      <div class="pv-assure">
+        <div class="pv-a">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>
+          <div><b>Your data stays on your machines</b>
+            <p>Conversations, credentials and your knowledge graph are local-first. Cloud sync is off
+               unless you switch it on, and adris.tech never stores your files.</p></div>
+        </div>
+        <div class="pv-a">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>
+          <div><b>You cannot be surprised by a bill</b>
+            <p>You are never cut off mid-task. Admins set a hard cap the team cannot exceed, and the
+               app shows what is left in plain numbers, not tokens.</p></div>
+        </div>
+        <div class="pv-a">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8"/></svg>
+          <div><b>It runs on Windows you already have</b>
+            <p>A 25 MB installer. It drives your own Word, Excel and PowerPoint, so documents come out
+               in your template — not ours.</p></div>
+        </div>
+        <div class="pv-a">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4M14 7l5 5-5 5M19 12H9"/></svg>
+          <div><b>You can leave</b>
+            <p>Cancel or downgrade any time, effective at the next renewal. Your files are already on
+               your own machines — there is nothing to export.</p></div>
+        </div>
+      </div>
     </div>
 
     <div class="pv-band">
@@ -616,6 +704,43 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
           <label>What you would use it for<input name="use" required placeholder="e.g. proposals and outreach" /></label>
           <button type="submit" class="pv-btn">Request a pilot</button>
           <p class="pv-form-note" id="pilotNote">We reply within one working day.</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── ENTERPRISE ────────────────────────────────────────────────────────
+         A separate conversation from the pilot, and a separate box, because a company asking for
+         terms is not a team asking for a trial. Same table underneath — one inbox, two shapes. -->
+    <div class="pv-band" id="enterprise">
+      <div class="pv-pilot">
+        <div>
+          <h2>Enterprise</h2>
+          <p class="lede" style="margin-bottom:14px">
+            For a custom token pool, unlimited seats, custom roles, a dedicated contact and an SLA.
+            Billed by PO or NET-30 against an invoice, on a term we agree.
+          </p>
+          <ul class="pv-list" style="max-width:520px">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Security review and deployment questions answered by a person</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Single sign-on and admin controls across every seat</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Whatever your finance team needs on the invoice</span></li>
+          </ul>
+        </div>
+
+        <form class="pv-form" id="entForm">
+          <p class="pv-form-h">Talk to us</p>
+          <div class="pv-two">
+            <label>Your name<input name="name" required autocomplete="name" /></label>
+            <label>Your role<input name="role" placeholder="e.g. IT, Finance" /></label>
+          </div>
+          <label>Company name<input name="company" required autocomplete="organization" /></label>
+          <div class="pv-two">
+            <label>Work email<input name="email" type="email" required autocomplete="email" /></label>
+            <label>Phone<input name="phone" inputmode="tel" placeholder="optional" /></label>
+          </div>
+          <label>Seats needed<input name="seats" required inputmode="numeric" placeholder="e.g. 60" /></label>
+          <label>What you need from us<input name="need" required placeholder="e.g. SSO, security review, invoicing" /></label>
+          <button type="submit" class="pv-btn">Send</button>
+          <p class="pv-form-note" id="entNote">We reply within one working day.</p>
         </form>
       </div>
     </div>
@@ -2080,6 +2205,58 @@ initAffiliate();
 <script src="/nav-auth.js" defer></script>
 
 <script>
+/* ── The billing term ────────────────────────────────────────────────────────
+   The ladder used to be a table at the bottom of the page, which left the buyer to do the
+   arithmetic against the cards at the top. This changes the number they are actually looking at.
+
+   The base prices live in the markup (data-base), so with no JavaScript the page still shows the
+   correct monthly price rather than an empty card.                                              */
+(function () {
+  var terms = [].slice.call(document.querySelectorAll('.pv-term'));
+  if (!terms.length) return;
+  var note = document.getElementById('termNote');
+  var inr = function (n) { return '₹' + Math.round(n).toLocaleString('en-IN'); };
+
+  function apply(months, off) {
+    // Per-month price after the discount, and the total actually charged upfront. Rounded to whole
+    // rupees — a price with paise on it looks like a mistake.
+    document.querySelectorAll('.pv-price[data-base]').forEach(function (el) {
+      var base = +el.getAttribute('data-base');
+      var each = Math.round(base * (1 - off / 100));
+      el.querySelector('.amt').textContent = inr(each);
+    });
+    document.querySelectorAll('.pv-intl[data-intl]').forEach(function (el) {
+      var base = +el.getAttribute('data-intl');
+      el.querySelector('.amt').textContent = '$' + Math.round(base * (1 - off / 100)) + '/mo';
+    });
+    document.querySelectorAll('.pv-billed[data-base]').forEach(function (el) {
+      var base = +el.getAttribute('data-base');
+      // ROUND FIRST, THEN MULTIPLY.
+      // The card shows a rounded monthly price, and a customer checks the total by multiplying THAT.
+      // Multiplying the unrounded figure gave ₹47,995 where the plan says ₹47,994 — a rupee out,
+      // which is exactly the kind of thing that gets quoted back at you.
+      var each = Math.round(base * (1 - off / 100));
+      el.textContent = months === 1
+        ? 'Billed ' + inr(each) + ' monthly.'
+        : 'Billed ' + inr(each * months) + ' every ' + months + ' months.';
+    });
+    if (note) {
+      note.textContent = months === 1
+        ? 'Billed monthly. Longer terms are billed upfront and cost less per month.'
+        : 'Billed upfront for ' + months + ' months — ' + off + '% off'
+          + (months === 12 ? ', about four months free. Locks in today\'s rate for the year.' : '.');
+    }
+  }
+
+  terms.forEach(function (b) {
+    b.addEventListener('click', function () {
+      terms.forEach(function (o) { o.classList.remove('is-on'); });
+      b.classList.add('is-on');
+      apply(+b.getAttribute('data-term'), +b.getAttribute('data-off'));
+    });
+  });
+})();
+
 /* ── The pilot request ───────────────────────────────────────────────────────
    Goes into `enterprise_requests`, the table enterprise.html already writes and the Head dashboard
    now reads. No new table and no new permissions: one inbox for every "talk to us" on the site.
@@ -2089,10 +2266,25 @@ initAffiliate();
 
    The request carries who they are and how to reach them, because "a company wants a pilot" with no
    name and no number is not something anyone can act on.                                        */
-(function () {
-  var f = document.getElementById('pilotForm');
+/* ── Both request forms ──────────────────────────────────────────────────────
+   One function, two forms, one table. `enterprise_requests` is what enterprise.html already writes
+   and what the Head dashboard now reads, so there is a single inbox for every "talk to us" on the
+   site — no new table, no new permissions.
+
+   There is no adris mailbox yet, so there is deliberately no mailto here: a form that opens an email
+   client pointed at an address nobody reads is a dead end that looks like it worked.
+
+   Three rules this must never break:
+     · it carries who they are and how to reach them, because "a company wants a pilot" with no name
+       and no number cannot be acted on;
+     · it says what happened, on success AND on failure — silence is the one outcome a request form
+       may never have;
+     · a pilot and an enterprise enquiry are labelled differently, because they need different
+       replies.                                                                                    */
+function wireRequest(formId, noteId, label, extraFields) {
+  var f = document.getElementById(formId);
   if (!f) return;
-  var note = document.getElementById('pilotNote');
+  var note = document.getElementById(noteId);
   var btn  = f.querySelector('.pv-btn');
 
   f.addEventListener('submit', async function (e) {
@@ -2100,7 +2292,7 @@ initAffiliate();
     var d = new FormData(f);
     var get = function (k) { return String(d.get(k) || '').trim(); };
 
-    if (!get('name') || !get('company') || !get('email').includes('@')) {
+    if (!get('name') || !get('company') || get('email').indexOf('@') === -1) {
       note.textContent = 'Please give your name, your company and a work email so we can reply.';
       note.style.opacity = '1';
       return;
@@ -2111,33 +2303,27 @@ initAffiliate();
     btn.textContent = 'Sending…';
     note.textContent = '';
 
-    // The same columns enterprise.html uses. Everything specific to a pilot goes in requirements,
-    // so the record is readable by a person without needing a schema change.
-    var requirements = [
-      'PILOT REQUEST (from the pricing page)',
+    var lines = [label,
       'Role: ' + (get('role') || 'not given'),
-      'Phone: ' + (get('phone') || 'not given'),
-      'Deciding by: ' + get('when'),
-      'Would use it for: ' + get('use'),
-    ].join('\n');
+      'Phone: ' + (get('phone') || 'not given')];
+    extraFields.forEach(function (p) { lines.push(p[1] + ': ' + get(p[0])); });
 
     try {
       var res = await _supa.from('enterprise_requests').insert({
         contact_name:  get('name'),
         contact_email: get('email').toLowerCase(),
         company_name:  get('company'),
-        company_size:  get('team') || null,
-        seats_needed:  parseInt(get('team'), 10) || null,
-        requirements:  requirements,
+        company_size:  get('team') || get('seats') || null,
+        seats_needed:  parseInt(get('team') || get('seats'), 10) || null,
+        requirements:  lines.join('\n'),
       });
       if (res.error) throw new Error(res.error.message);
 
       f.querySelectorAll('input').forEach(function (i) { i.value = ''; });
-      btn.textContent = 'Request sent';
+      btn.textContent = 'Sent';
       note.textContent = 'Got it — we have your request and will come back to you within one working day.';
       note.style.opacity = '1';
     } catch (err) {
-      // NEVER SWALLOW IT. A business that asked and heard nothing concludes we are not serious.
       btn.disabled = false;
       btn.textContent = was;
       note.textContent = 'That did not send (' + (err && err.message ? err.message : 'unknown error')
@@ -2145,7 +2331,12 @@ initAffiliate();
       note.style.opacity = '1';
     }
   });
-})();
+}
+
+wireRequest('pilotForm', 'pilotNote', 'PILOT REQUEST (from the pricing page)',
+  [['when', 'Deciding by'], ['use', 'Would use it for']]);
+wireRequest('entForm', 'entNote', 'ENTERPRISE ENQUIRY (from the pricing page)',
+  [['seats', 'Seats needed'], ['need', 'What they need']]);
 </script>
 </body>
 </html>
