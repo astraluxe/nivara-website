@@ -424,6 +424,26 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
   .pv-q { border-top: 1px solid var(--rule); padding: 16px 0; }
   .pv-q b { display: block; font-size: 14.5px; margin-bottom: 6px; }
   .pv-q p { margin: 0; font-size: 13.5px; line-height: 1.65; opacity: .7; }
+
+  .pv-hold { max-width: 620px; margin: 18px auto 0; padding: 12px 18px; border-radius: 10px;
+    border: 1px solid var(--rule); font-size: 13.5px; line-height: 1.6; opacity: .78; }
+  .pv-hold b { opacity: 1; }
+
+  .pv-pilot { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: start;
+    border: 1px solid var(--rule); border-radius: 14px; padding: 28px; }
+  @media (max-width: 900px) { .pv-pilot { grid-template-columns: 1fr; } }
+  .pv-form { display: grid; gap: 11px; }
+  .pv-form-h { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+  .pv-form label { display: grid; gap: 5px; font-size: 12px; opacity: .7; }
+  .pv-two { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  @media (max-width: 520px) { .pv-two { grid-template-columns: 1fr; } }
+  .pv-form input { font: inherit; font-size: 13.5px; padding: 9px 11px; border-radius: 9px;
+    border: 1px solid var(--rule-strong); background: transparent; color: inherit; width: 100%; }
+  .pv-form input:focus { outline: none; border-color: var(--accent); }
+  .pv-btn { margin-top: 4px; padding: 11px 18px; border-radius: 10px; border: 0; cursor: pointer;
+    background: var(--accent); color: #fff; font: inherit; font-size: 14px; font-weight: 600; }
+  .pv-btn:disabled { opacity: .55; cursor: default; }
+  .pv-form-note { margin: 4px 0 0; font-size: 12px; opacity: .55; }
 </style>
 
 <section data-pricing-v2>
@@ -433,6 +453,10 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <p class="pv-sub">
         <b>The same AI on every plan.</b> Plans differ only in how much monthly capacity you get and
         which modules are included.
+      </p>
+      <p class="pv-hold">
+        <b>Self-serve checkout opens shortly.</b> Until then, download and start free — and if you
+        want Business or Growth for a team, ask us and we will set you up by hand.
       </p>
     </div>
 
@@ -444,14 +468,14 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <div class="pv-intl">$0 · no card</div>
         <a class="pv-cta" href="/download.html">Download</a>
         <ul class="pv-list">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>300 AI tasks</b> a month</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>300 AI tasks</b> to start with</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>10 AI images · 3 automation runs</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Up to 2 seats</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Full agent library, capped</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>Local models — unlimited, free</b></span></li>
           <li class="no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Guard, SSO, multi-device Mesh</span></li>
         </ul>
-        <p class="pv-note">Resets every month. Not a trial.</p>
+        <p class="pv-note">A one-time allowance — it does not refill. Your own key and local models stay free, always.</p>
       </div>
 
       <!-- Business -->
@@ -459,7 +483,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <div class="pv-name">Business</div>
         <div class="pv-price">₹9,999 <span>/mo</span></div>
         <div class="pv-intl">$99/mo · self-serve</div>
-        <a class="pv-cta" href="/download.html">Start free, upgrade later</a>
+        <a class="pv-cta" href="#pilot">Request access</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>8,000 AI tasks</b> a month</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>100 AI images · 1,500 automation runs</span></li>
@@ -477,7 +501,7 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
         <div class="pv-name">Growth</div>
         <div class="pv-price">₹19,999 <span>/mo</span></div>
         <div class="pv-intl">$199/mo · self-serve</div>
-        <a class="pv-cta solid" href="/download.html">Start free, upgrade later</a>
+        <a class="pv-cta solid" href="#pilot">Request access</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span><b>25,000 AI tasks</b> a month</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>400 AI images · 5,000 automation runs</span></li>
@@ -493,8 +517,8 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <div class="pv-card">
         <div class="pv-name">Enterprise</div>
         <div class="pv-price">Custom</div>
-        <div class="pv-intl">PO / NET-30 · GST invoice</div>
-        <a class="pv-cta" href="/enterprise.html">Talk to us</a>
+        <div class="pv-intl">PO / NET-30 · invoiced</div>
+        <a class="pv-cta" href="#pilot">Talk to us</a>
         <ul class="pv-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Custom token pool</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Unlimited seats and Mesh devices <i>(fair use)</i></span></li>
@@ -553,6 +577,49 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       </div>
     </div>
 
+    <!-- ── THE PILOT ─────────────────────────────────────────────────────────
+         For a business that needs more than the free allowance before it can decide. It is also,
+         while checkout is held, the way anybody gets a paid tier at all — so the form is the one
+         thing on this page that must work. -->
+    <div class="pv-band" id="pilot">
+      <div class="pv-pilot">
+        <div>
+          <h2>Run a pilot before you roll it out</h2>
+          <p class="lede" style="margin-bottom:14px">
+            For companies of five or more evaluating adris for a team, not one person. Twenty-one days,
+            full Growth features, and a usage cap sized for a real proof of concept —
+            <b>2,000,000 tokens · 50 AI images · 200 automation runs</b>.
+          </p>
+          <ul class="pv-list" style="max-width:520px">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>A one-to-one setup call, not a link to a help page</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>A live usage dashboard your team can see — never a black box</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>No card to start</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Convert within 30 days and the pilot counts toward your first term</span></li>
+          </ul>
+        </div>
+
+        <form class="pv-form" id="pilotForm">
+          <p class="pv-form-h">Request a pilot</p>
+          <div class="pv-two">
+            <label>Your name<input name="name" required autocomplete="name" /></label>
+            <label>Your role<input name="role" placeholder="e.g. Founder, Ops" autocomplete="organization-title" /></label>
+          </div>
+          <label>Company name<input name="company" required autocomplete="organization" /></label>
+          <div class="pv-two">
+            <label>Work email<input name="email" type="email" required autocomplete="email" /></label>
+            <label>Phone<input name="phone" inputmode="tel" autocomplete="tel" placeholder="optional" /></label>
+          </div>
+          <div class="pv-two">
+            <label>Team size<input name="team" required inputmode="numeric" placeholder="e.g. 12" /></label>
+            <label>Deciding by<input name="when" required placeholder="e.g. this month" /></label>
+          </div>
+          <label>What you would use it for<input name="use" required placeholder="e.g. proposals and outreach" /></label>
+          <button type="submit" class="pv-btn">Request a pilot</button>
+          <p class="pv-form-note" id="pilotNote">We reply within one working day.</p>
+        </form>
+      </div>
+    </div>
+
     <div class="pv-faq">
       <h2>Questions people actually ask</h2>
       <div class="pv-q"><b>What is a task?</b><p>Roughly one meaningful AI request — a caption, a short research answer, a code review. About 1,000 tokens. Simple requests use less; deep analysis of a long document uses more. The app shows both, tasks first.</p></div>
@@ -560,86 +627,10 @@ details.fq p { font-size:13px; color:var(--mu); line-height:1.7; padding-bottom:
       <div class="pv-q"><b>Can we use our own Gemini, OpenAI or Claude key?</b><p>Yes, on every plan including Free. Usage on your own key never counts against your allowance. You can also run models entirely on your own hardware, for nothing.</p></div>
       <div class="pv-q"><b>Do local automations use our quota?</b><p>No. Anything that runs entirely on your machine costs you nothing.</p></div>
       <div class="pv-q"><b>Where does our data go?</b><p>Conversations, credentials and your knowledge graph stay on your own machines. Cloud sync is off by default and covers only what you switch on.</p></div>
-      <div class="pv-q"><b>Is GST included?</b><p>Prices are exclusive of applicable GST. A GST-compliant invoice comes with every business licence.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ── PRICING IS TEMPORARILY OFF ──────────────────────────────────────────────
-     The plans are being rebuilt around the new bundled model. Rather than leave prices on the page
-     that are about to change — which is how a customer ends up quoting a number back at you that
-     you no longer offer — the page says so plainly and keeps every other route open.
-
-     TO LIFT THE LOCK: delete this <section data-pricing-lock> block and the <style> rule below it.
-     The whole original page is still here, untouched, underneath. -->
-<style>
-  /* Hide the old plans without removing them. */
-  /* Hide the old plans without removing them. Everything that is not the nav, this block, or a
-     script/style is taken off the page — the prices live in DIVs as well as SECTIONs, and a rule
-     that named only sections left ₹19,999 sitting on screen under the notice. */
-  body > *:not(nav):not(style):not(script):not(link):not([data-pricing-lock]):not(.mobile-nav-drawer):not(.mobile-nav-overlay) {
-    display: none !important;
-  }
-  .pl-wrap { max-width: 720px; margin: 0 auto; padding: 96px 32px 120px; text-align: center; }
-  .pl-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
-    border: 1px solid rgba(124,58,237,.35); background: rgba(124,58,237,.08); color: #7c3aed;
-    font-size: 12px; font-weight: 600; letter-spacing: .02em; }
-  .pl-dot { width: 7px; height: 7px; border-radius: 50%; background: #7c3aed; animation: plPulse 2s ease-in-out infinite; }
-  @keyframes plPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.8); } }
-  .pl-h { font-size: clamp(30px, 5vw, 46px); line-height: 1.1; letter-spacing: -.02em; margin: 26px 0 0; }
-  .pl-p { font-size: 16px; line-height: 1.65; margin: 18px auto 0; max-width: 560px; opacity: .78; }
-  .pl-list { list-style: none; padding: 0; margin: 32px auto 0; max-width: 520px; text-align: left; display: grid; gap: 12px; }
-  .pl-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; line-height: 1.55; opacity: .85; }
-  .pl-tick { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 2px; color: #7c3aed; }
-  .pl-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
-  .pl-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: 12px;
-    font-size: 14.5px; font-weight: 600; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease; }
-  .pl-btn:hover { transform: translateY(-1px); }
-  .pl-primary { background: #7c3aed; color: #fff; box-shadow: 0 6px 20px rgba(124,58,237,.28); }
-  .pl-ghost { border: 1px solid currentColor; opacity: .72; }
-  .pl-note { margin-top: 34px; font-size: 13px; opacity: .55; }
-</style>
-
-<section data-pricing-lock>
-  <div class="pl-wrap">
-    <span class="pl-badge"><span class="pl-dot"></span> Something better is on the way</span>
-
-    <h1 class="pl-h">We're rebuilding our pricing.</h1>
-
-    <p class="pl-p">
-      adris is changing in ways that make the old plans the wrong shape — so rather than leave
-      numbers up that are about to move, we've taken them down for a few days while the new ones
-      are finished.
-    </p>
-
-    <ul class="pl-list">
-      <li>
-        <svg class="pl-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-        <span><b>A free tier you can actually work in</b> — enough real tasks every month to run a
-        proper trial, not a demo that stops after five clicks.</span>
-      </li>
-      <li>
-        <svg class="pl-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-        <span><b>You see exactly what you've used</b> — a live meter in the app, in plain numbers,
-        with a spending limit you set yourself.</span>
-      </li>
-      <li>
-        <svg class="pl-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-        <span><b>Already pay for Claude or ChatGPT? Plug it in and our AI costs you nothing.</b>
-        That stays true on every plan, old or new.</span>
-      </li>
-    </ul>
-
-    <div class="pl-cta">
-      <a class="pl-btn pl-primary" href="/download.html">Download adris — free</a>
-      <a class="pl-btn pl-ghost" href="/enterprise.html">Talk to us about a team</a>
-    </div>
-
-    <p class="pl-note">
-      Already on a plan? Nothing changes for you, and nothing is being switched off.
-    </p>
-  </div>
-</section>
 
 <section class="crumb">
   <div class="wrap">
@@ -2088,5 +2079,73 @@ initAffiliate();
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/nav-auth.js" defer></script>
 
+<script>
+/* ── The pilot request ───────────────────────────────────────────────────────
+   Goes into `enterprise_requests`, the table enterprise.html already writes and the Head dashboard
+   now reads. No new table and no new permissions: one inbox for every "talk to us" on the site.
+
+   There is no adris mailbox yet, so there is deliberately no mailto anywhere here — a form that
+   opens an email client pointed at an address nobody reads is a dead end that looks like it worked.
+
+   The request carries who they are and how to reach them, because "a company wants a pilot" with no
+   name and no number is not something anyone can act on.                                        */
+(function () {
+  var f = document.getElementById('pilotForm');
+  if (!f) return;
+  var note = document.getElementById('pilotNote');
+  var btn  = f.querySelector('.pv-btn');
+
+  f.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var d = new FormData(f);
+    var get = function (k) { return String(d.get(k) || '').trim(); };
+
+    if (!get('name') || !get('company') || !get('email').includes('@')) {
+      note.textContent = 'Please give your name, your company and a work email so we can reply.';
+      note.style.opacity = '1';
+      return;
+    }
+
+    btn.disabled = true;
+    var was = btn.textContent;
+    btn.textContent = 'Sending…';
+    note.textContent = '';
+
+    // The same columns enterprise.html uses. Everything specific to a pilot goes in requirements,
+    // so the record is readable by a person without needing a schema change.
+    var requirements = [
+      'PILOT REQUEST (from the pricing page)',
+      'Role: ' + (get('role') || 'not given'),
+      'Phone: ' + (get('phone') || 'not given'),
+      'Deciding by: ' + get('when'),
+      'Would use it for: ' + get('use'),
+    ].join('\n');
+
+    try {
+      var res = await _supa.from('enterprise_requests').insert({
+        contact_name:  get('name'),
+        contact_email: get('email').toLowerCase(),
+        company_name:  get('company'),
+        company_size:  get('team') || null,
+        seats_needed:  parseInt(get('team'), 10) || null,
+        requirements:  requirements,
+      });
+      if (res.error) throw new Error(res.error.message);
+
+      f.querySelectorAll('input').forEach(function (i) { i.value = ''; });
+      btn.textContent = 'Request sent';
+      note.textContent = 'Got it — we have your request and will come back to you within one working day.';
+      note.style.opacity = '1';
+    } catch (err) {
+      // NEVER SWALLOW IT. A business that asked and heard nothing concludes we are not serious.
+      btn.disabled = false;
+      btn.textContent = was;
+      note.textContent = 'That did not send (' + (err && err.message ? err.message : 'unknown error')
+        + '). Please try again in a moment.';
+      note.style.opacity = '1';
+    }
+  });
+})();
+</script>
 </body>
 </html>

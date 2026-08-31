@@ -1269,15 +1269,13 @@ document.getElementById('navHam').addEventListener('click', function() {
           <input type="range" id="planRange" min="0" max="19999" value="1499" step="1" />
           <div class="ticks">
             <span style="left:0;transform:none" id="planTickZero">₹0</span>
-            <span style="left:8%;transform:translateX(-50%)">Solo</span>
-            <span style="left:25%;transform:translateX(-50%)">Builder</span>
-            <span style="left:100%;transform:translateX(-100%)">Team</span>
+            <span style="left:50%;transform:translateX(-50%)">Business</span>
+            <span style="left:100%;transform:translateX(-100%)">Growth</span>
           </div>
           <div class="plan-presets">
             <button data-plan="0">Free · ₹0</button>
-            <button data-plan="1499" class="active">Solo · ₹1,499</button>
-            <button data-plan="4999">Builder · ₹4,999</button>
-            <button data-plan="19999">Team · ₹19,999</button>
+            <button data-plan="9999" class="active">Business · ₹9,999</button>
+            <button data-plan="19999">Growth · ₹19,999</button>
           </div>
         </div>
       </div>
@@ -1287,7 +1285,7 @@ document.getElementById('navHam').addEventListener('click', function() {
         <div>
           <div class="e-tag">// monthly earnings · estimate</div>
           <div class="e-monthly">
-            <span class="cur">₹</span><span id="monthlyVal">1,558</span><span class="per">/ month</span>
+            <span class="cur">₹</span><span id="monthlyVal">0</span><span class="per">/ month</span>
           </div>
           <div class="e-tier">
             <span class="dot"></span>
@@ -1438,7 +1436,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       <details class="faq-item">
         <summary>How are commissions calculated?<span class="ico"></span></summary>
         <div class="answer">
-          Commission is your <strong>tier rate</strong> applied to the <strong>net payment amount</strong> (after payment gateway fees, typically 1.5–2.5%) of every active paying referral, every month they stay subscribed. So a Builder-tier affiliate (13%) with a referral on the Solo plan (₹1,499/month) earns roughly ₹195 from that single referral, every month — and about ₹650 if that referral is on the Builder plan (₹4,999/month).
+          Commission is your <strong>tier rate</strong> applied to the <strong>net payment amount</strong> (after payment gateway fees, typically 1.5–2.5%) of every active paying referral, every month they stay subscribed. So a Builder-tier affiliate (13%) with a referral on the Business plan (₹9,999/month) earns roughly ₹1,300 from that single referral, every month — and about ₹2,600 if that referral is on the Growth plan (₹19,999/month).
         </div>
       </details>
 
@@ -1466,7 +1464,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       <details class="faq-item">
         <summary>Do free plan users count toward my referral count?<span class="ico"></span></summary>
         <div class="answer">
-          No. Only users on a <strong>paid plan</strong> (Solo, Builder or Team) count toward your active referral total. Free-tier users are tracked in your dashboard so you can see total reach, but they don't generate commission until they upgrade.
+          No. Only users on a <strong>paid plan</strong> (Business, Growth or Enterprise) count toward your active referral total. Free-tier users are tracked in your dashboard so you can see total reach, but they don't generate commission until they upgrade.
         </div>
       </details>
 
