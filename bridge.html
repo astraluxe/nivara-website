@@ -122,11 +122,10 @@
       </li>
       <li><a href="/pricing">Pricing</a></li>
       <li><a href="/blog">Blog</a></li>
-      <li><a href="/affiliates">Affiliates</a></li>
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
-      <li><a href="/partner">Contact</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
     <div class="nav-right">
       <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
@@ -154,7 +153,6 @@
       <li><a href="/#platform" onclick="closeMobileNav()">Platform</a></li>
       <li><a href="/pricing"   onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="/download"  onclick="closeMobileNav()">Download</a></li>
-      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
     </ul>
     <a href="/download" class="btn mobile-nav-cta">Download — free</a>
   </div>
@@ -385,7 +383,6 @@ document.getElementById('navHam').addEventListener('click', function() {
         <ul>
           <li><a href="/privacy">Privacy Policy</a></li>
           <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate Terms</a></li>
         </ul>
       </div>
       <div>
@@ -400,8 +397,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       <div>
         <h3>Connect</h3>
         <ul>
-          <li><a href="/partner">Contact us</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
+          <li><a href="/contact">Contact us</a></li>
           <li><a href="/why-adris" style="color:var(--accent);">ROI calculator</a></li>
           <li><a href="/brief">Product brief (PDF)</a></li>
         </ul>
@@ -424,7 +420,6 @@ document.getElementById('navHam').addEventListener('click', function() {
   _nb.auth.onAuthStateChange(function(_,s){_nu(s);});
 })();
 </script>
-<script src="/affiliate-welcome.js" defer></script>
 <!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/nav-auth.js" defer></script>

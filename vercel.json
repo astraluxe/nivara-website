@@ -2,14 +2,107 @@
   "buildCommand": "echo done",
   "installCommand": "echo done",
   "outputDirectory": ".",
+  "redirects": [
+    {
+      "source": "/classic",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/affiliates",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/affiliate-dashboard",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/affiliate-terms",
+      "destination": "/terms",
+      "permanent": true
+    },
+    {
+      "source": "/team",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/team-dashboard",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/join",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/enterprise",
+      "destination": "/contact?type=custom_build",
+      "permanent": true
+    },
+    {
+      "source": "/promo",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/affiliates.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/affiliate-dashboard.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/affiliate-terms.html",
+      "destination": "/terms",
+      "permanent": true
+    },
+    {
+      "source": "/team.html",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/team-dashboard.html",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/join.html",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/enterprise.html",
+      "destination": "/contact?type=custom_build",
+      "permanent": true
+    },
+    {
+      "source": "/promo.html",
+      "destination": "/pricing",
+      "permanent": true
+    },
+    {
+      "source": "/NIVARA.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/krew-test.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/",
       "destination": "/home.html"
-    },
-    {
-      "source": "/classic",
-      "destination": "/NIVARA.html"
     },
     {
       "source": "/pricing",
@@ -28,11 +121,11 @@
       "destination": "/api/dl?file=:file"
     },
     {
-      "source": "/affiliates",
-      "destination": "/affiliates.html"
+      "source": "/partner",
+      "destination": "/partner.html"
     },
     {
-      "source": "/partner",
+      "source": "/contact",
       "destination": "/partner.html"
     },
     {
@@ -46,18 +139,6 @@
     {
       "source": "/signin",
       "destination": "/signin.html"
-    },
-    {
-      "source": "/join",
-      "destination": "/join.html"
-    },
-    {
-      "source": "/affiliate-dashboard",
-      "destination": "/affiliate-dashboard.html"
-    },
-    {
-      "source": "/affiliate-terms",
-      "destination": "/affiliate-terms.html"
     },
     {
       "source": "/admin",
@@ -98,22 +179,6 @@
     {
       "source": "/modules/brain",
       "destination": "/modules/brain.html"
-    },
-    {
-      "source": "/team",
-      "destination": "/team.html"
-    },
-    {
-      "source": "/team-dashboard",
-      "destination": "/team-dashboard.html"
-    },
-    {
-      "source": "/enterprise",
-      "destination": "/enterprise.html"
-    },
-    {
-      "source": "/promo",
-      "destination": "/promo.html"
     },
     {
       "source": "/why-adris",

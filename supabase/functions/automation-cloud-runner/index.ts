@@ -15,7 +15,7 @@ const CORS = {
 
 Deno.serve((req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
-  return new Response(JSON.stringify({ error: "adris.tech AI has been retired. adris.tech is now free and runs on the AI you connect: update the app, then pick a free NVIDIA or Groq key, your Claude Code or Codex, your own key, or a local model from the AI menu at the top of the window.", retired: true }), {
+  return new Response(JSON.stringify({ error: "Cloud automation runs are retired. Automations run on your PC.", retired: true }), {
     status: 410,
     headers: { ...CORS, "Content-Type": "application/json", "Cache-Control": "no-store" },
   });

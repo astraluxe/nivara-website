@@ -17,7 +17,7 @@
 <meta name="twitter:card"       content="summary_large_image" />
 <meta name="twitter:creator"    content="@Amogh_Misra_" />
 <meta name="twitter:title"      content="adris.tech — The AI operating system for business" />
-<meta name="twitter:description" content="One platform replaces your AI stack. Runs locally. Free to start." />
+<meta name="twitter:description" content="One platform replaces your AI stack. Runs locally. Free." />
 <meta name="twitter:image"      content="https://adris.tech/og-cover.png" />
 
 <link rel="canonical" href="https://adris.tech/" />
@@ -30,7 +30,7 @@
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","logo":"https://www.adris.tech/icon.png","description":"Local-first AI platform for businesses — eight products in one desktop app that runs on your own machine.","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressRegion":"Karnataka","addressCountry":"IN"},"sameAs":["https://x.com/Amogh_Misra_"]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"adris.tech","url":"https://www.adris.tech","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.adris.tech/docs?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows 10, Windows 11, Linux","description":"Eight AI products in one desktop app: AI agents, automation, code editor, local LLM runner, contract scanning, DNS security, device mesh and a shared knowledge graph. Runs locally.","url":"https://www.adris.tech","downloadUrl":"https://www.adris.tech/download","softwareVersion":"1.46.0","offers":[{"@type":"Offer","price":"0","priceCurrency":"INR","name":"Free"},{"@type":"Offer","price":"1499","priceCurrency":"INR","name":"Solo"},{"@type":"Offer","price":"4999","priceCurrency":"INR","name":"Builder"}],"featureList":["AI agents","Workflow automation","AI contract review","Local LLM runner","AI code editor","DNS security","Knowledge graph"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows 10, Windows 11, Linux","description":"Eight AI products in one desktop app: AI agents, automation, code editor, local LLM runner, contract scanning, DNS security, device mesh and a shared knowledge graph. Runs locally.","url":"https://www.adris.tech","downloadUrl":"https://www.adris.tech/download","softwareVersion":"1.46.0","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free — every module, no plans"},"featureList":["AI agents","Workflow automation","AI contract review","Local LLM runner","AI code editor","DNS security","Knowledge graph"]}</script>
 
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="backgrounds.css" />
@@ -396,7 +396,7 @@
 @media (max-width: 620px) { .bh-cite .li { margin-left: 0; width: 100%; justify-content: center; } }
 
 /* ── PRICING teaser ───────────────────────────────────────────── */
-.bh-price { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.bh-price { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; max-width: 900px; }
 .bh-price-card { border: 1px solid var(--rule); border-radius: 13px; padding: 22px 20px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; transition: all .2s; position: relative; }
 .bh-price-card:hover { border-color: var(--accent); transform: translateY(-3px); }
 .bh-price-card .pn { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
@@ -488,11 +488,10 @@
       </li>
       <li><a href="/pricing">Pricing</a></li>
       <li><a href="/blog">Blog</a></li>
-      <li><a href="/affiliates">Affiliates</a></li>
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
-      <li><a href="/partner">Contact</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
     <div class="nav-right">
       <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
@@ -531,7 +530,6 @@
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/brain"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Brain</a></li>
       <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
-      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
       <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
       <li><a href="/blog" onclick="closeMobileNav()">Blog</a></li>
       <li><a href="/brief"      onclick="closeMobileNav()">Product brief (PDF)</a></li>
@@ -590,7 +588,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <a href="/why-adris" class="bh-btn-ghost">See the ROI case →</a>
         <a href="/brief" class="bh-btn-ghost">Product brief (PDF) →</a>
         <a href="/partner" class="bh-btn-ghost">Talk to us</a>
-        <span class="bh-cta-note">~10 MB · No credit card · Free forever tier</span>
+        <span class="bh-cta-note">~10 MB · No credit card · Free</span>
       </div>
 
       <div class="bh-stats bh-rv d4">
@@ -607,7 +605,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
      REPLACES BAND — the B2B hook
 ============================================ -->
 <section class="bh-replaces" aria-label="What adris.tech replaces">
-  <div class="lede">One subscription replaces the whole stack</div>
+  <div class="lede">One free app replaces the whole stack</div>
   <div class="bh-marquee">
     <div class="bh-marquee-inner">
       <!-- set is duplicated once for a seamless loop -->
@@ -619,7 +617,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <span class="bh-chip">Contract review <s>₹15,000/doc</s></span>
       <span class="bh-chip">Social media exec <s>₹25,000/mo</s></span>
       <span class="bh-chip">Model playground <s>₹1,600/mo</s></span>
-      <span class="bh-chip one">adris.tech — from ₹0</span>
+      <span class="bh-chip one">adris.tech — free</span>
       <span class="bh-chip">AI chat assistant <s>₹2,000/mo</s></span>
       <span class="bh-chip">Automation platform <s>₹4,500/mo</s></span>
       <span class="bh-chip">Coding copilot <s>₹1,700/mo</s></span>
@@ -628,7 +626,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <span class="bh-chip">Contract review <s>₹15,000/doc</s></span>
       <span class="bh-chip">Social media exec <s>₹25,000/mo</s></span>
       <span class="bh-chip">Model playground <s>₹1,600/mo</s></span>
-      <span class="bh-chip one">adris.tech — from ₹0</span>
+      <span class="bh-chip one">adris.tech — free</span>
     </div>
   </div>
 </section>
@@ -795,7 +793,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <ul>
           <li>Lead lists built, verified and saved to a shared Brain</li>
           <li>Contracts scanned for risky clauses — in plain language</li>
-          <li>UPI billing · Hindi + 9 languages · ₹0 to start</li>
+          <li>Hindi + 9 languages · free</li>
         </ul>
         <a class="wlink" href="/why-adris">See the ROI numbers →</a>
       </div>
@@ -855,34 +853,22 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 <section class="bh-sec" id="pricing">
   <div class="wrap">
     <div class="bh-head bh-rv">
-      <div class="idx">// 05 — Pricing that makes sense here</div>
-      <h2>Start free. <span class="it">Scale when it pays for itself.</span></h2>
+      <div class="idx">// 05 — Pricing</div>
+      <h2>Free. <span class="it">The whole thing.</span></h2>
     </div>
     <div class="bh-price bh-rv d1">
-      <a class="bh-price-card" href="/pricing">
-        <div class="pn">Free</div>
+      <a class="bh-price-card" href="/download">
+        <div class="pn">adris.tech</div>
         <div class="pp">₹0<sub> forever</sub></div>
-        <div class="pd">All 8 modules · 50 AI tasks to try · run local models · Mesh 3 devices.</div>
-        <div class="pgo">Start free →</div>
+        <div class="pd">Every module and agent, nothing locked, no caps. Runs on the AI you connect: free NVIDIA or Groq keys, your Claude Code or Codex, your own key, or a local model.</div>
+        <div class="pgo">Download free →</div>
       </a>
-      <a class="bh-price-card" href="/pricing">
-        <div class="pn">Solo</div>
-        <div class="pp">₹1,499<sub>/mo</sub></div>
-        <div class="pd">~4,000 AI tasks/mo · cloud automations · security scans. For one person doing real work.</div>
-        <div class="pgo">See details →</div>
-      </a>
-      <a class="bh-price-card star" href="/pricing">
-        <span class="badge">Most popular</span>
-        <div class="pn">Builder</div>
-        <div class="pp">₹4,999<sub>/mo</sub></div>
-        <div class="pd">~16,000 AI tasks/mo · 5,000 automation runs · full Guard. For agencies &amp; power users.</div>
-        <div class="pgo">See details →</div>
-      </a>
-      <a class="bh-price-card" href="/pricing">
-        <div class="pn">Team</div>
-        <div class="pp">₹19,999<sub>/mo</sub></div>
-        <div class="pd">Shared workspace · admin controls · SSO · priority support with SLA.</div>
-        <div class="pgo">See details →</div>
+      <a class="bh-price-card star" href="/contact?type=custom_build">
+        <span class="badge">For businesses</span>
+        <div class="pn">Custom adris / Agentic AI office</div>
+        <div class="pp">Let&rsquo;s talk</div>
+        <div class="pd">Agents, workflows and integrations built around how your team works — set up and handed over.</div>
+        <div class="pgo">Request a custom build →</div>
       </a>
     </div>
   </div>
@@ -950,7 +936,6 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <ul>
           <li><a href="/privacy">Privacy Policy</a></li>
           <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
         </ul>
       </div>
       <div>
@@ -1011,21 +996,21 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         ['Modes', 'Speed, blocking, malware, family — switch any time'],
         ['Quiet', 'Toggles from the system tray, survives restarts'],
       ] },
-    { key: 'guard', n: '06', name: 'Guard', role: '/ security', status: 'Live · Paid plans', href: '/modules/guard', cta: 'Explore Guard',
+    { key: 'guard', n: '06', name: 'Guard', role: '/ security', status: 'Live · Free', href: '/modules/guard', cta: 'Explore Guard',
       desc: 'Reads agreements and flags risky clauses, missing terms and liabilities in plain language — including scanned PDFs and Hindi documents. Plus local threat monitoring for your machine.',
       outs: [
         ['Contracts', '200-page agreements reviewed in minutes, not billable hours'],
         ['Risk', 'Section-by-section findings with a clear risk score'],
         ['Local', 'Documents are analysed on-device — never uploaded'],
       ] },
-    { key: 'mesh', n: '07', name: 'Mesh', role: '/ compute', status: 'Live · All plans', href: '/modules/mesh', cta: 'Explore Mesh',
+    { key: 'mesh', n: '07', name: 'Mesh', role: '/ compute', status: 'Live · Free', href: '/modules/mesh', cta: 'Explore Mesh',
       desc: 'Pool RAM across the machines you already own to run AI models no single laptop could handle. One machine creates a room, others join with a code — the model runs across all of them.',
       outs: [
         ['Scale', 'Run frontier-size open models on consumer hardware'],
         ['Simple', 'Room codes — no networking degree required'],
-        ['Flexible', 'Passes from ₹15/hour when you need extra devices'],
+        ['Free', 'Up to 50 devices in a room, no passes to buy'],
       ] },
-    { key: 'brain', n: '08', name: 'Brain', role: '/ knowledge', status: 'Live · All plans', href: '/modules/brain', cta: 'Explore Brain',
+    { key: 'brain', n: '08', name: 'Brain', role: '/ knowledge', status: 'Live · Free', href: '/modules/brain', cta: 'Explore Brain',
       desc: 'A shared knowledge graph you and your agents both use. Lead lists, research, drafts and files are saved as connected nodes — agents recall instead of re-researching, so context survives and tokens go further.',
       outs: [
         ['Memory', 'Agents remember your business across conversations'],
@@ -1303,7 +1288,6 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 <!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/nav-auth.js" defer></script>
-<script src="/affiliate-welcome.js" defer></script>
 <script>
 // The badge was hardcoded and had already fallen two releases behind. latest.json is written by the
 // release script, so it is the one number that is always current — the printed value stays as the

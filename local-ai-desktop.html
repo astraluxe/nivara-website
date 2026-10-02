@@ -20,9 +20,9 @@
 <meta name="twitter:description" content="A local AI desktop app that runs on your own machine — agents, automation, code and contract review, with nothing leaving your computer." />
 <meta name="twitter:image" content="https://www.adris.tech/og-cover.png" />
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"A local AI desktop app that runs on your own machine — agents, automation, code and contract review, with nothing leaving your computer.","url":"https://www.adris.tech/local-ai-desktop","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free tier — all 8 modules"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"adris.tech","applicationCategory":"BusinessApplication","operatingSystem":"Windows, Linux","description":"A local AI desktop app that runs on your own machine — agents, automation, code and contract review, with nothing leaving your computer.","url":"https://www.adris.tech/local-ai-desktop","offers":{"@type":"Offer","price":"0","priceCurrency":"INR","description":"Free — all 8 modules, no plans"},"publisher":{"@type":"Organization","name":"adris.tech","url":"https://www.adris.tech","address":{"@type":"PostalAddress","addressLocality":"Bengaluru","addressCountry":"IN"}}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"adris.tech","item":"https://www.adris.tech/"},{"@type":"ListItem","position":2,"name":"Local AI desktop app","item":"https://www.adris.tech/local-ai-desktop"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this a wrapper around ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"No. You have three choices: open models running on your own machine, AI included with your plan, or your own provider key. The local path never leaves your computer; the other two are ordinary API calls you can see."}},{"@type":"Question","name":"Does it work on Mac?","acceptedAnswer":{"@type":"Answer","text":"Windows and Linux today. macOS is not available yet."}},{"@type":"Question","name":"Where is my chat history stored?","acceptedAnswer":{"@type":"Answer","text":"In a SQLite database file on your own disk. It is not synced anywhere unless you explicitly turn something on."}},{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"There is a free tier with all eight modules and local models. Paid plans add cloud AI credits and higher automation limits."}},{"@type":"Question","name":"Is there a Mac version?","acceptedAnswer":{"@type":"Answer","text":"Not yet. Windows and Linux today."}},{"@type":"Question","name":"How big is the download?","acceptedAnswer":{"@type":"Answer","text":"Around 10 MB for the app. Local models are downloaded separately and only if you want them."}},{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"Not to install it or to run local models. An account is needed for cloud AI credits and syncing."}},{"@type":"Question","name":"What happens if I lose internet?","acceptedAnswer":{"@type":"Answer","text":"Local models, document reading, the editor and local automations all keep working. Steps that call an outside service wait."}},{"@type":"Question","name":"Can I use my own OpenAI or Claude key?","acceptedAnswer":{"@type":"Answer","text":"Yes. Calls go straight from your machine to that provider, with the key stored in an encrypted local store."}},{"@type":"Question","name":"Is my data used for training?","acceptedAnswer":{"@type":"Answer","text":"There is nothing to train on — it does not leave your machine. If you connect your own provider key, that provider’s terms apply to those calls."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this a wrapper around ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"No. You have three choices: open models running on your own machine, AI included with your plan, or your own provider key. The local path never leaves your computer; the other two are ordinary API calls you can see."}},{"@type":"Question","name":"Does it work on Mac?","acceptedAnswer":{"@type":"Answer","text":"Windows and Linux today. macOS is not available yet."}},{"@type":"Question","name":"Where is my chat history stored?","acceptedAnswer":{"@type":"Answer","text":"In a SQLite database file on your own disk. It is not synced anywhere unless you explicitly turn something on."}},{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"Yes — adris.tech is free, with all eight modules and local models. There are no plans to buy."}},{"@type":"Question","name":"Is there a Mac version?","acceptedAnswer":{"@type":"Answer","text":"Not yet. Windows and Linux today."}},{"@type":"Question","name":"How big is the download?","acceptedAnswer":{"@type":"Answer","text":"Around 10 MB for the app. Local models are downloaded separately and only if you want them."}},{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"Not to install it or to run local models. An account is needed for cloud AI credits and syncing."}},{"@type":"Question","name":"What happens if I lose internet?","acceptedAnswer":{"@type":"Answer","text":"Local models, document reading, the editor and local automations all keep working. Steps that call an outside service wait."}},{"@type":"Question","name":"Can I use my own OpenAI or Claude key?","acceptedAnswer":{"@type":"Answer","text":"Yes. Calls go straight from your machine to that provider, with the key stored in an encrypted local store."}},{"@type":"Question","name":"Is my data used for training?","acceptedAnswer":{"@type":"Answer","text":"There is nothing to train on — it does not leave your machine. If you connect your own provider key, that provider’s terms apply to those calls."}}]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -94,11 +94,10 @@
       </li>
       <li><a href="/pricing">Pricing</a></li>
       <li><a href="/download">Download</a></li>
-      <li><a href="/affiliates">Affiliates</a></li>
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
-      <li><a href="/partner">Contact</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
     <div class="nav-right">
       <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
@@ -137,7 +136,6 @@
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/brain"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Brain</a></li>
       <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
-      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
       <li><a href="/bridge"    onclick="closeMobileNav()">Bridge</a></li>
       <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
       <li><a href="/blog" onclick="closeMobileNav()">Blog</a></li>
@@ -251,7 +249,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
           <tr><td>Works offline</td><td>Yes, with a local model</td><td>No</td><td>No</td></tr>
           <tr><td>Reads your disk directly</td><td>Yes</td><td>Upload each time</td><td>Inside Office only</td></tr>
           <tr><td>Runs scheduled work</td><td>Yes</td><td>No</td><td>No</td></tr>
-          <tr><td>Cost</td><td>Free tier, then ₹1,499/mo</td><td>~₹1,700–2,000/mo</td><td>~₹2,500/mo</td></tr>
+          <tr><td>Cost</td><td>Free</td><td>~₹1,700–2,000/mo</td><td>~₹2,500/mo</td></tr>
           <tr><td>Best model available</td><td><strong>Included with your plan</strong>, your own key, or local</td><td>Frontier</td><td>Frontier</td></tr>
           <tr><td>Also replaces</td><td>Automation, code editor, VPN, contract review</td><td>—</td><td>—</td></tr>
         </tbody>
@@ -269,7 +267,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
       <h3>Where is my chat history stored?</h3>
       <p>In a SQLite database file on your own disk. It is not synced anywhere unless you explicitly turn something on.</p>
       <h3>What does it cost?</h3>
-      <p>There is a free tier with all eight modules and local models. Paid plans add cloud AI credits and higher automation limits.</p>
+      <p>Yes — adris.tech is free, with all eight modules and local models and no plans to buy. It runs on the AI you connect: a local model, a free NVIDIA or Groq key, or your own Claude Code or Codex.</p>
       <h3>Is there a Mac version?</h3>
       <p>Not yet. Windows and Linux today.</p>
       <h3>How big is the download?</h3>
@@ -347,7 +345,6 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <ul>
           <li><a href="/privacy">Privacy Policy</a></li>
           <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
         </ul>
       </div>
       <div>

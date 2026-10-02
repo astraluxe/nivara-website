@@ -1050,11 +1050,10 @@
       </li>
       <li><a href="/pricing">Pricing</a></li>
       <li><a href="/blog">Blog</a></li>
-      <li><a href="/affiliates">Affiliates</a></li>
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
-      <li><a href="/partner">Contact</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
     <div class="nav-right">
       <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
@@ -1083,7 +1082,6 @@
       <li><a href="/#platform" onclick="closeMobileNav()">Platform</a></li>
       <li><a href="/pricing"   onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="/download"  onclick="closeMobileNav()">Download</a></li>
-      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
     </ul>
     <a href="#download-now" class="btn mobile-nav-cta">Download — free</a>
   </div>
@@ -1286,7 +1284,7 @@ document.getElementById('navHam').addEventListener('click', function() {
     </div>
     <div class="dl-feat">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      BYOK or use your adris.tech plan
+      Bring your own key, Claude Code / Codex, or a local model
     </div>
     <div class="dl-feat">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1386,7 +1384,7 @@ document.getElementById('navHam').addEventListener('click', function() {
         <div class="dl-mitem-body">
           <div class="dl-mitem-name">Vault</div>
           <div class="dl-mitem-sub">DNS · Ad blocking · Privacy</div>
-          <div class="dl-mitem-desc">System-wide ad and tracker blocking via Cloudflare DNS-over-HTTPS. Encrypts every DNS query. Free on every plan including Explore.</div>
+          <div class="dl-mitem-desc">System-wide ad and tracker blocking via Cloudflare DNS-over-HTTPS. Encrypts every DNS query. Free.</div>
           <span class="dl-mitem-badge">Phase 6 · Coming soon</span>
         </div>
       </div>
@@ -1404,7 +1402,7 @@ document.getElementById('navHam').addEventListener('click', function() {
           <div class="dl-mitem-name">Guard</div>
           <div class="dl-mitem-sub">Security · Monitoring · Contracts</div>
           <div class="dl-mitem-desc">Threat monitoring, contract clause scanning via Claude Sonnet, SOC2-ready audit trail. Built for Indian SMBs that can't afford a breach.</div>
-          <span class="dl-mitem-badge">Phase 8 · Builder+ plans</span>
+          <span class="dl-mitem-badge">Included · free</span>
         </div>
       </div>
 
@@ -1450,7 +1448,7 @@ document.getElementById('navHam').addEventListener('click', function() {
 <!-- ── FINAL CTA ── -->
 <section class="dl-final">
   <h2>Download once.<br/><em>Use everything.</em></h2>
-  <p>One login. Six modules. Your data stays on your machine — always. Start free, upgrade when you need more.</p>
+  <p>One login. Six modules. Your data stays on your machine — always. Free, with every module unlocked.</p>
 
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center;">
     <a id="finalCtaBtn" class="dl-btn-primary" href="#download-now" onclick="handleFinalCta(event)">
@@ -1500,7 +1498,6 @@ document.getElementById('navHam').addEventListener('click', function() {
         <ul>
           <li><a href="/privacy">Privacy Policy</a></li>
           <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate Terms</a></li>
         </ul>
       </div>
       <div>
@@ -1518,7 +1515,6 @@ document.getElementById('navHam').addEventListener('click', function() {
         <h3>Connect</h3>
         <ul>
           <li><a href="/partner">Contact / Partner</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
         </ul>
       </div>
     </div>
@@ -1723,7 +1719,6 @@ document.getElementById('navHam').addEventListener('click', function() {
     .catch(function () { /* offline — the printed fallback stands */ });
 })();
 </script>
-<script src="/affiliate-welcome.js" defer></script>
 <!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/nav-auth.js" defer></script>

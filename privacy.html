@@ -57,11 +57,10 @@
       </li>
       <li><a href="/pricing">Pricing</a></li>
       <li><a href="/blog">Blog</a></li>
-      <li><a href="/affiliates">Affiliates</a></li>
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
-      <li><a href="/partner">Contact</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
     <div class="nav-right">
       <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
@@ -89,7 +88,6 @@
       <li><a href="/#platform" onclick="closeMobileNav()">Platform</a></li>
       <li><a href="/pricing"   onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="/download"  onclick="closeMobileNav()">Download</a></li>
-      <li><a href="/affiliates" onclick="closeMobileNav()">Affiliates</a></li>
     </ul>
     <a href="/download" class="btn mobile-nav-cta">Download — free</a>
   </div>
@@ -136,7 +134,7 @@ document.getElementById('navHam').addEventListener('click', function() {
 <section style="padding:0 0 clamp(72px,8vw,120px);">
   <div class="wrap">
     <div class="legal-wrap">
-      <p class="legal-meta">Last updated: 13 June 2026 · Effective immediately · Bengaluru, India</p>
+      <p class="legal-meta">Last updated: 2 October 2026 · Effective immediately · Bengaluru, India</p>
       <p class="legal-intro">adris.tech ("Adris", "we", "us", or "our") operates the adris.tech website and the Adris desktop application (the "App"). This policy explains what data we collect, why we collect it, and how you can control it. We've written it in plain language — not lawyer-speak.</p>
 
       <h2>1. Who we are</h2>
@@ -158,10 +156,10 @@ document.getElementById('navHam').addEventListener('click', function() {
       </ul>
 
       <h3>2c. Cloud feature data</h3>
-      <p>If you use adris.tech AI mode, we deliver a temporary, session-scoped API key to your device via our Supabase Edge Function. This key is held exclusively in application memory (RAM) and is never written to disk — it is discarded when the App closes. Your AI messages are sent directly from the App to Google Gemini using this key; they do not pass through our servers. We log aggregate token counts (not message content) to enforce your monthly plan limit, synced every 5 minutes from your device to our database.</p>
+      <p>adris.tech no longer provides a hosted AI service (retired 2 October 2026). The App sends your AI requests directly from your device to the provider you connect — for example NVIDIA, Groq, Google Gemini, OpenAI or Anthropic, or your own Claude Code or Codex — or runs them on a model on your own computer. Those requests do not pass through adris.tech servers, and that provider's own privacy policy applies to them. Your API keys are stored on your device.</p>
 
       <h3>2d. Payment data</h3>
-      <p>Payments are processed by Razorpay. We never see or store your card number, UPI PIN, or bank credentials. We receive a payment confirmation and subscription status from Razorpay's webhook.</p>
+      <p>The App is free and we no longer take payments for it. For payments made before 2 October 2026, Razorpay processed them; we never saw or stored card numbers, UPI PINs or bank credentials, and we keep only the payment confirmation records the law requires (see retention below).</p>
 
       <h3>2e. Website analytics</h3>
       <p>Our website may use privacy-respecting analytics (no cookies, no fingerprinting, no cross-site tracking). We collect only aggregate page view counts and referral sources.</p>
@@ -173,7 +171,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       <ul>
         <li>To provide and operate the App and website</li>
         <li>To send transactional emails (account verification, payment receipts, affiliate payouts)</li>
-        <li>To enforce plan limits and prevent abuse</li>
+        <li>To prevent abuse</li>
         <li>To respond to support requests</li>
         <li>To improve the product (using aggregate, anonymised patterns only)</li>
       </ul>
@@ -192,7 +190,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       <h2>5. Data retention</h2>
       <ul>
         <li>Account data: retained until you delete your account</li>
-        <li>Token usage logs: retained for 90 days for billing verification</li>
+        <li>Historical token usage logs (from the retired hosted AI): retained for up to 90 days, then deleted</li>
         <li>Affiliate application data: retained for 3 years from the date of application</li>
         <li>Payment records: retained for 7 years as required by Indian GST law</li>
       </ul>
@@ -249,7 +247,6 @@ document.getElementById('navHam').addEventListener('click', function() {
         <ul>
           <li><a href="/privacy" style="color:var(--accent);">Privacy Policy</a></li>
           <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/affiliates">Affiliate Terms</a></li>
         </ul>
       </div>
       <div>
@@ -264,8 +261,7 @@ document.getElementById('navHam').addEventListener('click', function() {
       <div>
         <h3>Connect</h3>
         <ul>
-          <li><a href="/partner">Contact us</a></li>
-          <li><a href="/affiliates">Affiliate program</a></li>
+          <li><a href="/contact">Contact us</a></li>
         </ul>
       </div>
     </div>
