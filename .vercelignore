@@ -1,0 +1,15 @@
+# Kept in git, never served on www.adris.tech. Everything else in this folder is the public site
+# (vercel.json outputDirectory is "."), so anything internal has to be listed here.
+ADRIS-OS/
+supabase/
+records/
+nivara-desktop/
+video (for ref. only)/
+film-frames/
+*.md
+*.MD
+adris-test-runner.js
+adris-test-results.json
+build-sitemap.mjs
+.gitignore
+.env*
