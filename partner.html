@@ -651,6 +651,11 @@ document.getElementById('navHam').addEventListener('click', function() {
       .ag-panel.on { display: block; }
       .ag-panel h3 { margin: 0 0 4px; font-size: 18px; }
       .ag-panel .ag-sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+      .ag-size { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: 13px; }
+      .ag-size label { display: inline-flex; gap: 6px; align-items: center; padding: 6px 10px; border: 1px solid var(--rule); border-radius: 999px; background: var(--paper); cursor: pointer; }
+      .ag-size label.on { border-color: var(--accent); color: var(--accent); }
+      .ag-size input { accent-color: var(--accent); }
+      .ag-group { margin: 16px 0 8px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
       .ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
       .ag-item { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); cursor: pointer; }
       .ag-item input { margin-top: 3px; accent-color: var(--accent); }
@@ -667,7 +672,8 @@ document.getElementById('navHam').addEventListener('click', function() {
     <div class="ag-panel" id="agPanel" aria-live="polite">
       <h3>Which agents would help your office?</h3>
       <p class="ag-sub">Pick any that fit, or describe your own agent or a whole department below. Nothing is final until we talk.</p>
-      <div class="ag-grid" id="agGrid"></div>
+      <div class="ag-size" id="agSize" role="radiogroup" aria-label="Your company size"></div>
+      <div id="agGrid"></div>
       <div class="ag-own">
         <label for="agOwn">Describe your own agent (optional)</label>
         <textarea id="agOwn" placeholder="e.g. an agent that reads our purchase orders and updates stock in Tally"></textarea>
@@ -867,9 +873,10 @@ document.getElementById('navHam').addEventListener('click', function() {
   // ── CUSTOM ADRIS: THE AGENT PICKER (23 Oct 2026) ──────────────────────────────────────────
   // The list and the approximate prices come from the office (adris-agents.json). The choices
   // travel inside the description as plain lines, so the request reaches the office unchanged.
-  var AG = null, agPicked = {};
-  var agPanel = document.getElementById('agPanel'), agGrid = document.getElementById('agGrid');
+  var AG = null, agPicked = {}, agScale = 'micro', agSizeChosen = false;
+  var agPanel = document.getElementById('agPanel'), agGrid = document.getElementById('agGrid'), agSize = document.getElementById('agSize');
   var agTotal = document.getElementById('agTotal'), agOwn = document.getElementById('agOwn'), agDept = document.getElementById('agDept');
+  var agPrices = [];
   function inr(n) { return 'Rs ' + Number(n).toLocaleString('en-IN'); }
   function agSync() {
     var r = document.querySelector('input[name="partnership_type"]:checked');
@@ -877,36 +884,60 @@ document.getElementById('navHam').addEventListener('click', function() {
   }
   function agDraw() {
     if (!AG) return;
+    agPrices.forEach(function (x) { x.el.textContent = (agSizeChosen ? 'about ' : 'from ') + inr(x.a.price[agScale]); });
     var keys = Object.keys(agPicked).filter(function (k) { return agPicked[k]; });
     var own = agOwn.value.trim(), dept = agDept.value.trim();
     agTotal.textContent = '';
+    agTotal.removeAttribute('data-sum');
     if (!keys.length && !own && !dept) {
       var s0 = document.createElement('strong'); s0.textContent = 'Pick an agent to see an approximate price.'; agTotal.appendChild(s0); return;
     }
-    var sum = AG.base;
-    AG.agents.forEach(function (a) { if (agPicked[a.key]) sum += a.about; });
-    if (own) sum += AG.own_agent;
-    if (dept) sum += AG.own_department;
+    var sum = AG.setup[agScale];
+    AG.agents.forEach(function (a) { if (agPicked[a.key]) sum += a.price[agScale]; });
+    if (own) sum += AG.own_agent[agScale];
+    if (dept) sum += AG.own_department[agScale];
     sum = Math.max(sum, AG.minimum);
-    var st = document.createElement('strong'); st.textContent = 'Approximately ' + inr(sum) + ' to build';
-    var p1 = document.createElement('p'); p1.textContent = 'Includes setup and training. Optional support from ' + inr(AG.support_month) + ' a month.';
+    var st = document.createElement('strong');
+    st.textContent = (agSizeChosen ? 'Approximately ' : 'From ') + inr(sum) + ' to build';
+    var p1 = document.createElement('p');
+    p1.textContent = 'Includes setup and training. Optional support from ' + inr(AG.support_month[agScale]) + ' a month.'
+      + (agSizeChosen ? '' : ' Pick your company size above for a closer figure - the price grows with the size of the business.');
     var p2 = document.createElement('p'); p2.textContent = AG.negotiable;
     agTotal.appendChild(st); agTotal.appendChild(p1); agTotal.appendChild(p2);
     agTotal.setAttribute('data-sum', sum);
   }
   fetch('/adris-agents.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
-    if (!d || !d.agents) return;
+    if (!d || !d.agents || !d.scales) return;
     AG = d;
-    d.agents.forEach(function (a) {
-      var lab = document.createElement('label'); lab.className = 'ag-item';
-      var cb = document.createElement('input'); cb.type = 'checkbox';
-      cb.addEventListener('change', function () { agPicked[a.key] = cb.checked; agDraw(); });
-      var box = document.createElement('div');
-      var b = document.createElement('b'); b.textContent = a.name;
-      var ds = document.createElement('span'); ds.textContent = a.desc;
-      var pr = document.createElement('span'); pr.className = 'ag-p'; pr.textContent = 'about ' + inr(a.about);
-      box.appendChild(b); box.appendChild(ds); box.appendChild(pr);
-      lab.appendChild(cb); lab.appendChild(box); agGrid.appendChild(lab);
+    d.scales.forEach(function (sc) {
+      var lab = document.createElement('label');
+      var rb = document.createElement('input'); rb.type = 'radio'; rb.name = 'ag_size'; rb.value = sc.key;
+      rb.addEventListener('change', function () {
+        agScale = sc.key; agSizeChosen = true;
+        agSize.querySelectorAll('label').forEach(function (l) { l.classList.toggle('on', l === lab); });
+        agDraw();
+      });
+      lab.appendChild(rb); lab.appendChild(document.createTextNode(sc.label));
+      agSize.appendChild(lab);
+    });
+    var lead = document.createElement('span'); lead.textContent = 'Your company size:'; agSize.insertBefore(lead, agSize.firstChild);
+    d.groups.forEach(function (g) {
+      var mine = d.agents.filter(function (a) { return a.group === g; });
+      if (!mine.length) return;
+      var h = document.createElement('div'); h.className = 'ag-group'; h.textContent = g; agGrid.appendChild(h);
+      var grid = document.createElement('div'); grid.className = 'ag-grid'; agGrid.appendChild(grid);
+      mine.forEach(function (a) {
+        var lab = document.createElement('label'); lab.className = 'ag-item';
+        var cb = document.createElement('input'); cb.type = 'checkbox';
+        cb.addEventListener('change', function () { agPicked[a.key] = cb.checked; agDraw(); });
+        var box = document.createElement('div');
+        var b = document.createElement('b'); b.textContent = a.name;
+        var ds = document.createElement('span'); ds.textContent = a.desc;
+        var pr = document.createElement('span'); pr.className = 'ag-p';
+        agPrices.push({ el: pr, a: a });
+        box.appendChild(b); box.appendChild(ds); box.appendChild(pr);
+        lab.appendChild(cb); lab.appendChild(box); grid.appendChild(lab);
+      });
     });
     agSync(); agDraw();
   }).catch(function () { /* the form works without the picker */ });
@@ -920,6 +951,7 @@ document.getElementById('navHam').addEventListener('click', function() {
     if (names.length) out.push('Agents selected: ' + names.join('; '));
     if (agOwn.value.trim()) out.push('Their own agent: ' + agOwn.value.trim().replace(/\s+/g, ' '));
     if (agDept.value.trim()) out.push('Their own department: ' + agDept.value.trim().replace(/\s+/g, ' '));
+    if (out.length) out.push('Company size: ' + (agSizeChosen ? AG.scales.filter(function (x) { return x.key === agScale; })[0].label : 'not given'));
     if (out.length && agTotal.getAttribute('data-sum')) out.push('Approximate price shown: ' + inr(agTotal.getAttribute('data-sum')) + ' (negotiable)');
     return out.join('\n');
   }

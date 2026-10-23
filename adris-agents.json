@@ -1,82 +1,344 @@
 {
- "agents": [
+ "groups": [
+  "Sales and marketing",
+  "Operations",
+  "Tenders and documents",
+  "Finance",
+  "Technology and security",
+  "Your office"
+ ],
+ "scales": [
   {
-   "key": "email_desk",
-   "name": "Email desk",
-   "desc": "Reads incoming mail, sorts it (customer, supplier, spam), and drafts replies for a person to approve.",
-   "about": 115000
+   "key": "micro",
+   "label": "1-10 people"
   },
   {
+   "key": "small",
+   "label": "11-50 people"
+  },
+  {
+   "key": "medium",
+   "label": "51-250 people"
+  },
+  {
+   "key": "large",
+   "label": "251+ people"
+  }
+ ],
+ "agents": [
+  {
    "key": "lead_research",
+   "group": "Sales and marketing",
    "name": "Lead research",
-   "desc": "Finds businesses that fit, and fills in their facts (owner, size, city) with the source of every fact.",
-   "about": 77000
+   "desc": "Finds businesses that fit you, with the facts that matter (owner, size, city) and the source of every fact.",
+   "price": {
+    "micro": 7500,
+    "small": 14500,
+    "medium": 29500,
+    "large": 59000
+   }
+  },
+  {
+   "key": "company_research",
+   "group": "Sales and marketing",
+   "name": "Company research",
+   "desc": "Fills in a prospect's legal status, GST number, government orders and decision maker - each fact with its source.",
+   "price": {
+    "micro": 7500,
+    "small": 14500,
+    "medium": 29500,
+    "large": 59000
+   }
   },
   {
    "key": "outreach",
+   "group": "Sales and marketing",
    "name": "Outreach and follow-ups",
    "desc": "Writes first emails and follow-ups in your voice, and sends them only after approval.",
-   "about": 123000
+   "price": {
+    "micro": 11500,
+    "small": 23000,
+    "medium": 48000,
+    "large": 95500
+   }
+  },
+  {
+   "key": "pitch_decks",
+   "group": "Sales and marketing",
+   "name": "Pitch deck maker",
+   "desc": "A short deck made for each prospect - their problem, your answer, their competitors - ready to send.",
+   "price": {
+    "micro": 5500,
+    "small": 11000,
+    "medium": 23000,
+    "large": 45500
+   }
   },
   {
    "key": "call_assistant",
+   "group": "Sales and marketing",
    "name": "Call assistant",
-   "desc": "A card for every call: who to call, what to say, and the outcome noted, with the next step booked.",
-   "about": 94000
-  },
-  {
-   "key": "meetings",
-   "name": "Meeting scheduler",
-   "desc": "Books meetings with a Google Meet link, sends the invite and reminds both sides.",
-   "about": 82000
-  },
-  {
-   "key": "whatsapp_desk",
-   "name": "WhatsApp desk",
-   "desc": "Answers WhatsApp Business messages with your menu and hands real conversations to a person.",
-   "about": 106000
-  },
-  {
-   "key": "tender_desk",
-   "name": "Tender desk",
-   "desc": "Reads government tenders, checks eligibility, and writes one document with everything the bid needs.",
-   "about": 100000
-  },
-  {
-   "key": "accounts",
-   "name": "Accounts and invoices",
-   "desc": "Makes invoices and GST-ready PDFs, keeps the ledger and reminds about payments due.",
-   "about": 123000
+   "desc": "A card for every call: who to call, what to say, the outcome noted, and the next step booked.",
+   "price": {
+    "micro": 9000,
+    "small": 17500,
+    "medium": 36500,
+    "large": 72500
+   }
   },
   {
    "key": "marketing_posts",
-   "name": "Marketing posts",
+   "group": "Sales and marketing",
+   "name": "Social media posts",
    "desc": "Drafts LinkedIn posts from your real work and publishes them after approval.",
-   "about": 82000
+   "price": {
+    "micro": 8000,
+    "small": 15500,
+    "medium": 32000,
+    "large": 63500
+   }
+  },
+  {
+   "key": "blog_writer",
+   "group": "Sales and marketing",
+   "name": "Website articles",
+   "desc": "Researches and drafts articles for your website, checks they don't repeat old ones, publishes after approval.",
+   "price": {
+    "micro": 5000,
+    "small": 10000,
+    "medium": 20000,
+    "large": 40000
+   }
+  },
+  {
+   "key": "email_desk",
+   "group": "Operations",
+   "name": "Email desk",
+   "desc": "Reads incoming mail, sorts it (customer, supplier, spam), and drafts replies for a person to approve.",
+   "price": {
+    "micro": 11000,
+    "small": 21500,
+    "medium": 44500,
+    "large": 88500
+   }
+  },
+  {
+   "key": "whatsapp_desk",
+   "group": "Operations",
+   "name": "WhatsApp desk",
+   "desc": "Answers WhatsApp Business messages with your menu and hands real conversations to a person.",
+   "price": {
+    "micro": 10000,
+    "small": 20000,
+    "medium": 41000,
+    "large": 82000
+   }
+  },
+  {
+   "key": "meetings",
+   "group": "Operations",
+   "name": "Meeting scheduler",
+   "desc": "Books meetings with a Google Meet link, sends the invite and reminds both sides.",
+   "price": {
+    "micro": 8000,
+    "small": 15500,
+    "medium": 32000,
+    "large": 63500
+   }
+  },
+  {
+   "key": "projects",
+   "group": "Operations",
+   "name": "Project manager",
+   "desc": "Plans every project into steps with owners and dates, tracks progress and flags what is running late.",
+   "price": {
+    "micro": 9000,
+    "small": 17500,
+    "medium": 36500,
+    "large": 72500
+   }
+  },
+  {
+   "key": "tender_desk",
+   "group": "Tenders and documents",
+   "name": "Tender desk",
+   "desc": "Finds government tenders that fit you, checks eligibility, and says which are worth bidding for.",
+   "price": {
+    "micro": 8500,
+    "small": 17000,
+    "medium": 35500,
+    "large": 70500
+   }
+  },
+  {
+   "key": "tender_dossier",
+   "group": "Tenders and documents",
+   "name": "Tender reader",
+   "desc": "Turns a tender's four or five documents into one dossier - every requirement, date and rupee, with its source.",
+   "price": {
+    "micro": 5000,
+    "small": 10000,
+    "medium": 20000,
+    "large": 40000
+   }
+  },
+  {
+   "key": "bid_pricing",
+   "group": "Tenders and documents",
+   "name": "Bid costing",
+   "desc": "Works out what a tender job will cost you and a sensible bid price, line by line.",
+   "price": {
+    "micro": 5000,
+    "small": 10000,
+    "medium": 20000,
+    "large": 40000
+   }
+  },
+  {
+   "key": "document_reader",
+   "group": "Tenders and documents",
+   "name": "Document reader",
+   "desc": "Reads long PDFs, scanned papers and spreadsheets and pulls out what you need into one clean sheet.",
+   "price": {
+    "micro": 5500,
+    "small": 11000,
+    "medium": 23000,
+    "large": 45500
+   }
+  },
+  {
+   "key": "accounts",
+   "group": "Finance",
+   "name": "Accounts and invoices",
+   "desc": "Makes invoices and GST-ready PDFs, keeps the ledger and reminds about payments due.",
+   "price": {
+    "micro": 11500,
+    "small": 23000,
+    "medium": 48000,
+    "large": 95500
+   }
+  },
+  {
+   "key": "quotations",
+   "group": "Finance",
+   "name": "Quotations",
+   "desc": "Prepares quotations from your price list, tracks which are waiting, and follows up.",
+   "price": {
+    "micro": 5000,
+    "small": 10000,
+    "medium": 20000,
+    "large": 40000
+   }
   },
   {
    "key": "website_builder",
+   "group": "Technology and security",
    "name": "Website builder",
    "desc": "Builds and updates your website, with a private preview before anything goes live.",
-   "about": 50000
+   "price": {
+    "micro": 5000,
+    "small": 10000,
+    "medium": 20000,
+    "large": 40000
+   }
+  },
+  {
+   "key": "software_builder",
+   "group": "Technology and security",
+   "name": "Software builder",
+   "desc": "Builds small software features and fixes, tested in a sandbox, merged only when a person approves.",
+   "price": {
+    "micro": 10000,
+    "small": 20000,
+    "medium": 41000,
+    "large": 82000
+   }
   },
   {
    "key": "security_checks",
+   "group": "Technology and security",
    "name": "Security checks",
    "desc": "Scans your code for leaked keys and outdated parts, and keeps your DPDP / CERT-In checklist (SKULL.ORG).",
-   "about": 59000
+   "price": {
+    "micro": 5500,
+    "small": 11000,
+    "medium": 23000,
+    "large": 45500
+   }
+  },
+  {
+   "key": "health_monitor",
+   "group": "Technology and security",
+   "name": "Health monitor and self-repair",
+   "desc": "Watches every job in your office, restarts what fails, and tells you what it could not fix.",
+   "price": {
+    "micro": 7000,
+    "small": 13500,
+    "medium": 27500,
+    "large": 55000
+   }
+  },
+  {
+   "key": "reviewer",
+   "group": "Your office",
+   "name": "Quality reviewer",
+   "desc": "Checks every email, post and document before it goes out - wrong names, cut-off text, promises you can't keep.",
+   "price": {
+    "micro": 5000,
+    "small": 10000,
+    "medium": 20000,
+    "large": 40000
+   }
+  },
+  {
+   "key": "council",
+   "group": "Your office",
+   "name": "Approval council",
+   "desc": "Approves the routine decisions you hand it, and sends you only the ones that need you.",
+   "price": {
+    "micro": 5000,
+    "small": 10000,
+    "medium": 20000,
+    "large": 40000
+   }
   },
   {
    "key": "office_hub",
+   "group": "Your office",
    "name": "Approvals and owner dashboard",
    "desc": "One place, on your laptop and phone, to see every department's work and approve what needs you.",
-   "about": 100000
+   "price": {
+    "micro": 9500,
+    "small": 19000,
+    "medium": 39000,
+    "large": 77500
+   }
   }
  ],
- "base": 24000,
- "own_agent": 106000,
- "own_department": 217000,
+ "setup": {
+  "micro": 5000,
+  "small": 10000,
+  "medium": 20000,
+  "large": 40000
+ },
+ "support_month": {
+  "micro": 1500,
+  "small": 3000,
+  "medium": 5000,
+  "large": 10000
+ },
+ "own_agent": {
+  "micro": 10000,
+  "small": 20000,
+  "medium": 41000,
+  "large": 82000
+ },
+ "own_department": {
+  "micro": 30000,
+  "small": 59500,
+  "medium": 123000,
+  "large": 246000
+ },
  "minimum": 9999,
- "support_month": 5000,
  "negotiable": "Approximate. The price is negotiable, and it can go up with how heavy the work is: how many people use it, how much it reads, and which of your tools it connects to. We confirm the price after a short call."
 }
