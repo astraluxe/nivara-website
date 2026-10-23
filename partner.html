@@ -941,7 +941,8 @@ document.getElementById('navHam').addEventListener('click', function() {
       return;
     }
 
-    var selectedRadio = form.querySelector('input[name="partnership_type"]:checked');
+    // the type cards sit above the form, not inside it (23 Oct 2026: this read form.querySelector and so always sent 'other')
+    var selectedRadio = document.querySelector('input[name="partnership_type"]:checked');
     var ptype = selectedRadio ? selectedRadio.value : 'other';
 
     btn.disabled = true;

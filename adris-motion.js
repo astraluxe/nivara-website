@@ -142,7 +142,7 @@
 
   /* ------------------------------------------------------------ the typed caption */
   function typeIn(el) {
-    var text = el.getAttribute('data-type') || '';
+    var text = el.getAttribute('data-ad-type') || '';
     if (reduce) { el.textContent = text; return; }
     el.textContent = '';
     var i = 0;
@@ -175,7 +175,7 @@
     var host = document.querySelector('[data-ad-field]');
     if (host) buildField(document.body);
     document.querySelectorAll('[data-ad-mark]').forEach(buildMark);
-    document.querySelectorAll('[data-type]').forEach(typeIn);
+    document.querySelectorAll('[data-ad-type]').forEach(typeIn);
     navState();
     reveals();
   }
