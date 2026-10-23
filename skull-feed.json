@@ -1,14 +1,13 @@
 {
- "updated": "2026-10-23T11:38:42",
+ "updated": "2026-10-23T11:42:06",
  "posts": [
   {
    "id": 1,
-   "kind": "release",
-   "title": "Repo Guard, open source",
-   "body": "A small scanner for leaked keys in a repository. Read-only, runs offline, MIT licence.",
+   "kind": "update",
+   "title": "SKULL.ORG is open",
+   "body": "SKULL.ORG is the new defensive security desk of adris.tech. We check code, websites and cloud setups for the problems that cost small businesses the most, and we only ever check what its owner has asked us to check, in writing.\n\nWhile we earn trust, the first checks are free. Ask through the contact page and we will reply with exactly what we would check and how.",
    "date": "2026-10-23",
-   "from": "Engineering",
-   "repo": "https://github.com/astraluxe/repo-guard"
+   "from": "SKULL"
   }
  ]
 }
