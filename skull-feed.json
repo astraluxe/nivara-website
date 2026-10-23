@@ -1,6 +1,14 @@
 {
- "updated": "2026-10-23T11:42:06",
+ "updated": "2026-10-23T11:42:08",
  "posts": [
+  {
+   "id": 2,
+   "kind": "report",
+   "title": "Our own office, audited first",
+   "body": "Before checking anyone else, we checked ourselves. On 23 October 2026 SKULL.ORG audited the 20 website previews our studio hosts for Indian clinics and restaurants: no leaked keys, no scripts loaded from unknown sites, no forms sending data elsewhere, and every preview hidden from search engines.\n\nThis week our weekly self-audit of our own machines and repositories found nothing serious, and every action SKULL.ORG takes is written to an append-only log that is checked for tampering.",
+   "date": "2026-10-23",
+   "from": "SKULL"
+  },
   {
    "id": 1,
    "kind": "update",
