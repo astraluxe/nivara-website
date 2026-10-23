@@ -1,0 +1,14 @@
+{
+ "updated": "2026-10-23T11:38:42",
+ "posts": [
+  {
+   "id": 1,
+   "kind": "release",
+   "title": "Repo Guard, open source",
+   "body": "A small scanner for leaked keys in a repository. Read-only, runs offline, MIT licence.",
+   "date": "2026-10-23",
+   "from": "Engineering",
+   "repo": "https://github.com/astraluxe/repo-guard"
+  }
+ ]
+}
