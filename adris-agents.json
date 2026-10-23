@@ -1,0 +1,82 @@
+{
+ "agents": [
+  {
+   "key": "email_desk",
+   "name": "Email desk",
+   "desc": "Reads incoming mail, sorts it (customer, supplier, spam), and drafts replies for a person to approve.",
+   "about": 115000
+  },
+  {
+   "key": "lead_research",
+   "name": "Lead research",
+   "desc": "Finds businesses that fit, and fills in their facts (owner, size, city) with the source of every fact.",
+   "about": 77000
+  },
+  {
+   "key": "outreach",
+   "name": "Outreach and follow-ups",
+   "desc": "Writes first emails and follow-ups in your voice, and sends them only after approval.",
+   "about": 123000
+  },
+  {
+   "key": "call_assistant",
+   "name": "Call assistant",
+   "desc": "A card for every call: who to call, what to say, and the outcome noted, with the next step booked.",
+   "about": 94000
+  },
+  {
+   "key": "meetings",
+   "name": "Meeting scheduler",
+   "desc": "Books meetings with a Google Meet link, sends the invite and reminds both sides.",
+   "about": 82000
+  },
+  {
+   "key": "whatsapp_desk",
+   "name": "WhatsApp desk",
+   "desc": "Answers WhatsApp Business messages with your menu and hands real conversations to a person.",
+   "about": 106000
+  },
+  {
+   "key": "tender_desk",
+   "name": "Tender desk",
+   "desc": "Reads government tenders, checks eligibility, and writes one document with everything the bid needs.",
+   "about": 100000
+  },
+  {
+   "key": "accounts",
+   "name": "Accounts and invoices",
+   "desc": "Makes invoices and GST-ready PDFs, keeps the ledger and reminds about payments due.",
+   "about": 123000
+  },
+  {
+   "key": "marketing_posts",
+   "name": "Marketing posts",
+   "desc": "Drafts LinkedIn posts from your real work and publishes them after approval.",
+   "about": 82000
+  },
+  {
+   "key": "website_builder",
+   "name": "Website builder",
+   "desc": "Builds and updates your website, with a private preview before anything goes live.",
+   "about": 50000
+  },
+  {
+   "key": "security_checks",
+   "name": "Security checks",
+   "desc": "Scans your code for leaked keys and outdated parts, and keeps your DPDP / CERT-In checklist (SKULL.ORG).",
+   "about": 59000
+  },
+  {
+   "key": "office_hub",
+   "name": "Approvals and owner dashboard",
+   "desc": "One place, on your laptop and phone, to see every department's work and approve what needs you.",
+   "about": 100000
+  }
+ ],
+ "base": 24000,
+ "own_agent": 106000,
+ "own_department": 217000,
+ "minimum": 9999,
+ "support_month": 5000,
+ "negotiable": "Approximate. The price is negotiable, and it can go up with how heavy the work is: how many people use it, how much it reads, and which of your tools it connects to. We confirm the price after a short call."
+}

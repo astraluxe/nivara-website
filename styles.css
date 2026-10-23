@@ -137,7 +137,9 @@ section {
      30px avatar. As a grid column it cannot overlap its neighbours.
      (The 1100px breakpoint below already assumed a grid here.) */
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  /* 23 Oct 2026: equal side columns (1fr | links | 1fr), so the links sit on the page's centre - with
+     auto | 1fr | auto they were centred between a narrow logo and a wide right group, i.e. off-centre. */
+  grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
   align-items: center;
   height: 64px;
 }
