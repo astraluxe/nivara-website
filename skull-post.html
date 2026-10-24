@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The skull blog | adris.tech</title>
+<meta name="description" content="skull is the defensive security desk of adris.tech: authorised checks of your code, websites and cloud, honest write-ups of the best open-source security tools, and evidence packs from public on-chain data." />
+<link rel="canonical" href="https://www.adris.tech/skull" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="The skull blog | adris.tech" />
+<meta property="og:description" content="skull is the defensive security desk of adris.tech: authorised checks of your code, websites and cloud, honest write-ups of the best open-source security tools, and evidence packs from public on-chain data." />
+<meta property="og:url" content="https://www.adris.tech/skull" />
+<meta property="og:image" content="https://www.adris.tech/og-cover.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+<script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+/* skull - the security desk's own look (24 Oct 2026): the site's colours and theme, with a modern pixel display face,
+   mono labels and stepped "pixel" corners. Body text stays in the site's readable face. */
+.sk-page { --sk-px: 6px; --sk-green: #7c5cff; }
+.sk-page h1, .sk-page h2, .sk-page h3, .sk-pixel { font-family: "Pixelify Sans", var(--font-sans, system-ui), sans-serif; letter-spacing: .01em; }
+.sk-main { max-width: 1120px; margin: 0 auto; padding: 0 24px 80px; }
+.sk-mono, .sk-tag, .sk-meta { font-family: "JetBrains Mono", ui-monospace, monospace; }
+.sk-muted { color: var(--muted); }
+/* stepped pixel corners */
+.sk-px { clip-path: polygon(0 var(--sk-px), var(--sk-px) var(--sk-px), var(--sk-px) 0, calc(100% - var(--sk-px)) 0,
+  calc(100% - var(--sk-px)) var(--sk-px), 100% var(--sk-px), 100% calc(100% - var(--sk-px)), calc(100% - var(--sk-px)) calc(100% - var(--sk-px)),
+  calc(100% - var(--sk-px)) 100%, var(--sk-px) 100%, var(--sk-px) calc(100% - var(--sk-px)), 0 calc(100% - var(--sk-px))); }
+.sk-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: 72px 0 48px; }
+.sk-hero h1 { font-size: clamp(54px, 8vw, 96px); line-height: .95; margin: 10px 0 18px; font-weight: 700; }
+.sk-hero h1 .sk-dot { color: var(--accent); }
+.sk-hero .sk-lead { font-size: 19px; line-height: 1.55; color: var(--muted); max-width: 620px; }
+.sk-tag { display: inline-block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 8px; background: var(--ink); color: var(--paper); }
+.sk-art-wrap { display: grid; place-items: center; }
+.sk-art { width: min(240px, 60vw); height: auto; color: var(--ink); filter: drop-shadow(6px 6px 0 var(--accent)); margin: 0; }
+.sk-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.sk-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; background: var(--ink); color: var(--paper) !important; text-decoration: none;
+  font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-size: 16px; border: 2px solid var(--ink); }
+.sk-btn.ghost { background: transparent; color: var(--ink) !important; }
+.sk-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff !important; }
+.sk-sec { padding: 56px 0 8px; border-top: 2px dashed var(--rule); }
+.sk-sec > h2 { font-size: clamp(30px, 4vw, 44px); margin: 12px 0 10px; }
+.sk-sec > p { color: var(--muted); max-width: 720px; line-height: 1.6; }
+.sk-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 22px; }
+.sk-filters button { font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 7px 12px; border: 2px solid var(--rule); background: transparent; color: var(--muted); cursor: pointer; }
+.sk-filters button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.sk-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.sk-card { background: var(--paper-2); border: 2px solid var(--rule); padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.sk-card.featured { grid-column: 1 / -1; background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.sk-card.featured .sk-meta, .sk-card.featured p { color: color-mix(in oklab, var(--paper) 78%, transparent); }
+.sk-card.featured a.sk-read { color: var(--paper); }
+.sk-card h3 { font-size: 22px; line-height: 1.2; margin: 0; }
+.sk-card h3 a { color: inherit; text-decoration: none; }
+.sk-card h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.sk-card p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; overflow-wrap: anywhere; }
+.sk-meta { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+.sk-meta .k { color: var(--accent); }
+.sk-links { margin-top: auto; display: flex; gap: 14px; flex-wrap: wrap; padding-top: 6px; }
+.sk-read, .sk-links a { font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-size: 15px; color: var(--ink); }
+.sk-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+.sk-grid3 > div { border: 2px solid var(--rule); padding: 18px; background: var(--paper-2); }
+.sk-grid3 h3 { font-size: 20px; margin: 0 0 8px; }
+.sk-grid3 p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; }
+.sk-rules { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+.sk-rules li { padding: 14px 16px; border-left: 6px solid var(--accent); background: var(--paper-2); line-height: 1.55; }
+.sk-rules b { font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-weight: 600; }
+.sk-cta { background: var(--ink); color: var(--paper); padding: 30px; margin-top: 30px; }
+.sk-cta h2 { margin: 0 0 8px; color: var(--paper); }
+.sk-cta p { color: color-mix(in oklab, var(--paper) 78%, transparent); max-width: 720px; line-height: 1.6; }
+.sk-cta .sk-btn { background: var(--paper); color: var(--ink) !important; border-color: var(--paper); margin-top: 8px; }
+/* one post */
+.sk-post { max-width: 760px; padding-top: 48px; }
+.sk-back { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--muted); text-decoration: none; }
+.sk-post article h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 14px 0 12px; }
+.sk-post article h2 { font-size: 26px; margin: 34px 0 10px; }
+.sk-post article p, .sk-post article li { font-size: 17px; line-height: 1.7; }
+.sk-post article code { font-family: "JetBrains Mono", monospace; font-size: 14px; background: var(--paper-2); padding: 1px 5px; }
+.sk-post article pre { background: var(--ink); color: var(--paper); padding: 14px 16px; overflow-x: auto; font-size: 14px; }
+.sk-post article pre code { background: none; color: inherit; padding: 0; }
+.sk-post .sk-repo { display: inline-block; margin: 6px 0 18px; }
+@media (max-width: 900px) { .sk-hero { grid-template-columns: 1fr; padding-top: 40px; } .sk-art-wrap { order: -1; justify-items: start; }
+  .sk-art { width: 120px; } .sk-grid3 { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .sk-main { padding: 0 16px 60px; } .sk-feed { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) { .sk-art { animation: sk-blink 6s steps(1) infinite; } }
+@keyframes sk-blink { 0%, 96%, 100% { transform: none; } 97% { transform: translateY(-2px); } }
+.sk-post article ul, .sk-post article ol { padding-left: 24px; margin: 10px 0; } .sk-post article ul li { list-style: square; } .sk-post article ol li { list-style: decimal; } .sk-post article li::marker { color: var(--accent); }
+</style>
+</head>
+<body class="sk-page">
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-mark" aria-label="adris.tech home">
+      <svg class="logo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+        <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+        <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+      </svg>
+      <span>adris<span style="color: var(--muted-2); font-weight: 400;">.tech</span></span>
+      <span class="dot"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#platform">Platform</a></li>
+      <li class="has-dropdown">
+        <a href="/#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
+            <a href="/modules/automation"><span class="nav-dd-tag">02</span>Automation</a>
+            <a href="/modules/coder"><span class="nav-dd-tag">03</span>Coder</a>
+            <a href="/modules/models"><span class="nav-dd-tag">04</span>Models</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/modules/vault"><span class="nav-dd-tag">05</span>Vault</a>
+            <a href="/modules/guard"><span class="nav-dd-tag">06</span>Guard</a>
+            <a href="/modules/mesh"><span class="nav-dd-tag">07</span>Mesh</a>
+            <a href="/modules/brain"><span class="nav-dd-tag">08</span>Brain — Knowledge</a>
+          </div>
+        </div>
+      </li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/bridge">Bridge</a></li>
+      <li><a href="/why-adris">Why adris</a></li>
+      <li><a href="/brief">Product brief</a></li>
+      <li><a href="/skull"><span style="display:inline-flex;align-items:center;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull</span></a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;transition:all .15s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--rule-strong)';this.style.color='var(--ink)'">Sign in</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-thumb" aria-hidden="true"></span>
+          <span class="tt-l tt-paper">Paper</span>
+          <span class="tt-l tt-ink">Ink</span>
+        </span>
+      </button>
+      <a href="/download" class="btn">
+        Download — free
+        <svg class="arrow" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+      </a>
+      <button class="nav-ham" id="navHam" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-inner">
+    <ul>
+      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/krew"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Krew — AI Agents</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/automation"  onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Automation</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/coder"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Coder</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/models"      onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Models</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/vault"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Vault</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/guard"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Guard</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/mesh"        onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Mesh</a></li>
+      <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/brain"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Brain</a></li>
+      <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
+      <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
+      <li><a href="/blog" onclick="closeMobileNav()">Blog</a></li>
+      <li><a href="/brief"      onclick="closeMobileNav()">Product brief (PDF)</a></li>
+      <li><a href="/skull"    onclick="closeMobileNav()"><span style="display:inline-flex;align-items:center;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull</span></a></li>
+      <li><a href="/partner"    onclick="closeMobileNav()">Contact</a></li>
+    </ul>
+    <a href="/download" class="btn mobile-nav-cta">Download — free</a>
+  </div>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
+<script>
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('navHam').classList.remove('open');
+  document.getElementById('navHam').setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.getElementById('navHam').addEventListener('click', function() {
+  const open = this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open', open);
+  document.getElementById('mobileNavOverlay').classList.toggle('open', open);
+  this.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+document.getElementById('themeToggle').addEventListener('click', function () {
+  var next = (document.documentElement.getAttribute('data-theme') || 'paper') === 'paper' ? 'ink' : 'paper';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (_) {}
+});
+</script>
+
+<main class="sk-main sk-post">
+  <a class="sk-back" href="/skull#blog">&larr; the skull blog</a>
+  <article id="skArticle" aria-live="polite"><p class="sk-muted">Loading the post...</p></article>
+  <aside class="sk-cta sk-px">
+    <h2>Want us to look at yours?</h2>
+    <p>The first check is free while skull earns your trust: a read-only review of your website's public setup and,
+    if you give access, one code repository scanned for leaked keys and vulnerable parts.</p>
+    <a class="sk-btn" href="/contact?type=security">Ask for a free security check</a>
+  </aside>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand-mark" href="/#top">
+          <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
+            <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
+            <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
+          </svg>
+          <span>adris.tech</span><span class="dot"></span>
+        </a>
+        <span class="tag">tech / blr</span>
+      </div>
+      <div>
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="/modules/krew">Krew · agents</a></li>
+          <li><a href="/modules/automation">Studio · automation</a></li>
+          <li><a href="/modules/coder">Coder · dev tools</a></li>
+          <li><a href="/modules/models">Models · open hub</a></li>
+          <li><a href="/modules/vault">Vault · DNS</a></li>
+          <li><a href="/modules/guard">Guard · security</a></li>
+          <li><a href="/modules/mesh">Mesh · devices</a></li>
+          <li><a href="/modules/brain">Brain · knowledge</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/why-adris">Why adris</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/skull"><span style="display:inline-flex;align-items:center;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull · security</span></a></li>
+          <li><a href="/brief">Product brief (PDF)</a></li>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/download">Download app</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="/download">Download — free</a></li>
+          <li><a href="/partner">Contact / Partner</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="meta">© 2026 adris.tech · Bengaluru, India</span>
+      <span class="meta">Built in Bengaluru · Made for India</span>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/nav-auth.js" defer></script>
+<script>
+/* the skull blog's tiny markdown: ## headings, - and 1. lists, **bold**, `code`, ``` blocks, https links only.
+   Everything is escaped first - post text never becomes HTML by itself. */
+window.skMd = function (src) {
+  var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var inline = function (s) {
+    return esc(s)
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[\s(])(https:\/\/[^\s<)]+[^\s<).,;:])/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+  };
+  var out = [], blocks = String(src || "").replace(/\r/g, "").split(/```/);
+  blocks.forEach(function (chunk, i) {
+    if (i % 2 === 1) { out.push("<pre><code>" + esc(chunk.replace(/^[a-z]*\n/, "").trim()) + "</code></pre>"); return; }
+    chunk.split(/\n\s*\n/).forEach(function (b) {
+      var t = b.trim();
+      if (!t) return;
+      var lines = t.split("\n");
+      if (/^#{1,3}\s/.test(t) && lines.length === 1) { out.push("<h2>" + inline(t.replace(/^#{1,3}\s*/, "")) + "</h2>"); return; }
+      if (lines.every(function (l) { return /^\s*[-*]\s+/.test(l); })) {
+        out.push("<ul>" + lines.map(function (l) { return "<li>" + inline(l.replace(/^\s*[-*]\s+/, "")) + "</li>"; }).join("") + "</ul>"); return;
+      }
+      if (lines.every(function (l) { return /^\s*\d+[.)]\s+/.test(l); })) {
+        out.push("<ol>" + lines.map(function (l) { return "<li>" + inline(l.replace(/^\s*\d+[.)]\s+/, "")) + "</li>"; }).join("") + "</ol>"); return;
+      }
+      if (/^#{1,3}\s/.test(lines[0])) {
+        out.push("<h2>" + inline(lines[0].replace(/^#{1,3}\s*/, "")) + "</h2>");
+        lines = lines.slice(1);
+      }
+      out.push("<p>" + lines.map(inline).join("<br>") + "</p>");
+    });
+  });
+  return out.join("\n");
+};
+</script>
+<script src="/skull.js" defer></script>
+</body>
+</html>

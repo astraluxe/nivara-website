@@ -105,6 +105,14 @@
       "destination": "/home.html"
     },
     {
+      "source": "/skull/blog/:slug",
+      "destination": "/skull-post.html"
+    },
+    {
+      "source": "/skull/blog",
+      "destination": "/skull.html"
+    },
+    {
       "source": "/skull",
       "destination": "/skull.html"
     },

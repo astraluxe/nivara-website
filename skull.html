@@ -3,64 +3,96 @@
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/png" href="/icon.png" />
-<link rel="apple-touch-icon" href="/icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SKULL.ORG - defensive security for Indian businesses | adris.tech</title>
-<meta name="description" content="SKULL.ORG is the defensive security desk of adris.tech: authorised checks of your code, cloud and websites, compliance readiness for DPDP and CERT-In, and evidence packs from public on-chain data. Find, secure, trace and prove, legally." />
+<title>skull - security for Indian businesses, in the open | adris.tech</title>
+<meta name="description" content="skull is the defensive security desk of adris.tech: authorised checks of your code, websites and cloud, honest write-ups of the best open-source security tools, and evidence packs from public on-chain data." />
 <link rel="canonical" href="https://www.adris.tech/skull" />
 <meta name="robots" content="index, follow" />
-
 <meta property="og:type" content="website" />
-<meta property="og:title" content="SKULL.ORG - defensive security for Indian businesses | adris.tech" />
-<meta property="og:description" content="SKULL.ORG is the defensive security desk of adris.tech: authorised checks of your code, cloud and websites, compliance readiness for DPDP and CERT-In, and evidence packs from public on-chain data. Find, secure, trace and prove, legally." />
+<meta property="og:title" content="skull - security for Indian businesses, in the open | adris.tech" />
+<meta property="og:description" content="skull is the defensive security desk of adris.tech: authorised checks of your code, websites and cloud, honest write-ups of the best open-source security tools, and evidence packs from public on-chain data." />
 <meta property="og:url" content="https://www.adris.tech/skull" />
 <meta property="og:image" content="https://www.adris.tech/og-cover.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="SKULL.ORG - defensive security for Indian businesses | adris.tech" />
-<meta name="twitter:description" content="SKULL.ORG is the defensive security desk of adris.tech: authorised checks of your code, cloud and websites, compliance readiness for DPDP and CERT-In, and evidence packs from public on-chain data. Find, secure, trace and prove, legally." />
-<meta name="twitter:image" content="https://www.adris.tech/og-cover.png" />
-
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Blog", "name": "skull - the security blog of adris.tech", "url": "https://www.adris.tech/skull", "description": "skull is the defensive security desk of adris.tech: authorised checks of your code, websites and cloud, honest write-ups of the best open-source security tools, and evidence packs from public on-chain data.", "publisher": {"@type": "Organization", "name": "adris.tech", "url": "https://www.adris.tech"}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css" />
-<link rel="stylesheet" href="/module-pages.css" />
-<link rel="stylesheet" href="/backgrounds.css" />
-<link rel="stylesheet" href="/module-editorial.css" />
-<style>
-/* An inline aside. NOT .callout — that class is a full-bleed dark hero band. */
-.lp-note { border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: 10px;
-  padding: 16px 18px; margin: 22px 0; font-size: 14.5px; line-height: 1.75; color: var(--muted);
-  background: var(--paper-2); }
-.lp-note strong { color: var(--ink); }
-/* A comparison table and a related-pages strip. Text only, no images and no scripts, so the
-   extra depth costs a few kilobytes rather than a slower page. */
-/* A grid item defaults to min-width:auto, so .hiw-main refused to shrink below its widest child
-   and grew to 537px inside a 390px phone — the table was not scrolling, the whole column was
-   overflowing and the last column got clipped away. Scoped here rather than in the shared
-   stylesheet so the module pages are untouched. */
-.hiw-main { min-width: 0; }
-.lp-table { border-collapse: collapse; margin: 20px 0; font-size: 14px; display: block;
-  max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.lp-table thead { position: sticky; left: 0; }
-.lp-table th, .lp-table td { min-width: 104px; }
-.lp-table tr td:first-child, .lp-table tr th:first-child { min-width: 120px; }
-.lp-table th, .lp-table td { border: 1px solid var(--rule); padding: 10px 13px; text-align: left; vertical-align: top; }
-.lp-table th { background: var(--paper-2); font-weight: 600; color: var(--ink); font-size: 13px; }
-.lp-table td { color: var(--muted); line-height: 1.6; }
-.lp-table td strong, .lp-table td b { color: var(--ink); }
-.lp-table tr td:first-child { color: var(--ink); font-weight: 500; }
-.lp-rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 24px 0 0; }
-.lp-rel a { display: block; border: 1px solid var(--rule); border-radius: 10px; padding: 13px 15px;
-  text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 600; transition: border-color .18s; }
-.lp-rel a:hover { border-color: var(--accent); }
-.lp-rel a span { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
-</style>
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "SKULL.ORG (adris.tech)", "url": "https://www.adris.tech/skull", "description": "SKULL.ORG is the defensive security desk of adris.tech: authorised checks of your code, cloud and websites, compliance readiness for DPDP and CERT-In, and evidence packs from public on-chain data. Find, secure, trace and prove, legally.", "parentOrganization": {"@type": "Organization", "name": "adris.tech", "url": "https://www.adris.tech"}}</script>
+<style>
+/* skull - the security desk's own look (24 Oct 2026): the site's colours and theme, with a modern pixel display face,
+   mono labels and stepped "pixel" corners. Body text stays in the site's readable face. */
+.sk-page { --sk-px: 6px; --sk-green: #7c5cff; }
+.sk-page h1, .sk-page h2, .sk-page h3, .sk-pixel { font-family: "Pixelify Sans", var(--font-sans, system-ui), sans-serif; letter-spacing: .01em; }
+.sk-main { max-width: 1120px; margin: 0 auto; padding: 0 24px 80px; }
+.sk-mono, .sk-tag, .sk-meta { font-family: "JetBrains Mono", ui-monospace, monospace; }
+.sk-muted { color: var(--muted); }
+/* stepped pixel corners */
+.sk-px { clip-path: polygon(0 var(--sk-px), var(--sk-px) var(--sk-px), var(--sk-px) 0, calc(100% - var(--sk-px)) 0,
+  calc(100% - var(--sk-px)) var(--sk-px), 100% var(--sk-px), 100% calc(100% - var(--sk-px)), calc(100% - var(--sk-px)) calc(100% - var(--sk-px)),
+  calc(100% - var(--sk-px)) 100%, var(--sk-px) 100%, var(--sk-px) calc(100% - var(--sk-px)), 0 calc(100% - var(--sk-px))); }
+.sk-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: 72px 0 48px; }
+.sk-hero h1 { font-size: clamp(54px, 8vw, 96px); line-height: .95; margin: 10px 0 18px; font-weight: 700; }
+.sk-hero h1 .sk-dot { color: var(--accent); }
+.sk-hero .sk-lead { font-size: 19px; line-height: 1.55; color: var(--muted); max-width: 620px; }
+.sk-tag { display: inline-block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 8px; background: var(--ink); color: var(--paper); }
+.sk-art-wrap { display: grid; place-items: center; }
+.sk-art { width: min(240px, 60vw); height: auto; color: var(--ink); filter: drop-shadow(6px 6px 0 var(--accent)); margin: 0; }
+.sk-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.sk-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; background: var(--ink); color: var(--paper) !important; text-decoration: none;
+  font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-size: 16px; border: 2px solid var(--ink); }
+.sk-btn.ghost { background: transparent; color: var(--ink) !important; }
+.sk-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff !important; }
+.sk-sec { padding: 56px 0 8px; border-top: 2px dashed var(--rule); }
+.sk-sec > h2 { font-size: clamp(30px, 4vw, 44px); margin: 12px 0 10px; }
+.sk-sec > p { color: var(--muted); max-width: 720px; line-height: 1.6; }
+.sk-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 22px; }
+.sk-filters button { font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 7px 12px; border: 2px solid var(--rule); background: transparent; color: var(--muted); cursor: pointer; }
+.sk-filters button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.sk-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.sk-card { background: var(--paper-2); border: 2px solid var(--rule); padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.sk-card.featured { grid-column: 1 / -1; background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.sk-card.featured .sk-meta, .sk-card.featured p { color: color-mix(in oklab, var(--paper) 78%, transparent); }
+.sk-card.featured a.sk-read { color: var(--paper); }
+.sk-card h3 { font-size: 22px; line-height: 1.2; margin: 0; }
+.sk-card h3 a { color: inherit; text-decoration: none; }
+.sk-card h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.sk-card p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; overflow-wrap: anywhere; }
+.sk-meta { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+.sk-meta .k { color: var(--accent); }
+.sk-links { margin-top: auto; display: flex; gap: 14px; flex-wrap: wrap; padding-top: 6px; }
+.sk-read, .sk-links a { font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-size: 15px; color: var(--ink); }
+.sk-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+.sk-grid3 > div { border: 2px solid var(--rule); padding: 18px; background: var(--paper-2); }
+.sk-grid3 h3 { font-size: 20px; margin: 0 0 8px; }
+.sk-grid3 p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; }
+.sk-rules { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+.sk-rules li { padding: 14px 16px; border-left: 6px solid var(--accent); background: var(--paper-2); line-height: 1.55; }
+.sk-rules b { font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-weight: 600; }
+.sk-cta { background: var(--ink); color: var(--paper); padding: 30px; margin-top: 30px; }
+.sk-cta h2 { margin: 0 0 8px; color: var(--paper); }
+.sk-cta p { color: color-mix(in oklab, var(--paper) 78%, transparent); max-width: 720px; line-height: 1.6; }
+.sk-cta .sk-btn { background: var(--paper); color: var(--ink) !important; border-color: var(--paper); margin-top: 8px; }
+/* one post */
+.sk-post { max-width: 760px; padding-top: 48px; }
+.sk-back { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--muted); text-decoration: none; }
+.sk-post article h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 14px 0 12px; }
+.sk-post article h2 { font-size: 26px; margin: 34px 0 10px; }
+.sk-post article p, .sk-post article li { font-size: 17px; line-height: 1.7; }
+.sk-post article code { font-family: "JetBrains Mono", monospace; font-size: 14px; background: var(--paper-2); padding: 1px 5px; }
+.sk-post article pre { background: var(--ink); color: var(--paper); padding: 14px 16px; overflow-x: auto; font-size: 14px; }
+.sk-post article pre code { background: none; color: inherit; padding: 0; }
+.sk-post .sk-repo { display: inline-block; margin: 6px 0 18px; }
+@media (max-width: 900px) { .sk-hero { grid-template-columns: 1fr; padding-top: 40px; } .sk-art-wrap { order: -1; justify-items: start; }
+  .sk-art { width: 120px; } .sk-grid3 { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .sk-main { padding: 0 16px 60px; } .sk-feed { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) { .sk-art { animation: sk-blink 6s steps(1) infinite; } }
+@keyframes sk-blink { 0%, 96%, 100% { transform: none; } 97% { transform: translateY(-2px); } }
+.sk-post article ul, .sk-post article ol { padding-left: 24px; margin: 10px 0; } .sk-post article ul li { list-style: square; } .sk-post article ol li { list-style: decimal; } .sk-post article li::marker { color: var(--accent); }
+</style>
 </head>
-<body>
-
+<body class="sk-page">
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="nav-mark" aria-label="adris.tech home">
@@ -72,9 +104,9 @@
       <span class="dot"></span>
     </a>
     <ul class="nav-links">
-      <li><a href="#platform">Platform</a></li>
+      <li><a href="/#platform">Platform</a></li>
       <li class="has-dropdown">
-        <a href="#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a href="/#platform" style="display:inline-flex;align-items:center;">Modules<span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         <div class="nav-dropdown">
           <div class="nav-dropdown-inner">
             <a href="/modules/krew"><span class="nav-dd-tag">01</span>Krew — AI Agents</a>
@@ -90,11 +122,11 @@
         </div>
       </li>
       <li><a href="/pricing">Pricing</a></li>
-      <li><a href="/download">Download</a></li>
+      <li><a href="/blog">Blog</a></li>
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
-      <li><a href="/skull">SKULL.ORG</a></li>
+      <li><a href="/skull"><span style="display:inline-flex;align-items:center;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull</span></a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>
     <div class="nav-right">
@@ -123,7 +155,7 @@
 <div class="mobile-nav-drawer" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-inner">
     <ul>
-      <li><a href="#platform"  onclick="closeMobileNav()">Platform</a></li>
+      <li><a href="/#platform"  onclick="closeMobileNav()">Platform</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/krew"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Krew — AI Agents</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/automation"  onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Automation</a></li>
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/coder"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Coder</a></li>
@@ -134,18 +166,16 @@
       <li style="padding-left:14px;border-left:2px solid var(--rule)"><a href="/modules/brain"       onclick="closeMobileNav()" style="font-size:12px;color:var(--muted-2)">Brain</a></li>
       <li><a href="/pricing"    onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="/download"   onclick="closeMobileNav()">Download</a></li>
-      <li><a href="/bridge"    onclick="closeMobileNav()">Bridge</a></li>
       <li><a href="/why-adris"  onclick="closeMobileNav()">Why adris</a></li>
       <li><a href="/blog" onclick="closeMobileNav()">Blog</a></li>
       <li><a href="/brief"      onclick="closeMobileNav()">Product brief (PDF)</a></li>
-      <li><a href="/skull"    onclick="closeMobileNav()">SKULL.ORG</a></li>
+      <li><a href="/skull"    onclick="closeMobileNav()"><span style="display:inline-flex;align-items:center;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull</span></a></li>
       <li><a href="/partner"    onclick="closeMobileNav()">Contact</a></li>
     </ul>
     <a href="/download" class="btn mobile-nav-cta">Download — free</a>
   </div>
 </div>
 <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileNav()"></div>
-
 <script>
 function closeMobileNav() {
   document.getElementById('mobileNav').classList.remove('open');
@@ -168,174 +198,79 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 });
 </script>
 
-<div class="hiw-hero">
-  <a href="/" class="hiw-back"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M9 1L1 9M1 9H8M1 9V2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg> adris.tech</a>
-  <h1>SKULL.ORG: <em>find, secure, trace and prove, legally.</em></h1>
-  <p class="hiw-hero-sub">The defensive security desk of adris.tech. Authorised security checks for Indian businesses, compliance readiness, and evidence packs from public on-chain data, with the first checks free while we earn trust.</p>
-  <div class="hiw-jump-grid">
-    <a href="#what" class="hiw-jump"><span class="hiw-jump-num">00</span> What SKULL.ORG is</a>
-    <a href="#feed" class="hiw-jump"><span class="hiw-jump-num">01</span> From SKULL.ORG</a>
-    <a href="#do" class="hiw-jump"><span class="hiw-jump-num">02</span> What we do</a>
-    <a href="#rules" class="hiw-jump"><span class="hiw-jump-num">03</span> How we work</a>
-    <a href="#free" class="hiw-jump"><span class="hiw-jump-num">04</span> Free first checks</a>
-    <a href="#ours" class="hiw-jump"><span class="hiw-jump-num">05</span> Proof on ourselves</a>
-  </div>
-</div>
-
-<div class="hiw-layout">
-  <aside class="hiw-sidebar">
-    <div class="hiw-sidebar-label">On this page</div>
-    <ul class="hiw-nav">
-      <li><a href="#what" class="active"><span class="hiw-nav-num">00</span>What SKULL.ORG is</a></li>
-      <li><a href="#feed"><span class="hiw-nav-num">01</span>From SKULL.ORG</a></li>
-      <li><a href="#do"><span class="hiw-nav-num">02</span>What we do</a></li>
-      <li><a href="#rules"><span class="hiw-nav-num">03</span>How we work</a></li>
-      <li><a href="#free"><span class="hiw-nav-num">04</span>Free first checks</a></li>
-      <li><a href="#ours"><span class="hiw-nav-num">05</span>Proof on ourselves</a></li>
-    </ul>
-  </aside>
-
-  <main class="hiw-main">
-    <style>
-      .sk-hero { padding-top: 8px; }
-      .sk-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 4px; }
-      .sk-actions a { display: inline-flex; align-items: center; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1px solid var(--rule-strong, var(--rule)); color: var(--ink); text-decoration: none; }
-      .sk-actions a.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-      .sk-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 18px; }
-      .sk-filters button { font: inherit; font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--rule); background: transparent; color: var(--muted); cursor: pointer; }
-      .sk-filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-      .sk-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
-      .sk-post { border: 1px solid var(--rule); border-radius: 12px; padding: 18px 18px 16px; background: var(--paper-2); display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-      .sk-post .sk-meta { display: flex; gap: 8px; align-items: center; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-      .sk-post .sk-kind { padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink); }
-      .sk-post h3 { margin: 2px 0 0; font-size: 17px; line-height: 1.3; }
-      .sk-post p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--muted); overflow-wrap: anywhere; }
-      .sk-post .sk-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 6px; }
-      .sk-post .sk-links a { font-size: 13px; font-weight: 500; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
-      .sk-empty { color: var(--muted); font-size: 14px; }
-    </style>
-
-    <section class="hiw-section sk-hero" id="what">
-      <div class="hiw-section-tag"><span class="hiw-section-num">00</span> SKULL.ORG · by adris.tech</div>
-      <h2>A security desk that <span class="it">only checks what you ask it to.</span></h2>
-      <p class="hiw-oneliner">Authorised targets only · a person approves every check · Bengaluru</p>
-      <p>SKULL.ORG checks what small and growing Indian businesses rarely have time to check: keys and passwords left
-      in code, outdated software with known holes, websites and cloud accounts set up in a hurry, and the paperwork the
-      DPDP Act and CERT-In now expect. Its AI agents work inside our own office, and a person approves every check
-      before it touches anything of yours.</p>
+<main class="sk-main">
+  <section class="sk-hero">
+    <div>
+      <span class="sk-tag"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull · by adris.tech</span>
+      <h1>skull<span class="sk-dot">.</span></h1>
+      <p class="sk-lead">The security desk of adris.tech, in the open. We write honestly about the best open-source
+      security tools on GitHub, we check our own systems first, and we check yours only when you ask us to, in
+      writing.</p>
       <div class="sk-actions">
-        <a class="primary" href="/contact?type=security">Ask for a free security check</a>
-        <a href="#feed">See what we are working on</a>
+        <a class="sk-btn sk-px" href="#blog">Read the skull blog</a>
+        <a class="sk-btn ghost sk-px" href="/contact?type=security">Free security check</a>
       </div>
-    </section>
+    </div>
+    <div class="sk-art-wrap"><svg class="sk-art" role="img" aria-label="skull" viewBox="0 0 9 9" width="180" height="180" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg></div>
+  </section>
 
-    <section class="hiw-section" id="feed">
-      <div class="hiw-section-tag"><span class="hiw-section-num">01</span> From SKULL.ORG</div>
-      <h2>Updates, reports, projects and releases.</h2>
-      <p>Everything SKULL.ORG publishes lands here: what we checked, what we found on our own systems, the free projects
-      we take on, and tools you can use, with the code on GitHub or a direct download when there is one.</p>
-      <div class="sk-filters" role="group" aria-label="Show">
-        <button type="button" data-kind="all" aria-pressed="true">All</button>
-        <button type="button" data-kind="update" aria-pressed="false">Updates</button>
-        <button type="button" data-kind="report" aria-pressed="false">Reports</button>
-        <button type="button" data-kind="project" aria-pressed="false">Projects</button>
-        <button type="button" data-kind="release" aria-pressed="false">Releases</button>
-        <button type="button" data-kind="guide" aria-pressed="false">Guides</button>
-      </div>
-      <div class="sk-feed" id="skFeed"><p class="sk-empty">Loading…</p></div>
-    </section>
+  <section class="sk-sec" id="blog">
+    <span class="sk-tag">The skull blog</span>
+    <h2>Tools, reports and what we found.</h2>
+    <p>Reviews of open-source security tools made by companies and communities around the world, written from the
+    projects' own data on GitHub; reports on our own systems; and what we are working on. Every article also appears
+    on the main adris.tech blog.</p>
+    <div class="sk-filters" role="group" aria-label="Show">
+      <button type="button" data-kind="all" aria-pressed="true">all</button>
+      <button type="button" data-kind="article" aria-pressed="false">tool reviews</button>
+      <button type="button" data-kind="report" aria-pressed="false">reports</button>
+      <button type="button" data-kind="update" aria-pressed="false">updates</button>
+      <button type="button" data-kind="guide" aria-pressed="false">guides</button>
+    </div>
+    <div class="sk-feed" id="skFeed"><p class="sk-muted">Loading the blog...</p></div>
+  </section>
 
-    <section class="hiw-section" id="do">
-      <div class="hiw-section-tag"><span class="hiw-section-num">02</span> What we do</div>
-      <h2>Three kinds of work, and public programs.</h2>
-      <div class="grid-3">
-        <div class="grid-card"><h3>Secure your systems</h3><p>Leaked keys and passwords in your repositories,
-        vulnerable dependencies, basic code checks, and a hardening checklist for your website and cloud, with a
-        plain-language report and the fix for each finding.</p></div>
-        <div class="grid-card"><h3>Compliance readiness</h3><p>Checklists and evidence trackers for the DPDP Act,
-        CERT-In's directions, ISO 27001 and SOC 2, so you know what is missing before an auditor or a customer asks.</p></div>
-        <div class="grid-card"><h3>Trace and prove</h3><p>For victims of crypto theft: the stolen funds followed across
-        public blockchains, an evidence pack with a timeline and a fund-flow graph, sealed with a SHA-256 hash for the
-        police, the exchange or your lawyer. Public data only.</p></div>
-      </div>
-      <p>We also take part in public bug-bounty programs and audit contests, strictly inside each program's published
-      scope.</p>
-    </section>
+  <section class="sk-sec" id="do">
+    <span class="sk-tag">What we do</span>
+    <h2>Find, secure, trace and prove. Legally.</h2>
+    <div class="sk-grid3">
+      <div class="sk-px"><h3>Secure your systems</h3><p>Leaked keys and passwords in your code, outdated parts with
+      known holes, and a hardening checklist for your website and cloud, with the fix for each finding.</p></div>
+      <div class="sk-px"><h3>Compliance readiness</h3><p>Checklists and evidence trackers for the DPDP Act, CERT-In's
+      directions, ISO 27001 and SOC 2, so you know what is missing before an auditor or a customer asks.</p></div>
+      <div class="sk-px"><h3>Trace and prove</h3><p>For victims of crypto theft: stolen funds followed across public
+      blockchains, with an evidence pack for the police, the exchange or your lawyer. Public data only.</p></div>
+    </div>
+  </section>
 
-    <section class="hiw-section" id="rules">
-      <div class="hiw-section-tag"><span class="hiw-section-num">03</span> How we work</div>
-      <h2>The rules we do not bend.</h2>
-      <ul>
-        <li><strong>Written scope first</strong>: every check names what it covers, agreed with you before it starts. No scope, no scan. That rule is written into our software, not just into this page.</li>
-        <li><strong>No hacking back</strong>: no access to systems that are not yours or your client's, ever.</li>
-        <li><strong>No public accusations</strong>: who might be behind an incident stays a confidential hypothesis, shared only with you, the exchange, the police or your lawyer.</li>
-        <li><strong>No guarantees</strong>: a report says what was checked, when, and what it could not check. Nobody can honestly promise a system is safe, and we do not.</li>
-        <li><strong>Your data stays yours</strong>: findings are kept only as long as the work needs them.</li>
-      </ul>
-    </section>
+  <section class="sk-sec" id="rules">
+    <span class="sk-tag">How we work</span>
+    <h2>The rules we do not bend.</h2>
+    <ul class="sk-rules">
+      <li><b>Written scope first.</b> Every check names what it covers, agreed before it starts. No scope, no scan,
+      and that rule is in our software, not just on this page.</li>
+      <li><b>No hacking back.</b> No access to systems that are not yours or your client's, ever.</li>
+      <li><b>No public accusations.</b> Who might be behind an incident stays a confidential hypothesis.</li>
+      <li><b>No guarantees.</b> A report says what was checked, when, and what it could not check.</li>
+      <li><b>Our own office first.</b> A weekly read-only audit of our own machines and code, and an append-only log
+      of everything skull does.</li>
+    </ul>
+    <div class="sk-cta sk-px">
+      <h2>Our first checks are free.</h2>
+      <p>skull is new and trust has to be earned. A read-only review of your website's public setup and, if you give
+      access, one code repository scanned for leaked keys and vulnerable parts. You get the full report and owe us
+      nothing.</p>
+      <a class="sk-btn sk-px" href="/contact?type=security">Ask for a free security check</a>
+    </div>
+  </section>
+</main>
 
-    <section class="hiw-section" id="free">
-      <div class="hiw-section-tag"><span class="hiw-section-num">04</span> Free while we earn trust</div>
-      <h2>Our first checks are <span class="it">free.</span></h2>
-      <p>SKULL.ORG is new, and trust has to be earned. So our first security checks for Indian businesses cost nothing:
-      a read-only review of your website's public setup and, if you give us access, a scan of one code repository for
-      leaked secrets and vulnerable dependencies. You get the full report and owe us nothing, and you decide whether we
-      may mention that we worked together.</p>
-      <div class="sk-actions"><a class="primary" href="/contact?type=security">Ask for a free security check</a></div>
-    </section>
-
-    <section class="hiw-section" id="ours">
-      <div class="hiw-section-tag"><span class="hiw-section-num">05</span> Proof on ourselves</div>
-      <h2>We run it on our own office first.</h2>
-      <p>Before SKULL.ORG checks anything of yours, it checks ours: a weekly read-only audit of our own machines,
-      repositories and AI agents, an append-only log of every action it takes, and a self-healing routine that fixes
-      what goes wrong in our office before a person has to notice it. What it finds is posted above.</p>
-    </section>
-
-    <script>
-    (function () {
-      var box = document.getElementById("skFeed"), posts = [], kind = "all";
-      var names = { update: "Update", report: "Report", project: "Project", release: "Release", guide: "Guide", notice: "Notice" };
-      function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-      function safe(u) { return typeof u === "string" && /^https:\/\/[^\s<>"']+$/.test(u) ? u : ""; }
-      function draw() {
-        box.textContent = "";
-        var shown = posts.filter(function (p) { return kind === "all" || p.kind === kind; });
-        if (!shown.length) { box.appendChild(el("p", "sk-empty", kind === "all" ? "The first posts are on their way." : "Nothing here yet.")); return; }
-        shown.forEach(function (p) {
-          var card = el("article", "sk-post"), meta = el("div", "sk-meta");
-          meta.appendChild(el("span", "sk-kind", names[p.kind] || "Post"));
-          if (p.date) meta.appendChild(el("span", "", new Date(p.date + "T00:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })));
-          card.appendChild(meta);
-          card.appendChild(el("h3", "", p.title));
-          String(p.body || "").split(/\n\s*\n/).forEach(function (para) { if (para.trim()) card.appendChild(el("p", "", para.trim())); });
-          var links = el("div", "sk-links"), repo = safe(p.repo), dl = safe(p.download);
-          if (repo) { var a = el("a", "", "Code on GitHub ↗"); a.href = repo; a.target = "_blank"; a.rel = "noopener"; links.appendChild(a); }
-          if (dl) { var d = el("a", "", "Download ↓"); d.href = dl; d.rel = "noopener"; links.appendChild(d); }
-          if (links.childNodes.length) card.appendChild(links);
-          box.appendChild(card);
-        });
-      }
-      document.querySelectorAll(".sk-filters button").forEach(function (b) {
-        b.addEventListener("click", function () {
-          kind = b.getAttribute("data-kind");
-          document.querySelectorAll(".sk-filters button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-          draw();
-        });
-      });
-      fetch("/skull-feed.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : { posts: [] }; })
-        .then(function (d) { posts = (d && d.posts) || []; draw(); })
-        .catch(function () { posts = []; draw(); });
-    })();
-    </script>
-  </main>
-</div>
 
 <footer>
   <div class="wrap">
     <div class="footer-top">
       <div class="footer-brand">
-        <a class="brand-mark" href="#top">
+        <a class="brand-mark" href="/#top">
           <svg class="flogo" viewBox="0 0 26 24" fill="none" aria-hidden="true">
             <path d="M2 4 L9 4 L15 12 L9 20 L2 20 L8 12 Z" fill="currentColor"/>
             <path d="M12 4 L19 4 L25 12 L19 20 L12 20 L18 12 Z" fill="currentColor"/>
@@ -362,7 +297,7 @@ document.getElementById('themeToggle').addEventListener('click', function () {
         <ul>
           <li><a href="/why-adris">Why adris</a></li>
           <li><a href="/blog">Blog</a></li>
-          <li><a href="/skull">SKULL.ORG · security</a></li>
+          <li><a href="/skull"><span style="display:inline-flex;align-items:center;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull · security</span></a></li>
           <li><a href="/brief">Product brief (PDF)</a></li>
           <li><a href="/how-it-works">How it works</a></li>
           <li><a href="/pricing">Pricing</a></li>
@@ -390,12 +325,43 @@ document.getElementById('themeToggle').addEventListener('click', function () {
     </div>
   </div>
 </footer>
-
-<!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/nav-auth.js" defer></script>
-<!-- Keeps the "On this page" highlight on the section you are reading -->
-<script src="/page-nav.js" defer></script>
-
+<script>
+/* the skull blog's tiny markdown: ## headings, - and 1. lists, **bold**, `code`, ``` blocks, https links only.
+   Everything is escaped first - post text never becomes HTML by itself. */
+window.skMd = function (src) {
+  var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var inline = function (s) {
+    return esc(s)
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[\s(])(https:\/\/[^\s<)]+[^\s<).,;:])/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+  };
+  var out = [], blocks = String(src || "").replace(/\r/g, "").split(/```/);
+  blocks.forEach(function (chunk, i) {
+    if (i % 2 === 1) { out.push("<pre><code>" + esc(chunk.replace(/^[a-z]*\n/, "").trim()) + "</code></pre>"); return; }
+    chunk.split(/\n\s*\n/).forEach(function (b) {
+      var t = b.trim();
+      if (!t) return;
+      var lines = t.split("\n");
+      if (/^#{1,3}\s/.test(t) && lines.length === 1) { out.push("<h2>" + inline(t.replace(/^#{1,3}\s*/, "")) + "</h2>"); return; }
+      if (lines.every(function (l) { return /^\s*[-*]\s+/.test(l); })) {
+        out.push("<ul>" + lines.map(function (l) { return "<li>" + inline(l.replace(/^\s*[-*]\s+/, "")) + "</li>"; }).join("") + "</ul>"); return;
+      }
+      if (lines.every(function (l) { return /^\s*\d+[.)]\s+/.test(l); })) {
+        out.push("<ol>" + lines.map(function (l) { return "<li>" + inline(l.replace(/^\s*\d+[.)]\s+/, "")) + "</li>"; }).join("") + "</ol>"); return;
+      }
+      if (/^#{1,3}\s/.test(lines[0])) {
+        out.push("<h2>" + inline(lines[0].replace(/^#{1,3}\s*/, "")) + "</h2>");
+        lines = lines.slice(1);
+      }
+      out.push("<p>" + lines.map(inline).join("<br>") + "</p>");
+    });
+  });
+  return out.join("\n");
+};
+</script>
+<script src="/skull.js" defer></script>
 </body>
 </html>
