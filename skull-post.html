@@ -17,14 +17,14 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css" />
 <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 <style>
 /* skull - the security desk's own look (24 Oct 2026): the site's colours and theme, with a modern pixel display face,
    mono labels and stepped "pixel" corners. Body text stays in the site's readable face. */
 .sk-page { --sk-px: 6px; --sk-green: #7c5cff; }
-.sk-page h1, .sk-page h2, .sk-page h3, .sk-pixel { font-family: "Pixelify Sans", var(--font-sans, system-ui), sans-serif; letter-spacing: .01em; }
+.sk-page h1, .sk-page h2, .sk-page h3, .sk-pixel { font-family: "Press Start 2P", ui-monospace, monospace; font-weight: 400; font-synthesis: none; letter-spacing: 0; line-height: 1.35; }
 .sk-main { max-width: 1120px; margin: 0 auto; padding: 0 24px 80px; }
 .sk-mono, .sk-tag, .sk-meta { font-family: "JetBrains Mono", ui-monospace, monospace; }
 .sk-muted { color: var(--muted); }
@@ -33,19 +33,19 @@
   calc(100% - var(--sk-px)) var(--sk-px), 100% var(--sk-px), 100% calc(100% - var(--sk-px)), calc(100% - var(--sk-px)) calc(100% - var(--sk-px)),
   calc(100% - var(--sk-px)) 100%, var(--sk-px) 100%, var(--sk-px) calc(100% - var(--sk-px)), 0 calc(100% - var(--sk-px))); }
 .sk-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: 72px 0 48px; }
-.sk-hero h1 { font-size: clamp(54px, 8vw, 96px); line-height: .95; margin: 10px 0 18px; font-weight: 700; }
+.sk-hero h1 { font-size: 64px; line-height: 1.1; margin: 14px 0 20px; }
 .sk-hero h1 .sk-dot { color: var(--accent); }
 .sk-hero .sk-lead { font-size: 19px; line-height: 1.55; color: var(--muted); max-width: 620px; }
-.sk-tag { display: inline-block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 8px; background: var(--ink); color: var(--paper); }
+.sk-tag { display: inline-flex; align-items: center; gap: 2px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 8px; background: var(--ink); color: var(--paper); }
 .sk-art-wrap { display: grid; place-items: center; }
 .sk-art { width: min(240px, 60vw); height: auto; color: var(--ink); filter: drop-shadow(6px 6px 0 var(--accent)); margin: 0; }
 .sk-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .sk-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; background: var(--ink); color: var(--paper) !important; text-decoration: none;
-  font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-size: 16px; border: 2px solid var(--ink); }
+  font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 500; font-size: 15px; border: 2px solid var(--ink); }
 .sk-btn.ghost { background: transparent; color: var(--ink) !important; }
 .sk-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff !important; }
 .sk-sec { padding: 56px 0 8px; border-top: 2px dashed var(--rule); }
-.sk-sec > h2 { font-size: clamp(30px, 4vw, 44px); margin: 12px 0 10px; }
+.sk-sec > h2 { font-size: 24px; margin: 16px 0 14px; }
 .sk-sec > p { color: var(--muted); max-width: 720px; line-height: 1.6; }
 .sk-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 22px; }
 .sk-filters button { font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 7px 12px; border: 2px solid var(--rule); background: transparent; color: var(--muted); cursor: pointer; }
@@ -55,30 +55,30 @@
 .sk-card.featured { grid-column: 1 / -1; background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .sk-card.featured .sk-meta, .sk-card.featured p { color: color-mix(in oklab, var(--paper) 78%, transparent); }
 .sk-card.featured a.sk-read { color: var(--paper); }
-.sk-card h3 { font-size: 22px; line-height: 1.2; margin: 0; }
+.sk-card h3 { font-size: 16px; line-height: 1.5; margin: 0; }
 .sk-card h3 a { color: inherit; text-decoration: none; }
 .sk-card h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
 .sk-card p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; overflow-wrap: anywhere; }
 .sk-meta { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
 .sk-meta .k { color: var(--accent); }
 .sk-links { margin-top: auto; display: flex; gap: 14px; flex-wrap: wrap; padding-top: 6px; }
-.sk-read, .sk-links a { font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-size: 15px; color: var(--ink); }
+.sk-read, .sk-links a { font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 500; font-size: 14px; color: var(--ink); }
 .sk-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
 .sk-grid3 > div { border: 2px solid var(--rule); padding: 18px; background: var(--paper-2); }
-.sk-grid3 h3 { font-size: 20px; margin: 0 0 8px; }
+.sk-grid3 h3 { font-size: 16px; line-height: 1.5; margin: 0 0 10px; }
 .sk-grid3 p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; }
 .sk-rules { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
 .sk-rules li { padding: 14px 16px; border-left: 6px solid var(--accent); background: var(--paper-2); line-height: 1.55; }
-.sk-rules b { font-family: "Pixelify Sans", var(--font-sans), sans-serif; font-weight: 600; }
+.sk-rules b { font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 500; }
 .sk-cta { background: var(--ink); color: var(--paper); padding: 30px; margin-top: 30px; }
-.sk-cta h2 { margin: 0 0 8px; color: var(--paper); }
+.sk-cta h2 { margin: 0 0 12px; font-size: 24px; color: var(--paper); }
 .sk-cta p { color: color-mix(in oklab, var(--paper) 78%, transparent); max-width: 720px; line-height: 1.6; }
 .sk-cta .sk-btn { background: var(--paper); color: var(--ink) !important; border-color: var(--paper); margin-top: 8px; }
 /* one post */
 .sk-post { max-width: 760px; padding-top: 48px; }
 .sk-back { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--muted); text-decoration: none; }
-.sk-post article h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 14px 0 12px; }
-.sk-post article h2 { font-size: 26px; margin: 34px 0 10px; }
+.sk-post article h1 { font-size: 32px; line-height: 1.35; margin: 16px 0 14px; }
+.sk-post article h2 { font-size: 16px; line-height: 1.5; margin: 36px 0 12px; }
 .sk-post article p, .sk-post article li { font-size: 17px; line-height: 1.7; }
 .sk-post article code { font-family: "JetBrains Mono", monospace; font-size: 14px; background: var(--paper-2); padding: 1px 5px; }
 .sk-post article pre { background: var(--ink); color: var(--paper); padding: 14px 16px; overflow-x: auto; font-size: 14px; }
@@ -90,6 +90,10 @@
 @media (prefers-reduced-motion: no-preference) { .sk-art { animation: sk-blink 6s steps(1) infinite; } }
 @keyframes sk-blink { 0%, 96%, 100% { transform: none; } 97% { transform: translateY(-2px); } }
 .sk-post article ul, .sk-post article ol { padding-left: 24px; margin: 10px 0; } .sk-post article ul li { list-style: square; } .sk-post article ol li { list-style: decimal; } .sk-post article li::marker { color: var(--accent); }
+
+/* 24 Oct 2026: Press Start 2P is an 8x8 bitmap face - it stays sharp on its 8px grid; smaller on phones */
+@media (max-width: 900px) { .sk-hero h1 { font-size: 48px; } .sk-sec > h2 { font-size: 16px; } .sk-post article h1 { font-size: 24px; } .sk-cta h2 { font-size: 16px; } }
+@media (max-width: 420px) { .sk-hero h1 { font-size: 40px; } .sk-card h3, .sk-grid3 h3 { font-size: 16px; } }
 </style>
 </head>
 <body class="sk-page">
