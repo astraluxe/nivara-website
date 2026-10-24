@@ -340,5 +340,175 @@
   "large": 246000
  },
  "minimum": 9999,
- "negotiable": "Approximate. The price is negotiable, and it can go up with how heavy the work is: how many people use it, how much it reads, and which of your tools it connects to. We confirm the price after a short call."
+ "negotiable": "Approximate. The price is negotiable, and it can go up with how heavy the work is: how many people use it, how much it reads, and which of your tools it connects to. We confirm the price after a short call.",
+ "hours": {
+  "lead_research": {
+   "micro": 10,
+   "small": 20,
+   "medium": 40,
+   "large": 80
+  },
+  "company_research": {
+   "micro": 6,
+   "small": 12,
+   "medium": 24,
+   "large": 48
+  },
+  "outreach": {
+   "micro": 12,
+   "small": 25,
+   "medium": 50,
+   "large": 100
+  },
+  "pitch_decks": {
+   "micro": 5,
+   "small": 10,
+   "medium": 20,
+   "large": 40
+  },
+  "call_assistant": {
+   "micro": 8,
+   "small": 15,
+   "medium": 30,
+   "large": 60
+  },
+  "marketing_posts": {
+   "micro": 4,
+   "small": 8,
+   "medium": 16,
+   "large": 32
+  },
+  "blog_writer": {
+   "micro": 5,
+   "small": 10,
+   "medium": 20,
+   "large": 40
+  },
+  "email_desk": {
+   "micro": 15,
+   "small": 30,
+   "medium": 60,
+   "large": 120
+  },
+  "whatsapp_desk": {
+   "micro": 12,
+   "small": 25,
+   "medium": 50,
+   "large": 100
+  },
+  "meetings": {
+   "micro": 4,
+   "small": 8,
+   "medium": 16,
+   "large": 32
+  },
+  "projects": {
+   "micro": 6,
+   "small": 12,
+   "medium": 24,
+   "large": 48
+  },
+  "tender_desk": {
+   "micro": 12,
+   "small": 25,
+   "medium": 50,
+   "large": 100
+  },
+  "tender_dossier": {
+   "micro": 10,
+   "small": 20,
+   "medium": 40,
+   "large": 80
+  },
+  "bid_pricing": {
+   "micro": 8,
+   "small": 15,
+   "medium": 30,
+   "large": 60
+  },
+  "document_reader": {
+   "micro": 10,
+   "small": 20,
+   "medium": 40,
+   "large": 80
+  },
+  "accounts": {
+   "micro": 10,
+   "small": 20,
+   "medium": 40,
+   "large": 80
+  },
+  "quotations": {
+   "micro": 8,
+   "small": 15,
+   "medium": 30,
+   "large": 60
+  },
+  "website_builder": {
+   "micro": 5,
+   "small": 10,
+   "medium": 20,
+   "large": 40
+  },
+  "software_builder": {
+   "micro": 10,
+   "small": 20,
+   "medium": 40,
+   "large": 80
+  },
+  "security_checks": {
+   "micro": 4,
+   "small": 8,
+   "medium": 16,
+   "large": 32
+  },
+  "health_monitor": {
+   "micro": 5,
+   "small": 10,
+   "medium": 20,
+   "large": 40
+  },
+  "reviewer": {
+   "micro": 5,
+   "small": 10,
+   "medium": 20,
+   "large": 40
+  },
+  "council": {
+   "micro": 4,
+   "small": 8,
+   "medium": 16,
+   "large": 32
+  },
+  "office_hub": {
+   "micro": 6,
+   "small": 12,
+   "medium": 24,
+   "large": 48
+  }
+ },
+ "hours_own": {
+  "micro": {
+   "agent": 8,
+   "department": 20
+  },
+  "small": {
+   "agent": 15,
+   "department": 40
+  },
+  "medium": {
+   "agent": 30,
+   "department": 80
+  },
+  "large": {
+   "agent": 60,
+   "department": 160
+  }
+ },
+ "hour_value": {
+  "micro": 250,
+  "small": 300,
+  "medium": 400,
+  "large": 550
+ }
 }
