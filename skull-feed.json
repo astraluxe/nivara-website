@@ -1,6 +1,16 @@
 {
- "updated": "2026-10-24T05:16:11",
+ "updated": "2026-10-24T05:16:14",
  "posts": [
+  {
+   "id": 7,
+   "kind": "guide",
+   "title": "Five checks for your business website this week",
+   "body": "1. Every page loads over https, including forms and images. 2. Your website platform and its plugins are on their latest versions. 3. Old admin accounts are removed and the rest use two-factor sign-in. 4. No API keys or passwords sit in the website code or in a public repository. 5. You have a backup, and you have tried restoring it once.\n\nIf any of these is unclear, that is what our free first check is for.",
+   "slug": "five-checks-for-your-business-website-this-week",
+   "excerpt": "1. Every page loads over https, including forms and images. 2. Your website platform and its plugins are on their latest versions. 3. Old admin accounts are removed and the rest use two-factor sign-in. 4. No API keys or...",
+   "date": "2026-10-24",
+   "from": "SKULL"
+  },
   {
    "id": 4,
    "kind": "article",
