@@ -1,11 +1,24 @@
 {
- "updated": "2026-10-23T11:42:08",
+ "updated": "2026-10-24T04:50:57",
  "posts": [
+  {
+   "id": 5,
+   "kind": "article",
+   "title": "Scanning Secrets with TruffleHog: A Practical Guide for Small Businesses",
+   "body": "## The hidden risk of leaked credentials\nOrganizations often store code, configuration files and operational logs in places that are easy to access. When a secret such as an API key or database password is unintentionally written to a repository or a chat channel it can be harvested by attackers. Finding those secrets before they are abused is a core requirement for any security program.\n\n## What it is\nTruffleHog is an open source secret scanning tool maintained by Truffle Security. It is released under the AGPL 3.0 licence. Its latest release is v3.99.6 on 24 Oct 2026. The project has 28,676 stars on GitHub as of 24 Oct 2026.\n\n## What it finds\nThe scanner looks for credentials across many sources including Git repositories, chat platforms, wikis, log files, API testing services, object stores and local filesystems. It can recognise more than 800 types of secrets ranging from cloud provider keys to database passwords and private encryption keys. For each finding it tries to classify the secret to its originating service and can optionally validate whether the credential is still active.\n\n## How a small business would use it\nA web agency could run TruffleHog against client repositories before deployment to ensure no development keys are left in the code base. A clinic that manages a patient portal could scan its configuration files and server logs to verify that database passwords are not exposed. A startup building a mobile app could integrate the tool into its CI pipeline to stop accidental commits of third‑party API keys.\n\n## Trying it\nFor macOS users the tool can be installed with a package manager:\n```bash\nbrew install trufflehog\n```\nThe Docker image can be used on any platform. A basic scan of a GitHub organization looks like:\n```bash\ndocker run --rm -it -v \"$PWD:/pwd\" trufflesecurity/trufflehog:latest github --org=trufflesecurity\n```\nScanning a single repository is performed with:\n```bash\ndocker run --rm -it -v \"$PWD:/pwd\" trufflesecurity/trufflehog:latest github --repo https://github.com/trufflesecurity/test_keys\n```\nWindows command prompt and PowerShell variations are provided in the README. For further options consult the official documentation.\n\n## Limits\nThe scanner cannot guarantee that every secret is malicious; it may report false positives that require human judgement. Validation of a secret relies on the ability to connect to the target service, which may be blocked by firewalls or require additional credentials. The tool does not replace secure development practices such as using environment variables or secret management solutions. Continuous monitoring and periodic manual review are still necessary.\n\n## The skull take\nTruffleHog gives small teams a fast way to locate hidden credentials in code and configuration. Run it regularly in CI and before any release to catch accidental exposure early.\n\nRepository: https://github.com/trufflesecurity/trufflehog · facts checked on GitHub 24 Oct 2026.",
+   "slug": "scanning-secrets-with-trufflehog-a-practical-guide-for-small-businesse",
+   "excerpt": "Repository: https://github.com/trufflesecurity/trufflehog · facts checked on GitHub 24 Oct 2026.",
+   "date": "2026-10-24",
+   "from": "SKULL writer",
+   "repo": "https://github.com/trufflesecurity/trufflehog"
+  },
   {
    "id": 2,
    "kind": "report",
    "title": "Our own office, audited first",
    "body": "Before checking anyone else, we checked ourselves. On 23 October 2026 SKULL.ORG audited the 20 website previews our studio hosts for Indian clinics and restaurants: no leaked keys, no scripts loaded from unknown sites, no forms sending data elsewhere, and every preview hidden from search engines.\n\nThis week our weekly self-audit of our own machines and repositories found nothing serious, and every action SKULL.ORG takes is written to an append-only log that is checked for tampering.",
+   "slug": "our-own-office-audited-first",
+   "excerpt": "Before checking anyone else, we checked ourselves. On 23 October 2026 SKULL.ORG audited the 20 website previews our studio hosts for Indian clinics and restaurants: no leaked keys, no scripts loaded from unknown sites,...",
    "date": "2026-10-23",
    "from": "SKULL"
   },
@@ -14,6 +27,8 @@
    "kind": "update",
    "title": "SKULL.ORG is open",
    "body": "SKULL.ORG is the new defensive security desk of adris.tech. We check code, websites and cloud setups for the problems that cost small businesses the most, and we only ever check what its owner has asked us to check, in writing.\n\nWhile we earn trust, the first checks are free. Ask through the contact page and we will reply with exactly what we would check and how.",
+   "slug": "skull-org-is-open",
+   "excerpt": "SKULL.ORG is the new defensive security desk of adris.tech. We check code, websites and cloud setups for the problems that cost small businesses the most, and we only ever check what its owner has asked us to check, in...",
    "date": "2026-10-23",
    "from": "SKULL"
   }
