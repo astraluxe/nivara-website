@@ -6,7 +6,7 @@
 <link rel="apple-touch-icon" href="/icon.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Docs · adris.tech</title>
-<meta name="description" content="The complete guide to adris.tech, in one place: every module (Krew, Studio, Coder, Models, Vault, Guard, Mesh), how it works, and the cost case — explained in plain language." />
+<meta name="description" content="The complete guide to adris.tech, in one place: the custom digital offices we build, how a project runs and our terms, every module of the free app, how it works, and the cost case — explained in plain language." />
 <link rel="canonical" href="https://adris.tech/docs" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +14,19 @@
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="module-editorial.css" />
 <link rel="stylesheet" href="docs.css" />
+<style>
+.docs-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 6px}
+.docs-actions .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--rule-strong);cursor:pointer}
+.termcard h4 .full{font-weight:400;opacity:.65;font-size:.85em}
+.modcard.termcard{cursor:default}
+@media print{
+  .nav,.docs-side,.docs-mobilebar,.docs-actions,.dpager,footer{display:none!important}
+  .docs-shell{display:block!important}.docs-main{padding:0!important;max-width:none!important}
+  .dtopic[data-topic=office],.dtopic[data-topic=project],.dtopic[data-topic=terms],.dtopic[data-topic=protect]{display:block!important;page-break-after:always}
+  .dtopic:not([data-topic=office]):not([data-topic=project]):not([data-topic=terms]):not([data-topic=protect]){display:none!important}
+  a{color:inherit;text-decoration:none}
+}
+</style>
 </head>
 <body>
 
@@ -44,10 +57,10 @@
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
+      <li><a href="/docs" aria-current="page">Docs</a></li>
       <li><a href="/skull"><span style="display:inline-flex;align-items:baseline;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull</span></a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>
-    <ul class="nav-links"><li><a href="/#platform">Platform</a></li><li><a href="/docs">Docs</a></li><li><a href="/pricing">Pricing</a></li><li><a href="/download">Download</a></li></ul>
     <div class="nav-right">
       <a id="navSignIn" href="/signin" style="padding:7px 14px;border:1px solid var(--rule-strong);border-radius:8px;font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;white-space:nowrap;">Sign in</a>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span class="tt-track"><span class="tt-thumb" aria-hidden="true"></span><span class="tt-l tt-paper">Paper</span><span class="tt-l tt-ink">Ink</span></span></button>
@@ -65,7 +78,13 @@
 
   <!-- SIDEBAR -->
   <aside class="docs-side" id="docsSide">
-    <div class="dgroup-title">Get started</div>
+    <div class="dgroup-title">Custom digital office</div>
+    <a class="dlink" data-topic="office">What we build</a>
+    <a class="dlink" data-topic="project">How a project runs</a>
+    <a class="dlink" data-topic="terms">Our terms, plainly</a>
+    <a class="dlink" data-topic="protect">Your data &amp; our code</a>
+
+    <div class="dgroup-title">The free app</div>
     <a class="dlink" data-topic="overview">Overview</a>
     <a class="dlink" data-topic="how">How it works</a>
     <a class="dlink" data-topic="roi">Is it worth it? (ROI)</a>
@@ -90,18 +109,142 @@
   <!-- CONTENT -->
   <main class="docs-main" id="docsMain">
 
+
+    <!-- CUSTOM DIGITAL OFFICE (29 Oct 2026) -->
+    <article class="dtopic" data-topic="office">
+      <div class="dcrumb">Custom digital office</div>
+      <h1>An office that does the <em>routine work</em> for you.</h1>
+      <p class="dlede">adris.tech is a Bengaluru company that builds custom digital offices: AI agents, organised like departments, that take over a company's routine office work — enquiries, quotations, follow-ups, documents and reports — and run on the company's own computers.</p>
+      <div class="docs-actions"><a class="btn" href="/contact">Talk to us</a> <button class="btn btn-ghost" type="button" onclick="window.print()">Save this guide as PDF</button></div>
+
+      <div class="dsec" id="office-what">
+        <h2>What we build</h2>
+        <p>Every office is built around one company's work. We start from what takes your team's time each week and build agents for exactly that. Typical work an office takes over:</p>
+        <ol class="steps">
+          <li><div class="step-text"><strong>Enquiries to quotations</strong><span>Reads enquiries from email or WhatsApp, prepares the quotation in your format, and puts it in front of you to approve.</span></div></li>
+          <li><div class="step-text"><strong>Follow-ups that do not slip</strong><span>Keeps track of every open enquiry, order and payment, and drafts the next follow-up on time.</span></div></li>
+          <li><div class="step-text"><strong>Documents and paperwork</strong><span>Fills the documents your business repeats every day from the details already in front of it.</span></div></li>
+          <li><div class="step-text"><strong>Reports</strong><span>Daily and weekly summaries of what came in, what went out and what is waiting on whom.</span></div></li>
+        </ol>
+      </div>
+
+      <div class="dsec" id="office-control">
+        <h2>You stay in control</h2>
+        <p>The agents prepare; people decide. Anything that leaves your company — a quotation, an email to a customer, a price — waits for approval by the person you choose. Every action is recorded: who decided what, and when.</p>
+        <div class="dfig"><div class="ba">
+          <div class="ba-box after"><div class="ba-head">The agents do</div><ul><li>Read and sort what comes in</li><li>Draft quotations, replies and documents</li><li>Track what is open and due</li><li>Prepare reports</li></ul></div>
+          <div class="ba-box after"><div class="ba-head">Your people do</div><ul><li>Approve what goes out</li><li>Set prices and terms</li><li>Handle exceptions</li><li>Talk to customers</li></ul></div>
+        </div></div>
+      </div>
+
+      <div class="dsec" id="office-where">
+        <h2>Where it runs, and which AI it uses</h2>
+        <p>The office runs on your own computers. You choose the AI it uses: a local model keeps everything on your premises; a cloud AI key in your own name is quicker to start with, but the text it processes is sent to that AI provider. We tell you plainly which one you are using.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <article class="dtopic" data-topic="project">
+      <div class="dcrumb">Custom digital office</div>
+      <h1>How a project <em>runs.</em></h1>
+      <p class="dlede">Seven steps from the first call to a working office. Nothing is built before both sides have signed what will be built.</p>
+      <div class="dsec" id="project-steps">
+        <h2>The steps</h2>
+        <ol class="steps">
+          <li><div class="step-text"><strong>1 · A short call</strong><span>We learn how your team works today and where the time goes. No charge.</span></div></li>
+          <li><div class="step-text"><strong>2 · The SOW (Statement of Work)</strong><span>Exactly what we build, the acceptance tests, the timeline and the price — in writing.</span></div></li>
+          <li><div class="step-text"><strong>3 · The agreement, online</strong><span>You receive a private link on adris.tech with every term of the project. You read it and accept it there — or ask us about any point first.</span></div></li>
+          <li><div class="step-text"><strong>4 · Advance payment</strong><span>30–50% of the total (agreed per project) before building starts. The rest follows on the milestones in the SOW — for example at the demo and after delivery.</span></div></li>
+          <li><div class="step-text"><strong>5 · Build and demo</strong><span>We build the office and show it working on your own work.</span></div></li>
+          <li><div class="step-text"><strong>6 · Delivery and acceptance</strong><span>Installed on your computers and tested against the SOW's acceptance tests. You confirm in writing.</span></div></li>
+          <li><div class="step-text"><strong>7 · The first month</strong><span>Problems you report in the first month after acceptance are fixed free.</span></div></li>
+        </ol>
+      </div>
+      <div class="dsec" id="project-after">
+        <h2>After the first year</h2>
+        <p>The price covers building the office and using it for 12 months from acceptance; it is renewed every year at the renewal price in the SOW. An optional monthly plan covers security checks, updates and changes to the existing agents. New agents or departments are always a separate order, with their own SOW.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <article class="dtopic" data-topic="terms">
+      <div class="dcrumb">Custom digital office</div>
+      <h1>Our terms, <em>plainly.</em></h1>
+      <p class="dlede">The terms in every adris.tech agreement, in the same words as the agreement itself. The first list is part of every project; the second is added when a project needs it.</p>
+      <div class="dsec" id="terms-every">
+        <h2>In every agreement</h2>
+        <div class="dfig"><div class="modgrid">
+            <div class="modcard termcard"><div class="mn">01</div><h4>SOW <span class="full">(Statement of Work)</span></h4><p>Lists exactly what we build (each agent / department and what it does), the acceptance tests, the timeline and the price. Both sides sign it before any work starts. Anything not written in it is a change request.</p></div>
+            <div class="modcard termcard"><div class="mn">02</div><h4>Advance payment before building starts</h4><p>30–50% of the total price (agreed per project) is paid before any build work begins; work starts on the day it is received. It is adjusted against the final invoice. Why: it reserves our build time and pays for the set-up (environment, integrations, testing) of a system made only for this client.</p></div>
+            <div class="modcard termcard"><div class="mn">03</div><h4>Payment of the balance</h4><p>The remaining amount is paid on the milestones written in the SOW (for example on delivery for testing and on acceptance), each by the due date written in the SOW.</p></div>
+            <div class="modcard termcard"><div class="mn">04</div><h4>The price is for one year</h4><p>The agreed total covers building the system and its use for 12 months from acceptance. To keep using it after that, it is renewed every year at the renewal price written in the SOW.</p></div>
+            <div class="modcard termcard"><div class="mn">05</div><h4>GST <span class="full">(Goods and Services Tax)</span></h4><p>Prices exclude taxes. adris.tech is not GST-registered yet, so no GST is charged now. From the date adris.tech is registered, GST at the rate then in force (18% today for these services) is added to every invoice issued from that date - including the unpaid milestones of this order. The client is told in writing, with the GSTIN (GST Identification Number), before the first such invoice.</p></div>
+            <div class="modcard termcard"><div class="mn">06</div><h4>Change requests</h4><p>Work outside the SOW is estimated and agreed in writing before it is built; it can change the price and the timeline.</p></div>
+            <div class="modcard termcard"><div class="mn">07</div><h4>New agents or departments are a separate order</h4><p>Adding a new agent or a new department is quoted and paid separately, with its own SOW. It is not covered by the yearly price or by the monthly plan.</p></div>
+            <div class="modcard termcard"><div class="mn">08</div><h4>Acceptance</h4><p>The client tests the delivered system against the SOW&#x27;s acceptance tests and confirms in writing. Defects against the SOW found during acceptance are fixed at no extra charge.</p></div>
+            <div class="modcard termcard"><div class="mn">09</div><h4>Free fixes in the first month</h4><p>Problems the client reports within one month of acceptance are fixed free. After that first month, fixes and changes are covered only by the optional monthly plan - without it, each is quoted separately.</p></div>
+            <div class="modcard termcard"><div class="mn">10</div><h4>Ownership and licence</h4><p>The client&#x27;s data, documents and content always stay theirs. The system (the agents, their set-up and adris.tech&#x27;s code) is licensed to the client for each paid year and keeps running while the yearly price is renewed.</p></div>
+            <div class="modcard termcard"><div class="mn">11</div><h4>Our software stays ours: no copying or reverse-engineering</h4><p>adris.tech&#x27;s software is installed in encrypted, compiled form and licensed for this system only. The client will not copy, decompile, reverse-engineer or let anyone else access it.</p></div>
+            <div class="modcard termcard"><div class="mn">12</div><h4>Built-in protection of our software</h4><p>The software checks its licence and its own files. If it is tampered with, copied or accessed without adris.tech&#x27;s permission - or the licence lapses - it locks itself and deletes ITS OWN program files and keys. It never deletes or changes the client&#x27;s data, documents or systems.</p></div>
+            <div class="modcard termcard"><div class="mn">13</div><h4>The client&#x27;s data is always theirs</h4><p>The client&#x27;s data stays on their machines and remains theirs. On request, and at the end of the licence, they receive an export of it in a standard format.</p></div>
+            <div class="modcard termcard"><div class="mn">14</div><h4>Data and confidentiality</h4><p>Client data is used only for this project, kept confidential and not shared. Personal data is handled as the Digital Personal Data Protection Act, 2023 requires.</p></div>
+            <div class="modcard termcard"><div class="mn">15</div><h4>Third-party costs</h4><p>AI model keys, hosting, phone / WhatsApp numbers and any other paid service the system uses are in the client&#x27;s name and paid by the client (adris.tech runs on the client&#x27;s own AI key or a local model).</p></div>
+            <div class="modcard termcard"><div class="mn">16</div><h4>Ending the work early</h4><p>Either side may stop the project with written notice. Work done up to that date is paid for, and the advance is adjusted against it.</p></div>
+        </div></div>
+      </div>
+      <div class="dsec" id="terms-optional">
+        <h2>Added when a project needs it</h2>
+        <ol class="steps">
+          <li><div class="step-text"><strong>Mutual NDA <span class="full">(Non-Disclosure Agreement)</span></strong><span>Signed before they share internal documents, data or processes. Protects both sides.</span></div></li>
+          <li><div class="step-text"><strong>DPA <span class="full">(Data Processing Agreement)</span></strong><span>Needed when the system will handle personal data of their customers or staff.</span></div></li>
+          <li><div class="step-text"><strong>PO from the client <span class="full">(Purchase Order)</span></strong><span>Many companies issue a PO (Purchase Order) before paying the advance - its number goes on our invoices.</span></div></li>
+          <li><div class="step-text"><strong>MSA <span class="full">(Master Services Agreement)</span></strong><span>Umbrella terms for repeat work; each new project then needs only its own SOW (Statement of Work).</span></div></li>
+          <li><div class="step-text"><strong>Optional monthly plan (security and updates)</strong><span>Paid per month: security checks and updates, fixes, and the changes the client asks for to the EXISTING agents only. New agents or departments are never part of it (they are a separate order).</span></div></li>
+          <li><div class="step-text"><strong>Code and admin handover (buy-out)</strong><span>Only if agreed and priced separately: the code, passwords and admin rights of what was built are handed over and the client no longer needs the yearly licence for it.</span></div></li>
+          <li><div class="step-text"><strong>Limit of liability</strong><span>Our liability is limited to the amount paid for the project; no liability for indirect losses.</span></div></li>
+          <li><div class="step-text"><strong>Non-solicitation</strong><span>Neither side hires the other&#x27;s people working on this project, during it and for an agreed time after.</span></div></li>
+          <li><div class="step-text"><strong>Their vendor registration forms</strong><span>Supplier registration, PAN (Permanent Account Number) / bank detail forms or any other form their accounts team needs.</span></div></li>
+        </ol>
+      </div>
+      <div class="dsec" id="terms-talk">
+        <h2>What can be discussed</h2>
+        <p>How the payments after the advance are split and timed, the start date and the support plan are agreed per project. The terms in the first list protect both sides and stay in every agreement. This page explains our terms; the signed agreement is what applies.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
+    <article class="dtopic" data-topic="protect">
+      <div class="dcrumb">Custom digital office</div>
+      <h1>Your data stays yours. <em>Our code stays ours.</em></h1>
+      <p class="dlede">Two promises that sit side by side in every agreement.</p>
+      <div class="dsec" id="protect-data">
+        <h2>Your data</h2>
+        <p>Your data, documents and content stay on your machines and remain yours. They are used only for your project, kept confidential and not shared. Personal data is handled as the Digital Personal Data Protection Act, 2023 requires. On request, and at the end of the licence, you receive an export of your data in a standard format.</p>
+      </div>
+      <div class="dsec" id="protect-code">
+        <h2>Our software</h2>
+        <p>The adris.tech software is installed in encrypted, compiled form and licensed for your office only; it is not copied, decompiled or reverse-engineered. It checks its licence and its own files. If it is tampered with, copied or accessed without permission — or the licence lapses — it locks itself and deletes its own program files and keys. It never deletes or changes your data, documents or systems.</p>
+      </div>
+      <div class="dsec" id="protect-costs">
+        <h2>Accounts in your name</h2>
+        <p>AI model keys, hosting, phone or WhatsApp numbers and any other paid service the office uses are in your name and paid by you, so you always hold the keys to your own accounts.</p>
+        <p>Questions about any of this? <a href="/contact">Contact us</a> — we answer before anything is signed.</p>
+      </div>
+      <div class="dpager" data-pager></div>
+    </article>
+
     <!-- OVERVIEW -->
     <article class="dtopic" data-topic="overview">
       <div class="dcrumb">Get started</div>
       <h1>One app that replaces <em>five things</em> you already pay for.</h1>
-      <p class="dlede">adris.tech is one desktop app that bundles seven tools — AI agents, automation, a coding assistant, a model hub, network protection, a security analyst, and RAM pooling. It runs on <strong>your own laptop</strong>, so your work, files and conversations stay with you.</p>
+      <p class="dlede">adris.tech is one desktop app that bundles eight tools — AI agents, automation, a coding assistant, a model hub, network protection, a security analyst, RAM pooling and a knowledge graph. It runs on <strong>your own laptop</strong>, so your work, files and conversations stay with you.</p>
 
       <div class="dsec" id="overview-map">
         <h2>The eight modules</h2>
         <p class="one">Tap any module to read its guide — it opens right here, no new tab.</p>
         <div class="dfig">
           <div class="modgrid">
-            <div class="modcard" data-goto="krew"><div class="mn">01 · Krew</div><h4>AI agents</h4><p>A team of 48 named specialists that do the work, not just answer questions.</p></div>
+            <div class="modcard" data-goto="krew"><div class="mn">01 · Krew</div><h4>AI agents</h4><p>A team of 57 named specialists that do the work, not just answer questions.</p></div>
             <div class="modcard" data-goto="studio"><div class="mn">02 · Studio</div><h4>Automation</h4><p>Visual workflows that run by themselves on a schedule.</p></div>
             <div class="modcard" data-goto="coder"><div class="mn">03 · Coder</div><h4>Dev tools</h4><p>AI that reads your whole codebase and edits your files directly.</p></div>
             <div class="modcard" data-goto="models"><div class="mn">04 · Models</div><h4>AI model hub</h4><p>Run any open model on your laptop in two clicks, free.</p></div>
@@ -580,8 +723,8 @@ document.getElementById('themeToggle').addEventListener('click',function(){var c
 
 // ── Docs router ────────────────────────────────────────────────
 (function(){
-  var TOPICS = ['overview','how','roi','bridge','krew','studio','coder','models','vault','guard','mesh','shelf'];
-  var TITLES = {overview:'Overview',how:'How it works',roi:'Is it worth it?',krew:'Krew — AI agents',studio:'Studio — automation',coder:'Coder — dev tools',models:'Models — AI hub',vault:'Vault — protection',guard:'Guard — security',mesh:'Mesh — RAM pooling',bridge:'Use your own subscription',shelf:'The Shelf — free software'};
+  var TOPICS = ['office','project','terms','protect','overview','how','roi','bridge','krew','studio','coder','models','vault','guard','mesh','shelf'];
+  var TITLES = {office:'What we build',project:'How a project runs',terms:'Our terms, plainly',protect:'Your data & our code',overview:'Overview',how:'How it works',roi:'Is it worth it?',krew:'Krew — AI agents',studio:'Studio — automation',coder:'Coder — dev tools',models:'Models — AI hub',vault:'Vault — protection',guard:'Guard — security',mesh:'Mesh — RAM pooling',bridge:'Use your own subscription',shelf:'The Shelf — free software'};
   var topics = document.querySelectorAll('.dtopic');
   var sideLinks = document.querySelectorAll('.dlink[data-topic]');
   var groups = document.querySelectorAll('.dgroup[data-topic]');
@@ -592,7 +735,7 @@ document.getElementById('themeToggle').addEventListener('click',function(){var c
   TOPICS.forEach(function(t){ var o=document.createElement('option'); o.value=t; o.textContent=TITLES[t]; mobile.appendChild(o); });
 
   function setActive(topic){
-    if (TOPICS.indexOf(topic) === -1) topic = 'overview';
+    if (TOPICS.indexOf(topic) === -1) topic = 'office';
     topics.forEach(function(p){ p.classList.toggle('active', p.dataset.topic===topic); });
     sideLinks.forEach(function(a){ a.classList.toggle('active', a.dataset.topic===topic); });
     groups.forEach(function(g){ var on=g.dataset.topic===topic; g.classList.toggle('active',on); g.classList.toggle('open',on); });
@@ -635,7 +778,7 @@ document.getElementById('themeToggle').addEventListener('click',function(){var c
   mobile.addEventListener('change', function(){ setActive(mobile.value); });
   window.addEventListener('hashchange', function(){ setActive(location.hash.slice(1)); });
 
-  setActive(location.hash.slice(1) || 'overview');
+  setActive(location.hash.slice(1) || 'office');
 })();
 </script>
 <!-- Signed-in state in the nav — shared by every page, see nav-auth.js -->

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Agreement - adris.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root { --ink: #111; --muted: #6b6b6b; --rule: #e6e6e6; --accent: #6b4eff; --paper: #fff; --ok: #1f8a4c; --bad: #c0392b; }
+  @media (prefers-color-scheme: dark) { :root { --ink: #f1f1f1; --muted: #a3a3a3; --rule: #2c2c2c; --paper: #121212; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Space Grotesk", system-ui, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.55; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  .brand { font-weight: 700; font-size: 18px; letter-spacing: -.01em; }
+  .brand span { color: var(--muted); font-weight: 500; }
+  h1 { font-size: clamp(24px, 4vw, 32px); line-height: 1.2; margin: 18px 0 6px; }
+  .meta { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+  ol { padding-left: 22px; }
+  li { margin: 0 0 14px; }
+  li b { font-weight: 600; }
+  .full { color: var(--muted); font-weight: 400; }
+  .must { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--accent); margin-left: 6px; }
+  .how { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); }
+  .box { border: 1px solid var(--rule); border-radius: 12px; padding: 18px; margin-top: 26px; }
+  label { display: block; font-size: 14px; margin: 10px 0 4px; }
+  input[type=text], input[type=email] { width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; font: inherit; background: transparent; color: inherit; }
+  .agree { display: flex; gap: 10px; align-items: flex-start; margin: 14px 0; font-size: 14px; }
+  .agree input { width: 18px; height: 18px; margin-top: 2px; }
+  button { background: var(--ink); color: var(--paper); border: 0; border-radius: 999px; padding: 12px 22px; font: inherit; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  .msg { margin-top: 10px; font-size: 14px; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .bad { color: var(--bad); }
+  .small { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">adris<span>.tech</span></div>
+  <div id="app"><p class="meta">Loading the agreement…</p></div>
+</main>
+<script>
+// 29 Oct 2026: the online agreement. The link's code is the only way in; the page can read and accept this one
+// agreement and nothing else (Supabase functions agreement_get / agreement_accept).
+(function () {
+  var URL_ = "https://xkkqcqsacgdrfwbwdqsp.supabase.co/rest/v1/rpc/";
+  var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0";
+  var token = (location.pathname.split("/agree/")[1] || new URLSearchParams(location.search).get("t") || "").replace(/[^A-Za-z0-9_-]/g, "");
+  var app = document.getElementById("app");
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { if (k === "text") e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); });
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function rpc(name, args) {
+    return fetch(URL_ + name, { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify(args) }).then(function (r) { return r.json(); });
+  }
+  var SIGN = { digital: "signed digitally", physical: "signed on paper", either: "" };
+  function show(a) {
+    if (!a || !a.content) { app.replaceChildren(el("h1", { text: "This agreement link is not valid." }), el("p", { class: "meta", text: "Please ask adris.tech for a new link." })); return; }
+    var c = a.content;
+    var list = el("ol", {}, c.items.map(function (it) {
+      return el("li", {}, [el("b", { text: it.title }), it.full ? el("span", { class: "full", text: " (" + it.full + ")" }) : null,
+        it.mandatory ? el("span", { class: "must", text: "required" }) : null,
+        el("div", { text: it.text }), it.note ? el("div", { class: "small", text: "Note: " + it.note }) : null,
+        SIGN[it.sign] ? el("div", { class: "how", text: SIGN[it.sign] }) : null]);
+    }));
+    var head = [el("h1", { text: c.title }), el("div", { class: "meta", text: "From " + c.from + " · prepared " + String(c.made || "").slice(0, 10) }), list];
+    if (a.status === "ACCEPTED") {
+      app.replaceChildren.apply(app, head.concat([el("div", { class: "box" }, [el("p", { class: "ok", text: "Accepted by " + a.name + " on " + String(a.at || "").slice(0, 16).replace("T", " ") + "." }),
+        el("p", { class: "small", text: "Thank you. adris.tech has a record of this acceptance." })])]));
+      return;
+    }
+    var name = el("input", { type: "text", autocomplete: "name" });
+    var mail = el("input", { type: "email", autocomplete: "email" });
+    var tick = el("input", { type: "checkbox" });
+    var btn = el("button", { type: "button", text: "I accept this agreement" });
+    var msg = el("div", { class: "msg" });
+    btn.disabled = true;
+    tick.addEventListener("change", function () { btn.disabled = !tick.checked; });
+    btn.addEventListener("click", function () {
+      btn.disabled = true; msg.className = "msg"; msg.textContent = "Saving…";
+      rpc("agreement_accept", { t: token, name: name.value, email: mail.value, agent: navigator.userAgent.slice(0, 200) }).then(function (r) {
+        if (r && r.ok) { a.status = "ACCEPTED"; a.name = name.value; a.at = r.at || new Date().toISOString(); show(a); }
+        else { msg.className = "msg bad"; msg.textContent = (r && r.error) || "Could not save - please try again."; btn.disabled = !tick.checked; }
+      }).catch(function () { msg.className = "msg bad"; msg.textContent = "Could not reach adris.tech - please try again."; btn.disabled = !tick.checked; });
+    });
+    var form = el("div", { class: "box" }, [el("label", { text: "Your full name" }), name, el("label", { text: "Your email" }), mail,
+      el("div", { class: "agree" }, [tick, el("span", { text: "I have read every point above and I agree to it on behalf of " + (c.company || "my company") + "." })]),
+      btn, msg, el("p", { class: "small", text: "Accepting records your name, email and the time. Questions first? Reply to the email this link came in." })]);
+    app.replaceChildren.apply(app, head.concat([form]));
+  }
+  if (!token || token.length < 24) { show(null); return; }
+  rpc("agreement_get", { t: token }).then(function (a) { if (a) a.content.company = a.company; show(a); }).catch(function () { show(null); });
+})();
+</script>
+</body>
+</html>
