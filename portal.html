@@ -18,8 +18,8 @@
   h1 { font-size: clamp(24px, 4vw, 32px); line-height: 1.2; margin: 18px 0 6px; }
   h2 { font-size: 16px; margin: 28px 0 8px; }
   .meta { color: var(--muted); font-size: 14px; }
-  .now { border: 1px solid var(--rule); border-radius: 12px; padding: 14px 18px; margin-top: 14px; }
-  .now b { font-size: 18px; display: block; }
+  .nowbox { border: 1px solid var(--rule); border-radius: 12px; padding: 14px 18px; margin-top: 14px; }
+  .nowbox b { font-size: 18px; display: block; }
   ol.steps { list-style: none; margin: 0; padding: 0; }
   ol.steps li { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; color: var(--muted); }
   ol.steps li i { flex: none; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid currentColor; transform: translateY(1px); }
@@ -31,7 +31,8 @@
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td { text-align: left; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { color: var(--muted); font-weight: 500; }
-  td.n, th.n { text-align: right; white-space: nowrap; }
+  td.n, th.n, td.d { text-align: right; white-space: nowrap; }
+  td.d { text-align: left; }
   label { display: block; font-size: 14px; margin: 10px 0 4px; }
   input, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; font: inherit; background: transparent; color: inherit; }
   textarea { min-height: 96px; }
@@ -76,7 +77,7 @@
   function show(s) {
     if (!s || !s.client) { nothing(); return; }
     var parts = [el("h1", { text: s.client }), el("p", { class: "meta", text: "Your project with adris.tech. Updated " + String(s.updated || "").replace("T", " ").slice(0, 16) })];
-    if (s.now) parts.push(el("div", { class: "now" }, [el("span", { class: "meta", text: "Now" }), el("b", { text: s.now }),
+    if (s.now) parts.push(el("div", { class: "nowbox" }, [el("span", { class: "meta", text: "Now" }), el("b", { text: s.now }),
       el("span", { class: "meta", text: "With: " + (s.waiting_on || "adris.tech") })]));
     parts.push(el("h2", { text: "Steps" }), el("ol", { class: "steps" }, (s.steps || []).map(function (x) {
       return el("li", { class: x.state }, [el("i"), el("span", { text: x.title })]);
@@ -84,10 +85,10 @@
     if ((s.invoices || []).length) {
       parts.push(el("h2", { text: "Invoices" }), el("div", { class: "wrap" }, [el("table", {}, [
         el("thead", {}, [el("tr", {}, [el("th", { text: "Number" }), el("th", { text: "For" }), el("th", { class: "n", text: "Total" }),
-          el("th", { class: "n", text: "Due" }), el("th", { text: "By" }), el("th", { text: "Status" })])]),
+          el("th", { class: "n", text: "To pay" }), el("th", { text: "Due by" }), el("th", { text: "Status" })])]),
         el("tbody", {}, s.invoices.map(function (i) {
-          return el("tr", {}, [el("td", { text: i.number }), el("td", { text: i.what }), el("td", { class: "n", text: inr(i.total) }),
-            el("td", { class: "n", text: inr(i.outstanding) }), el("td", { text: i.due || "" }), el("td", { text: STATUS[i.status] || i.status })]);
+          return el("tr", {}, [el("td", { class: "d", text: i.number }), el("td", { text: i.what }), el("td", { class: "n", text: inr(i.total) }),
+            el("td", { class: "n", text: inr(i.outstanding) }), el("td", { class: "d", text: i.due || "" }), el("td", { text: STATUS[i.status] || i.status })]);
         }))])]));
     }
     if (s.renews_on || s.accepted_on) {
@@ -97,7 +98,7 @@
     }
     if ((s.requests || []).length) {
       parts.push(el("h2", { text: "Your requests" }), el("div", { class: "wrap" }, [el("table", {}, [el("tbody", {}, s.requests.map(function (r) {
-        return el("tr", {}, [el("td", { text: r.at }), el("td", { text: r.text }), el("td", { text: r.status === "OPEN" ? "open" : "done" })]);
+        return el("tr", {}, [el("td", { class: "d", text: r.at }), el("td", { text: r.text }), el("td", { text: r.status === "OPEN" ? "open" : "done" })]);
       }))])]));
     }
     var name = el("input", { type: "text", autocomplete: "name" });
