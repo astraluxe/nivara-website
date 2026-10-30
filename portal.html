@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Your project - adris.tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root { --ink: #111; --muted: #6b6b6b; --rule: #e6e6e6; --accent: #6b4eff; --paper: #fff; --ok: #1f8a4c; --bad: #c0392b; }
+  @media (prefers-color-scheme: dark) { :root { --ink: #f1f1f1; --muted: #a3a3a3; --rule: #2c2c2c; --paper: #121212; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Space Grotesk", system-ui, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.55; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  .brand { font-weight: 700; font-size: 18px; letter-spacing: -.01em; }
+  .brand span { color: var(--muted); font-weight: 500; }
+  h1 { font-size: clamp(24px, 4vw, 32px); line-height: 1.2; margin: 18px 0 6px; }
+  h2 { font-size: 16px; margin: 28px 0 8px; }
+  .meta { color: var(--muted); font-size: 14px; }
+  .now { border: 1px solid var(--rule); border-radius: 12px; padding: 14px 18px; margin-top: 14px; }
+  .now b { font-size: 18px; display: block; }
+  ol.steps { list-style: none; margin: 0; padding: 0; }
+  ol.steps li { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; color: var(--muted); }
+  ol.steps li i { flex: none; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid currentColor; transform: translateY(1px); }
+  ol.steps li.done { color: var(--ink); }
+  ol.steps li.done i { background: var(--ok); border-color: var(--ok); }
+  ol.steps li.now { color: var(--ink); font-weight: 600; }
+  ol.steps li.now i { background: var(--accent); border-color: var(--accent); }
+  .wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; }
+  td.n, th.n { text-align: right; white-space: nowrap; }
+  label { display: block; font-size: 14px; margin: 10px 0 4px; }
+  input, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; font: inherit; background: transparent; color: inherit; }
+  textarea { min-height: 96px; }
+  button { background: var(--ink); color: var(--paper); border: 0; border-radius: 999px; padding: 12px 22px; font: inherit; font-weight: 600; cursor: pointer; margin-top: 12px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .msg { margin-top: 10px; font-size: 14px; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .bad { color: var(--bad); }
+  .small { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">adris<span>.tech</span></div>
+  <div id="app"><p class="meta">Loading your project…</p></div>
+</main>
+<script>
+// 30 Oct 2026: a client's private project page. The link's code is the only way in; the page can read this one client's
+// snapshot and send a request, nothing else (Supabase functions portal_get / portal_ask).
+(function () {
+  var URL_ = "https://xkkqcqsacgdrfwbwdqsp.supabase.co/rest/v1/rpc/";
+  var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0";
+  var token = (location.pathname.split("/portal/")[1] || new URLSearchParams(location.search).get("t") || "").replace(/[^A-Za-z0-9_-]/g, "");
+  var app = document.getElementById("app");
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { if (k === "text") e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); });
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function rpc(name, args) {
+    return fetch(URL_ + name, { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify(args) }).then(function (r) { return r.json(); });
+  }
+  function inr(v) {
+    return "Rs " + Number(v || 0).toLocaleString("en-IN", { maximumFractionDigits: 2 });
+  }
+  var STATUS = { ISSUED: "due", PART_PAID: "part paid", PAID: "paid", CANCELLED: "cancelled" };
+  function nothing() {
+    app.replaceChildren(el("h1", { text: "This link is not active." }), el("p", { class: "meta", text: "Please ask adris.tech for a new link." }));
+  }
+  function show(s) {
+    if (!s || !s.client) { nothing(); return; }
+    var parts = [el("h1", { text: s.client }), el("p", { class: "meta", text: "Your project with adris.tech. Updated " + String(s.updated || "").replace("T", " ").slice(0, 16) })];
+    if (s.now) parts.push(el("div", { class: "now" }, [el("span", { class: "meta", text: "Now" }), el("b", { text: s.now }),
+      el("span", { class: "meta", text: "With: " + (s.waiting_on || "adris.tech") })]));
+    parts.push(el("h2", { text: "Steps" }), el("ol", { class: "steps" }, (s.steps || []).map(function (x) {
+      return el("li", { class: x.state }, [el("i"), el("span", { text: x.title })]);
+    })));
+    if ((s.invoices || []).length) {
+      parts.push(el("h2", { text: "Invoices" }), el("div", { class: "wrap" }, [el("table", {}, [
+        el("thead", {}, [el("tr", {}, [el("th", { text: "Number" }), el("th", { text: "For" }), el("th", { class: "n", text: "Total" }),
+          el("th", { class: "n", text: "Due" }), el("th", { text: "By" }), el("th", { text: "Status" })])]),
+        el("tbody", {}, s.invoices.map(function (i) {
+          return el("tr", {}, [el("td", { text: i.number }), el("td", { text: i.what }), el("td", { class: "n", text: inr(i.total) }),
+            el("td", { class: "n", text: inr(i.outstanding) }), el("td", { text: i.due || "" }), el("td", { text: STATUS[i.status] || i.status })]);
+        }))])]));
+    }
+    if (s.renews_on || s.accepted_on) {
+      parts.push(el("h2", { text: "Your plan" }));
+      if (s.accepted_on) parts.push(el("p", { class: "meta", text: "Live since " + s.accepted_on }));
+      if (s.renews_on) parts.push(el("p", { class: "meta", text: "Yearly licence renews on " + s.renews_on }));
+    }
+    if ((s.requests || []).length) {
+      parts.push(el("h2", { text: "Your requests" }), el("div", { class: "wrap" }, [el("table", {}, [el("tbody", {}, s.requests.map(function (r) {
+        return el("tr", {}, [el("td", { text: r.at }), el("td", { text: r.text }), el("td", { text: r.status === "OPEN" ? "open" : "done" })]);
+      }))])]));
+    }
+    var name = el("input", { type: "text", autocomplete: "name" });
+    var body = el("textarea", {});
+    var btn = el("button", { type: "button", text: "Send to adris.tech" });
+    var msg = el("div", { class: "msg" });
+    btn.addEventListener("click", function () {
+      btn.disabled = true; msg.className = "msg"; msg.textContent = "Sending…";
+      rpc("portal_ask", { t: token, name: name.value, body: body.value }).then(function (r) {
+        if (r && r.ok) { body.value = ""; msg.className = "msg ok"; msg.textContent = "Sent. We will reply by email."; }
+        else { msg.className = "msg bad"; msg.textContent = (r && r.error) || "Could not send - please try again."; }
+        btn.disabled = false;
+      }).catch(function () { msg.className = "msg bad"; msg.textContent = "Could not reach adris.tech - please try again."; btn.disabled = false; });
+    });
+    parts.push(el("h2", { text: "Send us a request" }), el("label", { text: "Your name" }), name, el("label", { text: "What do you need?" }), body, btn, msg,
+      el("p", { class: "small", text: "This page is private to you. Please do not share the link." }));
+    app.replaceChildren.apply(app, parts);
+  }
+  if (!token || token.length < 24) { nothing(); return; }
+  rpc("portal_get", { t: token }).then(show).catch(nothing);
+})();
+</script>
+</body>
+</html>

@@ -105,6 +105,10 @@
       "destination": "/agree.html"
     },
     {
+      "source": "/portal/:token",
+      "destination": "/portal.html"
+    },
+    {
       "source": "/",
       "destination": "/home.html"
     },
