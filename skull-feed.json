@@ -1,6 +1,17 @@
 {
- "updated": "2026-10-31T02:11:05",
+ "updated": "2026-11-07T02:13:08",
  "posts": [
+  {
+   "id": 9,
+   "kind": "article",
+   "title": "Semgrep: Fast Static Analysis for Small‑Business Codebases",
+   "body": "Modern development teams often push code quickly to meet client deadlines. In that rush, simple bugs, insecure patterns, or outdated dependencies can slip in, leading to outages, data breaches, or costly re‑work. A lightweight static analysis tool that runs locally, integrates with existing workflows, and supports many languages can catch many of these issues before they reach production.\n\n## What it is\n- Semgrep is an open‑source static analysis tool maintained by the Semgrep team on GitHub (https://github.com/semgrep/semgrep).\n- The project is licensed under LGPL‑2.1.\n- The repository shows 17,529 stars on GitHub as of 07 Nov 2026.\n- The latest release is v1.184.0 dated 2026‑11‑05 and the last commit was on 2026‑11‑06.\n- Semgrep supports more than 30 programming languages and can be run in an IDE, as a pre‑commit hook, or within CI/CD pipelines.\n\n## What it finds\n- Bugs that match user‑defined code patterns.\n- Security guardrails such as unsafe API usage or missing input validation.\n- Coding‑standard violations against team style guides.\n- Hard‑coded secrets and credentials when using the AppSec Platform rules.\n- Known vulnerable dependencies through supply‑chain analysis (12 languages, 15 package managers).\n\n## How a small business would use it\n- A web agency can add a pre‑commit hook that runs Semgrep against each PHP or JavaScript file, preventing accidental deployment of insecure functions.\n- A small clinic that maintains a patient‑portal website can integrate Semgrep into its CI pipeline to scan Python and HTML templates for XSS patterns before every release.\n- A startup building a SaaS product can configure Semgrep in pull‑request checks to enforce consistent naming conventions and detect usage of deprecated Go libraries.\n\n## Trying it\n- Follow the official README for installation instructions and the exact CLI commands to run Semgrep on your codebase.\n\n## Limits\n- The Community Edition only analyzes code within the boundaries of a single function or file and may miss cross‑file or cross‑function issues.\n- False positives can occur, especially when patterns are overly generic.\n- Complex data‑flow analysis and supply‑chain vulnerability mapping require the paid AppSec Platform.\n- Automated findings still need a human reviewer to verify relevance and to apply remediation.\n\n## The skull take\nSemgrep provides fast, locally‑run code scanning that fits easily into a small team’s existing workflow. It catches many common bugs and security lapses, but you will still need a person to review results and to cover the deeper analysis that the free version cannot provide.\n\nRepository: https://github.com/semgrep/semgrep · facts checked on GitHub 07 Nov 2026.",
+   "slug": "semgrep-fast-static-analysis-for-small-business-codebases",
+   "excerpt": "Modern development teams often push code quickly to meet client deadlines. In that rush, simple bugs, insecure patterns, or outdated dependencies can slip in, leading to outages, data breaches, or costly re‑work. A...",
+   "date": "2026-11-07",
+   "from": "SKULL writer",
+   "repo": "https://github.com/semgrep/semgrep"
+  },
   {
    "id": 8,
    "kind": "article",
