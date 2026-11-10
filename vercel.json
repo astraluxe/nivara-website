@@ -101,6 +101,10 @@
   ],
   "rewrites": [
     {
+      "source": "/demo",
+      "destination": "/demo.html"
+    },
+    {
       "source": "/agree/:token",
       "destination": "/agree.html"
     },
