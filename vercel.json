@@ -10,7 +10,7 @@
     },
     {
       "source": "/affiliates",
-      "destination": "/contact",
+      "destination": "/sales-partners",
       "permanent": true
     },
     {
@@ -100,6 +100,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/sales-partners",
+      "destination": "/sales-partners.html"
+    },
     {
       "source": "/demo",
       "destination": "/demo.html"
