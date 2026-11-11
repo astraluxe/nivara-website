@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Agreement preview - adris.tech</title>
+<meta name="description" content="A read-only preview of adris.tech's standard client agreement terms." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root { --ink: #111; --muted: #6b6b6b; --rule: #e6e6e6; --accent: #6b4eff; --paper: #fff; --ok: #1f8a4c; --bad: #c0392b; }
+  @media (prefers-color-scheme: dark) { :root { --ink: #f1f1f1; --muted: #a3a3a3; --rule: #2c2c2c; --paper: #121212; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Space Grotesk", system-ui, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.55; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  .brand { font-weight: 700; font-size: 18px; letter-spacing: -.01em; }
+  .brand span { color: var(--muted); font-weight: 500; }
+  h1 { font-size: clamp(24px, 4vw, 32px); line-height: 1.2; margin: 18px 0 6px; }
+  .meta { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+  ol { padding-left: 22px; }
+  li { margin: 0 0 14px; }
+  li b { font-weight: 600; }
+  .full { color: var(--muted); font-weight: 400; }
+  .must { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--accent); margin-left: 6px; }
+  .how { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); }
+  .box { border: 1px solid var(--rule); border-radius: 12px; padding: 18px; margin-top: 26px; }
+  label { display: block; font-size: 14px; margin: 10px 0 4px; }
+  input[type=text], input[type=email] { width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; font: inherit; background: transparent; color: inherit; }
+  .agree { display: flex; gap: 10px; align-items: flex-start; margin: 14px 0; font-size: 14px; }
+  .agree input { width: 18px; height: 18px; margin-top: 2px; }
+  button { background: var(--ink); color: var(--paper); border: 0; border-radius: 999px; padding: 12px 22px; font: inherit; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  .msg { margin-top: 10px; font-size: 14px; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .bad { color: var(--bad); }
+  .small { font-size: 12px; color: var(--muted); }
+  .banner { border: 1px solid var(--accent); border-radius: 12px; padding: 14px 16px; margin: 18px 0 8px; font-size: 14px; }
+  .banner b { color: var(--accent); }
+  .steps { font-size: 14px; color: var(--muted); padding-left: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><a href="/" style="color:inherit;text-decoration:none">adris<span>.tech</span></a></div>
+  <h1>Our standard agreement - preview</h1>
+  <div class="banner"><b>Preview only.</b> This is not your agreement and it cannot be accepted or signed here. It shows the
+  terms we normally use, so you can read them before you decide. Nothing you do on this page is recorded.</div>
+  <ol class="steps">
+    <li>Before any details are shared: a short mutual NDA, if you want one.</li>
+    <li>After the order: a written scope (SOW) with what we build, the acceptance tests, the timeline and the price.</li>
+    <li>Then your own agreement: a separate private link, with these terms and your SOW.</li>
+  </ol>
+  <div id="app"></div>
+  <p class="small">Questions about any point? Reply to the email this link came in. The final terms are agreed with you in writing.</p>
+</main>
+<script>
+(function () {
+  var ITEMS = [{"title": "SOW", "full": "Statement of Work", "text": "Lists exactly what we build (each agent / department and what it does), the acceptance tests, the timeline and the price. Both sides sign it before any work starts. Anything not written in it is a change request."}, {"title": "Advance payment before building starts", "full": "", "text": "40% of the total price is paid before any build work begins; work starts on the day it is received. It is adjusted against the final invoice. Why: it reserves our build time and pays for the set-up (environment, integrations, testing) of a system made only for this client."}, {"title": "Payment of the balance", "full": "", "text": "The remaining 60% is paid on the milestones written in the SOW (for example on delivery for testing and on acceptance), each by the due date written in the SOW."}, {"title": "The price is for one year", "full": "", "text": "The agreed total covers building the system and its use for 12 months from acceptance. To keep using it after that, it is renewed every year at the renewal price written in the SOW."}, {"title": "GST", "full": "Goods and Services Tax", "text": "Prices exclude taxes. adris.tech is not GST-registered yet, so no GST is charged now. From the date adris.tech is registered, GST at the rate then in force (18% today for these services) is added to every invoice issued from that date - including the unpaid milestones of this order. The client is told in writing, with the GSTIN (GST Identification Number), before the first such invoice."}, {"title": "Change requests", "full": "", "text": "Work outside the SOW is estimated and agreed in writing before it is built; it can change the price and the timeline."}, {"title": "New agents or departments are a separate order", "full": "", "text": "Adding a new agent or a new department is quoted and paid separately, with its own SOW. It is not covered by the yearly price or by the monthly plan."}, {"title": "Acceptance", "full": "", "text": "The client tests the delivered system against the SOW's acceptance tests and confirms in writing. Defects against the SOW found during acceptance are fixed at no extra charge."}, {"title": "Free fixes in the first month", "full": "", "text": "Problems the client reports within one month of acceptance are fixed free. After that first month, fixes and changes are covered only by the optional monthly plan - without it, each is quoted separately."}, {"title": "Ownership and licence", "full": "", "text": "The client's data, documents and content always stay theirs. The system (the agents, their set-up and adris.tech's code) is licensed to the client for each paid year and keeps running while the yearly price is renewed."}, {"title": "Our software stays ours: no copying or reverse-engineering", "full": "", "text": "adris.tech's software is installed in encrypted, compiled form and licensed for this system only. The client will not copy, decompile, reverse-engineer or let anyone else access it."}, {"title": "Built-in protection of our software", "full": "", "text": "The software checks its licence and its own files. If it is tampered with, copied or accessed without adris.tech's permission - or the licence lapses - it locks itself and deletes ITS OWN program files and keys. It never deletes or changes the client's data, documents or systems."}, {"title": "The client's data is always theirs", "full": "", "text": "The client's data stays on their machines and remains theirs. On request, and at the end of the licence, they receive an export of it in a standard format."}, {"title": "Data and confidentiality", "full": "", "text": "Client data is used only for this project, kept confidential and not shared. Personal data is handled as the Digital Personal Data Protection Act, 2023 requires."}, {"title": "Third-party costs", "full": "", "text": "AI model keys, hosting, phone / WhatsApp numbers and any other paid service the system uses are in the client's name and paid by the client (adris.tech runs on the client's own AI key or a local model)."}, {"title": "Ending the work early", "full": "", "text": "Either side may stop the project with written notice. Work done up to that date is paid for, and the advance is adjusted against it."}];
+  var app = document.getElementById("app");
+  var ol = document.createElement("ol");
+  ITEMS.forEach(function (it) {
+    var li = document.createElement("li");
+    var b = document.createElement("b"); b.textContent = it.title; li.appendChild(b);
+    if (it.full) { var f = document.createElement("span"); f.className = "full"; f.textContent = " (" + it.full + ")"; li.appendChild(f); }
+    var d = document.createElement("div"); d.textContent = it.text; li.appendChild(d);
+    ol.appendChild(li);
+  });
+  app.appendChild(ol);
+})();
+</script>
+</body>
+</html>
