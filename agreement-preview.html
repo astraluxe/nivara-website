@@ -58,62 +58,44 @@
   <div class="banner"><b>Preview only.</b> This is not your agreement and it cannot be accepted or signed here. It shows the
   terms we normally use, so you can read them before you decide. Nothing you do on this page is recorded.</div>
   <ol class="steps">
-    <li>Before any details are shared: the mutual NDA below, signed on its own if you want it first.</li>
+    <li>If you want one: the NDA below, signed before you share any documents.</li>
     <li>After the order: a written scope (SOW) with what we build, the acceptance tests, the timeline and the price.</li>
     <li>Then your own agreement: a separate private link, with these terms and your SOW.</li>
   </ol>
   <div id="app"></div>
 
   <h2>Confidentiality (NDA)</h2>
-  <p class="small">Optional. Tick to see what each level covers. Ticking here only shows the clauses; nothing is saved or sent.</p>
+  <p class="small">Optional. Tick to see what it covers. Ticking here only shows the clauses; nothing is saved or sent.</p>
 
   <div class="opt" id="nda">
-    <label><input type="checkbox" data-opt="nda" /> Mutual NDA, part of this agreement <span class="price">included</span></label>
-    <p class="sub">If documents are shared before the order, the same NDA is signed on its own first and carries into the agreement.</p>
+    <label><input type="checkbox" data-opt="nda" /> Mutual NDA <span class="price">Rs 10,000 a year</span></label>
+    <p class="sub">Without it, your data and documents are still kept private (see "Data and confidentiality" above), and we
+    may mention your company's name and the kind of work we did as a reference. With the NDA, nothing about you or the
+    project is mentioned anywhere. It can be signed before the order, and then carries into this agreement.</p>
     <ol>
-      <li><b>What is confidential.</b> Anything one side shares with the other for this project: documents, tender and
-        supplier data, prices, workflows, source code, passwords and keys, whether marked confidential or clearly so.</li>
-      <li><b>What is not.</b> Information that is already public, was already known, is developed independently, is
-        received lawfully from someone else, or must be disclosed by law or a court order (with notice to the other side
-        where the law allows).</li>
-      <li><b>Use.</b> Only for this project, and only by the people who need it, who are bound by the same duty.</li>
-      <li><b>Security.</b> Each side protects the other's information with reasonable security practices
-        (Information Technology Act, 2000, section 43A).</li>
-      <li><b>Personal data.</b> Personal data of the client's customers or staff is processed only on the client's
-        instructions, as the Digital Personal Data Protection Act, 2023 requires.</li>
-      <li><b>Return or deletion.</b> On request, or when the work ends, copies are returned or deleted and this is
-        confirmed in writing.</li>
-      <li><b>How long.</b> During the work and for 3 years after it ends; trade secrets and source code for as long as
-        they stay confidential.</li>
-      <li><b>No licence.</b> Sharing information gives no ownership of it or right to use it for anything else.</li>
-      <li><b>Remedies.</b> A breach can be stopped by an injunction (Specific Relief Act, 1963) as well as claimed as
-        damages.</li>
-      <li><b>No non-compete.</b> Neither side is stopped from doing its normal business; restraints of that kind are
-        void in India (Indian Contract Act, 1872, section 27).</li>
+      <li><b>What is confidential.</b> Everything shared for this project: documents, tender and supplier data, prices,
+        workflows, code and passwords, and the fact that we work together.</li>
+      <li><b>Your name stays private.</b> We do not name you as a client, show your work as a case study, or mention the
+        project anywhere.</li>
+      <li><b>Use.</b> Only for this project, and only by the people working on it.</li>
+      <li><b>Named team.</b> Only the people named in the scope document work on your project.</li>
+      <li><b>Your machines only.</b> Your files are handled only on your own or offline machines.</li>
+      <li><b>Deletion.</b> On request, or when the work ends, any copies are deleted and we confirm it in writing,
+        and once a year while the work continues.</li>
+      <li><b>How long.</b> During the work and for 3 years after it ends.</li>
+      <li><b>Both ways.</b> You keep our methods and code confidential in the same way.</li>
+      <li><b>The usual exceptions.</b> Information that is already public, or that the law requires to be shared.</li>
+      <li><b>Yearly.</b> Renewed with the licence, and can be dropped at renewal. GST is added when applicable.</li>
     </ol>
   </div>
 
-  <div class="opt" id="ndaplus">
-    <label><input type="checkbox" data-opt="ndaplus" /> Extended confidentiality <span class="price">Rs 10,000 a year</span></label>
-    <p class="sub">For sensitive work such as defence, aerospace or legal. Adds to the NDA above; GST is added when applicable.</p>
-    <ol>
-      <li><b>Named team.</b> Only the adris.tech people named in the SOW work on the project.</li>
-      <li><b>Your machines only.</b> Your files are handled only on your own or offline machines, never on shared or cloud storage.</li>
-      <li><b>Yearly certificate.</b> A written certificate each year, and at the end, that no copies of your data are kept.</li>
-      <li><b>Renewal.</b> Renewed each year with the licence, and can be dropped at renewal.</li>
-    </ol>
-  </div>
-
-  <h2>Under Indian law</h2>
+  <h2>General</h2>
   <ol class="law">
-    <li><b>Governing law and courts.</b> The agreement is governed by the laws of India. Disputes go first to arbitration
-      in Bengaluru under the Arbitration and Conciliation Act, 1996, and otherwise to the courts in Bengaluru.</li>
-    <li><b>Accepting online.</b> An agreement accepted online is valid (Information Technology Act, 2000, section 10A).
-      We also ask for a confirming email, so both sides have a clear record.</li>
-    <li><b>Stamp duty.</b> The signed agreement is stamped as the Karnataka Stamp Act, 1957 requires (by e-stamp);
-      adris.tech arranges it.</li>
-    <li><b>Authority.</b> The person who accepts confirms they are authorised to sign for their company.</li>
+    <li>This agreement follows the laws of India. If anything is unclear, we sort it out together first.</li>
+    <li>Accepting online and confirming by email is how the agreement is signed; both sides keep a copy.</li>
+    <li>The person accepting confirms they can sign for their company.</li>
   </ol>
+
   <p class="small">Questions about any point? Reply to the email this link came in. The final terms are agreed with you in writing.</p>
 </main>
 <script>
@@ -133,17 +115,7 @@
 </script>
 <script>
 document.querySelectorAll("[data-opt]").forEach(function (box) {
-  box.addEventListener("change", function () {
-    box.closest(".opt").classList.toggle("on", box.checked);
-    if (box.dataset.opt === "ndaplus" && box.checked) {
-      var base = document.querySelector('[data-opt="nda"]');
-      if (!base.checked) { base.checked = true; base.closest(".opt").classList.add("on"); }
-    }
-    if (box.dataset.opt === "nda" && !box.checked) {
-      var plus = document.querySelector('[data-opt="ndaplus"]');
-      plus.checked = false; plus.closest(".opt").classList.remove("on");
-    }
-  });
+  box.addEventListener("change", function () { box.closest(".opt").classList.toggle("on", box.checked); });
 });
 </script>
 </body>
