@@ -34,6 +34,16 @@
   .ok { color: var(--ok); font-weight: 600; }
   .bad { color: var(--bad); }
   .small { font-size: 12px; color: var(--muted); }
+  textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; font: inherit; background: transparent; color: inherit; }
+  input[type=tel] { width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; font: inherit; background: transparent; color: inherit; }
+  .det { border-collapse: collapse; margin: 10px 0; font-size: 14px; width: 100%; }
+  .det th { text-align: left; color: var(--muted); font-weight: 500; padding: 4px 12px 4px 0; vertical-align: top; width: 38%; }
+  .det td { padding: 4px 0; overflow-wrap: anywhere; }
+  .code { font-family: "JetBrains Mono", monospace; border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
+  .small { overflow-wrap: anywhere; }
+  @media print { .noprint { display: none !important; } body { background: #fff; color: #000; } .box { border-color: #999; } }
 </style>
 </head>
 <body>
@@ -42,8 +52,10 @@
   <div id="app"><p class="meta">Loading the agreement…</p></div>
 </main>
 <script>
-// 29 Oct 2026: the online agreement. The link's code is the only way in; the page can read and accept this one
-// agreement and nothing else (Supabase functions agreement_get / agreement_accept).
+// 11 Nov 2026: the two-step agreement. Step 1 here: the company's registered details + agree -> a code (AGR-XXXXXX).
+// Step 2: an email from the same address with "I accept agreement AGR-XXXXXX". Once signed, the page always shows the
+// signed copy (the terms frozen at signing, with their fingerprint) and offers a PDF and a saved copy.
+// Database: supabase/migrations/20261111_agreement_two_step_signed_copy.sql (agreement_get / agreement_accept_full).
 (function () {
   var URL_ = "https://xkkqcqsacgdrfwbwdqsp.supabase.co/rest/v1/rpc/";
   var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhra3FjcXNhY2dkcmZ3YndkcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4OTU0NzQsImV4cCI6MjA4OTQ3MTQ3NH0.gD57n_392PovM1QBVRsstzL4EQM-jvVeTbu_O1f-3l0";
@@ -59,43 +71,108 @@
     return fetch(URL_ + name, { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json" },
       body: JSON.stringify(args) }).then(function (r) { return r.json(); });
   }
-  var SIGN = { digital: "signed digitally", physical: "signed on paper", either: "" };
-  function show(a) {
-    if (!a || !a.content) { app.replaceChildren(el("h1", { text: "This agreement link is not valid." }), el("p", { class: "meta", text: "Please ask adris.tech for a new link." })); return; }
-    var c = a.content;
-    var list = el("ol", {}, c.items.map(function (it) {
+  function when(ts) { return String(ts || "").slice(0, 16).replace("T", " "); }
+  var GSTIN = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/;
+  var EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+  function terms(c) {
+    return el("ol", {}, c.items.map(function (it) {
       return el("li", {}, [el("b", { text: it.title }), it.full ? el("span", { class: "full", text: " (" + it.full + ")" }) : null,
-        it.mandatory ? el("span", { class: "must", text: "required" }) : null,
-        el("div", { text: it.text }), it.note ? el("div", { class: "small", text: "Note: " + it.note }) : null,
-        SIGN[it.sign] ? el("div", { class: "how", text: SIGN[it.sign] }) : null]);
+        el("div", { text: it.text }), it.note ? el("div", { class: "small", text: "Note: " + it.note }) : null]);
     }));
-    var head = [el("h1", { text: c.title }), el("div", { class: "meta", text: "From " + c.from + " · prepared " + String(c.made || "").slice(0, 10) }), list];
-    if (a.status === "ACCEPTED") {
-      app.replaceChildren.apply(app, head.concat([el("div", { class: "box" }, [el("p", { class: "ok", text: "Accepted by " + a.name + " on " + String(a.at || "").slice(0, 16).replace("T", " ") + "." }),
-        el("p", { class: "small", text: "Thank you. adris.tech has a record of this acceptance." })])]));
-      return;
-    }
-    var name = el("input", { type: "text", autocomplete: "name" });
-    var mail = el("input", { type: "email", autocomplete: "email" });
+  }
+  function head(a) {
+    var c = a.content;
+    return [el("h1", { text: c.title }), el("div", { class: "meta", text: "From " + c.from + " · prepared " + String(c.made || "").slice(0, 10) })];
+  }
+  function detailsTable(d) {
+    var rows = [["Company (registered name)", d.legal_name], ["GSTIN", d.gstin], ["Registered address", d.address],
+                ["Signed by", d.signatory + ", " + d.designation], ["Email", d.email], ["Phone", d.phone]];
+    return el("table", { class: "det" }, rows.map(function (r) { return el("tr", {}, [el("th", { text: r[0] }), el("td", { text: r[1] || "" })]); }));
+  }
+
+  function signed(a) {
+    var d = a.details || {};
+    var confirmed = !!a.email_confirmed_at;
+    var stamp = el("div", { class: "box stamp" }, [
+      el("p", { class: "ok", text: "Signed online on " + when(a.at) + " · code " + (a.code || "") }),
+      detailsTable(d),
+      el("p", { class: confirmed ? "ok" : "small", text: confirmed
+        ? "Confirmed by email on " + when(a.email_confirmed_at) + ". This agreement is complete."
+        : "One step left: send an email from " + (d.email || "the address above") + " to founder@adris.tech with this line:" }),
+      confirmed ? null : el("pre", { class: "code", text: "I accept agreement " + (a.code || "") }),
+      a.hash ? el("p", { class: "small", text: "Fingerprint of the signed terms (SHA-256): " + a.hash }) : null,
+      el("div", { class: "actions noprint" }, [
+        el("button", { type: "button", id: "pdf", text: "Download PDF" }),
+        el("button", { type: "button", id: "copy", class: "ghost", text: "Save a copy" })])]);
+    app.replaceChildren.apply(app, head(a).concat([terms(a.content), stamp]));
+    document.getElementById("pdf").addEventListener("click", function () { window.print(); });
+    document.getElementById("copy").addEventListener("click", function () {
+      var html = "<!doctype html><meta charset=utf-8><title>" + a.content.title + "</title>" +
+        "<style>body{font-family:system-ui,sans-serif;max-width:760px;margin:24px auto;padding:0 16px;line-height:1.5}th{text-align:left;padding-right:12px}</style>" +
+        document.querySelector("main").innerHTML.replace(/<div class="actions noprint">[\s\S]*?<\/div>/, "");
+      var url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+      var link = el("a", { href: url, download: "adris-agreement-" + (a.code || "copy") + ".html" });
+      document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+    });
+  }
+
+  function form(a) {
+    var c = a.content;
+    function field(label, attrs) { var i = el(attrs.tag || "input", attrs); return [el("label", { text: label }), i, i]; }
+    var f = {};
+    var parts = [];
+    [["legal_name", "Company's registered name", { type: "text", autocomplete: "organization" }],
+     ["gstin", "GSTIN", { type: "text", maxlength: "15", placeholder: "29ABCDE1234F1Z5" }],
+     ["address", "Registered address", { tag: "textarea", rows: "3" }],
+     ["signatory", "Name of the person signing", { type: "text", autocomplete: "name" }],
+     ["designation", "Designation", { type: "text", placeholder: "Director, Partner, Proprietor" }],
+     ["email", "Email (the step-2 email must come from this address)", { type: "email", autocomplete: "email" }],
+     ["phone", "Phone", { type: "tel", autocomplete: "tel" }]].forEach(function (x) {
+      var got = field(x[1], x[2]); f[x[0]] = got[2]; parts.push(got[0], got[1]);
+    });
     var tick = el("input", { type: "checkbox" });
     var btn = el("button", { type: "button", text: "I accept this agreement" });
-    var msg = el("div", { class: "msg" });
+    var msg = el("div", { class: "msg", role: "status" });
     btn.disabled = true;
     tick.addEventListener("change", function () { btn.disabled = !tick.checked; });
     btn.addEventListener("click", function () {
+      var d = {};
+      Object.keys(f).forEach(function (k) { d[k] = (f[k].value || "").trim(); });
+      d.gstin = d.gstin.toUpperCase();
+      var bad = d.legal_name.length < 3 ? "Please write the company's registered name."
+        : !GSTIN.test(d.gstin) ? "Please check the GSTIN. It has 15 characters, for example 29ABCDE1234F1Z5."
+        : d.address.length < 10 ? "Please write the registered address."
+        : d.signatory.length < 2 || d.designation.length < 2 ? "Please write the signatory's name and designation."
+        : !EMAIL.test(d.email) ? "Please check the email address."
+        : d.phone.replace(/\D/g, "").length < 10 ? "Please check the phone number." : "";
+      if (bad) { msg.className = "msg bad"; msg.textContent = bad; return; }
       btn.disabled = true; msg.className = "msg"; msg.textContent = "Saving…";
-      rpc("agreement_accept", { t: token, name: name.value, email: mail.value, agent: navigator.userAgent.slice(0, 200) }).then(function (r) {
-        if (r && r.ok) { a.status = "ACCEPTED"; a.name = name.value; a.at = r.at || new Date().toISOString(); show(a); }
-        else { msg.className = "msg bad"; msg.textContent = (r && r.error) || "Could not save - please try again."; btn.disabled = !tick.checked; }
-      }).catch(function () { msg.className = "msg bad"; msg.textContent = "Could not reach adris.tech - please try again."; btn.disabled = !tick.checked; });
+      rpc("agreement_accept_full", { t: token, d: d, agent: navigator.userAgent.slice(0, 200) }).then(function (r) {
+        if (r && r.ok) { load(); }
+        else { msg.className = "msg bad"; msg.textContent = (r && r.error) || "Could not save. Please try again."; btn.disabled = !tick.checked; }
+      }).catch(function () { msg.className = "msg bad"; msg.textContent = "Could not reach adris.tech. Please try again."; btn.disabled = !tick.checked; });
     });
-    var form = el("div", { class: "box" }, [el("label", { text: "Your full name" }), name, el("label", { text: "Your email" }), mail,
-      el("div", { class: "agree" }, [tick, el("span", { text: "I have read every point above and I agree to it on behalf of " + (c.company || "my company") + "." })]),
-      btn, msg, el("p", { class: "small", text: "Accepting records your name, email and the time. Questions first? Reply to the email this link came in." })]);
-    app.replaceChildren.apply(app, head.concat([form]));
+    var box = el("div", { class: "box noprint" }, parts.concat([
+      el("div", { class: "agree" }, [tick, el("span", { text: "I have read every point above and I accept it on behalf of the company named above, which I am authorised to sign for." })]),
+      btn, msg, el("p", { class: "small", text: "Accepting records these details and the time. You then confirm once by email. Questions first? Reply to the email this link came in." })]));
+    app.replaceChildren.apply(app, head(a).concat([terms(c), box]));
+  }
+
+  function show(a) {
+    if (!a || !a.content) { app.replaceChildren(el("h1", { text: "This agreement link is not valid." }), el("p", { class: "meta", text: "Please ask adris.tech for a new link." })); return; }
+    if (a.preview) {
+      app.replaceChildren.apply(app, head(a).concat([el("div", { class: "box" }, [el("p", { class: "ok", text: "Preview only" }),
+        el("p", { class: "small", text: "This shows the terms. It is not your agreement and cannot be accepted." })]), terms(a.content)]));
+      return;
+    }
+    if (a.status === "ACCEPTED") signed(a); else form(a);
+  }
+  function load() {
+    rpc("agreement_get", { t: token }).then(function (a) { if (a && a.content) a.content.company = a.company; show(a); }).catch(function () { show(null); });
   }
   if (!token || token.length < 24) { show(null); return; }
-  rpc("agreement_get", { t: token }).then(function (a) { if (a) a.content.company = a.company; show(a); }).catch(function () { show(null); });
+  load();
 })();
 </script>
 </body>
