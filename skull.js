@@ -3,7 +3,8 @@
    Every state is drawn: loading (skeletons), empty, error with a retry - never an endless "loading". */
 (function () {
   "use strict";
-  var REPO = "astraluxe/skull-locker";           // the open-source repo whose stars are shown
+  var REPO = "skull-org/skull-locker";            // the open-source repo whose stars are shown
+  var ORG = "https://github.com/skull-org";       // where the badge points until the repo is public
   var NAMES = { article: "Tool review", report: "Report", update: "Update", guide: "Guide", project: "Project",
                 release: "Release", notice: "Notice" };
   var LONG = { article: 1, guide: 1, report: 1 };
@@ -88,11 +89,19 @@
   // "Star on GitHub" with no number, so no made-up figure is ever displayed.
   var starEls = document.querySelectorAll("[data-gh-stars]");
   if (starEls.length) {
+    // 11 Nov 2026 (the owner: "github icon - number of stars, like on Supabase's site"): 114700 -> "114.7K"
+    var short = function (n) {
+      n = Number(n) || 0;
+      if (n >= 1e6) return (Math.floor(n / 1e5) / 10).toFixed(1).replace(/\.0$/, "") + "M";
+      if (n >= 1e3) return (Math.floor(n / 100) / 10).toFixed(1).replace(/\.0$/, "") + "K";
+      return String(n);
+    };
     var paint = function (n, ok) {
       starEls.forEach(function (a) {
-        a.href = "https://github.com/" + REPO;
-        a.querySelector(".sk-star-n").textContent = ok ? Number(n).toLocaleString("en-IN") : "";
-        a.querySelector(".sk-star-t").textContent = ok ? "Star" : "Star on GitHub";
+        a.href = ok ? "https://github.com/" + REPO : ORG;     // never a link to a page that does not exist
+        a.querySelector(".sk-star-n").textContent = ok ? short(n) : "";
+        a.querySelector(".sk-star-t").textContent = ok ? "" : "skull-org on GitHub";
+        a.title = ok ? Number(n).toLocaleString("en-IN") + " stars on GitHub" : "skull-org on GitHub";
         a.hidden = false;
       });
       var link = document.getElementById("skRepoLink");
