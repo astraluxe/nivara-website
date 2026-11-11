@@ -94,6 +94,160 @@
 /* 24 Oct 2026: Press Start 2P is an 8x8 bitmap face - it stays sharp on its 8px grid; smaller on phones */
 @media (max-width: 900px) { .sk-hero h1 { font-size: 48px; } .sk-sec > h2 { font-size: 16px; } .sk-post article h1 { font-size: 24px; } .sk-cta h2 { font-size: 16px; } }
 @media (max-width: 420px) { .sk-hero h1 { font-size: 40px; } .sk-card h3, .sk-grid3 h3 { font-size: 16px; } }
+/* 11 Nov 2026 redesign: the site's colours (ink, paper, violet) and the skull pixel identity, made more premium.
+   Spacing on a 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 px scale; no background gradients except the hero grid lines. */
+.sk-main { max-width: none; padding: 0 0 96px; }
+.sk-band { max-width: 1160px; margin: 0 auto; padding: 96px 24px 0; }
+.sk-dark { max-width: none; background: #0E0E0C; color: #F2EFE9; margin-top: 96px; padding: 96px 24px; }
+.sk-dark > .sk-split { max-width: 1112px; margin: 0 auto; }
+.sk-serif { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; }
+.sk-label { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.sk-dark .sk-label { color: rgba(242,239,233,.55); }
+.sk-page .sk-band h2, .sk-page .sk-dark h2 { font-family: var(--font-sans); font-weight: 600; letter-spacing: -.035em; line-height: 1.05;
+  font-size: clamp(32px, 4.4vw, 48px); margin: 16px 0 16px; max-width: 760px; text-wrap: balance; }
+.sk-page .sk-band h3 { font-family: var(--font-sans); font-weight: 600; letter-spacing: -.02em; line-height: 1.25; font-size: 20px; margin: 0; }
+.sk-head p, .sk-split p { color: var(--muted); max-width: 620px; font-size: 16px; line-height: 1.6; text-wrap: pretty; margin: 0 0 12px; }
+.sk-dark p { color: rgba(242,239,233,.72); }
+.sk-fine { font-size: 13px !important; opacity: .8; }
+.sk-num { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+
+/* hero */
+.sk-hero2 { position: relative; overflow: hidden; background: #0E0E0C; color: #F2EFE9; padding: 128px 24px 96px; }
+.sk-hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(242,239,233,.05) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(242,239,233,.05) 1px, transparent 1px); background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 70% 40%, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at 70% 40%, #000 30%, transparent 75%); }
+.sk-hero-in { position: relative; max-width: 1112px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.sk-kicker { display: inline-flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: rgba(242,239,233,.6); }
+.sk-live { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(124,92,255,.18); }
+.sk-page .sk-word { font-family: "Press Start 2P", ui-monospace, monospace; font-size: clamp(56px, 9vw, 112px); line-height: 1; margin: 24px 0 24px; letter-spacing: -.02em; color: #F2EFE9; }
+.sk-word .sk-dot { color: var(--accent); }
+.sk-h1sub { font-family: var(--font-sans); font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -.03em; line-height: 1.1; margin: 0 0 16px; color: #F2EFE9; max-width: 640px; }
+.sk-lead2 { font-size: 18px; line-height: 1.6; color: rgba(242,239,233,.72); max-width: 600px; margin: 0; text-wrap: pretty; }
+.sk-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.sk-btn2 { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 8px; background: var(--accent); color: #fff !important;
+  font-family: var(--font-sans); font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--accent);
+  transition: transform .3s cubic-bezier(.22,1,.36,1), background-color .3s, border-color .3s; }
+.sk-btn2:hover { transform: translateY(-2px); }
+.sk-btn2:active { transform: translateY(1px); }
+.sk-btn2:focus-visible, .sk-svc:focus-visible, .sk-filters button:focus-visible, .sk-faq summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sk-btn2.ghost { background: transparent; border-color: rgba(242,239,233,.28); color: #F2EFE9 !important; }
+.sk-btn2.ghost:hover { border-color: #F2EFE9; }
+.sk-btn2.light { background: #F2EFE9; border-color: #F2EFE9; color: #0E0E0C !important; }
+.sk-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.sk-chips span { font-family: "JetBrains Mono", monospace; font-size: 12px; color: rgba(242,239,233,.7); border: 1px solid rgba(242,239,233,.18); border-radius: 99px; padding: 4px 12px; }
+.sk-hero-art { display: flex; justify-content: center; align-items: center; }
+.sk-hero-art svg { width: min(320px, 70vw); height: auto; fill: #F2EFE9; filter: drop-shadow(8px 8px 0 var(--accent)); }
+
+/* service cards */
+.sk-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+.sk-svc { display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 1px solid var(--rule); border-radius: 16px; background: var(--paper);
+  color: var(--ink) !important; text-decoration: none; transition: transform .5s cubic-bezier(.22,1,.36,1), border-color .3s, box-shadow .3s; }
+.sk-svc:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 0 0 4px rgba(124,92,255,.12); }
+.sk-svc p { color: var(--muted); font-size: 15px; line-height: 1.55; margin: 0; }
+.sk-go { margin-top: auto; padding-top: 8px; font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 500; color: var(--ink); }
+.sk-go i { font-style: normal; display: inline-block; transition: transform .3s cubic-bezier(.22,1,.36,1); }
+.sk-svc:hover .sk-go i { transform: translateX(4px); }
+
+/* the illustrated report */
+.sk-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: center; }
+.sk-console { border: 1px solid rgba(242,239,233,.16); border-radius: 16px; background: #161614; padding: 24px; font-family: "JetBrains Mono", monospace; }
+.sk-con-top { display: flex; justify-content: space-between; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: rgba(242,239,233,.6); }
+.sk-badge { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; border: 1px solid rgba(242,239,233,.3); border-radius: 99px; padding: 2px 8px; color: rgba(242,239,233,.8); }
+.sk-badge.light { border-color: var(--rule-strong); color: var(--muted); }
+.sk-con-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
+.sk-con-stats div { border: 1px solid rgba(242,239,233,.12); border-radius: 8px; padding: 12px; }
+.sk-con-stats b { display: block; font-family: var(--font-sans); font-size: 30px; font-weight: 600; color: #F2EFE9; letter-spacing: -.03em; }
+.sk-con-stats span { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: rgba(242,239,233,.55); }
+.sk-con-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sk-con-rows li { display: grid; grid-template-columns: 12px 150px 1fr; gap: 12px; align-items: center; font-size: 13px; padding: 8px 0; border-top: 1px solid rgba(242,239,233,.08); }
+.sk-con-rows b { font-weight: 500; color: #F2EFE9; }
+.sk-con-rows em { font-style: normal; color: rgba(242,239,233,.6); }
+.sk-st { width: 8px; height: 8px; border-radius: 50%; }
+.sk-st.ok { background: #F2EFE9; } .sk-st.warn { background: var(--accent); } .sk-st.idle { border: 1px solid rgba(242,239,233,.4); }
+.sk-con-log { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.sk-con-log span { font-size: 11px; color: rgba(242,239,233,.55); border: 1px dashed rgba(242,239,233,.2); border-radius: 4px; padding: 2px 8px; }
+
+/* research */
+.sk-head-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.sk-search input { font: inherit; font-size: 15px; padding: 12px 16px; width: 280px; max-width: 100%; border-radius: 8px; border: 1px solid var(--rule-strong); background: var(--paper); color: var(--ink); }
+.sk-search input:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.sk-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 24px; }
+.sk-filters button { font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 8px 12px; border-radius: 99px; border: 1px solid var(--rule); background: transparent; color: var(--muted); cursor: pointer; transition: border-color .3s, color .3s; }
+.sk-filters button:hover { border-color: var(--ink); color: var(--ink); }
+.sk-filters button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.sk-feed2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.sk-post2 { display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 1px solid var(--rule); border-radius: 16px; background: var(--paper); min-width: 0;
+  transition: transform .5s cubic-bezier(.22,1,.36,1), border-color .3s; }
+.sk-post2:hover { transform: translateY(-2px); border-color: var(--rule-strong); }
+.sk-post2.featured { grid-column: 1 / -1; background: #0E0E0C; border-color: #0E0E0C; color: #F2EFE9; padding: 32px; }
+.sk-post2.featured h3 { font-size: 28px !important; }
+.sk-post2.featured p, .sk-post2.featured .sk-meta2 { color: rgba(242,239,233,.7); }
+.sk-post2.featured a { color: #F2EFE9; }
+.sk-post2 h3 a { color: inherit; text-decoration: none; }
+.sk-post2 h3 a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.sk-post2 p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; overflow-wrap: anywhere; }
+.sk-meta2 { display: flex; gap: 12px; flex-wrap: wrap; font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.sk-meta2 .k { color: var(--accent); }
+.sk-links2 { margin-top: auto; display: flex; gap: 16px; flex-wrap: wrap; padding-top: 4px; font-family: "JetBrains Mono", monospace; font-size: 13px; }
+.sk-links2 a { color: var(--ink); text-decoration: none; }
+.sk-skel { height: 180px; border-radius: 16px; background: var(--paper-2); animation: skPulse 1.4s ease-in-out infinite; }
+.sk-skel.big { grid-column: 1 / -1; height: 220px; }
+@keyframes skPulse { 50% { opacity: .55; } }
+.sk-state { grid-column: 1 / -1; padding: 32px; border: 1px dashed var(--rule-strong); border-radius: 16px; color: var(--muted); }
+.sk-state b { color: var(--ink); display: block; margin-bottom: 4px; }
+
+/* open source */
+.sk-repo { border: 1px solid var(--rule); border-radius: 16px; padding: 32px; background: var(--paper); display: grid; gap: 12px; }
+.sk-repo-top { display: flex; justify-content: space-between; align-items: center; }
+.sk-repo p { margin: 0; color: var(--muted); }
+.sk-repo-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.sk-repo-meta span { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--muted); border: 1px solid var(--rule); border-radius: 99px; padding: 2px 10px; }
+
+/* how we work */
+.sk-steps { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.sk-steps li { display: grid; grid-template-columns: 80px 1fr; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--rule); }
+.sk-steps p { margin: 8px 0 0; color: var(--muted); max-width: 640px; line-height: 1.6; }
+
+/* the free check */
+.sk-cta2 { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 48px; background: #0E0E0C; color: #F2EFE9; border-radius: 24px; padding: 48px; }
+.sk-cta2 h2 { color: #F2EFE9; }
+.sk-cta2 p { color: rgba(242,239,233,.72); max-width: 520px; line-height: 1.6; margin: 0 0 24px; }
+.sk-cta2 .sk-label { color: rgba(242,239,233,.55); }
+.sk-flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; align-content: center; }
+.sk-flow li { display: grid; grid-template-columns: 48px 1fr; grid-template-rows: auto auto; column-gap: 12px; padding: 16px; border: 1px solid rgba(242,239,233,.14); border-radius: 12px; }
+.sk-flow .sk-num { grid-row: span 2; align-self: center; }
+.sk-flow b { font-family: var(--font-sans); font-size: 17px; color: #F2EFE9; }
+.sk-flow em { font-style: normal; color: rgba(242,239,233,.65); font-size: 14px; }
+.sk-faq { max-width: 760px; margin: 48px auto 0; border-top: 1px solid var(--rule); }
+.sk-faq details { border-bottom: 1px solid var(--rule); padding: 16px 0; }
+.sk-faq summary { cursor: pointer; font-family: var(--font-sans); font-weight: 600; font-size: 17px; list-style: none; display: flex; justify-content: space-between; }
+.sk-faq summary::after { content: "+"; font-family: "JetBrains Mono", monospace; color: var(--muted); transition: transform .3s cubic-bezier(.22,1,.36,1); }
+.sk-faq details[open] summary::after { transform: rotate(45deg); }
+.sk-faq p { margin: 12px 0 0; color: var(--muted); line-height: 1.6; }
+
+@media (max-width: 980px) {
+  .sk-hero-in, .sk-split, .sk-cta2 { grid-template-columns: 1fr; }
+  .sk-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sk-hero-art { order: -1; justify-content: flex-start; } .sk-hero-art svg { width: 120px !important; }
+}
+@media (max-width: 640px) {
+  .sk-cards, .sk-feed2 { grid-template-columns: 1fr; }
+  .sk-hero2 { padding: 96px 16px 64px; } .sk-band { padding: 64px 16px 0; } .sk-dark { padding: 64px 16px; margin-top: 64px; }
+  .sk-cta2 { padding: 32px 24px; } .sk-steps li { grid-template-columns: 48px 1fr; gap: 12px; }
+  .sk-con-rows li { grid-template-columns: 12px 1fr; } .sk-con-rows em { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) { .sk-svc, .sk-btn2, .sk-post2, .sk-go i { transition: none !important; } .sk-skel { animation: none; } }
+
+.sk-art2 { width: min(300px, 60vw); height: auto; aspect-ratio: 1; display: block; fill: #F2EFE9; filter: drop-shadow(8px 8px 0 var(--accent)); }
+.sk-star { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(242,239,233,.28);
+  color: #F2EFE9 !important; text-decoration: none; font-family: var(--font-sans); font-weight: 600; font-size: 15px;
+  transition: border-color .3s, transform .3s cubic-bezier(.22,1,.36,1); }
+.sk-star:hover { border-color: #F2EFE9; transform: translateY(-2px); }
+.sk-star .sk-star-n:not(:empty) { font-family: "JetBrains Mono", monospace; font-weight: 500; padding-left: 8px; border-left: 1px solid rgba(242,239,233,.28); }
+.sk-repo .sk-star { color: var(--ink) !important; border-color: var(--rule-strong); }
+.sk-repo .sk-star .sk-star-n:not(:empty) { border-left-color: var(--rule-strong); }
+.sk-repo-act { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
 </style>
 </head>
 <body class="sk-page">
@@ -130,7 +284,20 @@
       <li><a href="/bridge">Bridge</a></li>
       <li><a href="/why-adris">Why adris</a></li>
       <li><a href="/brief">Product brief</a></li>
-      <li><a href="/skull"><span style="display:inline-flex;align-items:baseline;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull</span></a></li>
+      <li class="has-dropdown">
+        <a href="/skull" style="display:inline-flex;align-items:center;"><span style="display:inline-flex;align-items:baseline;white-space:nowrap"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull</span><span class="dd-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <div class="nav-dropdown">
+          <div class="nav-dropdown-inner">
+            <a href="/skull"><span class="nav-dd-tag">01</span>Overview</a>
+            <a href="/skull#services"><span class="nav-dd-tag">02</span>Services</a>
+            <a href="/skull#blog"><span class="nav-dd-tag">03</span>Research blog</a>
+            <a href="/skull#open-source"><span class="nav-dd-tag">04</span>Open source</a>
+            <div class="nav-dd-sep"></div>
+            <a href="/skull#rules"><span class="nav-dd-tag">05</span>How we work</a>
+            <a href="/skull#check"><span class="nav-dd-tag">06</span>Free security check</a>
+          </div>
+        </div>
+      </li>
       <li><a href="/sales-partners">Partners</a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>
@@ -205,71 +372,154 @@ document.getElementById('themeToggle').addEventListener('click', function () {
 </script>
 
 <main class="sk-main">
-  <section class="sk-hero">
-    <div>
-      <span class="sk-tag"><svg class="sk-ico" aria-hidden="true" viewBox="0 0 9 9" width="12" height="12" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg>skull · by adris.tech</span>
-      <h1>skull<span class="sk-dot">.</span></h1>
-      <p class="sk-lead">The security desk of adris.tech, in the open. We write honestly about the best open-source
-      security tools on GitHub, we check our own systems first, and we check yours only when you ask us to, in
-      writing.</p>
-      <div class="sk-actions">
-        <a class="sk-btn sk-px" href="#blog">Read the skull blog</a>
-        <a class="sk-btn ghost sk-px" href="/contact?type=security">Free security check</a>
+  <section class="sk-hero2">
+    <div class="sk-hero-grid" aria-hidden="true"></div>
+    <div class="sk-hero-in">
+      <div class="sk-hero-copy">
+        <div class="sk-kicker"><span class="sk-live"></span>Security, in the open · Bengaluru, India</div>
+        <h1 class="sk-word">skull<span class="sk-dot">.</span></h1>
+        <p class="sk-h1sub">Security should never be <span class="sk-serif">a black box.</span></p>
+        <p class="sk-lead2">The security desk of adris.tech. Independent security checks, open source tools and compliance
+          readiness for Indian businesses, with every check agreed in writing first and every report saying what was
+          checked and what was not.</p>
+        <div class="sk-actions">
+          <a class="sk-btn2" href="#check">Get a free security check <span aria-hidden="true">→</span></a>
+          <a class="sk-btn2 ghost" href="#blog">Read the research</a>
+          <a class="sk-star" data-gh-stars href="https://github.com/astraluxe/skull-locker" target="_blank" rel="noopener" hidden><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="sk-star-t">Star on GitHub</span><span class="sk-star-n"></span></a>
+        </div>
+        <div class="sk-chips"><span>Read only first</span><span>Written scope</span><span>No hacking back</span></div>
+      </div>
+      <div class="sk-hero-art" aria-hidden="true"><svg class="sk-art2" role="img" aria-label="skull" viewBox="0 0 9 9" width="300" height="300" shape-rendering="crispEdges"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg></div>
+    </div>
+  </section>
+
+  <section class="sk-band" id="services">
+    <div class="sk-head"><span class="sk-label">What we do</span>
+      <h2>Find, secure, trace <span class="sk-serif">and prove.</span></h2>
+      <p>Four kinds of work, each one legal, written down and repeatable.</p></div>
+    <div class="sk-cards">
+      <a class="sk-svc" href="#check"><span class="sk-num">01 / Secure</span><h3>Find the weaknesses.</h3>
+        <p>Leaked keys and passwords in your code, outdated parts with known holes, and a hardening checklist for your
+        website and cloud, with the fix for each finding.</p><span class="sk-go">Ask for a check <i>→</i></span></a>
+      <a class="sk-svc" href="#check"><span class="sk-num">02 / Compliance</span><h3>Be ready for the audit.</h3>
+        <p>Checklists and evidence trackers for the DPDP Act, CERT-In's directions, ISO 27001 and SOC 2, so you know
+        what is missing before an auditor or a customer asks.</p><span class="sk-go">Talk to us <i>→</i></span></a>
+      <a class="sk-svc" href="#check"><span class="sk-num">03 / Trace</span><h3>Follow the evidence.</h3>
+        <p>For victims of crypto theft: stolen funds followed across public blockchains, with an evidence pack for the
+        police, the exchange or your lawyer. Public data only.</p><span class="sk-go">Start a case <i>→</i></span></a>
+      <a class="sk-svc" href="#blog"><span class="sk-num">04 / Research</span><h3>Know what matters.</h3>
+        <p>Honest reviews of the best open source security tools, reports on our own systems, and tools we build and
+        publish ourselves.</p><span class="sk-go">Read the research <i>→</i></span></a>
+    </div>
+  </section>
+
+  <section class="sk-band sk-dark">
+    <div class="sk-split">
+      <div><span class="sk-label">What a report looks like</span>
+        <h2>One page that says <span class="sk-serif">what we found.</span></h2>
+        <p>Every check ends in a report like this: what was checked, what was found, how serious it is, and the fix.
+        And, just as plainly, what we could not check.</p>
+        <p class="sk-fine">An illustration of the format, not the results of a real scan.</p></div>
+      <div class="sk-console" role="img" aria-label="Illustration of a skull security report">
+        <div class="sk-con-top"><span>skull / security report</span><span class="sk-badge">Example</span></div>
+        <div class="sk-con-stats">
+          <div><b>3</b><span>areas checked</span></div><div><b>1</b><span>needs action</span></div><div><b>0</b><span>changes made</span></div>
+        </div>
+        <ul class="sk-con-rows">
+          <li><span class="sk-st warn"></span><b>Secret exposure</b><em>1 old key in git history · rotate it</em></li>
+          <li><span class="sk-st ok"></span><b>Dependency health</b><em>no known critical holes</em></li>
+          <li><span class="sk-st ok"></span><b>Website setup</b><em>HTTPS and headers in place</em></li>
+          <li><span class="sk-st idle"></span><b>Not checked</b><em>internal network (not in scope)</em></li>
+        </ul>
+        <div class="sk-con-log"><span>scope signed</span><span>read only scan</span><span>report sent</span></div>
       </div>
     </div>
-    <div class="sk-art-wrap"><svg class="sk-art" role="img" aria-label="skull" viewBox="0 0 9 9" width="180" height="180" shape-rendering="crispEdges" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><rect x="2" y="0" width="1" height="1"/><rect x="3" y="0" width="1" height="1"/><rect x="4" y="0" width="1" height="1"/><rect x="5" y="0" width="1" height="1"/><rect x="6" y="0" width="1" height="1"/><rect x="1" y="1" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="1" width="1" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/><rect x="0" y="2" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="0" y="4" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="0" y="5" width="1" height="1"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="1" y="6" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="7" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/><rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/><rect x="6" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/></svg></div>
   </section>
 
-  <section class="sk-sec" id="blog">
-    <span class="sk-tag">The skull blog</span>
-    <h2>Tools, reports and what we found.</h2>
-    <p>Reviews of open-source security tools made by companies and communities around the world, written from the
-    projects' own data on GitHub; reports on our own systems; and what we are working on. Every article also appears
-    on the main adris.tech blog.</p>
+  <section class="sk-band" id="blog">
+    <div class="sk-head sk-head-row">
+      <div><span class="sk-label">The skull blog</span>
+        <h2>Tools, reports <span class="sk-serif">and what we found.</span></h2>
+        <p>Reviews of open source security tools written from each project's own data on GitHub, reports on our own
+        systems, and guides. Every article also appears on the main adris.tech blog.</p></div>
+      <label class="sk-search"><span class="sk-sr">Search the blog</span>
+        <input id="skSearch" type="search" placeholder="Search the research" autocomplete="off"></label>
+    </div>
     <div class="sk-filters" role="group" aria-label="Show">
-      <button type="button" data-kind="all" aria-pressed="true">all</button>
-      <button type="button" data-kind="article" aria-pressed="false">tool reviews</button>
-      <button type="button" data-kind="report" aria-pressed="false">reports</button>
-      <button type="button" data-kind="update" aria-pressed="false">updates</button>
-      <button type="button" data-kind="guide" aria-pressed="false">guides</button>
+      <button type="button" data-kind="all" aria-pressed="true">All</button>
+      <button type="button" data-kind="article" aria-pressed="false">Tool reviews</button>
+      <button type="button" data-kind="report" aria-pressed="false">Reports</button>
+      <button type="button" data-kind="guide" aria-pressed="false">Guides</button>
+      <button type="button" data-kind="update" aria-pressed="false">Updates</button>
     </div>
-    <div class="sk-feed" id="skFeed"><p class="sk-muted">Loading the blog...</p></div>
-  </section>
-
-  <section class="sk-sec" id="do">
-    <span class="sk-tag">What we do</span>
-    <h2>Find, secure, trace and prove. Legally.</h2>
-    <div class="sk-grid3">
-      <div class="sk-px"><h3>Secure your systems</h3><p>Leaked keys and passwords in your code, outdated parts with
-      known holes, and a hardening checklist for your website and cloud, with the fix for each finding.</p></div>
-      <div class="sk-px"><h3>Compliance readiness</h3><p>Checklists and evidence trackers for the DPDP Act, CERT-In's
-      directions, ISO 27001 and SOC 2, so you know what is missing before an auditor or a customer asks.</p></div>
-      <div class="sk-px"><h3>Trace and prove</h3><p>For victims of crypto theft: stolen funds followed across public
-      blockchains, with an evidence pack for the police, the exchange or your lawyer. Public data only.</p></div>
+    <div class="sk-feed2" id="skFeed" aria-live="polite">
+      <div class="sk-skel big"></div><div class="sk-skel"></div><div class="sk-skel"></div>
     </div>
   </section>
 
-  <section class="sk-sec" id="rules">
-    <span class="sk-tag">How we work</span>
-    <h2>The rules we do not bend.</h2>
-    <ul class="sk-rules">
-      <li><b>Written scope first.</b> Every check names what it covers, agreed before it starts. No scope, no scan,
-      and that rule is in our software, not just on this page.</li>
-      <li><b>No hacking back.</b> No access to systems that are not yours or your client's, ever.</li>
-      <li><b>No public accusations.</b> Who might be behind an incident stays a confidential hypothesis.</li>
-      <li><b>No guarantees.</b> A report says what was checked, when, and what it could not check.</li>
-      <li><b>Our own office first.</b> A weekly read-only audit of our own machines and code, and an append-only log
-      of everything skull does.</li>
-    </ul>
-    <div class="sk-cta sk-px">
-      <h2>Our first checks are free.</h2>
-      <p>skull is new and trust has to be earned. A read-only review of your website's public setup and, if you give
-      access, one code repository scanned for leaked keys and vulnerable parts. You get the full report and owe us
-      nothing.</p>
-      <a class="sk-btn sk-px" href="/contact?type=security">Ask for a free security check</a>
+  <section class="sk-band" id="open-source">
+    <div class="sk-split">
+      <div><span class="sk-label">Open source</span>
+        <h2>We publish <span class="sk-serif">what we build.</span></h2>
+        <p>Security you cannot read is security you have to take on trust. So the tools we write for ourselves are
+        released as open source, tested hard and reviewed in public.</p></div>
+      <div class="sk-repo">
+        <div class="sk-repo-top"><span class="sk-num">skull-locker</span><span class="sk-badge light">Beta</span></div>
+        <h3>Lock any file with a password. Lose nothing.</h3>
+        <p>Argon2id and XChaCha20-Poly1305 through libsodium, a right-click entry on Windows, and the original kept until
+        the locked copy has been opened and checked. 61 tests, a stress run and three independent reviews.</p>
+        <div class="sk-repo-meta"><span>Python</span><span>Apache 2.0</span><span>Windows · macOS · Linux</span></div>
+        <div class="sk-repo-act"><span class="sk-go" id="skRepoLink">Releasing on GitHub this week</span><a class="sk-star" data-gh-stars href="https://github.com/astraluxe/skull-locker" target="_blank" rel="noopener" hidden><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="sk-star-t">Star on GitHub</span><span class="sk-star-n"></span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sk-band" id="rules">
+    <div class="sk-head"><span class="sk-label">How we work</span>
+      <h2>Trust is not a promise. <span class="sk-serif">It is a process.</span></h2></div>
+    <ol class="sk-steps">
+      <li><span class="sk-num">01</span><div><h3>Written scope first</h3><p>Every check names what it covers, agreed
+        before it starts. No scope, no scan, and that rule is in our software, not just on this page.</p></div></li>
+      <li><span class="sk-num">02</span><div><h3>Read only by default</h3><p>We look, we do not change. Anything that
+        would change your systems is your decision, in writing.</p></div></li>
+      <li><span class="sk-num">03</span><div><h3>No hacking back</h3><p>No access to systems that are not yours or your
+        client's, ever. Who might be behind an incident stays a confidential hypothesis.</p></div></li>
+      <li><span class="sk-num">04</span><div><h3>Evidence over promises</h3><p>No guarantees. A report says what was
+        checked, when, and what it could not check.</p></div></li>
+      <li><span class="sk-num">05</span><div><h3>Our own office first</h3><p>A weekly read only audit of our own
+        machines and code, and an append only log of everything skull does.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="sk-band" id="check">
+    <div class="sk-cta2">
+      <div class="sk-cta-copy"><span class="sk-label">Free security check</span>
+        <h2>Your security deserves <span class="sk-serif">a second pair of eyes.</span></h2>
+        <p>skull is new and trust has to be earned, so the first check is free. A read only review of your website's
+        public setup and, if you give access, one code repository scanned for leaked keys and vulnerable parts. You
+        get the full report and owe us nothing.</p>
+        <a class="sk-btn2 light" href="/contact?type=security">Ask for a free check <span aria-hidden="true">→</span></a></div>
+      <ol class="sk-flow">
+        <li><span class="sk-num">01</span><b>Request</b><em>Tell us what to check. We agree the scope in writing.</em></li>
+        <li><span class="sk-num">02</span><b>Review</b><em>A read only check, inside that scope and nothing else.</em></li>
+        <li><span class="sk-num">03</span><b>Receive</b><em>A report with every finding, its fix, and what was not checked.</em></li>
+      </ol>
+    </div>
+    <div class="sk-faq">
+      <details><summary>Do you need access to my systems?</summary><p>Not for the website check: it uses only what is
+        public. For a code check you choose the repository and give read only access, which you can remove at any time.</p></details>
+      <details><summary>What happens to my data?</summary><p>We keep only what the report needs, use it only for your
+        check, and delete it when you ask. Nothing about you is published.</p></details>
+      <details><summary>What exactly is in scope?</summary><p>Whatever we agree in writing before we start, and nothing
+        else. If we notice something outside the scope, we tell you, and we do not test it.</p></details>
+      <details><summary>How long does it take?</summary><p>We agree the timing with you when we agree the scope, based
+        on what is being checked.</p></details>
+      <details><summary>Is it really free?</summary><p>The first check is. If you want more after the report, we quote
+        it separately, and you are under no obligation.</p></details>
     </div>
   </section>
 </main>
+
 
 
 <footer>
