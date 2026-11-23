@@ -1,6 +1,17 @@
 {
- "updated": "2026-11-20T00:41:33",
+ "updated": "2026-11-23T01:25:58",
  "posts": [
+  {
+   "id": 14,
+   "kind": "article",
+   "title": "CrowdSec: open-source IDS/IPS with crowdsourced blocklist",
+   "body": "Small businesses face constant automated attacks, brute-force login attempts, vulnerability scans, and scrapers that steal content or probe for weaknesses. Traditional tools like fail2ban block offenders locally but do not share threat intelligence across users. CrowdSec addresses this by combining local detection with a community blocklist so that an IP blocked on one server can be blocked for everyone else before it reaches them.\n\n## What it is\n- Maintained by CrowdSec (GitHub: crowdsecurity)\n- Licence: MIT\n- Last updated: 2026-11-20\n- Latest release: v1.8.2 (2026-10-26)\n- 15,756 stars on GitHub as of 23 Nov 2026\n\n## What it finds\n- Brute-force login attempts\n- Port scans\n- Web vulnerability scans\n- Malicious bots and scrapers\n- IP addresses listed in the community blocklist\n\n## How a small business would use it\n- A web agency runs CrowdSec on each client’s Linux server or Docker host. The engine parses Nginx and SSH logs, detects brute-force and scan patterns, and pushes offending IPs to the firewall via the bouncer. The agency also subscribes to the community blocklist so new malicious IPs are blocked before they hit any client site.\n- A clinic’s website runs on a Windows server with IIS. CrowdSec reads IIS logs, applies AppSec WAF rules based on Coraza and the OWASP Core Rule Set, and serves JavaScript proof-of-work challenges to suspicious requests. Legitimate crawlers such as Googlebot pass through while headless scrapers are stopped.\n- A startup deploys CrowdSec in its Kubernetes cluster as a DaemonSet. The engine aggregates logs from multiple pods, correlates attacks across services, and uses the remediation layer to block at the network policy level. The team monitors alerts in the CrowdSec Console and tunes detection rules from the Hub for their specific application endpoints.\n\n## Trying it\nFollow the README and documentation to install CrowdSec on Linux, Windows, Docker, OpnSense, Kubernetes, and more. No installation commands are provided in the README.\n\n## Limits\n- Does not replace a full security information and event management system\n- Does not automatically patch vulnerable applications\n- False positives can occur when legitimate traffic matches detection patterns\n- Community blocklist quality depends on user contributions and may include stale entries\n- Rule tuning and alert review still require a person with knowledge of the environment\n\n## The skull take\nCrowdSec gives small teams a practical way to share threat intelligence without running a dedicated SOC. Deploy it where your logs live, enable the community blocklist, and spend time only on the alerts that matter for your stack.\n\nRepository: https://github.com/crowdsecurity/crowdsec · facts checked on GitHub 23 Nov 2026.",
+   "slug": "crowdsec-open-source-ids-ips-with-crowdsourced-blocklist",
+   "excerpt": "Small businesses face constant automated attacks, brute-force login attempts, vulnerability scans, and scrapers that steal content or probe for weaknesses. Traditional tools like fail2ban block offenders locally but do...",
+   "date": "2026-11-23",
+   "from": "SKULL writer",
+   "repo": "https://github.com/crowdsecurity/crowdsec"
+  },
   {
    "id": 13,
    "kind": "article",
